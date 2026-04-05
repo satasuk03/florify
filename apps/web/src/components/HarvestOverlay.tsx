@@ -5,6 +5,7 @@ import type { Rarity, TreeInstance } from '@florify/shared';
 import { Button } from '@/components/Button';
 import { RarityBadge } from '@/components/RarityBadge';
 import { FloraImage } from '@/components/FloraImage';
+import { HarvestConfetti } from '@/components/HarvestConfetti';
 import { SPECIES } from '@/data/species';
 import { useT, useLanguage } from '@/i18n/useT';
 import { shareSpecies } from '@/lib/shareSpecies';
@@ -173,6 +174,11 @@ export function HarvestOverlay({ tree, onDismiss }: Props) {
         className="absolute inset-0 pointer-events-none animate-pulse-slow"
         style={{ background: GLOW[tree.rarity] }}
       />
+
+      {/* Rarity-tiered leaf/sparkle burst. Keyed on tree.id so a fresh
+          harvest replays the animation and a deterministic PRNG keeps
+          particle positions stable across strict-mode re-renders. */}
+      <HarvestConfetti rarity={tree.rarity} playKey={tree.id} />
 
       <div
         className={`relative flex flex-col items-center gap-4 px-8 text-center max-w-md animate-scale-in transition-opacity duration-300 ease-out ${
