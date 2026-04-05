@@ -5,6 +5,7 @@ import { AccountSection } from './sections/AccountSection';
 import { PreferencesSection } from './sections/PreferencesSection';
 import { SaveDataSection } from './sections/SaveDataSection';
 import { DangerZoneSection } from './sections/DangerZoneSection';
+import { useT } from '@/i18n/useT';
 
 /**
  * Settings bottom sheet — slides up from the bottom on mobile, centers
@@ -22,6 +23,7 @@ interface Props {
 }
 
 export function SettingsSheet({ open, onClose }: Props) {
+  const t = useT();
   // Dismiss on Escape. Attach only while open so background shortcuts
   // still work when the sheet is closed.
   useEffect(() => {
@@ -41,17 +43,17 @@ export function SettingsSheet({ open, onClose }: Props) {
       onClick={onClose}
       role="dialog"
       aria-modal="true"
-      aria-label="Settings"
+      aria-label={t('settings.title')}
     >
       <div
         className="w-full sm:max-w-md bg-cream-50 rounded-t-3xl sm:rounded-3xl p-6 shadow-soft-lg max-h-[92dvh] overflow-y-auto scrollbar-elegant animate-sheet-up"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center mb-5">
-          <h2 className="font-serif text-2xl text-ink-900">Settings</h2>
+          <h2 className="font-serif text-2xl text-ink-900">{t('settings.title')}</h2>
           <button
             onClick={onClose}
-            aria-label="Close"
+            aria-label={t('settings.close')}
             className="text-ink-500 text-2xl leading-none w-10 h-10 flex items-center justify-center hover:bg-cream-100 rounded-full transition-colors"
           >
             ✕

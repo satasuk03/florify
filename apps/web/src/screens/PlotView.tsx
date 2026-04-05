@@ -12,9 +12,11 @@ import { FloristCardSheet } from "@/components/florist-card/FloristCardSheet";
 import { SettingsSheet } from "@/components/settings/SettingsSheet";
 import { HarvestOverlay } from "@/components/HarvestOverlay";
 import { SeedPacket } from "@/components/SeedPacket";
+import { LanguageToggle } from "@/components/LanguageToggle";
 import { useGameStore } from "@/store/gameStore";
 import { useHandheld } from "@/hooks/useHandheld";
 import { SPECIES } from "@/data/species";
+import { useT } from "@/i18n/useT";
 
 /**
  * Home screen — designs/07 §7.1.
@@ -26,6 +28,7 @@ import { SPECIES } from "@/data/species";
  * chrome — the flora is the hero.
  */
 export function PlotView() {
+  const t = useT();
   const tree = useGameStore((s) => s.state.activeTree);
   const canWater = useGameStore((s) => s.canWater());
   const nextAt = useGameStore((s) => s.nextWaterAt());
@@ -182,23 +185,24 @@ export function PlotView() {
               />
             </div>
             <div className="text-[11px] text-ink-500 tabular-nums tracking-wider">
-              รดน้ำแล้ว {tree.currentWaterings} ครั้ง
+              {t('plot.wateredCount', { count: tree.currentWaterings })}
             </div>
           </div>
         </div>
       )}
 
-      {/* ─── TOP-LEFT: Gallery ──────────────────────────── */}
+      {/* ─── TOP-LEFT: Gallery + Language toggle ───────── */}
       <div
-        className="absolute top-0 left-0 pl-4 pointer-events-none animate-fade-down"
+        className="absolute top-0 left-0 flex flex-col items-start gap-2 pl-4 pointer-events-none animate-fade-down"
         style={{
           paddingTop: "calc(env(safe-area-inset-top) + 0.75rem)",
           animationDelay: "120ms",
         }}
       >
-        <CornerButton to="/gallery" label="Open Gallery" size="primary">
+        <CornerButton to="/gallery" label={t('plot.openGallery')} size="primary">
           <GalleryIcon />
         </CornerButton>
+        <LanguageToggle />
       </div>
 
       {/* ─── TOP-RIGHT: Florist Card + Settings ── */}
@@ -211,7 +215,7 @@ export function PlotView() {
       >
         <CornerButton
           onClick={() => setShowFlorist(true)}
-          label="Open Florist Card"
+          label={t('plot.openFloristCard')}
           size="primary"
         >
           <FloristCardIcon />
@@ -219,7 +223,7 @@ export function PlotView() {
 
         <CornerButton
           onClick={() => setShowSettings(true)}
-          label="Open Settings"
+          label={t('plot.openSettings')}
           size="primary"
         >
           <SettingsIcon />
@@ -243,7 +247,7 @@ export function PlotView() {
         >
           {phase === "empty" ? (
             <Button size="lg" onClick={handlePlant} className="min-w-[240px]">
-              เริ่มปลูก
+              {t('plot.plant')}
             </Button>
           ) : phase === "tree" ? (
             <Button
@@ -252,7 +256,7 @@ export function PlotView() {
               disabled={!canWater}
               className={`min-w-[240px] ${!canWater ? "opacity-60" : ""}`}
             >
-              รดน้ำ
+              {t('plot.water')}
             </Button>
           ) : null}
 

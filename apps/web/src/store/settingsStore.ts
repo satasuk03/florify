@@ -4,6 +4,7 @@ const defaults: Settings = {
   sound: true,
   haptics: true,
   notifications: false,
+  language: 'th',
 };
 
 // Module-level cache so `loadSettings()` returns a stable reference

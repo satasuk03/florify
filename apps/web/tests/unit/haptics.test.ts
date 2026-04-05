@@ -38,7 +38,7 @@ describe('haptic', () => {
   });
 
   it('is a no-op when user has disabled haptics', () => {
-    saveSettings({ sound: true, haptics: false, notifications: false });
+    saveSettings({ sound: true, haptics: false, notifications: false, language: 'th' });
     haptic('tap');
     expect(vibrate).not.toHaveBeenCalled();
   });

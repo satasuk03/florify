@@ -9,6 +9,7 @@ import { AnimatedNumber } from '@/components/AnimatedNumber';
 import { useGameStore } from '@/store/gameStore';
 import { SPECIES } from '@/data/species';
 import { TOTAL_SPECIES } from '@florify/shared';
+import { useT } from '@/i18n/useT';
 
 /**
  * Gallery grid — every harvested tree as a thumbnail, sorted by most
@@ -16,6 +17,7 @@ import { TOTAL_SPECIES } from '@florify/shared';
  * shipped in `public/floras/{folder}/`.
  */
 export function GalleryView() {
+  const t = useT();
   const collection = useGameStore((s) => s.state.collection);
   const unlocked = useGameStore((s) => s.uniqueSpeciesUnlocked());
   const sorted = [...collection].sort(
@@ -28,11 +30,11 @@ export function GalleryView() {
         <Link
           href="/"
           className="w-10 h-10 flex items-center justify-center text-ink-700 hover:bg-cream-100 rounded-full transition-all duration-300 ease-out hover:-translate-x-0.5"
-          aria-label="Back to home"
+          aria-label={t('gallery.back')}
         >
           <BackIcon />
         </Link>
-        <h1 className="text-xl font-serif">Gallery</h1>
+        <h1 className="text-xl font-serif">{t('gallery.title')}</h1>
         <div className="w-10" aria-hidden />
       </header>
 
@@ -44,7 +46,7 @@ export function GalleryView() {
           <div className="text-3xl font-serif text-ink-900 tabular-nums">
             <AnimatedNumber value={collection.length} />
           </div>
-          <div className="text-xs text-ink-500 mt-1">harvested</div>
+          <div className="text-xs text-ink-500 mt-1">{t('gallery.harvested')}</div>
         </Card>
         <Card
           className="p-3 animate-fade-up"
@@ -53,13 +55,13 @@ export function GalleryView() {
           <div className="text-3xl font-serif text-ink-900 tabular-nums">
             <AnimatedNumber value={unlocked} /> / <AnimatedNumber value={TOTAL_SPECIES} duration={1400} />
           </div>
-          <div className="text-xs text-ink-500 mt-1">species unlocked</div>
+          <div className="text-xs text-ink-500 mt-1">{t('gallery.speciesUnlocked')}</div>
         </Card>
       </section>
 
       {sorted.length === 0 ? (
         <div className="text-center text-ink-500 text-sm mt-16 animate-fade-in">
-          ยังไม่มีต้นไม้ที่เก็บไว้ — เริ่มปลูกเลย
+          {t('gallery.empty')}
         </div>
       ) : (
         <div className="grid grid-cols-3 gap-3">

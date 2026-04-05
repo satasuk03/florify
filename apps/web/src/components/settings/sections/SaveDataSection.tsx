@@ -6,6 +6,7 @@ import { Card } from '@/components/Card';
 import { useGameStore } from '@/store/gameStore';
 import { exportSaveString, importSaveString } from '@/lib/saveTransfer';
 import { toast } from '@/lib/toast';
+import { useT } from '@/i18n/useT';
 
 /**
  * Export/import save data as a copy-pasteable base64 string. The user
@@ -17,6 +18,7 @@ import { toast } from '@/lib/toast';
  * without hunting down every subscription.
  */
 export function SaveDataSection() {
+  const t = useT();
   const state = useGameStore((s) => s.state);
   const replaceState = useGameStore((s) => s.replaceState);
   const [mode, setMode] = useState<'idle' | 'importing'>('idle');
@@ -28,14 +30,14 @@ export function SaveDataSection() {
       const encoded = await exportSaveString(state);
       if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
         await navigator.clipboard.writeText(encoded);
-        toast('คัดลอกรหัส save แล้ว — เก็บไว้ที่ปลอดภัย');
+        toast(t('settings.exportCopied'));
       } else {
         // Fallback: show the string in a prompt so the user can copy
         // manually on browsers where clipboard API is unavailable.
-        window.prompt('คัดลอกรหัสนี้:', encoded);
+        window.prompt(t('settings.exportManualPrompt'), encoded);
       }
     } catch (err) {
-      toast(`Export ล้มเหลว: ${err instanceof Error ? err.message : 'unknown'}`);
+      toast(t('settings.exportFailed', { reason: err instanceof Error ? err.message : 'unknown' }));
     }
   };
 
@@ -46,13 +48,11 @@ export function SaveDataSection() {
       setError(result.reason);
       return;
     }
-    const confirmed = window.confirm(
-      'แทนที่ข้อมูลปัจจุบันทั้งหมด? การกระทำนี้ย้อนกลับไม่ได้',
-    );
+    const confirmed = window.confirm(t('settings.importConfirm'));
     if (!confirmed) return;
 
     replaceState(result.state);
-    toast('นำเข้าข้อมูลเรียบร้อย กำลังรีโหลด…');
+    toast(t('settings.importSuccess'));
     // Reload to rehydrate every derived subscription from the new
     // state cleanly. Small delay so the toast is visible first.
     setTimeout(() => window.location.reload(), 400);
@@ -61,17 +61,16 @@ export function SaveDataSection() {
   return (
     <section>
       <h2 className="text-sm font-medium text-ink-500 uppercase tracking-wider mb-3">
-        Save data
+        {t('settings.saveData')}
       </h2>
       <Card className="p-4 space-y-3">
         <div className="text-sm text-ink-700">
-          สำรองข้อมูลเป็นรหัสตัวอักษร คัดลอกเก็บไว้ที่ไหนก็ได้ (โน้ต, chat, อีเมล)
-          แล้วนำกลับมาใส่ทีหลังได้
+          {t('settings.saveDataHint')}
         </div>
 
         <div className="flex gap-2">
           <Button variant="secondary" size="md" onClick={handleExport} className="flex-1">
-            Export (คัดลอกรหัส)
+            {t('settings.exportCopy')}
           </Button>
           <Button
             variant="secondary"
@@ -83,7 +82,7 @@ export function SaveDataSection() {
             }}
             className="flex-1"
           >
-            {mode === 'importing' ? 'ยกเลิก' : 'Import'}
+            {mode === 'importing' ? t('settings.cancel') : t('settings.import')}
           </Button>
         </div>
 
@@ -92,7 +91,7 @@ export function SaveDataSection() {
             <textarea
               value={pasted}
               onChange={(e) => setPasted(e.target.value)}
-              placeholder="วางรหัส save ที่นี่…"
+              placeholder={t('settings.importPlaceholder')}
               rows={4}
               className="w-full px-3 py-2 rounded-lg bg-cream-100 border border-cream-300 text-ink-900 placeholder:text-ink-400 text-xs font-mono focus:outline-none focus:border-clay-500 transition-colors resize-none"
             />
@@ -105,7 +104,7 @@ export function SaveDataSection() {
               disabled={pasted.trim().length === 0}
               className="w-full"
             >
-              นำเข้าและแทนที่
+              {t('settings.importSubmit')}
             </Button>
           </div>
         )}
