@@ -199,9 +199,13 @@ export function PlotView() {
           animationDelay: "120ms",
         }}
       >
-        <CornerButton to="/gallery" label={t('plot.openGallery')} size="primary">
-          <GalleryIcon />
-        </CornerButton>
+        {/* id is read by HarvestOverlay to measure the fly-to-gallery
+            target rect when the player taps "Collect". */}
+        <div id="fly-target-gallery" className="pointer-events-auto">
+          <CornerButton to="/gallery" label={t('plot.openGallery')} size="primary">
+            <GalleryIcon />
+          </CornerButton>
+        </div>
         <LanguageToggle />
       </div>
 

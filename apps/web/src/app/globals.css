@@ -144,6 +144,18 @@
     animation: pulse-slow 3600ms ease-in-out infinite;
   }
 
+  /* Fly-to-gallery — plays on the harvest overlay's flora clone when
+     the player taps "เก็บเข้า Gallery". The clone is positioned at the
+     flora's current rect (inline left/top/width/height) and this
+     animation translates+scales it into the gallery corner button.
+     `--fly-dx`, `--fly-dy`, `--fly-scale` are set inline from JS since
+     they depend on measured rects. Tiny upward hop at the start sells
+     the "pluck" before the arc. */
+  .animate-harvest-fly-to-gallery {
+    animation: harvest-fly-to-gallery 720ms cubic-bezier(0.5, 0, 0.2, 1) forwards;
+    will-change: transform, opacity;
+  }
+
   /* ─── Seed-packet animations ──────────────────────────────────
      A 6-step sequence that plays when the player taps "เริ่มปลูก":
      idle float → shake → tear flap → seed drops → packet dissolves
@@ -328,6 +340,25 @@
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes harvest-fly-to-gallery {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  18% {
+    transform: translate(0, -16px) scale(1.04) rotate(-2deg);
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--fly-dx, 0), var(--fly-dy, 0))
+      scale(var(--fly-scale, 0.25)) rotate(-8deg);
+    opacity: 0;
   }
 }
 

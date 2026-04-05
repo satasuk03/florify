@@ -5,6 +5,12 @@ import Link from 'next/link';
 import { RarityBadge } from '@/components/RarityBadge';
 import { BackIcon } from '@/components/icons';
 import { FloraImage } from '@/components/FloraImage';
+import { LangToggle, type Lang } from '@/components/LangToggle';
+import {
+  StageSelector,
+  STAGE_PROGRESS,
+  type Stage,
+} from '@/components/StageSelector';
 import { useGameStore } from '@/store/gameStore';
 import { SPECIES } from '@/data/species';
 
@@ -16,12 +22,6 @@ import { SPECIES } from '@/data/species';
  * Uses the query-param routing pattern instead of a dynamic route
  * because Next.js 16 static export forbids `dynamicParams: true`.
  */
-
-type Lang = 'th' | 'en';
-
-type Stage = 1 | 2 | 3;
-const STAGES: readonly Stage[] = [1, 2, 3];
-const STAGE_PROGRESS: Record<Stage, number> = { 1: 0, 2: 0.5, 3: 1 };
 
 const COPY = {
   th: {
@@ -45,73 +45,6 @@ const COPY = {
     stageLabel: (n: Stage) => `Stage ${n}`,
   },
 };
-
-function StageSelector({
-  stage,
-  onChange,
-  label,
-}: {
-  stage: Stage;
-  onChange: (s: Stage) => void;
-  label: (s: Stage) => string;
-}) {
-  return (
-    <div
-      role="tablist"
-      aria-label="Growth stage"
-      className="relative inline-flex items-center gap-1 p-1 rounded-full bg-cream-100/95 backdrop-blur border border-cream-300/70 shadow-soft-sm"
-    >
-      {STAGES.map((s) => {
-        const active = s === stage;
-        return (
-          <button
-            key={s}
-            role="tab"
-            aria-selected={active}
-            aria-label={label(s)}
-            onClick={() => onChange(s)}
-            className={`relative w-8 h-8 rounded-full text-xs font-medium tabular-nums transition-all duration-300 ease-out ${
-              active
-                ? 'bg-ink-900 text-cream-50 shadow-soft-sm scale-105'
-                : 'text-ink-500 hover:text-ink-900 hover:bg-cream-200/70'
-            }`}
-          >
-            {s}
-          </button>
-        );
-      })}
-    </div>
-  );
-}
-
-function LangToggle({ lang, onChange }: { lang: Lang; onChange: (l: Lang) => void }) {
-  return (
-    <div
-      role="tablist"
-      aria-label="Language"
-      className="relative inline-flex items-center p-0.5 rounded-full bg-cream-200/80 text-xs font-medium"
-    >
-      <span
-        aria-hidden
-        className="absolute top-0.5 bottom-0.5 w-[calc(50%-2px)] rounded-full bg-cream-50 shadow-soft-sm transition-transform duration-300 ease-out"
-        style={{ transform: lang === 'th' ? 'translateX(0)' : 'translateX(100%)' }}
-      />
-      {(['th', 'en'] as const).map((code) => (
-        <button
-          key={code}
-          role="tab"
-          aria-selected={lang === code}
-          onClick={() => onChange(code)}
-          className={`relative z-10 px-3 py-1 rounded-full transition-colors duration-200 ${
-            lang === code ? 'text-ink-900' : 'text-ink-500 hover:text-ink-700'
-          }`}
-        >
-          {code === 'th' ? 'ไทย' : 'EN'}
-        </button>
-      ))}
-    </div>
-  );
-}
 
 export function DetailView({ id }: { id: string | null }) {
   const [lang, setLang] = useState<Lang>('th');

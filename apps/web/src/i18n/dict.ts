@@ -63,6 +63,23 @@ export const dict = {
     'settings.resetAll': 'รีเซ็ตข้อมูลทั้งหมด',
     'settings.resetConfirm': 'รีเซ็ตต้นไม้ทั้งหมดและสถิติ? การกระทำนี้ย้อนกลับไม่ได้',
     'settings.resetSuccess': 'รีเซ็ตข้อมูลเรียบร้อย',
+
+    // ── Harvest overlay ────────────────────────
+    'harvest.headline.common': 'ต้นไม้ใหม่ 🌿',
+    'harvest.headline.rare': 'พบของหายาก ✨',
+    'harvest.headline.legendary': 'บานสะพรั่งในตำนาน 🌼',
+    'harvest.waterings': 'รดน้ำ {count} ครั้ง · เก็บเข้า Gallery แล้ว',
+    'harvest.collect': 'เก็บเข้า Gallery',
+    'harvest.share': 'แชร์',
+
+    // ── Floripedia (public species page) ───────
+    'floripedia.title': 'Floripedia',
+    'floripedia.notFound': 'ไม่พบสายพันธุ์นี้',
+    'floripedia.home': 'กลับหน้าหลัก',
+    'floripedia.share': 'แชร์หน้านี้',
+    'floripedia.shareTitle': 'Florify — {name}',
+    'floripedia.shareText': 'ฉันเจอ {name} ใน Florify 🌿',
+    'floripedia.copied': 'คัดลอกลิงก์แล้ว',
   },
   en: {
     // ── PlotView ───────────────────────────────
@@ -118,6 +135,23 @@ export const dict = {
     'settings.resetAll': 'Reset all data',
     'settings.resetConfirm': 'Reset all plants and stats? This cannot be undone.',
     'settings.resetSuccess': 'Data reset',
+
+    // ── Harvest overlay ────────────────────────
+    'harvest.headline.common': 'New addition 🌿',
+    'harvest.headline.rare': 'Rare find ✨',
+    'harvest.headline.legendary': 'Legendary bloom 🌼',
+    'harvest.waterings': 'Watered {count} times · Added to Gallery',
+    'harvest.collect': 'Add to Gallery',
+    'harvest.share': 'Share',
+
+    // ── Floripedia (public species page) ───────
+    'floripedia.title': 'Floripedia',
+    'floripedia.notFound': 'Species not found',
+    'floripedia.home': 'Back to home',
+    'floripedia.share': 'Share this page',
+    'floripedia.shareTitle': 'Florify — {name}',
+    'floripedia.shareText': 'I found {name} in Florify 🌿',
+    'floripedia.copied': 'Link copied',
   },
 } as const satisfies Record<Language, Record<string, string>>;
 
