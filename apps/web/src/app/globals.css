@@ -1,0 +1,123 @@
+@import "tailwindcss";
+
+/* ─── Florify design tokens — off-white warm theme ──────────────
+   Mirrors designs/02-design-system.md §2.2. In Tailwind v4, tokens
+   live in @theme so they become utilities automatically (e.g.
+   `bg-cream-50`, `text-ink-900`, `shadow-soft-md`). */
+@theme {
+  /* Cream — off-white warm scale (surfaces) */
+  --color-cream-50:  #FBF8F3;
+  --color-cream-100: #F6F1E8;
+  --color-cream-200: #EEE6D6;
+  --color-cream-300: #E3D7C0;
+  --color-cream-400: #D1C0A0;
+
+  /* Ink — warm dark text */
+  --color-ink-900: #2B241B;
+  --color-ink-700: #4A3F30;
+  --color-ink-500: #6B5E4B;
+  --color-ink-300: #9C8F7B;
+
+  /* Clay — earthy terracotta accent */
+  --color-clay-400: #D89872;
+  --color-clay-500: #C7825A;
+  --color-clay-600: #A96842;
+
+  /* Leaf — nature green */
+  --color-leaf-300: #A8C49A;
+  --color-leaf-500: #6B8E4E;
+  --color-leaf-700: #4A6B35;
+
+  /* Rarity tier colors */
+  --color-rarity-common:    #B8A888;
+  --color-rarity-rare:      #7A9CB8;
+  --color-rarity-legendary: #D4A24C;
+
+  /* Utility */
+  --color-water:   #8EB5C7;
+  --color-warning: #C9925E;
+  --color-danger:  #B5574A;
+
+  /* Warm soft shadows (not neutral gray) */
+  --shadow-soft-sm: 0 1px 2px rgba(75, 55, 30, 0.06);
+  --shadow-soft-md: 0 4px 12px rgba(75, 55, 30, 0.08);
+  --shadow-soft-lg: 0 12px 32px rgba(75, 55, 30, 0.12);
+  --shadow-glow-common:    0 0 24px rgba(184, 168, 136, 0.4);
+  --shadow-glow-rare:      0 0 32px rgba(122, 156, 184, 0.5);
+  --shadow-glow-legendary: 0 0 48px rgba(212, 162, 76, 0.6);
+
+  /* Typography — next/font injects --font-sarabun / --font-fraunces via layout.tsx */
+  --font-sans: var(--font-sarabun), system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-serif: var(--font-fraunces), ui-serif, Georgia, serif;
+}
+
+/* ─── Base layer ───────────────────────────────────────────────── */
+@layer base {
+  html,
+  body {
+    height: 100%;
+    background-color: var(--color-cream-50);
+    color: var(--color-ink-900);
+    font-family: var(--font-sans);
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-serif);
+    font-weight: 600;
+  }
+
+  /* Mobile fixes — designs/08 §8.2 */
+  body {
+    overscroll-behavior: none;        /* prevent pull-to-refresh */
+    touch-action: manipulation;       /* kill 300ms tap delay */
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  input,
+  textarea,
+  select {
+    font-size: 16px;                  /* prevent iOS zoom on focus */
+  }
+  button {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* ─── Safe-area utility classes ────────────────────────────────── */
+@layer utilities {
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .safe-x {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+
+  /* Flora stage-change entry animation — plays when FloraImage
+     remounts the current-stage <img> via a keyed element. Paired
+     with a fade-out on the outgoing stage to crossfade growth. */
+  .animate-flora-stage-in {
+    animation: flora-stage-in 380ms ease-out both;
+    transform-origin: 50% 85%;
+  }
+}
+
+@keyframes flora-stage-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.03);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "florify",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Florify — plant, water, and collect procedurally-generated trees",
+  "scripts": {
+    "dev": "pnpm --filter @florify/web dev",
+    "build": "pnpm -r build",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test"
+  },
+  "packageManager": "pnpm@9.0.0",
+  "engines": {
+    "node": ">=20"
+  }
+}
