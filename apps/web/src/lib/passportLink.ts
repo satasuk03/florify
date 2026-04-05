@@ -1,0 +1,265 @@
+import type { FloristCardData, FloristRank } from '@/store/gameStore';
+import { gzip, gunzip } from './saveTransfer';
+
+/**
+ * Self-contained shareable passport links.
+ *
+ * Wire format (lives in the URL *fragment*, never sent to the server):
+ *   "fp1:" + base64url( gzip( utf8( JSON(packed) ) ) )
+ *
+ * Why in the fragment:
+ * - Static export + no backend means we can't persist serials → data.
+ *   Embedding the passport directly in the link is the only way to make
+ *   `/p/#…` self-render for recipients who've never opened Florify.
+ * - The fragment never reaches the server, so it stays out of analytics,
+ *   access logs, and referer headers.
+ *
+ * Why a distinct `fp1:` prefix (vs `florify1:` for saves):
+ * - A save string pasted into a passport link (or vice versa) fails
+ *   fast with a clear error instead of running through the wrong decoder.
+ * - The trailing `1` reserves a wire-format bump path.
+ *
+ * What's *not* in the payload:
+ * - `userId` — only the public, non-reversible `serial` derived from
+ *   it is shared, so recipients can't impersonate the owner once cloud
+ *   auth lands.
+ * - Rarity totals (200/80/20) — they're constants the decoder refills.
+ */
+
+const WIRE_PREFIX = 'fp1:';
+const FORMAT_VERSION = 1;
+
+const RARITY_TOTALS = {
+  common: 200,
+  rare: 80,
+  legendary: 20,
+} as const;
+
+const VALID_RANKS: readonly FloristRank[] = [
+  'Seedling',
+  'Apprentice',
+  'Gardener',
+  'Master',
+  'Legend',
+];
+
+/** Short-keyed payload — pre-gzip JSON size dominates for tiny inputs. */
+interface PackedPayload {
+  v: number; // format version
+  s: string; // serial (FL-xxxx-xxxx)
+  n: string; // displayName
+  r: FloristRank; // rank
+  u: number; // speciesUnlocked
+  h: number; // totalHarvested
+  c: number; // currentStreak
+  l: number; // longestStreak
+  rc: number; // rarity common unlocked
+  rr: number; // rarity rare unlocked
+  rl: number; // rarity legendary unlocked
+  t: number; // startedAt (epoch ms)
+}
+
+export type DecodeResult =
+  | { ok: true; data: FloristCardData }
+  | { ok: false; reason: string };
+
+// ── Encode ───────────────────────────────────────────────────────────
+
+/** Returns the encoded payload body only (without prefix or URL). */
+export async function encodePassportPayload(data: FloristCardData): Promise<string> {
+  const packed: PackedPayload = {
+    v: FORMAT_VERSION,
+    s: data.serial,
+    n: data.displayName,
+    r: data.rank,
+    u: data.speciesUnlocked,
+    h: data.totalHarvested,
+    c: data.currentStreak,
+    l: data.longestStreak,
+    rc: data.rarityProgress.common.unlocked,
+    rr: data.rarityProgress.rare.unlocked,
+    rl: data.rarityProgress.legendary.unlocked,
+    t: data.startedAt,
+  };
+  const json = JSON.stringify(packed);
+  const compressed = await gzip(new TextEncoder().encode(json));
+  return WIRE_PREFIX + bytesToBase64Url(compressed);
+}
+
+/**
+ * Build a fully-qualified passport URL for the given card.
+ *
+ * `origin` defaults to `window.location.origin` — callers on the server
+ * (currently none, since this route is client-only) must pass an origin.
+ */
+export async function encodePassportLink(
+  data: FloristCardData,
+  origin?: string,
+): Promise<string> {
+  const body = await encodePassportPayload(data);
+  const base =
+    origin ?? (typeof window !== 'undefined' ? window.location.origin : '');
+  return `${base}/p/#${body}`;
+}
+
+// ── Decode ───────────────────────────────────────────────────────────
+
+/**
+ * Decode a raw hash string (with or without a leading `#`) into
+ * `FloristCardData`. Never throws — tamper/garbage input produces a
+ * clean `{ ok: false, reason }` the UI can surface.
+ */
+export async function decodePassportLink(hash: string): Promise<DecodeResult> {
+  const trimmed = hash.trim().replace(/^#/, '');
+  if (!trimmed) return { ok: false, reason: 'ไม่มีข้อมูลในลิงค์' };
+
+  if (!trimmed.startsWith(WIRE_PREFIX)) {
+    return { ok: false, reason: 'ลิงค์พาสปอร์ตไม่ถูกต้อง' };
+  }
+  const body = trimmed.slice(WIRE_PREFIX.length);
+
+  let compressed: Uint8Array;
+  try {
+    compressed = base64UrlToBytes(body);
+  } catch {
+    return { ok: false, reason: 'ถอดรหัสลิงค์ไม่ได้' };
+  }
+
+  let json: string;
+  try {
+    const plain = await gunzip(compressed);
+    json = new TextDecoder().decode(plain);
+  } catch {
+    return { ok: false, reason: 'ข้อมูลในลิงค์เสียหาย' };
+  }
+
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(json);
+  } catch {
+    return { ok: false, reason: 'อ่านข้อมูลพาสปอร์ตไม่ได้' };
+  }
+
+  const packed = validatePacked(parsed);
+  if (!packed) {
+    return { ok: false, reason: 'โครงสร้างพาสปอร์ตไม่ถูกต้อง' };
+  }
+
+  if (packed.v > FORMAT_VERSION) {
+    return { ok: false, reason: `ลิงค์รุ่นใหม่กว่าที่รองรับ (v${packed.v})` };
+  }
+
+  return { ok: true, data: unpack(packed) };
+}
+
+function unpack(p: PackedPayload): FloristCardData {
+  return {
+    rank: p.r,
+    speciesUnlocked: p.u,
+    totalHarvested: p.h,
+    currentStreak: p.c,
+    longestStreak: p.l,
+    rarityProgress: {
+      common: { unlocked: p.rc, total: RARITY_TOTALS.common },
+      rare: { unlocked: p.rr, total: RARITY_TOTALS.rare },
+      legendary: { unlocked: p.rl, total: RARITY_TOTALS.legendary },
+    },
+    startedAt: p.t,
+    serial: p.s,
+    displayName: p.n,
+  };
+}
+
+function validatePacked(v: unknown): PackedPayload | null {
+  if (typeof v !== 'object' || v === null) return null;
+  const o = v as Record<string, unknown>;
+
+  // Numeric fields — clamp to finite, non-negative integers. Rejects
+  // NaN, Infinity, negative tampering, and non-number types in one go.
+  const num = (k: string): number | null => {
+    const x = o[k];
+    return typeof x === 'number' && Number.isFinite(x) && x >= 0 ? x : null;
+  };
+  const str = (k: string, maxLen: number): string | null => {
+    const x = o[k];
+    return typeof x === 'string' && x.length > 0 && x.length <= maxLen ? x : null;
+  };
+
+  const v_ = num('v');
+  const s = str('s', 32);
+  const n = str('n', 64);
+  const r = o.r;
+  const u = num('u');
+  const h = num('h');
+  const c = num('c');
+  const l = num('l');
+  const rc = num('rc');
+  const rr = num('rr');
+  const rl = num('rl');
+  const t = num('t');
+
+  if (
+    v_ === null ||
+    s === null ||
+    n === null ||
+    typeof r !== 'string' ||
+    !VALID_RANKS.includes(r as FloristRank) ||
+    u === null ||
+    h === null ||
+    c === null ||
+    l === null ||
+    rc === null ||
+    rr === null ||
+    rl === null ||
+    t === null
+  ) {
+    return null;
+  }
+
+  return {
+    v: v_,
+    s,
+    n,
+    r: r as FloristRank,
+    u,
+    h,
+    c,
+    l,
+    rc,
+    rr,
+    rl,
+    t,
+  };
+}
+
+// ── base64url <-> bytes (URL-safe, no padding) ───────────────────────
+//
+// Standard base64 uses `+` / `/` / `=`, all of which are either
+// reserved or ugly inside a URL fragment. base64url swaps `+`→`-`,
+// `/`→`_`, and strips trailing `=` padding. We roundtrip through
+// btoa/atob since the CompressionStream output is a tight byte array.
+
+function bytesToBase64Url(bytes: Uint8Array): string {
+  let binary = '';
+  for (let i = 0; i < bytes.length; i++) {
+    binary += String.fromCharCode(bytes[i]!);
+  }
+  return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+function base64UrlToBytes(b64url: string): Uint8Array {
+  // Reject anything that isn't in the URL-safe alphabet before handing
+  // it to atob — atob throws on `=` in the middle but silently ignores
+  // some other garbage.
+  if (!/^[A-Za-z0-9\-_]*$/.test(b64url)) {
+    throw new Error('invalid base64url');
+  }
+  const padLen = (4 - (b64url.length % 4)) % 4;
+  const b64 = b64url.replace(/-/g, '+').replace(/_/g, '/') + '='.repeat(padLen);
+  const binary = atob(b64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+  return bytes;
+}

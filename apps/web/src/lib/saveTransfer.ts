@@ -124,8 +124,10 @@ export async function importSaveString(raw: string): Promise<ImportResult> {
 }
 
 // ── gzip via CompressionStream ───────────────────────────────────────
+// Exported so sibling modules (e.g. passportLink.ts) can reuse the
+// same compression primitives without duplicating the Blob/Stream dance.
 
-async function gzip(input: Uint8Array): Promise<Uint8Array> {
+export async function gzip(input: Uint8Array): Promise<Uint8Array> {
   const stream = new Blob([input as BlobPart]).stream().pipeThrough(
     new CompressionStream('gzip'),
   );
@@ -133,7 +135,7 @@ async function gzip(input: Uint8Array): Promise<Uint8Array> {
   return new Uint8Array(buf);
 }
 
-async function gunzip(input: Uint8Array): Promise<Uint8Array> {
+export async function gunzip(input: Uint8Array): Promise<Uint8Array> {
   const stream = new Blob([input as BlobPart]).stream().pipeThrough(
     new DecompressionStream('gzip'),
   );

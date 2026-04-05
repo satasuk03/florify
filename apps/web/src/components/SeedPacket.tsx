@@ -82,9 +82,6 @@ export function SeedPacket({ state, onComplete, className }: Props) {
     <div
       className={clsx(
         'pointer-events-none select-none',
-        // Warm soft drop shadow (matches the reference's dy=15 sd=20
-        // tinted with ink rather than neutral gray).
-        'drop-shadow-[0_14px_28px_rgba(120,90,50,0.18)]',
         className,
       )}
       aria-hidden
@@ -153,16 +150,6 @@ export function SeedPacket({ state, onComplete, className }: Props) {
             <stop offset="100%" stopColor="#B89570" />
           </linearGradient>
         </defs>
-
-        {/* ─── Floor shadow ─── soft warm ellipse grounding the packet. */}
-        <ellipse
-          cx="100"
-          cy="288"
-          rx="72"
-          ry="5"
-          fill="#78614A"
-          opacity="0.14"
-        />
 
         {/* ─── BODY (dissolves during `opening`) ─────────────────── */}
         <g className={clsx(opening && 'animate-packet-dissolve')}>

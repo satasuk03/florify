@@ -86,6 +86,7 @@ Verify all three files exist and are non-empty before moving on.
    - `name`: display name
    - `rarity`: chosen rarity
    - `descriptionEN` / `descriptionTH`: the lore
+   - `series`: `SpeciesSeries.Abnormal` by default for user-added floras (use `SpeciesSeries.Original` only if the user explicitly asks). Import the enum from the same file — it's exported alongside `SpeciesDef`.
    Relax the `SPECIES.length !== 300` guard to `< 300`. Keep the id-equals-index and folder-matches-FLORA_NAMES checks intact — they still need to pass.
 
 ### 7. Verify

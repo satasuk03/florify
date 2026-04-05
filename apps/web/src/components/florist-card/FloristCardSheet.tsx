@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Button } from '@/components/Button';
 import { selectFloristCard, useGameStore } from '@/store/gameStore';
 import { toast } from '@/lib/toast';
+import { encodePassportLink } from '@/lib/passportLink';
 import { PassportCard } from './PassportCard';
 import { sharePassport, type ShareResult } from './sharePassport';
 
@@ -87,6 +88,20 @@ export function FloristCardSheet({ open, onClose }: Props) {
     window.addEventListener('resize', update);
     return () => window.removeEventListener('resize', update);
   }, [open]);
+
+  const handleCopyLink = useCallback(async () => {
+    try {
+      const url = await encodePassportLink(data);
+      if (typeof navigator === 'undefined' || !navigator.clipboard) {
+        toast('เบราว์เซอร์นี้ไม่รองรับการคัดลอก');
+        return;
+      }
+      await navigator.clipboard.writeText(url);
+      toast('คัดลอกลิงค์พาสปอร์ตแล้ว 🔗');
+    } catch {
+      toast('คัดลอกลิงค์ไม่ได้ ลองอีกครั้งนะ');
+    }
+  }, [data]);
 
   const handleShare = useCallback(async () => {
     setSheet({ phase: 'generating' });
@@ -183,6 +198,15 @@ export function FloristCardSheet({ open, onClose }: Props) {
               {shareLabel}  🌼
             </Button>
           </div>
+          <Button
+            variant="secondary"
+            size="md"
+            className="w-full"
+            onClick={handleCopyLink}
+            aria-label="Copy a shareable link to this passport"
+          >
+            คัดลอกลิงค์พาสปอร์ต  🔗
+          </Button>
           {hint && (
             <div className="text-xs text-ink-500 mt-1 text-center">{hint}</div>
           )}
