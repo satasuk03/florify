@@ -18,6 +18,7 @@ import { FloristCardSheet } from "@/components/florist-card/FloristCardSheet";
 import { SettingsSheet } from "@/components/settings/SettingsSheet";
 import { HarvestOverlay } from "@/components/HarvestOverlay";
 import { SeedPacket } from "@/components/SeedPacket";
+import { WaterSplash } from "@/components/WaterSplash";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import { useGameStore } from "@/store/gameStore";
 import { useHandheld } from "@/hooks/useHandheld";
@@ -43,6 +44,11 @@ export function PlotView() {
   const [showFlorist, setShowFlorist] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [harvested, setHarvested] = useState<TreeInstance | null>(null);
+  // Monotonic counter keyed onto <WaterSplash> — incrementing it on
+  // every successful water tap remounts the component and replays its
+  // one-shot droplet animation from the start. 0 means "never tapped",
+  // which suppresses the initial render.
+  const [splashKey, setSplashKey] = useState(0);
 
   // Plot phase state machine. Drives whether we show the seed packet,
   // the opening animation, or the full flora. `activeTree` is the
@@ -83,7 +89,9 @@ export function PlotView() {
 
   const handleWater = () => {
     const result = water();
-    if (result.ok && result.harvested) setHarvested(result.harvested);
+    if (!result.ok) return;
+    setSplashKey((k) => k + 1);
+    if (result.harvested) setHarvested(result.harvested);
   };
 
   const handlePlant = () => {
@@ -117,6 +125,10 @@ export function PlotView() {
           progress={tree.currentWaterings / tree.requiredWaterings}
         />
       )}
+
+      {/* Water droplet burst — remounts on every successful water tap
+          via the `splashKey` counter so the keyframes replay cleanly. */}
+      {phase === "tree" && splashKey > 0 && <WaterSplash key={splashKey} />}
 
       {/* ─── SEED PACKET ───────────────────────────────────
           Centerpiece of the empty state; plays its opening sequence
