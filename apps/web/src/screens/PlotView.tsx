@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { TreeInstance } from '@florify/shared';
 import { FloraImage } from '@/components/FloraImage';
 import { PerlinNoise } from '@/components/PerlinNoise';
@@ -34,6 +34,20 @@ export function PlotView() {
   const floraRef = useRef<HTMLDivElement>(null);
   useHandheld(floraRef);
 
+  // `canWater()` is derived from `Date.now()` but Zustand only notifies
+  // subscribers on `set()` — so when the cooldown simply elapses, nothing
+  // triggers a re-render and the รดน้ำ button stays disabled until some
+  // unrelated interaction re-renders the screen. Schedule a one-shot
+  // re-render at the exact moment the cooldown expires to re-enable it
+  // without a page refresh.
+  const [, forceTick] = useState(0);
+  useEffect(() => {
+    if (canWater || nextAt === null) return;
+    const delay = Math.max(0, nextAt - Date.now()) + 50;
+    const id = setTimeout(() => forceTick((n) => n + 1), delay);
+    return () => clearTimeout(id);
+  }, [canWater, nextAt]);
+
   const handleWater = () => {
     const result = water();
     if (result.ok && result.harvested) setHarvested(result.harvested);
@@ -50,11 +64,13 @@ export function PlotView() {
 
       {/* Full-bleed 2D flora (fills the frame on desktop, the screen on mobile).
           Wrapped in a ref'd box that receives a handheld-camera wobble via
-          `useHandheld`, so the flora drifts gently like a shaky phone hold. */}
+          `useHandheld`, so the flora drifts gently like a shaky phone hold.
+          A slow fade-in layers under the flora-stage animation so the very
+          first frame of the app doesn't pop in abruptly. */}
       {tree && (
         <div
           ref={floraRef}
-          className="absolute inset-0 pointer-events-none select-none will-change-transform"
+          className="absolute inset-0 pointer-events-none select-none will-change-transform animate-fade-in"
         >
           <FloraImage
             speciesId={tree.speciesId}
@@ -66,8 +82,11 @@ export function PlotView() {
 
       {/* ─── TOP-LEFT: Gallery ──────────────────────────── */}
       <div
-        className="absolute top-0 left-0 pl-4 pointer-events-none"
-        style={{ paddingTop: 'calc(env(safe-area-inset-top) + 0.75rem)' }}
+        className="absolute top-0 left-0 pl-4 pointer-events-none animate-fade-down"
+        style={{
+          paddingTop: 'calc(env(safe-area-inset-top) + 0.75rem)',
+          animationDelay: '120ms',
+        }}
       >
         <CornerButton to="/gallery" label="Open Gallery" size="primary">
           <GalleryIcon />
@@ -76,8 +95,11 @@ export function PlotView() {
 
       {/* ─── TOP-RIGHT: Florist Card + Login (Coming Soon) ── */}
       <div
-        className="absolute top-0 right-0 flex flex-col items-end gap-2 pr-4 pointer-events-none"
-        style={{ paddingTop: 'calc(env(safe-area-inset-top) + 0.75rem)' }}
+        className="absolute top-0 right-0 flex flex-col items-end gap-2 pr-4 pointer-events-none animate-fade-down"
+        style={{
+          paddingTop: 'calc(env(safe-area-inset-top) + 0.75rem)',
+          animationDelay: '200ms',
+        }}
       >
         <CornerButton
           onClick={() => setShowFlorist(true)}
@@ -99,12 +121,19 @@ export function PlotView() {
 
       {/* ─── BOTTOM CENTER ACTION ──────────────────────── */}
       <div
-        className="absolute bottom-0 left-0 right-0 flex flex-col items-center pointer-events-none"
-        style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 1.5rem)' }}
+        className="absolute bottom-0 left-0 right-0 flex flex-col items-center pointer-events-none animate-fade-up"
+        style={{
+          paddingBottom: 'calc(env(safe-area-inset-bottom) + 1.5rem)',
+          animationDelay: '280ms',
+        }}
       >
         <div className="pointer-events-auto flex flex-col items-center gap-2">
           {tree && (
-            <div className="text-xs text-ink-500 tracking-wider font-medium tabular-nums">
+            <div
+              // Re-key on percent so the number softly fades when progress ticks.
+              key={percent}
+              className="text-xs text-ink-500 tracking-wider font-medium tabular-nums animate-fade-in"
+            >
               {percent}%
             </div>
           )}

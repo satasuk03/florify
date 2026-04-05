@@ -10,7 +10,8 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variantClasses: Record<Variant, string> = {
-  primary: 'bg-clay-500 text-cream-50 hover:bg-clay-400 active:bg-clay-600 shadow-soft-md',
+  primary:
+    'bg-clay-500 text-cream-50 hover:bg-clay-400 active:bg-clay-600 shadow-soft-md hover:shadow-soft-lg shine-on-hover',
   secondary: 'bg-cream-100 text-ink-900 hover:bg-cream-200 border border-cream-300',
   ghost: 'bg-transparent text-ink-700 hover:bg-cream-100',
 };
@@ -28,7 +29,11 @@ export const Button = forwardRef<HTMLButtonElement, Props>(function Button(
     <button
       ref={ref}
       className={clsx(
-        'font-medium transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed',
+        // Ease-out + longer duration reads as "settled" rather than snappy.
+        // `active:scale` gives a subtle press affordance without looking toy-like.
+        'font-medium transition-all duration-300 ease-out',
+        'active:scale-[0.98] motion-reduce:active:scale-100',
+        'disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100',
         variantClasses[variant],
         sizeClasses[size],
         className,

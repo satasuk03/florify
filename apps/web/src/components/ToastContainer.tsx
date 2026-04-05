@@ -12,8 +12,10 @@ export function ToastContainer() {
     >
       {message && (
         <div
+          // Re-key on message so the animation replays for each new toast.
+          key={message}
           role="status"
-          className="mx-4 mb-6 max-w-md rounded-xl bg-ink-900/90 text-cream-50 text-sm px-4 py-3 shadow-soft-lg backdrop-blur-sm"
+          className="mx-4 mb-6 max-w-md rounded-xl bg-ink-900/90 text-cream-50 text-sm px-4 py-3 shadow-soft-lg backdrop-blur-sm animate-toast-in"
         >
           {message}
         </div>

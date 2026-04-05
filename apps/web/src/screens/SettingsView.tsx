@@ -73,10 +73,10 @@ export function SettingsView() {
 
   return (
     <div className="min-h-full h-full overflow-y-auto bg-cream-50 safe-top safe-bottom px-4 pb-24">
-      <header className="flex items-center justify-between py-4">
+      <header className="flex items-center justify-between py-4 animate-fade-down">
         <Link
           href="/"
-          className="w-10 h-10 flex items-center justify-center text-ink-700 hover:bg-cream-100 rounded-full transition-colors"
+          className="w-10 h-10 flex items-center justify-center text-ink-700 hover:bg-cream-100 rounded-full transition-all duration-300 ease-out hover:-translate-x-0.5 motion-reduce:hover:translate-x-0"
           aria-label="Back to home"
         >
           <BackIcon />
@@ -87,8 +87,12 @@ export function SettingsView() {
 
       {settings && (
         <div className="space-y-3 mt-4">
-          {ROWS.map((row) => (
-            <Card key={row.key} className="p-4 flex items-center justify-between gap-4">
+          {ROWS.map((row, i) => (
+            <Card
+              key={row.key}
+              className="p-4 flex items-center justify-between gap-4 animate-fade-up"
+              style={{ animationDelay: `${i * 70 + 80}ms` }}
+            >
               <div className="flex-1 min-w-0">
                 <div className="text-base text-ink-900">{row.label}</div>
                 {row.hint && <div className="text-xs text-ink-500 mt-0.5">{row.hint}</div>}
@@ -103,7 +107,10 @@ export function SettingsView() {
         </div>
       )}
 
-      <section className="mt-10">
+      <section
+        className="mt-10 animate-fade-up"
+        style={{ animationDelay: `${ROWS.length * 70 + 120}ms` }}
+      >
         <h2 className="text-sm font-medium text-ink-500 uppercase tracking-wider mb-3">
           Danger zone
         </h2>
@@ -139,12 +146,12 @@ function Toggle({
       aria-checked={checked}
       aria-label={label}
       onClick={() => onChange(!checked)}
-      className={`relative h-7 w-12 rounded-full transition-colors duration-150 flex-shrink-0 ${
+      className={`relative h-7 w-12 rounded-full transition-colors duration-300 ease-out flex-shrink-0 ${
         checked ? 'bg-clay-500' : 'bg-cream-300'
       }`}
     >
       <span
-        className={`absolute top-0.5 left-0.5 h-6 w-6 rounded-full bg-cream-50 shadow-soft-sm transition-transform duration-150 ${
+        className={`absolute top-0.5 left-0.5 h-6 w-6 rounded-full bg-cream-50 shadow-soft-sm transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
           checked ? 'translate-x-5' : 'translate-x-0'
         }`}
       />

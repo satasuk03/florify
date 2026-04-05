@@ -7,7 +7,7 @@
  * resolves a stable speciesId (0..299) to its folder name.
  */
 
-const PREFIXES = [
+export const PREFIXES = [
   'sun', 'moon', 'star', 'dawn', 'dusk', 'night', 'dream', 'mist', 'storm', 'tide',
   'ember', 'frost', 'glow', 'shadow', 'silver', 'gold', 'crimson', 'violet', 'azure', 'jade',
   'ruby', 'amber', 'pearl', 'obsidian', 'copper', 'crystal', 'velvet', 'silk', 'flame', 'ice',
@@ -16,19 +16,30 @@ const PREFIXES = [
   'mirth', 'tempest', 'grove', 'hollow', 'fen', 'marsh', 'cinder', 'opal', 'topaz', 'coral',
 ] as const;
 
-const SUFFIXES = ['leaf', 'fern', 'bloom', 'petal', 'moss'] as const;
+export const SUFFIXES = ['leaf', 'fern', 'bloom', 'petal', 'moss'] as const;
 
-function buildFloraNames(): readonly string[] {
-  const out: string[] = [];
-  for (const p of PREFIXES) {
-    for (const s of SUFFIXES) {
-      out.push(`${p}${s}`);
+export type Prefix = (typeof PREFIXES)[number];
+export type Suffix = (typeof SUFFIXES)[number];
+
+export interface FloraEntry {
+  readonly folder: string;
+  readonly prefix: Prefix;
+  readonly suffix: Suffix;
+}
+
+function buildFloraEntries(): readonly FloraEntry[] {
+  const out: FloraEntry[] = [];
+  for (const prefix of PREFIXES) {
+    for (const suffix of SUFFIXES) {
+      out.push({ folder: `${prefix}${suffix}`, prefix, suffix });
     }
   }
   return out;
 }
 
-export const FLORA_NAMES: readonly string[] = buildFloraNames();
+export const FLORA_ENTRIES: readonly FloraEntry[] = buildFloraEntries();
+
+export const FLORA_NAMES: readonly string[] = FLORA_ENTRIES.map((e) => e.folder);
 
 if (FLORA_NAMES.length !== 300) {
   throw new Error(`expected 300 flora names, got ${FLORA_NAMES.length}`);

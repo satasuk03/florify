@@ -135,7 +135,7 @@ export function FloristCardSheet({ open, onClose }: Props) {
 
   return (
     <div
-      className="fixed inset-0 z-40 bg-ink-900/50 backdrop-blur-sm flex items-end sm:items-center justify-center"
+      className="fixed inset-0 z-40 bg-ink-900/50 backdrop-blur-sm flex items-end sm:items-center justify-center animate-overlay-in"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -143,7 +143,7 @@ export function FloristCardSheet({ open, onClose }: Props) {
     >
       <div
         ref={contentRef}
-        className="w-full sm:max-w-md bg-cream-50 rounded-t-3xl sm:rounded-3xl p-6 shadow-soft-lg max-h-[92dvh] overflow-y-auto"
+        className="w-full sm:max-w-md bg-cream-50 rounded-t-3xl sm:rounded-3xl p-6 shadow-soft-lg max-h-[92dvh] overflow-y-auto scrollbar-elegant animate-sheet-up"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center mb-4">

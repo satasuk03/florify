@@ -58,7 +58,7 @@ export function HarvestOverlay({ tree, onDismiss }: Props) {
       role="dialog"
       aria-modal="true"
       aria-label="Harvest celebration"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-cream-50/85 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-cream-50/85 backdrop-blur-sm animate-overlay-in"
       onClick={onDismiss}
     >
       {/* Rarity-tinted radial glow */}
@@ -69,21 +69,39 @@ export function HarvestOverlay({ tree, onDismiss }: Props) {
       />
 
       <div
-        className="relative flex flex-col items-center gap-5 px-8 text-center max-w-md"
+        className="relative flex flex-col items-center gap-5 px-8 text-center max-w-md animate-scale-in"
+        style={{ animationDelay: '80ms' }}
         onClick={(e) => e.stopPropagation()}
       >
-        <RarityBadge rarity={tree.rarity} />
-        <h2 className="font-serif text-3xl text-ink-900">{headline}</h2>
-        <p className="font-serif text-2xl text-ink-700">
+        {/* Children fade up with a gentle stagger so the reveal feels
+            orchestrated rather than all-at-once. */}
+        <div className="animate-fade-up" style={{ animationDelay: '160ms' }}>
+          <RarityBadge rarity={tree.rarity} />
+        </div>
+        <h2
+          className="font-serif text-3xl text-ink-900 animate-fade-up"
+          style={{ animationDelay: '220ms' }}
+        >
+          {headline}
+        </h2>
+        <p
+          className="font-serif text-2xl text-ink-700 animate-fade-up"
+          style={{ animationDelay: '300ms' }}
+        >
           {species?.name ?? 'Unknown species'}
         </p>
-        <p className="text-sm text-ink-500 max-w-xs">
+        <p
+          className="text-sm text-ink-500 max-w-xs animate-fade-up"
+          style={{ animationDelay: '380ms' }}
+        >
           รดน้ำ {tree.requiredWaterings} ครั้ง · เก็บเข้า Gallery แล้ว
         </p>
 
-        <Button size="lg" onClick={onDismiss} className="mt-3 min-w-[200px]">
-          เก็บเข้า Gallery
-        </Button>
+        <div className="animate-fade-up" style={{ animationDelay: '460ms' }}>
+          <Button size="lg" onClick={onDismiss} className="mt-3 min-w-[200px]">
+            เก็บเข้า Gallery
+          </Button>
+        </div>
       </div>
     </div>
   );
