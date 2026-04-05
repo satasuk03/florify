@@ -166,12 +166,12 @@ function drawCorner(ctx: CanvasRenderingContext2D, op: Extract<DrawOp, { type: '
   const half = op.width / 2;
   // Horizontal arm
   let hx = op.x;
-  let hy = op.y - half;
-  let hw = op.len;
+  const hy = op.y - half;
+  const hw = op.len;
   // Vertical arm
   let vx = op.x - half;
   let vy = op.y;
-  let vh = op.len;
+  const vh = op.len;
   if (op.corner === 'tr' || op.corner === 'br') {
     hx = op.x - op.len;
     vx = op.x - half;

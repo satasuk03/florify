@@ -14,6 +14,7 @@ import { SeedPacket } from '@/components/SeedPacket';
 import { useGameStore } from '@/store/gameStore';
 import { useHandheld } from '@/hooks/useHandheld';
 import { toast } from '@/lib/toast';
+import { SPECIES } from '@/data/species';
 
 /**
  * Home screen — designs/07 §7.1.
@@ -40,19 +41,23 @@ export function PlotView() {
   // ground truth from the store but we can't render flora the instant
   // it appears — the packet opening needs ~1.2s first. So the phase is
   // derived on mount, then advanced manually by the packet's onComplete
-  // callback, and re-synced via useEffect for post-harvest transitions
-  // and hydration edge cases.
+  // callback, and re-synced in render (via the "adjust state on prop
+  // change" pattern) for post-harvest transitions and zustand hydration
+  // edge cases.
   type Phase = 'empty' | 'opening' | 'tree';
   const [phase, setPhase] = useState<Phase>(tree ? 'tree' : 'empty');
-
-  useEffect(() => {
+  const [prevTree, setPrevTree] = useState(tree);
+  if (tree !== prevTree) {
+    setPrevTree(tree);
     // Hydration from saved state with an existing tree → skip the
     // animation entirely and show the flora immediately.
     if (tree && phase === 'empty') setPhase('tree');
     // Post-harvest (waterTree clears activeTree) → return to empty
-    // state with the packet visible again for the next plant.
-    if (!tree && phase === 'tree') setPhase('empty');
-  }, [tree, phase]);
+    // state with the packet visible again for the next plant. We
+    // intentionally don't touch 'opening' — that's a user-driven
+    // latch the packet's onComplete will advance.
+    else if (!tree && phase === 'tree') setPhase('empty');
+  }
 
   // `canWater()` is derived from `Date.now()` but Zustand only notifies
   // subscribers on `set()` — so when the cooldown simply elapses, nothing
@@ -85,6 +90,7 @@ export function PlotView() {
   const percent = tree
     ? Math.round((tree.currentWaterings / tree.requiredWaterings) * 100)
     : 0;
+  const species = tree ? SPECIES[tree.speciesId] : null;
 
   return (
     <main className="relative h-full w-full bg-cream-50 overflow-hidden">
@@ -124,6 +130,55 @@ export function PlotView() {
           />
         </div>
       )}
+
+      {/* ─── TOP-CENTER: Florify wordmark + active tree readout ─────
+          Identifies the app (Fraunces serif, same family as the passport
+          wordmark) and — when a tree is active — surfaces its species
+          name, a growth gauge, and the waterings tally. Sits between the
+          corner buttons; width is capped so it never collides with them. */}
+      <div
+        className="absolute top-0 left-0 right-0 flex flex-col items-center pointer-events-none animate-fade-down"
+        style={{
+          paddingTop: 'calc(env(safe-area-inset-top) + 0.9rem)',
+          animationDelay: '60ms',
+        }}
+      >
+        <div className="font-serif text-2xl font-bold text-ink-900 tracking-[0.15em]">
+          Florify
+        </div>
+        {phase === 'tree' && tree && species && (
+          <div
+            key={tree.id}
+            className="mt-3 flex flex-col items-center gap-1.5 animate-fade-in"
+          >
+            <div className="flex items-baseline gap-2">
+              <div className="font-serif text-sm font-medium text-ink-700">
+                {species.name}
+              </div>
+              <div
+                className={`text-[10px] uppercase tracking-[0.15em] font-semibold ${
+                  tree.rarity === 'legendary'
+                    ? 'text-amber-600'
+                    : tree.rarity === 'rare'
+                    ? 'text-sky-600'
+                    : 'text-ink-400'
+                }`}
+              >
+                {tree.rarity}
+              </div>
+            </div>
+            <div className="w-32 h-1.5 rounded-full bg-ink-900/10 overflow-hidden">
+              <div
+                className="h-full bg-ink-900/60 transition-[width] duration-500 ease-out"
+                style={{ width: `${percent}%` }}
+              />
+            </div>
+            <div className="text-[11px] text-ink-500 tabular-nums tracking-wider">
+              รดน้ำแล้ว {tree.currentWaterings} ครั้ง
+            </div>
+          </div>
+        )}
+      </div>
 
       {/* ─── TOP-LEFT: Gallery ──────────────────────────── */}
       <div
@@ -177,16 +232,6 @@ export function PlotView() {
             phase === 'opening' ? 'opacity-0 pointer-events-none' : 'opacity-100'
           }`}
         >
-          {phase === 'tree' && tree && (
-            <div
-              // Re-key on percent so the number softly fades when progress ticks.
-              key={percent}
-              className="text-xs text-ink-500 tracking-wider font-medium tabular-nums animate-fade-in"
-            >
-              {percent}%
-            </div>
-          )}
-
           {phase === 'empty' ? (
             <Button size="lg" onClick={handlePlant} className="min-w-[240px]">
               เริ่มปลูก

@@ -6,3 +6,7 @@
 
 - OG Image
 - Passport Sharable -> เก็บ state ยังไง?
+
+- สามารถ Share ต้นไม้ตอนปลูกเสร้จได้
+
+- มี Export & Import Save

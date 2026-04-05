@@ -42,10 +42,15 @@ export function FloristCardSheet({ open, onClose }: Props) {
   const contentRef = useRef<HTMLDivElement>(null);
   const [cardWidth, setCardWidth] = useState(320);
 
-  // Reset state when reopening
-  useEffect(() => {
+  // Reset the sheet to `viewing` whenever the modal transitions from
+  // closed → open. Done as a render-time `prevOpen` check rather than
+  // in an effect, since the reset is derived purely from a prop change
+  // (see React docs: "Adjusting some state when a prop changes").
+  const [prevOpen, setPrevOpen] = useState(open);
+  if (open !== prevOpen) {
+    setPrevOpen(open);
     if (open) setSheet({ phase: 'viewing' });
-  }, [open]);
+  }
 
   // Auto-clear success states back to viewing after 3s
   useEffect(() => {

@@ -1,12 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import type { Settings } from '@florify/shared';
 import { Button } from '@/components/Button';
 import { Card } from '@/components/Card';
 import { BackIcon } from '@/components/icons';
-import { loadSettings, saveSettings } from '@/store/settingsStore';
+import { loadSettings, saveSettings, subscribeSettings } from '@/store/settingsStore';
 import { useGameStore } from '@/store/gameStore';
 import { toast } from '@/lib/toast';
 import { requestNotificationPermission } from '@/lib/notifications';
@@ -35,13 +35,14 @@ const ROWS: ToggleRow[] = [
   },
 ];
 
-export function SettingsView() {
-  const [settings, setSettings] = useState<Settings | null>(null);
-  const resetAllProgress = useGameStore((s) => s.resetAllProgress);
+// Stable server snapshot for useSyncExternalStore. Must be declared
+// outside the component so its reference doesn't change between
+// renders (React requires a stable snapshot during SSR).
+const getServerSnapshot = (): Settings | null => null;
 
-  useEffect(() => {
-    setSettings(loadSettings());
-  }, []);
+export function SettingsView() {
+  const settings = useSyncExternalStore(subscribeSettings, loadSettings, getServerSnapshot);
+  const resetAllProgress = useGameStore((s) => s.resetAllProgress);
 
   const updateToggle = async (key: ToggleKey, value: boolean) => {
     if (!settings) return;
@@ -57,7 +58,6 @@ export function SettingsView() {
     }
 
     const next: Settings = { ...settings, [key]: value };
-    setSettings(next);
     saveSettings(next);
   };
 

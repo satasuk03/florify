@@ -147,7 +147,7 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
   // ── Hero block: species unlocked ─────────────────────────────────
   ops.push({
     type: 'text',
-    text: `${data.speciesUnlocked} / 300`,
+    text: `${data.speciesUnlocked}`,
     x: cx,
     y: 640,
     size: 180,

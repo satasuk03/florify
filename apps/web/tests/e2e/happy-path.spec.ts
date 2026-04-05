@@ -25,9 +25,17 @@ test('plant → water → harvest happy path', async ({ page }) => {
   // Active tree is now on screen — the water button should be there.
   // We force requiredWaterings to 1 so a single tap harvests.
   await page.evaluate(() => {
-    const store = (window as unknown as { __gameStore?: { setState: (fn: (s: any) => any) => void } }).__gameStore;
+    interface DevStoreState {
+      state: {
+        activeTree: { requiredWaterings: number } | null;
+      };
+    }
+    interface DevStore {
+      setState: (fn: (s: DevStoreState) => Partial<DevStoreState>) => void;
+    }
+    const store = (window as unknown as { __gameStore?: DevStore }).__gameStore;
     if (!store) throw new Error('__gameStore not exposed on window — dev build required');
-    store.setState((s: { state: { activeTree: { requiredWaterings: number } | null } }) => ({
+    store.setState((s) => ({
       state: {
         ...s.state,
         activeTree: s.state.activeTree
