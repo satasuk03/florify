@@ -10,6 +10,7 @@ import { CornerButton } from '@/components/CornerButton';
 import { GalleryIcon, FloristCardIcon, UserIcon } from '@/components/icons';
 import { FloristCardSheet } from '@/components/florist-card/FloristCardSheet';
 import { HarvestOverlay } from '@/components/HarvestOverlay';
+import { SeedPacket } from '@/components/SeedPacket';
 import { useGameStore } from '@/store/gameStore';
 import { useHandheld } from '@/hooks/useHandheld';
 import { toast } from '@/lib/toast';
@@ -34,6 +35,25 @@ export function PlotView() {
   const floraRef = useRef<HTMLDivElement>(null);
   useHandheld(floraRef);
 
+  // Plot phase state machine. Drives whether we show the seed packet,
+  // the opening animation, or the full flora. `activeTree` is the
+  // ground truth from the store but we can't render flora the instant
+  // it appears — the packet opening needs ~1.2s first. So the phase is
+  // derived on mount, then advanced manually by the packet's onComplete
+  // callback, and re-synced via useEffect for post-harvest transitions
+  // and hydration edge cases.
+  type Phase = 'empty' | 'opening' | 'tree';
+  const [phase, setPhase] = useState<Phase>(tree ? 'tree' : 'empty');
+
+  useEffect(() => {
+    // Hydration from saved state with an existing tree → skip the
+    // animation entirely and show the flora immediately.
+    if (tree && phase === 'empty') setPhase('tree');
+    // Post-harvest (waterTree clears activeTree) → return to empty
+    // state with the packet visible again for the next plant.
+    if (!tree && phase === 'tree') setPhase('empty');
+  }, [tree, phase]);
+
   // `canWater()` is derived from `Date.now()` but Zustand only notifies
   // subscribers on `set()` — so when the cooldown simply elapses, nothing
   // triggers a re-render and the รดน้ำ button stays disabled until some
@@ -53,6 +73,15 @@ export function PlotView() {
     if (result.ok && result.harvested) setHarvested(result.harvested);
   };
 
+  const handlePlant = () => {
+    // Guard against double-taps during the opening animation. The
+    // button's `pointer-events-none` also blocks this but belt +
+    // braces — a keyboard user can still activate a focused button.
+    if (phase !== 'empty') return;
+    setPhase('opening');
+    plant();
+  };
+
   const percent = tree
     ? Math.round((tree.currentWaterings / tree.requiredWaterings) * 100)
     : 0;
@@ -65,9 +94,10 @@ export function PlotView() {
       {/* Full-bleed 2D flora (fills the frame on desktop, the screen on mobile).
           Wrapped in a ref'd box that receives a handheld-camera wobble via
           `useHandheld`, so the flora drifts gently like a shaky phone hold.
-          A slow fade-in layers under the flora-stage animation so the very
-          first frame of the app doesn't pop in abruptly. */}
-      {tree && (
+          Gated on `phase === 'tree'` rather than `tree` directly so the
+          seed packet has time to finish its opening sequence before the
+          flora mounts and plays its stage-in animation. */}
+      {tree && phase === 'tree' && (
         <div
           ref={floraRef}
           className="absolute inset-0 pointer-events-none select-none will-change-transform animate-fade-in"
@@ -76,6 +106,21 @@ export function PlotView() {
             speciesId={tree.speciesId}
             progress={tree.currentWaterings / tree.requiredWaterings}
             className="absolute inset-0 h-full w-full object-cover"
+          />
+        </div>
+      )}
+
+      {/* ─── SEED PACKET ───────────────────────────────────
+          Centerpiece of the empty state; plays its opening sequence
+          while the phase is 'opening'. Sized to ~62% of viewport
+          width (capped at 280px) so it sits comfortably between the
+          corner chrome and the bottom button on phone screens. */}
+      {phase !== 'tree' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <SeedPacket
+            state={phase === 'opening' ? 'opening' : 'idle'}
+            onComplete={() => setPhase('tree')}
+            className="w-[min(62vw,280px)]"
           />
         </div>
       )}
@@ -127,8 +172,12 @@ export function PlotView() {
           animationDelay: '280ms',
         }}
       >
-        <div className="pointer-events-auto flex flex-col items-center gap-2">
-          {tree && (
+        <div
+          className={`pointer-events-auto flex flex-col items-center gap-2 transition-opacity duration-[240ms] ease-out ${
+            phase === 'opening' ? 'opacity-0 pointer-events-none' : 'opacity-100'
+          }`}
+        >
+          {phase === 'tree' && tree && (
             <div
               // Re-key on percent so the number softly fades when progress ticks.
               key={percent}
@@ -138,11 +187,11 @@ export function PlotView() {
             </div>
           )}
 
-          {!tree ? (
-            <Button size="lg" onClick={() => plant()} className="min-w-[240px]">
+          {phase === 'empty' ? (
+            <Button size="lg" onClick={handlePlant} className="min-w-[240px]">
               เริ่มปลูก
             </Button>
-          ) : (
+          ) : phase === 'tree' ? (
             <Button
               size="lg"
               onClick={handleWater}
@@ -151,9 +200,9 @@ export function PlotView() {
             >
               รดน้ำ
             </Button>
-          )}
+          ) : null}
 
-          {tree && !canWater && nextAt !== null && (
+          {phase === 'tree' && tree && !canWater && nextAt !== null && (
             <div className="text-sm text-ink-500 mt-1">
               ⏳ <CountdownTimer until={nextAt} />
             </div>

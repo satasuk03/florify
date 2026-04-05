@@ -145,6 +145,39 @@
     animation: pulse-slow 3600ms ease-in-out infinite;
   }
 
+  /* ─── Seed-packet animations ──────────────────────────────────
+     A 6-step sequence that plays when the player taps "เริ่มปลูก":
+     idle float → shake → tear flap → seed drops → packet dissolves
+     → flora hand-off. Total ~1.4s. All driven from the `state` prop
+     on <SeedPacket>; durations here are authoritative and must match
+     the `setTimeout` in SeedPacket.tsx. */
+  .animate-packet-float {
+    animation: packet-float 5200ms ease-in-out infinite;
+    transform-origin: 50% 60%;
+  }
+  .animate-packet-shake {
+    animation: packet-shake 220ms linear both;
+    transform-origin: 50% 60%;
+  }
+  .animate-packet-tear {
+    animation: packet-tear 260ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: 220ms;
+    transform-origin: 50% 0;
+  }
+  .animate-packet-seal-pop {
+    animation: packet-seal-pop 200ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: 260ms;
+    transform-origin: 50% 50%;
+  }
+  .animate-packet-seed-drop {
+    animation: packet-seed-drop 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: 440ms;
+  }
+  .animate-packet-dissolve {
+    animation: packet-dissolve 480ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: 680ms;
+  }
+
   /* Thin, warm-toned scrollbar for modal/sheet content. The default
      browser gutter clashes with the cream palette — this replaces it
      with an ink-tinted pill that fades in only when the pointer is
@@ -307,6 +340,87 @@
   }
 }
 
+@keyframes packet-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1.5deg);
+  }
+  50% {
+    transform: translateY(-6px) rotate(1.5deg);
+  }
+}
+
+@keyframes packet-shake {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  20% {
+    transform: rotate(-3deg);
+  }
+  40% {
+    transform: rotate(3deg);
+  }
+  60% {
+    transform: rotate(-2deg);
+  }
+  80% {
+    transform: rotate(2deg);
+  }
+}
+
+@keyframes packet-tear {
+  0% {
+    transform: rotateX(0deg) translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: rotateX(-140deg) translateY(-4px);
+    opacity: 0.85;
+  }
+}
+
+@keyframes packet-seal-pop {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0);
+    opacity: 0;
+  }
+}
+
+@keyframes packet-seed-drop {
+  0% {
+    transform: translateY(-4px);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(64px);
+    opacity: 0;
+  }
+}
+
+@keyframes packet-dissolve {
+  0% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+    filter: blur(0);
+  }
+  100% {
+    transform: scale(0.96) translateY(8px);
+    opacity: 0;
+    filter: blur(2px);
+  }
+}
+
 /* ─── Reduced-motion override ─────────────────────────────────────
    One global switch: if the user prefers reduced motion, collapse
    every `animate-*` utility to an instant fade. Individual components
@@ -321,9 +435,16 @@
   .animate-sheet-up,
   .animate-overlay-in,
   .animate-toast-in,
-  .animate-pulse-slow {
+  .animate-pulse-slow,
+  .animate-packet-float,
+  .animate-packet-shake,
+  .animate-packet-tear,
+  .animate-packet-seal-pop,
+  .animate-packet-seed-drop,
+  .animate-packet-dissolve {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
+    animation-delay: 0ms !important;
   }
   .shine-on-hover::after {
     display: none;
