@@ -160,22 +160,26 @@
     transform-origin: 50% 60%;
   }
   .animate-packet-tear {
-    animation: packet-tear 260ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    /* Ease-in cubic so the flap "breaks free" slowly then accelerates
+       up-and-away — the same curve as the reference booster-pack
+       animation. Longer duration than the other steps to give the
+       piece time to travel. */
+    animation: packet-tear 640ms cubic-bezier(0.55, 0.085, 0.68, 0.53) both;
     animation-delay: 220ms;
-    transform-origin: 50% 0;
+    transform-origin: 50% 50%;
   }
   .animate-packet-seal-pop {
     animation: packet-seal-pop 200ms cubic-bezier(0.22, 1, 0.36, 1) both;
-    animation-delay: 260ms;
+    animation-delay: 240ms;
     transform-origin: 50% 50%;
   }
   .animate-packet-seed-drop {
-    animation: packet-seed-drop 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
-    animation-delay: 440ms;
+    animation: packet-seed-drop 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: 620ms;
   }
   .animate-packet-dissolve {
-    animation: packet-dissolve 480ms cubic-bezier(0.22, 1, 0.36, 1) both;
-    animation-delay: 680ms;
+    animation: packet-dissolve 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: 860ms;
   }
 
   /* Thin, warm-toned scrollbar for modal/sheet content. The default
@@ -371,12 +375,16 @@
 
 @keyframes packet-tear {
   0% {
-    transform: rotateX(0deg) translateY(0);
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 1;
+  }
+  20% {
+    transform: translate(-2px, -4px) rotate(-2deg);
     opacity: 1;
   }
   100% {
-    transform: rotateX(-140deg) translateY(-4px);
-    opacity: 0.85;
+    transform: translate(-32px, -160px) rotate(-14deg);
+    opacity: 0;
   }
 }
 
@@ -393,17 +401,17 @@
 
 @keyframes packet-seed-drop {
   0% {
-    transform: translateY(-4px);
+    transform: translateY(-6px);
     opacity: 0;
   }
-  15% {
+  18% {
     opacity: 1;
   }
-  85% {
+  82% {
     opacity: 1;
   }
   100% {
-    transform: translateY(64px);
+    transform: translateY(92px);
     opacity: 0;
   }
 }
