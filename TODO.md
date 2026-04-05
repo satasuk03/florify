@@ -7,6 +7,8 @@
 - OG Image
 - Passport Sharable -> เก็บ state ยังไง?
 
-- สามารถ Share ต้นไม้ตอนปลูกเสร้จได้
+- สามารถ Share ต้นไม้ตอนปลูกเสร้จได้ -> ต้องโชว์รูปด้วย เหมือนการ์ดสวยๆ คำอธิบาย แล้วตอนกดปิดก็มี animation เก็บเข้า gallery
 
 - มี Export & Import Save
+
+- สองภาษาได้ไหม เปลี่ยนภาษาใต้ Gallery -> Support static export ไหม

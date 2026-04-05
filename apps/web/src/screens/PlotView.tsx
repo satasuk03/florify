@@ -7,13 +7,13 @@ import { PerlinNoise } from '@/components/PerlinNoise';
 import { Button } from '@/components/Button';
 import { CountdownTimer } from '@/components/CountdownTimer';
 import { CornerButton } from '@/components/CornerButton';
-import { GalleryIcon, FloristCardIcon, UserIcon } from '@/components/icons';
+import { GalleryIcon, FloristCardIcon, SettingsIcon } from '@/components/icons';
 import { FloristCardSheet } from '@/components/florist-card/FloristCardSheet';
+import { SettingsSheet } from '@/components/settings/SettingsSheet';
 import { HarvestOverlay } from '@/components/HarvestOverlay';
 import { SeedPacket } from '@/components/SeedPacket';
 import { useGameStore } from '@/store/gameStore';
 import { useHandheld } from '@/hooks/useHandheld';
-import { toast } from '@/lib/toast';
 import { SPECIES } from '@/data/species';
 
 /**
@@ -32,9 +32,8 @@ export function PlotView() {
   const plant = useGameStore((s) => s.plantTree);
   const water = useGameStore((s) => s.waterTree);
   const [showFlorist, setShowFlorist] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
   const [harvested, setHarvested] = useState<TreeInstance | null>(null);
-  const floraRef = useRef<HTMLDivElement>(null);
-  useHandheld(floraRef);
 
   // Plot phase state machine. Drives whether we show the seed packet,
   // the opening animation, or the full flora. `activeTree` is the
@@ -104,16 +103,10 @@ export function PlotView() {
           seed packet has time to finish its opening sequence before the
           flora mounts and plays its stage-in animation. */}
       {tree && phase === 'tree' && (
-        <div
-          ref={floraRef}
-          className="absolute inset-0 pointer-events-none select-none will-change-transform animate-fade-in"
-        >
-          <FloraImage
-            speciesId={tree.speciesId}
-            progress={tree.currentWaterings / tree.requiredWaterings}
-            className="absolute inset-0 h-full w-full object-cover"
-          />
-        </div>
+        <HandheldFlora
+          speciesId={tree.speciesId}
+          progress={tree.currentWaterings / tree.requiredWaterings}
+        />
       )}
 
       {/* ─── SEED PACKET ───────────────────────────────────
@@ -193,7 +186,7 @@ export function PlotView() {
         </CornerButton>
       </div>
 
-      {/* ─── TOP-RIGHT: Florist Card + Login (Coming Soon) ── */}
+      {/* ─── TOP-RIGHT: Florist Card + Settings ── */}
       <div
         className="absolute top-0 right-0 flex flex-col items-end gap-2 pr-4 pointer-events-none animate-fade-down"
         style={{
@@ -210,12 +203,11 @@ export function PlotView() {
         </CornerButton>
 
         <CornerButton
-          onClick={() => toast('เร็วๆ นี้ — จะได้ sync ต้นไม้ข้ามเครื่อง')}
-          label="Login (Coming Soon)"
-          size="secondary"
-          comingSoon
+          onClick={() => setShowSettings(true)}
+          label="Open Settings"
+          size="primary"
         >
-          <UserIcon />
+          <SettingsIcon />
         </CornerButton>
       </div>
 
@@ -256,7 +248,31 @@ export function PlotView() {
       </div>
 
       <FloristCardSheet open={showFlorist} onClose={() => setShowFlorist(false)} />
+      <SettingsSheet open={showSettings} onClose={() => setShowSettings(false)} />
       <HarvestOverlay tree={harvested} onDismiss={() => setHarvested(null)} />
     </main>
+  );
+}
+
+/**
+ * Flora layer with handheld-camera wobble. Extracted so the `useHandheld`
+ * effect mounts with the ref'd div — calling the hook higher up in
+ * `PlotView` fires its effect before the gated flora div exists, so
+ * `ref.current` is null and the RAF loop never starts.
+ */
+function HandheldFlora({ speciesId, progress }: { speciesId: number; progress: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useHandheld(ref);
+  return (
+    <div
+      ref={ref}
+      className="absolute inset-0 pointer-events-none select-none will-change-transform animate-fade-in"
+    >
+      <FloraImage
+        speciesId={speciesId}
+        progress={progress}
+        className="absolute inset-0 h-full w-full object-cover"
+      />
+    </div>
   );
 }

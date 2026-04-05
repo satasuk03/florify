@@ -25,8 +25,9 @@ export interface PlayerStats {
 }
 
 export interface PlayerState {
-  schemaVersion: 1;
+  schemaVersion: 2;
   userId: string;              // local nanoid; linked to a cloud account later
+  displayName: string;         // user-editable; 'Guest' until renamed
   createdAt: number;
   updatedAt: number;           // last-writer-wins for cloud sync
   activeTree: TreeInstance | null;

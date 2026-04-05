@@ -1,4 +1,4 @@
-export const SCHEMA_VERSION = 1 as const;
+export const SCHEMA_VERSION = 2 as const;
 export const COOLDOWN_MS = 30 * 60 * 1000;      // 30 minutes
 export const MIN_WATERINGS = 3;
 export const MAX_WATERINGS = 10;

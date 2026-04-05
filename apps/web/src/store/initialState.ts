@@ -6,6 +6,7 @@ export function createInitialState(): PlayerState {
   return {
     schemaVersion: SCHEMA_VERSION,
     userId: nanoid(),
+    displayName: 'Guest',
     createdAt: now,
     updatedAt: now,
     activeTree: null,

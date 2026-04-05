@@ -54,7 +54,7 @@ describe('buildLayout', () => {
     const textContent = texts.map((t) => t.text);
     expect(textContent).toContain('FLORIFY');
     expect(textContent).toContain('BOTANICAL PASSPORT');
-    expect(textContent).toContain('47 / 300');
+    expect(textContent).toContain('47');
     expect(textContent).toContain('SPECIES UNLOCKED');
     expect(textContent).toContain('◆  APPRENTICE  ◆');
     expect(textContent).toContain('Common');

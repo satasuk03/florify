@@ -80,7 +80,11 @@ export interface GameStore {
   resetActiveTree: () => void;
   checkinStreak: () => void;
   resetAllProgress: () => void;
+  setDisplayName: (name: string) => void;
+  replaceState: (next: PlayerState) => void;
 }
+
+export const DISPLAY_NAME_MAX_LENGTH = 24;
 
 /**
  * Pure derivation of the Florist Card passport data from player state.
@@ -120,7 +124,7 @@ export function selectFloristCard(state: PlayerState): FloristCardData {
     },
     startedAt: state.createdAt,
     serial: deriveSerial(state.userId),
-    displayName: 'Guest',
+    displayName: state.displayName,
   };
 }
 
@@ -303,6 +307,28 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const next = createInitialState();
     set({ state: next });
     saveStore.save(next).catch((err) => console.error('[resetAllProgress]', err));
+  },
+
+  // ── Rename account ────────────────────────────────────────────────
+  // Trimmed and length-capped; blank input is treated as "Guest" rather
+  // than silently ignored so the passport never shows an empty name.
+  setDisplayName: (name: string) => {
+    const trimmed = name.trim().slice(0, DISPLAY_NAME_MAX_LENGTH);
+    const displayName = trimmed.length > 0 ? trimmed : 'Guest';
+    const s = get().state;
+    if (s.displayName === displayName) return;
+    const next: PlayerState = { ...s, displayName, updatedAt: Date.now() };
+    set({ state: next });
+    scheduleSave(next);
+  },
+
+  // ── Replace entire state (used by import) ─────────────────────────
+  // Bypasses the debounced save and writes synchronously so a reload
+  // immediately after import sees the imported state, not the old one.
+  replaceState: (next: PlayerState) => {
+    const stamped: PlayerState = { ...next, updatedAt: Date.now() };
+    set({ state: stamped });
+    saveStore.save(stamped).catch((err) => console.error('[replaceState]', err));
   },
 }));
 

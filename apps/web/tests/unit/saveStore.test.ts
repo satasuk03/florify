@@ -21,7 +21,7 @@ describe('LocalSaveStore', () => {
     const loaded = await store.load();
     expect(loaded).not.toBeNull();
     expect(loaded?.userId).toBe(initial.userId);
-    expect(loaded?.schemaVersion).toBe(1);
+    expect(loaded?.schemaVersion).toBe(2);
     expect(loaded?.activeTree).toBeNull();
     expect(loaded?.collection).toEqual([]);
   });
