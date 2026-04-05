@@ -94,6 +94,32 @@ export function WaterDropIcon({ size = 22, className }: IconProps) {
   );
 }
 
+export function SproutIcon({ size = 22, className }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.75"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden
+    >
+      {/* Soil line */}
+      <path d="M4 20 H20" />
+      {/* Stem */}
+      <path d="M12 20 V12" />
+      {/* Left leaf */}
+      <path d="M12 14 C 9 14 6.5 12 6.5 8.5 C 9.5 8.5 12 10.5 12 14 Z" />
+      {/* Right leaf */}
+      <path d="M12 12 C 15 12 17.5 10 17.5 6.5 C 14.5 6.5 12 8.5 12 12 Z" />
+    </svg>
+  );
+}
+
 export function SettingsIcon({ size = 22, className }: IconProps) {
   return (
     <svg

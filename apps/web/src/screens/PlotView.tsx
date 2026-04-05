@@ -7,7 +7,13 @@ import { PerlinNoise } from "@/components/PerlinNoise";
 import { Button } from "@/components/Button";
 import { CountdownTimer } from "@/components/CountdownTimer";
 import { CornerButton } from "@/components/CornerButton";
-import { GalleryIcon, FloristCardIcon, SettingsIcon } from "@/components/icons";
+import {
+  GalleryIcon,
+  FloristCardIcon,
+  SettingsIcon,
+  WaterDropIcon,
+  SproutIcon,
+} from "@/components/icons";
 import { FloristCardSheet } from "@/components/florist-card/FloristCardSheet";
 import { SettingsSheet } from "@/components/settings/SettingsSheet";
 import { HarvestOverlay } from "@/components/HarvestOverlay";
@@ -243,32 +249,37 @@ export function PlotView() {
         }}
       >
         <div
-          className={`pointer-events-auto flex flex-col items-center gap-2 transition-opacity duration-[240ms] ease-out ${
+          className={`pointer-events-auto flex flex-col items-center transition-opacity duration-[240ms] ease-out ${
             phase === "opening"
               ? "opacity-0 pointer-events-none"
               : "opacity-100"
           }`}
         >
-          {phase === "empty" ? (
-            <Button size="lg" onClick={handlePlant} className="min-w-[240px]">
-              {t('plot.plant')}
-            </Button>
-          ) : phase === "tree" ? (
-            <Button
-              size="lg"
-              onClick={handleWater}
-              disabled={!canWater}
-              className={`min-w-[240px] ${!canWater ? "opacity-60" : ""}`}
-            >
-              {t('plot.water')}
-            </Button>
-          ) : null}
-
+          {/* Countdown sits ABOVE the button so its appearance doesn't
+              shove the (bottom-anchored) action button upward whenever
+              the player taps water. Button stays put, timer grows up. */}
           {phase === "tree" && tree && !canWater && nextAt !== null && (
-            <div className="text-sm text-ink-500 mt-1">
+            <div className="text-sm text-ink-500 mb-2">
               ⏳ <CountdownTimer until={nextAt} />
             </div>
           )}
+
+          {phase === "empty" ? (
+            <ActionButton
+              onClick={handlePlant}
+              icon={<SproutIcon size={22} />}
+              label={t('plot.plant')}
+              tone="plant"
+            />
+          ) : phase === "tree" ? (
+            <ActionButton
+              onClick={handleWater}
+              disabled={!canWater}
+              icon={<WaterDropIcon size={22} />}
+              label={t('plot.water')}
+              tone="water"
+            />
+          ) : null}
         </div>
       </div>
 
@@ -282,6 +293,61 @@ export function PlotView() {
       />
       <HarvestOverlay tree={harvested} onDismiss={() => setHarvested(null)} />
     </main>
+  );
+}
+
+/**
+ * Bottom-center action button (Plant / Water). A tuned variant of the
+ * primary Button: full pill, icon + label pair, warm gradient fill, inner
+ * highlight ring, and a soft halo behind it that tints to match the action
+ * (clay for "plant", a cooler sky-tinted clay for "water"). Disabled state
+ * drops the halo and desaturates — the parent still shows the countdown.
+ */
+function ActionButton({
+  onClick,
+  disabled,
+  icon,
+  label,
+  tone,
+}: {
+  onClick: () => void;
+  disabled?: boolean;
+  icon: React.ReactNode;
+  label: string;
+  tone: "plant" | "water";
+}) {
+  return (
+    <div className="relative">
+      {/* Warm clay halo — deeply saturated orange glow behind the glass
+          so the tint reads vividly against the cream backdrop. Hidden
+          when disabled so the cooldown state looks visibly "asleep". */}
+      <div
+        aria-hidden
+        className={`absolute -inset-5 rounded-full blur-2xl transition-opacity duration-500
+          bg-[radial-gradient(ellipse_at_center,rgba(222,145,95,0.55),rgba(199,130,90,0.32)_55%,transparent_82%)]
+          ${disabled ? "opacity-0" : "opacity-100 animate-pulse-slow"}`}
+      />
+      <Button
+        size="lg"
+        onClick={onClick}
+        disabled={disabled}
+        className={`relative !rounded-full !h-14 px-10 min-w-[220px]
+          !bg-[rgba(216,148,110,0.55)] backdrop-blur-xl backdrop-saturate-150
+          text-cream-50
+          ring-1 ring-inset ring-white/40
+          border border-clay-300/50
+          shadow-[0_10px_28px_-10px_rgba(185,100,60,0.5),inset_0_1px_0_0_rgba(255,235,215,0.6),inset_0_-8px_18px_-8px_rgba(170,85,45,0.4)]
+          hover:!bg-[rgba(220,152,114,0.65)] hover:shadow-[0_14px_36px_-10px_rgba(185,100,60,0.6),inset_0_1px_0_0_rgba(255,240,220,0.65),inset_0_-8px_18px_-8px_rgba(170,85,45,0.45)]
+          before:content-[''] before:absolute before:inset-x-3 before:top-1 before:h-1/2 before:rounded-full
+          before:bg-gradient-to-b before:from-white/50 before:to-transparent before:pointer-events-none
+          ${disabled ? "saturate-75" : ""}`}
+      >
+        <span className="relative flex items-center justify-center gap-2.5 drop-shadow-[0_1px_1px_rgba(90,45,20,0.45)]">
+          <span className="text-cream-50">{icon}</span>
+          <span className="font-serif tracking-wide">{label}</span>
+        </span>
+      </Button>
+    </div>
   );
 }
 
