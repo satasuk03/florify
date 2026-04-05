@@ -15,7 +15,8 @@ Before doing anything else, make sure you have:
 2. **Folder name** *(optional)* — lowercase, no spaces, ascii only (e.g. `voidlotus`). If not supplied, propose one based on the description and confirm.
 3. **Display name** *(optional)* — defaults to Title-cased folder.
 4. **Rarity** *(optional)* — `common` | `rare` | `legendary`. Default `rare` for user-added floras unless the description clearly implies otherwise.
-5. **Thai description** *(optional)* — if the user doesn't provide one, translate the English description yourself into natural Thai in the same literary voice as existing entries in `apps/web/src/data/species.ts`.
+5. **Series** *(optional)* — `SpeciesSeries.Original` | `SpeciesSeries.Abnormal` (enum in `apps/web/src/data/species.ts`). Default `SpeciesSeries.Abnormal` for user-added floras, since `Original` is reserved for the hand-authored 300-species catalogue.
+6. **Thai description** *(optional)* — if the user doesn't provide one, translate the English description yourself into natural Thai in the same literary voice as existing entries in `apps/web/src/data/species.ts`.
 
 Do NOT reuse a folder name that already exists in `apps/web/src/data/floraNames.ts` or under `apps/web/public/floras/`. Check both before proceeding.
 
