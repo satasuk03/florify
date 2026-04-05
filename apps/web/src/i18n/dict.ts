@@ -47,7 +47,7 @@ export const dict = {
     'settings.saveData': 'ข้อมูลบันทึก',
     'settings.saveDataHint':
       'สำรองข้อมูลเป็นรหัสตัวอักษร คัดลอกเก็บไว้ที่ไหนก็ได้ (โน้ต, chat, อีเมล) แล้วนำกลับมาใส่ทีหลังได้',
-    'settings.exportCopy': 'Export (คัดลอกรหัส)',
+    'settings.exportCopy': 'คัดลอก',
     'settings.exportCopied': 'คัดลอกรหัส save แล้ว — เก็บไว้ที่ปลอดภัย',
     'settings.exportManualPrompt': 'คัดลอกรหัสนี้:',
     'settings.exportFailed': 'Export ล้มเหลว: {reason}',
