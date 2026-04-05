@@ -73,7 +73,7 @@ function StageSelector({
             className={`relative w-8 h-8 rounded-full text-xs font-medium tabular-nums transition-all duration-300 ease-out ${
               active
                 ? 'bg-ink-900 text-cream-50 shadow-soft-sm scale-105'
-                : 'text-ink-500 hover:text-ink-900 hover:bg-cream-200/70 motion-reduce:hover:scale-100'
+                : 'text-ink-500 hover:text-ink-900 hover:bg-cream-200/70'
             }`}
           >
             {s}
@@ -149,7 +149,7 @@ export function DetailView({ id }: { id: string | null }) {
       <header className="flex items-center justify-between px-4 py-3 animate-fade-down">
         <Link
           href="/gallery"
-          className="w-10 h-10 flex items-center justify-center text-ink-700 hover:bg-cream-100 rounded-full transition-all duration-300 ease-out hover:-translate-x-0.5 motion-reduce:hover:translate-x-0"
+          className="w-10 h-10 flex items-center justify-center text-ink-700 hover:bg-cream-100 rounded-full transition-all duration-300 ease-out hover:-translate-x-0.5"
           aria-label="Back to gallery"
         >
           <BackIcon />

@@ -17,7 +17,7 @@ import { requestNotificationPermission } from '@/lib/notifications';
  * organically as features ship, we don't need to front-load a full UI.
  */
 
-type ToggleKey = 'sound' | 'haptics' | 'reducedMotion' | 'notifications';
+type ToggleKey = 'sound' | 'haptics' | 'notifications';
 
 interface ToggleRow {
   key: ToggleKey;
@@ -28,7 +28,6 @@ interface ToggleRow {
 const ROWS: ToggleRow[] = [
   { key: 'sound', label: 'เสียง', hint: 'เปิดเสียงเอฟเฟกต์ในเกม (เร็วๆ นี้)' },
   { key: 'haptics', label: 'Haptics (สั่น)', hint: 'Android รองรับ · iOS ไม่รองรับ' },
-  { key: 'reducedMotion', label: 'ลดการเคลื่อนไหว', hint: 'ปิด auto-rotate + สวิงของต้นไม้' },
   {
     key: 'notifications',
     label: 'แจ้งเตือนรดน้ำ',
@@ -76,7 +75,7 @@ export function SettingsView() {
       <header className="flex items-center justify-between py-4 animate-fade-down">
         <Link
           href="/"
-          className="w-10 h-10 flex items-center justify-center text-ink-700 hover:bg-cream-100 rounded-full transition-all duration-300 ease-out hover:-translate-x-0.5 motion-reduce:hover:translate-x-0"
+          className="w-10 h-10 flex items-center justify-center text-ink-700 hover:bg-cream-100 rounded-full transition-all duration-300 ease-out hover:-translate-x-0.5"
           aria-label="Back to home"
         >
           <BackIcon />

@@ -6,9 +6,6 @@ import { useEffect, useRef, useState } from 'react';
  * Integer counter that tweens from 0 to `value` on mount and whenever
  * `value` changes. Uses an ease-out curve so it settles rather than
  * overshoots, matching the app's "quiet luxury" motion vocabulary.
- *
- * Honors `prefers-reduced-motion`: if the user opts out, the final
- * value is rendered immediately with no animation.
  */
 export function AnimatedNumber({
   value,
@@ -23,15 +20,6 @@ export function AnimatedNumber({
   const frameRef = useRef<number | null>(null);
 
   useEffect(() => {
-    const reduced =
-      typeof window !== 'undefined' &&
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    if (reduced) {
-      setDisplay(value);
-      return;
-    }
-
     const start = performance.now();
     const from = 0;
     const delta = value - from;

@@ -1,7 +1,6 @@
 'use client';
 
 import { SPECIES } from '@/data/species';
-import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 /**
  * 2D flora renderer. Picks one of three stage webps based on growth
@@ -12,8 +11,7 @@ import { useReducedMotion } from '@/hooks/useReducedMotion';
  * When the stage number changes (1→2, 2→3) we remount the <img> via
  * a `key` tied to the stage, which replays the `animate-flora-stage-in`
  * CSS animation — a short fade + subtle scale pop so growth reads as
- * a distinct reward moment instead of a silent src swap. Honors
- * `useReducedMotion()`.
+ * a distinct reward moment instead of a silent src swap.
  */
 
 interface Props {
@@ -31,7 +29,6 @@ function stageFromProgress(progress: number): 1 | 2 | 3 {
 
 export function FloraImage({ speciesId, progress, className, alt }: Props) {
   const species = SPECIES[speciesId];
-  const reduced = useReducedMotion();
   if (!species) return null;
   const stage = stageFromProgress(progress);
   const src = `/floras/${species.folder}/stage-${stage}.webp`;
@@ -41,12 +38,10 @@ export function FloraImage({ speciesId, progress, className, alt }: Props) {
       // Remount on stage change so the entry animation replays. For
       // the very first render (no prior stage) this is harmless — the
       // fade-in just doubles as a load-in.
-      key={reduced ? undefined : stage}
+      key={stage}
       src={src}
       alt={alt ?? species.name}
-      className={
-        reduced ? className : `${className ?? ''} animate-flora-stage-in`
-      }
+      className={`${className ?? ''} animate-flora-stage-in`}
       loading="lazy"
       decoding="async"
       draggable={false}

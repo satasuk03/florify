@@ -38,6 +38,5 @@ export interface PlayerState {
 export interface Settings {
   sound: boolean;
   haptics: boolean;
-  reducedMotion: boolean;
   notifications: boolean;      // in-tab Notification API opt-in
 }

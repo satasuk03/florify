@@ -2,7 +2,6 @@
 
 import { useEffect } from 'react';
 import { clsx } from 'clsx';
-import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 /**
  * Satin-foil seed packet — empty-state centerpiece + plant transition.
@@ -21,9 +20,7 @@ import { useReducedMotion } from '@/hooks/useReducedMotion';
  *
  * All motion lives in `globals.css` (`animate-packet-*` keyframes) so
  * timings are authoritative in one place — the `setTimeout` below must
- * stay in sync with those delays. Reduced-motion collapses the whole
- * sequence: onComplete fires on next tick and none of the keyframes
- * play (the global `prefers-reduced-motion` override handles that).
+ * stay in sync with those delays.
  *
  * Rarity/species is deliberately not surfaced here. Label says
  * "SEED №??" literal, matching the game's hidden-rarity mechanic —
@@ -73,14 +70,11 @@ const INTERIOR_PATH = (() => {
 })();
 
 export function SeedPacket({ state, onComplete, className }: Props) {
-  const reduced = useReducedMotion();
-
   useEffect(() => {
     if (state !== 'opening') return;
-    const delay = reduced ? 0 : OPEN_DURATION_MS;
-    const id = setTimeout(onComplete, delay);
+    const id = setTimeout(onComplete, OPEN_DURATION_MS);
     return () => clearTimeout(id);
-  }, [state, reduced, onComplete]);
+  }, [state, onComplete]);
 
   const opening = state === 'opening';
 

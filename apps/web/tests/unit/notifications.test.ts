@@ -27,7 +27,7 @@ describe('notifications', () => {
     FakeNotification.instances = [];
     vi.stubGlobal('Notification', FakeNotification);
     window.localStorage.clear();
-    saveSettings({ sound: true, haptics: true, reducedMotion: false, notifications: true });
+    saveSettings({ sound: true, haptics: true, notifications: true });
     vi.useFakeTimers();
   });
 
@@ -62,7 +62,7 @@ describe('notifications', () => {
       FakeNotification.permission = 'granted';
       expect(canNotify()).toBe(true);
 
-      saveSettings({ sound: true, haptics: true, reducedMotion: false, notifications: false });
+      saveSettings({ sound: true, haptics: true, notifications: false });
       expect(canNotify()).toBe(false);
     });
 
@@ -85,7 +85,7 @@ describe('notifications', () => {
 
     it('does nothing when notifications setting is off', () => {
       FakeNotification.permission = 'granted';
-      saveSettings({ sound: true, haptics: true, reducedMotion: false, notifications: false });
+      saveSettings({ sound: true, haptics: true, notifications: false });
       scheduleCooldownNotification(Date.now() + 1000);
       vi.advanceTimersByTime(2000);
       expect(FakeNotification.instances).toHaveLength(0);

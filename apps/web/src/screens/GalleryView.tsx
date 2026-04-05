@@ -27,7 +27,7 @@ export function GalleryView() {
       <header className="flex items-center justify-between py-4 animate-fade-down">
         <Link
           href="/"
-          className="w-10 h-10 flex items-center justify-center text-ink-700 hover:bg-cream-100 rounded-full transition-all duration-300 ease-out hover:-translate-x-0.5 motion-reduce:hover:translate-x-0"
+          className="w-10 h-10 flex items-center justify-center text-ink-700 hover:bg-cream-100 rounded-full transition-all duration-300 ease-out hover:-translate-x-0.5"
           aria-label="Back to home"
         >
           <BackIcon />
@@ -91,11 +91,11 @@ function GalleryTile({
   rarity: 'common' | 'rare' | 'legendary';
 }) {
   return (
-    <Card className="overflow-hidden aspect-[3/4] relative group-hover:-translate-y-1 group-hover:shadow-soft-md motion-reduce:group-hover:translate-y-0">
+    <Card className="overflow-hidden aspect-[3/4] relative group-hover:-translate-y-1 group-hover:shadow-soft-md">
       <FloraImage
         speciesId={speciesId}
         progress={1}
-        className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04] motion-reduce:group-hover:scale-100"
+        className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
       />
       <div className="absolute top-1 right-1">
         <RarityBadge rarity={rarity} />

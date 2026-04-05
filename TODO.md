@@ -1,5 +1,8 @@
-- continue to phase 6
-- Fix bug when visit 3000
+- ใส่ Florify font เดียวกับ passport ในหน้า home
+- ใส่ Guage ระดับของต้นไม้ไว้ด้านบน + ชื่อต้นไม้ + จำนวนครั้งที่รดน้ำแล้ว 
+  - แล้วลบ % บนปุ่มออก
 
-- ดอกไม้ต้นไม้ ต้องมีคำอธิบายด้วย -> มงคลๆ
-- Gallery เลขวิ่ง กับรูปแนวตั้ง
+- เปลี่ยน Display Name ใน passport ได้
+
+- OG Image
+- Passport Sharable -> เก็บ state ยังไง?

@@ -3,7 +3,6 @@ import { SETTINGS_KEY, type Settings } from '@florify/shared';
 const defaults: Settings = {
   sound: true,
   haptics: true,
-  reducedMotion: false,
   notifications: false,
 };
 

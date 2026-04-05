@@ -32,7 +32,7 @@ export const Button = forwardRef<HTMLButtonElement, Props>(function Button(
         // Ease-out + longer duration reads as "settled" rather than snappy.
         // `active:scale` gives a subtle press affordance without looking toy-like.
         'font-medium transition-all duration-300 ease-out',
-        'active:scale-[0.98] motion-reduce:active:scale-100',
+        'active:scale-[0.98]',
         'disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100',
         variantClasses[variant],
         sizeClasses[size],

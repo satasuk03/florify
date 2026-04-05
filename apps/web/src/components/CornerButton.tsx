@@ -42,7 +42,7 @@ export function CornerButton({
     'flex items-center justify-center text-ink-700',
     'shadow-soft-sm transition-all duration-300 ease-out',
     'hover:bg-cream-100 hover:shadow-soft-md hover:-translate-y-0.5',
-    'active:scale-95 active:translate-y-0 motion-reduce:hover:translate-y-0 motion-reduce:active:scale-100',
+    'active:scale-95 active:translate-y-0',
     size === 'primary' && 'h-11 w-11',
     size === 'secondary' && 'h-9 w-9 opacity-70',
     comingSoon && 'grayscale',

@@ -102,8 +102,7 @@
      A small vocabulary of understated, warm entrance animations.
      Everything uses an expo-out curve (cubic-bezier(.22,1,.36,1))
      that feels "settled" rather than bouncy — the luxurious-but-
-     quiet register this app wants. All honor prefers-reduced-motion
-     via the global override at the bottom of this file. */
+     quiet register this app wants. */
 
   /* Flora stage-change entry animation — plays when FloraImage
      remounts the current-stage <img> via a keyed element. */
@@ -429,32 +428,3 @@
   }
 }
 
-/* ─── Reduced-motion override ─────────────────────────────────────
-   One global switch: if the user prefers reduced motion, collapse
-   every `animate-*` utility to an instant fade. Individual components
-   can still check `useReducedMotion()` for JS-driven effects, but
-   none of the CSS keyframes above will play. */
-@media (prefers-reduced-motion: reduce) {
-  .animate-flora-stage-in,
-  .animate-fade-in,
-  .animate-fade-up,
-  .animate-fade-down,
-  .animate-scale-in,
-  .animate-sheet-up,
-  .animate-overlay-in,
-  .animate-toast-in,
-  .animate-pulse-slow,
-  .animate-packet-float,
-  .animate-packet-shake,
-  .animate-packet-tear,
-  .animate-packet-seal-pop,
-  .animate-packet-seed-drop,
-  .animate-packet-dissolve {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    animation-delay: 0ms !important;
-  }
-  .shine-on-hover::after {
-    display: none;
-  }
-}

@@ -1,15 +1,12 @@
 'use client';
 
 import { useEffect, type RefObject } from 'react';
-import { useReducedMotion } from './useReducedMotion';
 
 /**
  * Handheld-camera wobble. Samples a tiny smooth 1D noise function at
  * three different offsets to produce organic, non-periodic drift on
  * translateX / translateY / rotate. Writes `transform` directly to the
- * element via ref — no React state, no re-renders. Gated on
- * `useReducedMotion()`; when reduced motion is on, the element still
- * gets the baseline `scale()` so framing stays consistent.
+ * element via ref — no React state, no re-renders.
  *
  * Baseline `scale` > 1 exists on purpose: without it, the wobble would
  * expose the edge of the underlying image. A 1.04 scale gives the
@@ -45,16 +42,9 @@ export function useHandheld(
   ref: RefObject<HTMLElement | null>,
   { translate = 8, rotate = 0.35, scale = 1.04, speed = 0.22 }: Options = {},
 ): void {
-  const reduced = useReducedMotion();
-
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-
-    if (reduced) {
-      el.style.transform = `scale(${scale})`;
-      return;
-    }
 
     let raf = 0;
     const start = performance.now();
@@ -70,5 +60,5 @@ export function useHandheld(
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [ref, reduced, translate, rotate, scale, speed]);
+  }, [ref, translate, rotate, scale, speed]);
 }

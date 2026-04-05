@@ -5,7 +5,6 @@ import type { Rarity, TreeInstance } from '@florify/shared';
 import { Button } from '@/components/Button';
 import { RarityBadge } from '@/components/RarityBadge';
 import { SPECIES } from '@/data/species';
-import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 /**
  * Full-screen harvest celebration.
@@ -13,9 +12,6 @@ import { useReducedMotion } from '@/hooks/useReducedMotion';
  * Triggered from PlotView when `waterTree()` returns `harvested`. The
  * background glow is tinted by rarity so legendary feels different
  * from common at a glance — part of the chase mechanic.
- *
- * Reduced-motion users get the same visual elements without the
- * pulse/scale animations.
  */
 
 interface Props {
@@ -36,8 +32,6 @@ const HEADLINE: Record<Rarity, string> = {
 };
 
 export function HarvestOverlay({ tree, onDismiss }: Props) {
-  const reduced = useReducedMotion();
-
   // Auto-dismiss on Escape
   useEffect(() => {
     if (!tree) return;
@@ -64,7 +58,7 @@ export function HarvestOverlay({ tree, onDismiss }: Props) {
       {/* Rarity-tinted radial glow */}
       <div
         aria-hidden
-        className={`absolute inset-0 pointer-events-none ${reduced ? '' : 'animate-pulse-slow'}`}
+        className="absolute inset-0 pointer-events-none animate-pulse-slow"
         style={{ background: GLOW[tree.rarity] }}
       />
 
