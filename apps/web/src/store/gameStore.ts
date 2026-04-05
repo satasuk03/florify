@@ -185,9 +185,12 @@ export const useGameStore = create<GameStore>((set, get) => ({
     // doesn't need to mock Math.random for the pick itself.
     const pickRng = mulberry32(seed);
     const species = randPick(pickRng, pool);
-    // Required waterings 1..10, derived from seed so replay is consistent
+    // Required waterings 1..10, derived from seed so replay is consistent.
+    // First-ever tree is guaranteed 1 watering so new players see a harvest
+    // immediately — avoids a slow onboarding through multiple cooldowns.
+    const isFirstEver = current.stats.totalPlanted === 0 && current.collection.length === 0;
     const wateringsRng = mulberry32((seed ^ 0xabcdef) >>> 0);
-    const required = randInt(wateringsRng, MIN_WATERINGS, MAX_WATERINGS);
+    const required = isFirstEver ? 1 : randInt(wateringsRng, MIN_WATERINGS, MAX_WATERINGS);
 
     const now = Date.now();
     const tree: TreeInstance = {
