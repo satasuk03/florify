@@ -2,6 +2,7 @@
 - Sharable passport -> ต้องโชว์ วันที่ share ด้วยนะ -> ไม่้งั้นข้อมูลเก่า
 - Acheivements
 - เพิ่มต้นไม้ Abnormal -> Passport/Gallery ต้องมี filter แบบ all or by types
+- หาต้นไม้ที่ใช่สำหรับคุณ -> Viral Marketing
 
 ## Done
 - แล้วตอนกดปิดก็มี animation เก็บเข้า gallery

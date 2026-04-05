@@ -10,11 +10,13 @@ import { CornerButton } from "@/components/CornerButton";
 import {
   GalleryIcon,
   FloristCardIcon,
+  GuideBookIcon,
   SettingsIcon,
   WaterDropIcon,
   SproutIcon,
 } from "@/components/icons";
 import { FloristCardSheet } from "@/components/florist-card/FloristCardSheet";
+import { GuideBookSheet } from "@/components/guidebook/GuideBookSheet";
 import { SettingsSheet } from "@/components/settings/SettingsSheet";
 import { HarvestOverlay } from "@/components/HarvestOverlay";
 import { SeedPacket } from "@/components/SeedPacket";
@@ -42,6 +44,7 @@ export function PlotView() {
   const plant = useGameStore((s) => s.plantTree);
   const water = useGameStore((s) => s.waterTree);
   const [showFlorist, setShowFlorist] = useState(false);
+  const [showGuideBook, setShowGuideBook] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [harvested, setHarvested] = useState<TreeInstance | null>(null);
   // Monotonic counter keyed onto <WaterSplash> — incrementing it on
@@ -227,7 +230,7 @@ export function PlotView() {
         <LanguageToggle />
       </div>
 
-      {/* ─── TOP-RIGHT: Florist Card + Settings ── */}
+      {/* ─── TOP-RIGHT: Florist Card + Guide Book + Settings ── */}
       <div
         className="absolute top-0 right-0 flex flex-col items-end gap-2 pr-4 pointer-events-none animate-fade-down"
         style={{
@@ -241,6 +244,14 @@ export function PlotView() {
           size="primary"
         >
           <FloristCardIcon />
+        </CornerButton>
+
+        <CornerButton
+          onClick={() => setShowGuideBook(true)}
+          label={t('plot.openGuideBook')}
+          size="primary"
+        >
+          <GuideBookIcon />
         </CornerButton>
 
         <CornerButton
@@ -298,6 +309,10 @@ export function PlotView() {
       <FloristCardSheet
         open={showFlorist}
         onClose={() => setShowFlorist(false)}
+      />
+      <GuideBookSheet
+        open={showGuideBook}
+        onClose={() => setShowGuideBook(false)}
       />
       <SettingsSheet
         open={showSettings}

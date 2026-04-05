@@ -10,6 +10,7 @@ import {
 } from '@florify/shared';
 import { COOLDOWN_MS } from '@/lib/debug';
 import { SPECIES_BY_RARITY } from '@/data/species';
+import { RARITY_ROLL_WEIGHTS } from '@/data/rarityWeights';
 import { mulberry32, randInt, randPick, randSeed } from '@/engine/rng';
 import { saveStore } from './saveStore';
 import { scheduleSave } from './debouncedSave';
@@ -118,9 +119,9 @@ export function selectFloristCard(state: PlayerState): FloristCardData {
     currentStreak: state.streak.currentStreak,
     longestStreak: state.streak.longestStreak,
     rarityProgress: {
-      common: { unlocked: common, total: 200 },
-      rare: { unlocked: rare, total: 80 },
-      legendary: { unlocked: legendary, total: 20 },
+      common: { unlocked: common, total: SPECIES_BY_RARITY.common.length },
+      rare: { unlocked: rare, total: SPECIES_BY_RARITY.rare.length },
+      legendary: { unlocked: legendary, total: SPECIES_BY_RARITY.legendary.length },
     },
     startedAt: state.createdAt,
     serial: deriveSerial(state.userId),
@@ -129,11 +130,12 @@ export function selectFloristCard(state: PlayerState): FloristCardData {
 }
 
 // ── Rarity roll ─────────────────────────────────────────────────────
-// 3% legendary, 22% rare, 75% common (sums to 100%)
+// Weights come from `@/data/rarityWeights` so the Guide Book and the
+// actual roll share a single source of truth.
 function rollRarity(): Rarity {
   const r = Math.random();
-  if (r < 0.03) return 'legendary';
-  if (r < 0.25) return 'rare';
+  if (r < RARITY_ROLL_WEIGHTS.legendary) return 'legendary';
+  if (r < RARITY_ROLL_WEIGHTS.legendary + RARITY_ROLL_WEIGHTS.rare) return 'rare';
   return 'common';
 }
 

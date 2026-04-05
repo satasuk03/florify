@@ -140,6 +140,28 @@ export function SettingsIcon({ size = 22, className }: IconProps) {
   );
 }
 
+export function GuideBookIcon({ size = 22, className }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.75"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden
+    >
+      {/* Open book spine + pages */}
+      <path d="M12 6 C 10 4.5 7 4 4 4.5 V19 C 7 18.5 10 19 12 20.5" />
+      <path d="M12 6 C 14 4.5 17 4 20 4.5 V19 C 17 18.5 14 19 12 20.5" />
+      <path d="M12 6 V20.5" />
+    </svg>
+  );
+}
+
 export function BackIcon({ size = 22, className }: IconProps) {
   return (
     <svg

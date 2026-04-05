@@ -1,4 +1,5 @@
 import type { FloristCardData, FloristRank } from '@/store/gameStore';
+import { SPECIES_BY_RARITY } from '@/data/species';
 import { gzip, gunzip } from './saveTransfer';
 
 /**
@@ -23,17 +24,13 @@ import { gzip, gunzip } from './saveTransfer';
  * - `userId` — only the public, non-reversible `serial` derived from
  *   it is shared, so recipients can't impersonate the owner once cloud
  *   auth lands.
- * - Rarity totals (200/80/20) — they're constants the decoder refills.
+ * - Rarity totals — they're derived from `SPECIES_BY_RARITY` so adding
+ *   or removing species in the catalogue updates every shared link
+ *   automatically, no wire-format bump required.
  */
 
 const WIRE_PREFIX = 'fp1:';
 const FORMAT_VERSION = 1;
-
-const RARITY_TOTALS = {
-  common: 200,
-  rare: 80,
-  legendary: 20,
-} as const;
 
 const VALID_RANKS: readonly FloristRank[] = [
   'Seedling',
@@ -160,9 +157,9 @@ function unpack(p: PackedPayload): FloristCardData {
     currentStreak: p.c,
     longestStreak: p.l,
     rarityProgress: {
-      common: { unlocked: p.rc, total: RARITY_TOTALS.common },
-      rare: { unlocked: p.rr, total: RARITY_TOTALS.rare },
-      legendary: { unlocked: p.rl, total: RARITY_TOTALS.legendary },
+      common: { unlocked: p.rc, total: SPECIES_BY_RARITY.common.length },
+      rare: { unlocked: p.rr, total: SPECIES_BY_RARITY.rare.length },
+      legendary: { unlocked: p.rl, total: SPECIES_BY_RARITY.legendary.length },
     },
     startedAt: p.t,
     serial: p.s,

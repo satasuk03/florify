@@ -4,8 +4,14 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import type { FloristCardData } from '@/store/gameStore';
 import { decodePassportLink } from '@/lib/passportLink';
+import { SPECIES_BY_RARITY } from '@/data/species';
 import { PassportCard } from '@/components/florist-card/PassportCard';
 import { Button } from '@/components/Button';
+
+const TOTAL_SPECIES =
+  SPECIES_BY_RARITY.common.length +
+  SPECIES_BY_RARITY.rare.length +
+  SPECIES_BY_RARITY.legendary.length;
 
 /**
  * Public passport viewer — renders a shared Florist Card directly from
@@ -75,7 +81,7 @@ export default function PassportSharePage() {
           <>
             <PassportCard data={view.data} maxWidth={cardWidth} />
             <p className="text-center text-sm text-ink-600 font-serif italic">
-              {view.data.displayName} · {view.data.speciesUnlocked}/300 species
+              {view.data.displayName} · {view.data.speciesUnlocked}/{TOTAL_SPECIES} species
             </p>
           </>
         )}
