@@ -3366,6 +3366,28 @@ export const SPECIES: readonly SpeciesDef[] = [
       "ดอกบัวศักดิ์สิทธิ์ที่ผุดขึ้นจากโคลนตมอันลึกที่สุดโดยไม่มีมลทินใดแปดเปื้อน มีเทพธิดาในอาภรณ์ผ้าไหมสีเขียวหยกปรากฏเคียงข้าง — จากเด็กน้อยผู้อ่อนโยนคุกเข่าข้างอ่างสำริดที่ดอกตูมแรกแทรกผิวน้ำนิ่ง สู่สาวงามมงกุฎทองผู้ชูดอกบัวเรืองแสงขึ้นสูง และในที่สุดเป็นนางรำสวรรค์ผู้พลิ้วผ้าแพรเหนือสระบัวส่องสว่าง พระสูตรกล่าวไว้ว่า เฉกเช่นบัวเกิดในโคลนแต่บานสู่สรวงสวรรค์ ใจอันบริสุทธิ์ย่อมก้าวพ้นทุกข์ทั้งปวงของโลก",
     collection: SpeciesCollection.ChineseGarden,
   },
+  {
+    id: 303,
+    folder: "liushu",
+    name: "Liu Shu",
+    rarity: "rare",
+    descriptionEN:
+      "A weeping willow whose trailing branches sway like silk threads in a breeze that belongs to no season. As it grows, a gentle spirit in jade-green Hanfu appears beside it — first as a wide-eyed child reaching for the dancing leaves, then as a serene maiden standing beneath a curtain of green. The ancients wrote: where the willow bends, sorrow passes through without staying — and those who rest in its shade find their heavy hearts grow light.",
+    descriptionTH:
+      "ต้นหลิวที่กิ่งห้อยระย้าพลิ้วไหวดั่งเส้นไหมในสายลมที่ไม่เป็นของฤดูใด เมื่อเติบโตขึ้น วิญญาณอ่อนโยนในชุดฮั่นฝูสีเขียวหยกจะปรากฏเคียงข้าง — จากเด็กน้อยตาโตที่เอื้อมมือไขว่คว้าใบไม้ร่ายรำ สู่สาวน้อยผู้สงบนิ่งยืนใต้ม่านสีเขียวแห่งกิ่งหลิว โบราณว่าไว้ ที่ใดต้นหลิวโอนอ่อน ความทุกข์จะผ่านไปโดยไม่แวะพัก — และผู้ใดพักพิงใต้ร่มเงา หัวใจอันหนักอึ้งจะเบาลงเอง",
+    collection: SpeciesCollection.ChineseGarden,
+  },
+  {
+    id: 304,
+    folder: "zhuzi",
+    name: "Zhu Zi",
+    rarity: "common",
+    descriptionEN:
+      "In a bamboo forest where no path leads in or out, a girl once sat playing a flute she carved from the tallest stalk. The melody was so tender that the stream at her feet stopped flowing to listen, and the birds overhead folded their wings mid-air. When she finished, she vanished — but the bamboo remembered every note. Now, whenever a zhu zi grows tall enough for the wind to pass through its hollow heart, the forest plays her song again, and for a moment the whole world holds its breath.",
+    descriptionTH:
+      "ในป่าไผ่ที่ไม่มีทางเข้าหรือออก เคยมีสาวน้อยนั่งเป่าขลุ่ยที่เธอเหลาจากลำไผ่ที่สูงที่สุด เสียงเพลงนั้นอ่อนหวานจนสายธารแทบเท้าหยุดไหลเพื่อฟัง นกเหนือหัวพับปีกค้างกลางอากาศ เมื่อเพลงจบ เธอก็หายไป — แต่ไผ่จำทุกโน้ตได้ บัดนี้เมื่อต้นจู๋จื่อสูงพอให้ลมลอดผ่านหัวใจกลวง ผืนป่าจะบรรเลงเพลงของเธออีกครั้ง และชั่วขณะนั้นทั้งโลกกลั้นหายใจ",
+    collection: SpeciesCollection.ChineseGarden,
+  },
 ];
 
 // Integrity: catch id/ordering drift early — the app fails to boot rather

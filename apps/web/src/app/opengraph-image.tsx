@@ -1,11 +1,14 @@
 import { ImageResponse } from "next/og";
+import { SPECIES } from "@/data/species";
 
 // Static export friendly: this route is evaluated at `next build` and emitted
 // as a plain PNG under /opengraph-image.png. No server runtime involved.
 export const dynamic = "force-static";
 
+const speciesCount = SPECIES.length;
+
 export const alt =
-  "Florify — ปลูก รดน้ำ เก็บสะสมต้นไม้สุ่มสร้างของคุณเอง / Plant, water, and collect procedurally-generated trees";
+  `Florify — ปลูก รดน้ำ เก็บสะสมต้นไม้กว่า ${speciesCount} สายพันธุ์ / Plant, water, and collect ${speciesCount}+ unique tree species`;
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
@@ -160,7 +163,7 @@ export default async function Image() {
           display: "flex",
         }}
       >
-        Plant, water, and collect procedurally-generated trees
+        {`Plant, water, and collect ${speciesCount}+ unique tree species`}
       </div>
 
       {/* Footer URL pill */}

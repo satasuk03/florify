@@ -20,7 +20,7 @@ import { SPECIES_BY_RARITY } from '@/data/species';
 import { RARITY_ROLL_WEIGHTS } from '@/data/rarityWeights';
 import { mulberry32, randInt, randPick, randSeed } from '@/engine/rng';
 import { saveStore } from './saveStore';
-import { scheduleSave } from './debouncedSave';
+import { scheduleSave, flushSave } from './debouncedSave';
 import { createInitialState } from './initialState';
 import { isYesterday, todayLocalDate } from '@/lib/time';
 import { haptic } from '@/lib/haptics';
@@ -456,7 +456,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   replaceState: (next: PlayerState) => {
     const stamped: PlayerState = { ...next, updatedAt: Date.now() };
     set({ state: stamped });
-    saveStore.save(stamped).catch((err) => console.error('[replaceState]', err));
+    flushSave(stamped);
   },
 }));
 

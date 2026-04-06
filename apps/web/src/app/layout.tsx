@@ -3,6 +3,7 @@ import { Fraunces, Sarabun } from "next/font/google";
 import { StoreHydrator } from "@/store/StoreHydrator";
 import { ToastContainer } from "@/components/ToastContainer";
 import { MobileFrame } from "@/components/MobileFrame";
+import { SPECIES } from "@/data/species";
 import "./globals.css";
 
 const sarabun = Sarabun({
@@ -24,12 +25,13 @@ const fraunces = Fraunces({
 // unfurlers work even though there is no server runtime in production.
 const SITE_URL = "https://florify.zeze.app";
 
-const titleEN = "Florify — Plant, water & collect procedurally-generated trees";
-const titleTH = "Florify — ปลูก รดน้ำ เก็บสะสมต้นไม้สุ่มสร้างของคุณเอง";
+const speciesCount = SPECIES.length;
+const titleEN = `Florify — Plant, water & collect ${speciesCount}+ unique tree species`;
+const titleTH = `Florify — ปลูก รดน้ำ เก็บสะสมต้นไม้กว่า ${speciesCount} สายพันธุ์`;
 const descriptionEN =
-  "A tiny mobile-first garden game. Plant a seed, water it daily, and collect hundreds of procedurally-generated tree species in your personal gallery.";
+  `A tiny mobile-first garden game. Plant a seed, water it daily, and collect ${speciesCount}+ unique tree species in your personal gallery.`;
 const descriptionTH =
-  "เกมสวนจิ๋วบนมือถือ ปลูกเมล็ด รดน้ำทุกวัน แล้วเก็บสะสมต้นไม้สุ่มสร้างหลายร้อยสายพันธุ์ในแกลเลอรีของคุณเอง";
+  `เกมสวนจิ๋วบนมือถือ ปลูกเมล็ด รดน้ำทุกวัน แล้วเก็บสะสมต้นไม้กว่า ${speciesCount} สายพันธุ์ในแกลเลอรีของคุณเอง`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -48,7 +50,7 @@ export const metadata: Metadata = {
     "plant game",
     "gardening game",
     "idle garden",
-    "procedural trees",
+    "tree species",
     "collect trees",
     "mobile web game",
   ],
