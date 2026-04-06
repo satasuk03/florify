@@ -12,7 +12,7 @@ import {
   type Stage,
 } from '@/components/StageSelector';
 import { useGameStore } from '@/store/gameStore';
-import { SPECIES } from '@/data/species';
+import { SPECIES, SpeciesCollection } from '@/data/species';
 
 /**
  * Detail view for a single harvested tree. Reads `id` from the parent
@@ -22,6 +22,11 @@ import { SPECIES } from '@/data/species';
  * Uses the query-param routing pattern instead of a dynamic route
  * because Next.js 16 static export forbids `dynamicParams: true`.
  */
+
+const COLLECTION_LABELS: Record<SpeciesCollection, { th: string; en: string }> = {
+  [SpeciesCollection.Original]: { th: 'Original', en: 'Original' },
+  [SpeciesCollection.ChineseGarden]: { th: 'Chinese Garden', en: 'Chinese Garden' },
+};
 
 const COPY = {
   th: {
@@ -89,7 +94,12 @@ export function DetailView({ speciesId }: { speciesId: number | null }) {
         >
           <BackIcon />
         </Link>
-        <RarityBadge rarity={entry.rarity} />
+        <div className="flex items-center gap-2">
+          <span className="text-xs bg-cream-200/80 text-ink-600 px-2.5 py-0.5 rounded-full">
+            {COLLECTION_LABELS[species?.collection ?? SpeciesCollection.Original][lang]}
+          </span>
+          <RarityBadge rarity={entry.rarity} />
+        </div>
       </header>
 
       <div className="flex-1 min-h-0 flex items-center justify-center px-4 pb-2">
