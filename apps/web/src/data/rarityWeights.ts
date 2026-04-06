@@ -1,4 +1,4 @@
-import type { Rarity } from '@florify/shared';
+import type { Rarity } from "@florify/shared";
 
 /**
  * Roll probability per rarity tier. Single source of truth — the game
@@ -9,6 +9,6 @@ import type { Rarity } from '@florify/shared';
  */
 export const RARITY_ROLL_WEIGHTS: Record<Rarity, number> = {
   common: 0.75,
-  rare: 0.22,
-  legendary: 0.03,
+  rare: 0.2,
+  legendary: 0.05,
 };
