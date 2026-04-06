@@ -82,15 +82,6 @@ export function HarvestOverlay({ tree, onDismiss }: Props) {
     setFlying(null);
   }
 
-  // Auto-dismiss on Escape
-  useEffect(() => {
-    if (!tree) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onDismiss();
-    };
-    document.addEventListener('keydown', onKey);
-    return () => document.removeEventListener('keydown', onKey);
-  }, [tree, onDismiss]);
 
   if (!tree) return null;
 
@@ -166,7 +157,6 @@ export function HarvestOverlay({ tree, onDismiss }: Props) {
       aria-modal="true"
       aria-label="Harvest celebration"
       className="fixed inset-0 z-50 flex items-center justify-center bg-cream-50/85 backdrop-blur-sm animate-overlay-in"
-      onClick={onDismiss}
     >
       {/* Rarity-tinted radial glow */}
       <div
@@ -185,7 +175,6 @@ export function HarvestOverlay({ tree, onDismiss }: Props) {
           collecting ? 'opacity-0' : 'opacity-100'
         }`}
         style={{ animationDelay: '80ms' }}
-        onClick={(e) => e.stopPropagation()}
       >
         {/* Children fade up with a gentle stagger so the reveal feels
             orchestrated rather than all-at-once. The flora wrapper

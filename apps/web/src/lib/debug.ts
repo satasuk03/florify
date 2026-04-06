@@ -14,4 +14,4 @@ export const DEBUG_MODE = process.env.NEXT_PUBLIC_DEBUG_MODE === "true";
  * should import `DROP_REGEN_MS` from here instead of from
  * `@florify/shared` directly.
  */
-export const DROP_REGEN_MS = DEBUG_MODE ? 10_000 : PROD_DROP_REGEN_MS;
+export const DROP_REGEN_MS = DEBUG_MODE ? 3_000 : PROD_DROP_REGEN_MS;
