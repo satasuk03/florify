@@ -12,7 +12,7 @@ import {
   STAGE_PROGRESS,
   type Stage,
 } from '@/components/StageSelector';
-import { SPECIES } from '@/data/species';
+import { SPECIES, SpeciesCollection } from '@/data/species';
 import { useT, useLanguage } from '@/i18n/useT';
 import { shareSpecies } from '@/lib/shareSpecies';
 
@@ -26,6 +26,11 @@ import { shareSpecies } from '@/lib/shareSpecies';
  *
  * Route: `/floripedia/?id={speciesId}` (query-param, single static HTML).
  */
+
+const COLLECTION_LABELS: Record<SpeciesCollection, { th: string; en: string }> = {
+  [SpeciesCollection.Original]: { th: 'Original', en: 'Original' },
+  [SpeciesCollection.ChineseGarden]: { th: 'Chinese Garden', en: 'Chinese Garden' },
+};
 
 const STAGE_LABEL: Record<Lang, (s: Stage) => string> = {
   th: (s) => `ระยะ ${s}`,
@@ -95,7 +100,12 @@ export function FloripediaView({ speciesId }: Props) {
         >
           <BackIcon />
         </Link>
-        <RarityBadge rarity={species.rarity} />
+        <div className="flex items-center gap-2">
+          <span className="text-xs bg-cream-200/80 text-ink-600 px-2.5 py-0.5 rounded-full">
+            {COLLECTION_LABELS[species.collection][lang]}
+          </span>
+          <RarityBadge rarity={species.rarity} />
+        </div>
       </header>
 
       <div className="flex-1 min-h-0 flex items-center justify-center px-4 pb-2">
