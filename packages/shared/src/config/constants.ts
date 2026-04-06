@@ -1,6 +1,6 @@
 export const SCHEMA_VERSION = 4 as const;
-export const MAX_WATER_DROPS = 30;
-export const DROP_REGEN_MS = 5 * 60 * 1000;     // 5 minutes per drop
+export const MAX_WATER_DROPS = 50;
+export const DROP_REGEN_MS = 3 * 60 * 1000;     // 3 minutes per drop
 export const MIN_WATER_COST = 12;
 export const MAX_WATER_COST = 25;
 export const FIRST_FLORA_COST = 10;

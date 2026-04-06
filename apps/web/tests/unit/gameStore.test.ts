@@ -193,7 +193,7 @@ describe('computeDrops', () => {
     const now = Date.now();
     const state = {
       ...createInitialState(),
-      waterDrops: 28,
+      waterDrops: 48,
       lastDropRegenAt: now - 5 * DROP_REGEN_MS,
     };
     vi.spyOn(Date, 'now').mockReturnValue(now);
