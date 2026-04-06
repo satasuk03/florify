@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { LocalSaveStore } from '@/store/saveStore';
 import { createInitialState } from '@/store/initialState';
-import { STORAGE_KEY } from '@florify/shared';
+import { SCHEMA_VERSION, STORAGE_KEY } from '@florify/shared';
 
 describe('LocalSaveStore', () => {
   beforeEach(() => {
@@ -21,7 +21,7 @@ describe('LocalSaveStore', () => {
     const loaded = await store.load();
     expect(loaded).not.toBeNull();
     expect(loaded?.userId).toBe(initial.userId);
-    expect(loaded?.schemaVersion).toBe(2);
+    expect(loaded?.schemaVersion).toBe(SCHEMA_VERSION);
     expect(loaded?.activeTree).toBeNull();
     expect(loaded?.collection).toEqual([]);
   });

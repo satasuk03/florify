@@ -13,7 +13,7 @@ export const dict = {
     // ── PlotView ───────────────────────────────
     'plot.plant': 'เริ่มปลูก',
     'plot.water': 'รดน้ำ',
-    'plot.wateredCount': 'รดน้ำแล้ว {count} ครั้ง',
+    'plot.wateredCount': '{count}/{total} หยด',
     'plot.openGallery': 'เปิดแกลเลอรี',
     'plot.openFloristCard': 'เปิดการ์ดนักจัดดอกไม้',
     'plot.openSettings': 'เปิดตั้งค่า',
@@ -75,7 +75,7 @@ export const dict = {
     'guide.howto.plant.title': '1. ปลูก',
     'guide.howto.plant.body': 'แตะปุ่มด้านล่างเพื่อสุ่มเมล็ดพันธุ์ใหม่ มีต้นไม้ที่กำลังเติบโตได้ทีละ 1 ต้น',
     'guide.howto.water.title': '2. รดน้ำ',
-    'guide.howto.water.body': 'กลับมารดน้ำทุกๆ 30 นาที แต่ละต้นต้องรดน้ำ 1–10 ครั้ง แล้วแต่ดวง',
+    'guide.howto.water.body': 'แตะรดน้ำแต่ละครั้งใช้ 1 หยด สะสมได้สูงสุด 30 หยด (ฟื้นฟู 1 หยดทุก 5 นาที) แต่ละต้นใช้ 12–20 หยด',
     'guide.howto.harvest.title': '3. เก็บเกี่ยว',
     'guide.howto.harvest.body': 'เมื่อรดน้ำครบ ต้นไม้จะบานและถูกเก็บเข้าแกลเลอรี ปลดล็อคสายพันธุ์ใหม่ให้คุณ',
     'guide.rarity.title': 'ระดับความหายาก',
@@ -108,7 +108,7 @@ export const dict = {
     'harvest.headline.common': 'ต้นไม้ใหม่ 🌿',
     'harvest.headline.rare': 'พบของหายาก ✨',
     'harvest.headline.legendary': 'บานสะพรั่งในตำนาน 🌼',
-    'harvest.waterings': 'รดน้ำ {count} ครั้ง · เก็บเข้า Gallery แล้ว',
+    'harvest.waterings': 'ใช้ {count} หยด · เก็บเข้า Gallery แล้ว',
     'harvest.collect': 'เก็บเข้า Gallery',
     'harvest.share': 'แชร์',
 
@@ -125,7 +125,7 @@ export const dict = {
     // ── PlotView ───────────────────────────────
     'plot.plant': 'Plant',
     'plot.water': 'Water',
-    'plot.wateredCount': 'Watered {count} times',
+    'plot.wateredCount': '{count}/{total} drops',
     'plot.openGallery': 'Open Gallery',
     'plot.openFloristCard': 'Open Florist Card',
     'plot.openSettings': 'Open Settings',
@@ -153,7 +153,7 @@ export const dict = {
     'settings.soundHint': 'In-game sound effects (coming soon)',
     'settings.haptics': 'Haptics',
     'settings.hapticsHint': 'Supported on Android · not on iOS',
-    'settings.notifications': 'Watering reminders',
+    'settings.notifications': 'Drop reminders',
     'settings.notificationsHint': 'Only fires while the tab is open (not PWA)',
     'settings.notificationsDenied': 'Permission denied — enable in browser settings',
 
@@ -187,7 +187,7 @@ export const dict = {
     'guide.howto.plant.title': '1. Plant',
     'guide.howto.plant.body': 'Tap the button at the bottom to sow a new seed. Only one tree can be growing at a time.',
     'guide.howto.water.title': '2. Water',
-    'guide.howto.water.body': 'Come back every 30 minutes to water. Each tree needs 1–10 waterings before it blooms.',
+    'guide.howto.water.body': 'Each tap costs 1 water drop. You can hold up to 30 drops (1 drop regenerates every 5 minutes). Each tree needs 12–20 drops.',
     'guide.howto.harvest.title': '3. Harvest',
     'guide.howto.harvest.body': 'Once fully watered, the tree blooms and is added to your Gallery, unlocking a new species.',
     'guide.rarity.title': 'Rarity tiers',
@@ -220,7 +220,7 @@ export const dict = {
     'harvest.headline.common': 'New addition 🌿',
     'harvest.headline.rare': 'Rare find ✨',
     'harvest.headline.legendary': 'Legendary bloom 🌼',
-    'harvest.waterings': 'Watered {count} times · Added to Gallery',
+    'harvest.waterings': '{count} drops used · Added to Gallery',
     'harvest.collect': 'Add to Gallery',
     'harvest.share': 'Share',
 

@@ -14,7 +14,7 @@ import { useT } from '@/i18n/useT';
  *
  * Import uses `window.confirm` for the destructive step and then
  * reloads the page. Reload is the safest way to rehydrate derived
- * state (active tree UI, cooldown timers, FloristCard selectors)
+ * state (active tree UI, water drops, FloristCard selectors)
  * without hunting down every subscription.
  */
 export function SaveDataSection() {

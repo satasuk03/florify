@@ -94,6 +94,26 @@ export function WaterDropIcon({ size = 22, className }: IconProps) {
   );
 }
 
+export function ClockIcon({ size = 22, className }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.75"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden
+    >
+      <circle cx="12" cy="12" r="10" />
+      <polyline points="12 6 12 12 16 14" />
+    </svg>
+  );
+}
+
 export function SproutIcon({ size = 22, className }: IconProps) {
   return (
     <svg

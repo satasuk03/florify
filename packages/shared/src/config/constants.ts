@@ -1,7 +1,9 @@
-export const SCHEMA_VERSION = 2 as const;
-export const COOLDOWN_MS = 30 * 60 * 1000;      // 30 minutes
-export const MIN_WATERINGS = 3;
-export const MAX_WATERINGS = 10;
+export const SCHEMA_VERSION = 3 as const;
+export const MAX_WATER_DROPS = 30;
+export const DROP_REGEN_MS = 5 * 60 * 1000;     // 5 minutes per drop
+export const MIN_WATER_COST = 12;
+export const MAX_WATER_COST = 25;
+export const FIRST_FLORA_COST = 10;
 export const TOTAL_SPECIES = 300;
 export const STORAGE_KEY = 'florify:v1:player';
 export const SETTINGS_KEY = 'florify:v1:settings';

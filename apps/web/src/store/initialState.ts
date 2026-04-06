@@ -1,5 +1,5 @@
 import { nanoid } from 'nanoid';
-import { SCHEMA_VERSION, type PlayerState } from '@florify/shared';
+import { MAX_WATER_DROPS, SCHEMA_VERSION, type PlayerState } from '@florify/shared';
 
 export function createInitialState(): PlayerState {
   const now = Date.now();
@@ -9,6 +9,8 @@ export function createInitialState(): PlayerState {
     displayName: 'Guest',
     createdAt: now,
     updatedAt: now,
+    waterDrops: MAX_WATER_DROPS,
+    lastDropRegenAt: now,
     activeTree: null,
     collection: [],
     stats: { totalPlanted: 0, totalWatered: 0, totalHarvested: 0 },

@@ -1,9 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   canNotify,
-  cancelCooldownNotification,
+  cancelDropsNotification,
   requestNotificationPermission,
-  scheduleCooldownNotification,
+  scheduleDropsNotification,
 } from '@/lib/notifications';
 import { saveSettings } from '@/store/settingsStore';
 
@@ -32,7 +32,7 @@ describe('notifications', () => {
   });
 
   afterEach(() => {
-    cancelCooldownNotification();
+    cancelDropsNotification();
     vi.useRealTimers();
     vi.unstubAllGlobals();
   });
@@ -72,39 +72,39 @@ describe('notifications', () => {
     });
   });
 
-  describe('scheduleCooldownNotification', () => {
+  describe('scheduleDropsNotification', () => {
     it('fires a Notification after the delta elapses', () => {
       FakeNotification.permission = 'granted';
       const when = Date.now() + 5000;
-      scheduleCooldownNotification(when);
+      scheduleDropsNotification(when);
       expect(FakeNotification.instances).toHaveLength(0);
       vi.advanceTimersByTime(5001);
       expect(FakeNotification.instances).toHaveLength(1);
-      expect(FakeNotification.instances[0]?.title).toMatch(/พร้อมรดน้ำ/);
+      expect(FakeNotification.instances[0]?.title).toMatch(/หยดน้ำเต็ม/);
     });
 
     it('does nothing when notifications setting is off', () => {
       FakeNotification.permission = 'granted';
       saveSettings({ sound: true, haptics: true, notifications: false, language: 'th' });
-      scheduleCooldownNotification(Date.now() + 1000);
+      scheduleDropsNotification(Date.now() + 1000);
       vi.advanceTimersByTime(2000);
       expect(FakeNotification.instances).toHaveLength(0);
     });
 
     it('cancels previous timer on re-schedule', () => {
       FakeNotification.permission = 'granted';
-      scheduleCooldownNotification(Date.now() + 5000);
-      scheduleCooldownNotification(Date.now() + 10_000);
+      scheduleDropsNotification(Date.now() + 5000);
+      scheduleDropsNotification(Date.now() + 10_000);
       vi.advanceTimersByTime(5100);
       expect(FakeNotification.instances).toHaveLength(0);
       vi.advanceTimersByTime(5000);
       expect(FakeNotification.instances).toHaveLength(1);
     });
 
-    it('cancelCooldownNotification prevents scheduled fire', () => {
+    it('cancelDropsNotification prevents scheduled fire', () => {
       FakeNotification.permission = 'granted';
-      scheduleCooldownNotification(Date.now() + 5000);
-      cancelCooldownNotification();
+      scheduleDropsNotification(Date.now() + 5000);
+      cancelDropsNotification();
       vi.advanceTimersByTime(10_000);
       expect(FakeNotification.instances).toHaveLength(0);
     });

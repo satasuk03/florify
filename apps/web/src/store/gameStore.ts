@@ -1,14 +1,16 @@
 import { create } from 'zustand';
 import { nanoid } from 'nanoid';
 import {
-  MAX_WATERINGS,
-  MIN_WATERINGS,
+  FIRST_FLORA_COST,
+  MAX_WATER_COST,
+  MAX_WATER_DROPS,
+  MIN_WATER_COST,
   TOTAL_SPECIES,
   type PlayerState,
   type Rarity,
   type TreeInstance,
 } from '@florify/shared';
-import { COOLDOWN_MS } from '@/lib/debug';
+import { DROP_REGEN_MS } from '@/lib/debug';
 import { SPECIES_BY_RARITY } from '@/data/species';
 import { RARITY_ROLL_WEIGHTS } from '@/data/rarityWeights';
 import { mulberry32, randInt, randPick, randSeed } from '@/engine/rng';
@@ -17,22 +19,20 @@ import { scheduleSave } from './debouncedSave';
 import { createInitialState } from './initialState';
 import { isYesterday, todayLocalDate } from '@/lib/time';
 import { haptic } from '@/lib/haptics';
-import { cancelCooldownNotification, scheduleCooldownNotification } from '@/lib/notifications';
 
 /**
  * Florify game store.
  *
  * Single source of truth for player state; actions enforce the game
- * rules (cooldown, one-active-tree, rarity distribution). Persistence
+ * rules (water drops, one-active-tree, rarity distribution). Persistence
  * is fire-and-forget via `scheduleSave` — mutations are never blocked
  * on I/O. Tests clobber state directly via `useGameStore.setState` to
- * bypass cooldowns and deterministically trigger harvest.
+ * bypass drops and deterministically trigger harvest.
  */
 
 export interface WaterResult {
   ok: boolean;
   harvested?: TreeInstance;
-  nextAvailableAt?: number;
 }
 
 export type FloristRank = 'Seedling' | 'Apprentice' | 'Gardener' | 'Master' | 'Legend';
@@ -65,13 +65,32 @@ export function deriveSerial(userId: string): string {
   return `FL-${padded.slice(0, 4)}-${padded.slice(4, 8)}`;
 }
 
+// ── Water drop regeneration ──────────────────────────────────────────
+// Pure function: computes current drop count from the stored baseline
+// + elapsed time. Timestamp-based so it self-corrects after background
+// tabs, sleep, or page refreshes without needing intervals.
+export function computeDrops(state: PlayerState): { drops: number; regenAt: number } {
+  // Guard against missing fields from un-migrated saves
+  const baseDrops = state.waterDrops ?? MAX_WATER_DROPS;
+  const baseRegen = state.lastDropRegenAt ?? Date.now();
+  const elapsed = Date.now() - baseRegen;
+  const gained = Math.max(0, Math.floor(elapsed / DROP_REGEN_MS));
+  const drops = Math.min(baseDrops + gained, MAX_WATER_DROPS);
+  // Advance the baseline so we don't re-grant the same drops later
+  const regenAt = gained > 0
+    ? baseRegen + gained * DROP_REGEN_MS
+    : baseRegen;
+  return { drops, regenAt };
+}
+
 export interface GameStore {
   state: PlayerState;
 
   // Derived — primitive returns only (objects would break useSyncExternalStore
   // equality checks; derive object shapes from raw state via useMemo instead).
   canWater: () => boolean;
-  nextWaterAt: () => number | null;
+  waterDrops: () => number;
+  nextDropAt: () => number | null;
   uniqueSpeciesUnlocked: () => number;
 
   // Actions
@@ -158,16 +177,19 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   // ── Derived selectors ─────────────────────────────────────────────
   canWater: () => {
-    const t = get().state.activeTree;
-    if (!t) return false;
-    if (t.lastWateredAt === null) return true;
-    return Date.now() - t.lastWateredAt >= COOLDOWN_MS;
+    const s = get().state;
+    if (!s.activeTree) return false;
+    if (s.activeTree.currentWaterings >= s.activeTree.requiredWaterings) return false;
+    return computeDrops(s).drops >= 1;
   },
 
-  nextWaterAt: () => {
-    const t = get().state.activeTree;
-    if (!t || t.lastWateredAt === null) return null;
-    return t.lastWateredAt + COOLDOWN_MS;
+  waterDrops: () => computeDrops(get().state).drops,
+
+  nextDropAt: () => {
+    const s = get().state;
+    const { drops, regenAt } = computeDrops(s);
+    if (drops >= MAX_WATER_DROPS) return null;
+    return regenAt + DROP_REGEN_MS;
   },
 
   uniqueSpeciesUnlocked: () => distinctSpeciesIds(get().state.collection).size,
@@ -191,12 +213,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
     // doesn't need to mock Math.random for the pick itself.
     const pickRng = mulberry32(seed);
     const species = randPick(pickRng, pool);
-    // Required waterings 1..10, derived from seed so replay is consistent.
-    // First-ever tree is guaranteed 1 watering so new players see a harvest
-    // immediately — avoids a slow onboarding through multiple cooldowns.
+    // Required waterings (drop cost) derived from seed so replay is
+    // consistent. First-ever tree costs 10 drops for quick onboarding.
     const isFirstEver = current.stats.totalPlanted === 0 && current.collection.length === 0;
     const wateringsRng = mulberry32((seed ^ 0xabcdef) >>> 0);
-    const required = isFirstEver ? 1 : randInt(wateringsRng, MIN_WATERINGS, MAX_WATERINGS);
+    const required = isFirstEver ? FIRST_FLORA_COST : randInt(wateringsRng, MIN_WATER_COST, MAX_WATER_COST);
 
     const now = Date.now();
     const tree: TreeInstance = {
@@ -207,7 +228,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
       requiredWaterings: required,
       currentWaterings: 0,
       plantedAt: now,
-      lastWateredAt: null,
       harvestedAt: null,
     };
 
@@ -229,11 +249,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const tree = s.activeTree;
     if (!tree) return { ok: false };
 
-    const now = Date.now();
-    if (tree.lastWateredAt !== null && now - tree.lastWateredAt < COOLDOWN_MS) {
-      return { ok: false, nextAvailableAt: tree.lastWateredAt + COOLDOWN_MS };
-    }
+    // Sync regenerated drops
+    const { drops, regenAt } = computeDrops(s);
+    if (drops < 1) return { ok: false };
 
+    const now = Date.now();
     const nextWaterings = tree.currentWaterings + 1;
     const isHarvest = nextWaterings >= tree.requiredWaterings;
 
@@ -241,11 +261,12 @@ export const useGameStore = create<GameStore>((set, get) => ({
       const harvested: TreeInstance = {
         ...tree,
         currentWaterings: nextWaterings,
-        lastWateredAt: now,
         harvestedAt: now,
       };
       const next: PlayerState = {
         ...s,
+        waterDrops: drops - 1,
+        lastDropRegenAt: regenAt,
         activeTree: null,
         collection: [...s.collection, harvested],
         stats: {
@@ -257,20 +278,20 @@ export const useGameStore = create<GameStore>((set, get) => ({
       };
       set({ state: next });
       scheduleSave(next);
-      cancelCooldownNotification();
       haptic('harvest');
       return { ok: true, harvested };
     }
 
     const next: PlayerState = {
       ...s,
-      activeTree: { ...tree, currentWaterings: nextWaterings, lastWateredAt: now },
+      waterDrops: drops - 1,
+      lastDropRegenAt: regenAt,
+      activeTree: { ...tree, currentWaterings: nextWaterings },
       stats: { ...s.stats, totalWatered: s.stats.totalWatered + 1 },
       updatedAt: now,
     };
     set({ state: next });
     scheduleSave(next);
-    scheduleCooldownNotification(now + COOLDOWN_MS);
     haptic('water');
     return { ok: true };
   },
@@ -282,7 +303,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const next: PlayerState = { ...s, activeTree: null, updatedAt: Date.now() };
     set({ state: next });
     scheduleSave(next);
-    cancelCooldownNotification();
   },
 
   // ── Daily streak check-in ─────────────────────────────────────────

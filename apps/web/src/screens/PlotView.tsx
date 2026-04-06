@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import type { TreeInstance } from "@florify/shared";
+import { MAX_WATER_DROPS, type TreeInstance } from "@florify/shared";
 import { FloraImage } from "@/components/FloraImage";
 import { PerlinNoise } from "@/components/PerlinNoise";
 import { Button } from "@/components/Button";
-import { CountdownTimer } from "@/components/CountdownTimer";
+import { DropsIndicator } from "@/components/DropsIndicator";
 import { CornerButton } from "@/components/CornerButton";
 import {
   GalleryIcon,
@@ -40,7 +40,8 @@ export function PlotView() {
   const t = useT();
   const tree = useGameStore((s) => s.state.activeTree);
   const canWater = useGameStore((s) => s.canWater());
-  const nextAt = useGameStore((s) => s.nextWaterAt());
+  const drops = useGameStore((s) => s.waterDrops());
+  const nextDrop = useGameStore((s) => s.nextDropAt());
   const plant = useGameStore((s) => s.plantTree);
   const water = useGameStore((s) => s.waterTree);
   const [showFlorist, setShowFlorist] = useState(false);
@@ -76,19 +77,19 @@ export function PlotView() {
     else if (!tree && phase === "tree") setPhase("empty");
   }
 
-  // `canWater()` is derived from `Date.now()` but Zustand only notifies
-  // subscribers on `set()` — so when the cooldown simply elapses, nothing
-  // triggers a re-render and the รดน้ำ button stays disabled until some
-  // unrelated interaction re-renders the screen. Schedule a one-shot
-  // re-render at the exact moment the cooldown expires to re-enable it
-  // without a page refresh.
+  // Periodically re-render so the drop count and "next drop" timer
+  // stay up to date. `computeDrops` is timestamp-based so this just
+  // triggers React to re-read the selectors. Only active during the
+  // "tree" phase — running it during "opening" would reset the
+  // SeedPacket's onComplete timeout on every tick (the inline callback
+  // creates a new ref each render, which SeedPacket's useEffect treats
+  // as a dep change).
   const [, forceTick] = useState(0);
   useEffect(() => {
-    if (canWater || nextAt === null) return;
-    const delay = Math.max(0, nextAt - Date.now()) + 50;
-    const id = setTimeout(() => forceTick((n) => n + 1), delay);
-    return () => clearTimeout(id);
-  }, [canWater, nextAt]);
+    if (phase !== "tree" || drops >= MAX_WATER_DROPS) return;
+    const id = setInterval(() => forceTick((n) => n + 1), 1000);
+    return () => clearInterval(id);
+  }, [phase, drops]);
 
   const handleWater = () => {
     const result = water();
@@ -206,7 +207,7 @@ export function PlotView() {
               />
             </div>
             <div className="text-[11px] text-ink-500 tabular-nums tracking-wider">
-              {t('plot.wateredCount', { count: tree.currentWaterings })}
+              {percent}%
             </div>
           </div>
         </div>
@@ -278,13 +279,9 @@ export function PlotView() {
               : "opacity-100"
           }`}
         >
-          {/* Countdown sits ABOVE the button so its appearance doesn't
-              shove the (bottom-anchored) action button upward whenever
-              the player taps water. Button stays put, timer grows up. */}
-          {phase === "tree" && tree && !canWater && nextAt !== null && (
-            <div className="text-sm text-ink-500 mb-2">
-              ⏳ <CountdownTimer until={nextAt} />
-            </div>
+          {/* Water drops indicator — always visible when a tree is active. */}
+          {phase === "tree" && tree && (
+            <DropsIndicator drops={drops} nextDropAt={nextDrop} />
           )}
 
           {phase === "empty" ? (
@@ -367,7 +364,7 @@ function ActionButton({
           hover:!bg-[rgba(220,152,114,0.65)] hover:shadow-[0_14px_36px_-10px_rgba(185,100,60,0.6),inset_0_1px_0_0_rgba(255,240,220,0.65),inset_0_-8px_18px_-8px_rgba(170,85,45,0.45)]
           before:content-[''] before:absolute before:inset-x-3 before:top-1 before:h-1/2 before:rounded-full
           before:bg-gradient-to-b before:from-white/50 before:to-transparent before:pointer-events-none
-          ${disabled ? "saturate-75" : ""}`}
+          ${disabled ? "saturate-50 opacity-60" : ""}`}
       >
         <span className="relative flex items-center justify-center gap-2.5 drop-shadow-[0_1px_1px_rgba(90,45,20,0.45)]">
           <span className="text-cream-50">{icon}</span>

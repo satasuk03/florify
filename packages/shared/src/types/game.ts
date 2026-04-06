@@ -5,10 +5,9 @@ export interface TreeInstance {
   seed: number;                // uint32 — deterministic geometry
   speciesId: number;           // 0..299
   rarity: Rarity;              // denormalized from species table
-  requiredWaterings: number;   // 1..10 — fixed at plant time
+  requiredWaterings: number;   // 10..20 — drop cost, fixed at plant time
   currentWaterings: number;    // 0..requiredWaterings
   plantedAt: number;           // epoch ms
-  lastWateredAt: number | null;
   harvestedAt: number | null;  // null if not yet harvested
 }
 
@@ -25,11 +24,13 @@ export interface PlayerStats {
 }
 
 export interface PlayerState {
-  schemaVersion: 2;
+  schemaVersion: 3;
   userId: string;              // local nanoid; linked to a cloud account later
   displayName: string;         // user-editable; 'Guest' until renamed
   createdAt: number;
   updatedAt: number;           // last-writer-wins for cloud sync
+  waterDrops: number;          // 0..MAX_WATER_DROPS — current drop count
+  lastDropRegenAt: number;     // epoch ms — last regen sync point
   activeTree: TreeInstance | null;
   collection: TreeInstance[];  // harvested, append-only
   stats: PlayerStats;

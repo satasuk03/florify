@@ -6,15 +6,10 @@ import { loadSettings } from '@/store/settingsStore';
  * In-tab browser notifications — designs/08 §8.4.
  *
  * We're not a PWA, so we can't do Web Push. The compromise: schedule a
- * `setTimeout` that fires `new Notification(...)` when the watering
- * cooldown elapses, **but only while the tab is still open**. If the
- * user closes the tab we lose the timer — acceptable tradeoff for
- * keeping the app a static site.
- *
- * Re-arming on `visibilitychange` (StoreHydrator) handles the case
- * where the browser throttles long `setTimeout` when the tab is
- * backgrounded — we recompute the remaining delta when the tab
- * returns to the foreground.
+ * `setTimeout` that fires `new Notification(...)` when water drops have
+ * regenerated enough to water again, **but only while the tab is still
+ * open**. If the user closes the tab we lose the timer — acceptable
+ * tradeoff for keeping the app a static site.
  */
 
 let timerId: ReturnType<typeof setTimeout> | null = null;
@@ -41,18 +36,17 @@ export function canNotify(): boolean {
 }
 
 /**
- * Schedule a one-shot notification for when watering unlocks again.
- * Cancels any prior scheduled notification — there's only ever one
- * pending cooldown at a time.
+ * Schedule a one-shot notification for when enough drops have
+ * regenerated. Cancels any prior scheduled notification — there's only
+ * ever one pending at a time.
  */
-export function scheduleCooldownNotification(whenMs: number): void {
-  cancelCooldownNotification();
+export function scheduleDropsNotification(whenMs: number): void {
+  cancelDropsNotification();
   if (typeof window === 'undefined') return;
   if (!canNotify()) return;
 
   const delta = whenMs - Date.now();
   if (delta <= 0) {
-    // Already elapsed — fire immediately on next tick
     queueMicrotask(() => fireNotification());
     return;
   }
@@ -63,7 +57,7 @@ export function scheduleCooldownNotification(whenMs: number): void {
   }, delta);
 }
 
-export function cancelCooldownNotification(): void {
+export function cancelDropsNotification(): void {
   if (timerId !== null) {
     clearTimeout(timerId);
     timerId = null;
@@ -73,9 +67,9 @@ export function cancelCooldownNotification(): void {
 function fireNotification(): void {
   if (!canNotify()) return;
   try {
-    new Notification('ต้นไม้พร้อมรดน้ำแล้ว 💧', {
-      body: 'แวะมารดน้ำเพื่อสะสม progress',
-      tag: 'florify-water-ready',
+    new Notification('หยดน้ำเต็มแล้ว 💧', {
+      body: 'แวะมารดน้ำต้นไม้ได้เลย',
+      tag: 'florify-drops-ready',
       silent: false,
     });
   } catch (err) {

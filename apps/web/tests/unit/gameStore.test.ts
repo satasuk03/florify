@@ -1,8 +1,9 @@
-import { beforeEach, describe, expect, it } from 'vitest';
-import { selectFloristCard, useGameStore } from '@/store/gameStore';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { selectFloristCard, useGameStore, computeDrops } from '@/store/gameStore';
 import { createInitialState } from '@/store/initialState';
-import { COOLDOWN_MS, type TreeInstance } from '@florify/shared';
+import { MAX_WATER_DROPS, MAX_WATER_COST, MIN_WATER_COST, FIRST_FLORA_COST, DROP_REGEN_MS, type TreeInstance, type PlayerState } from '@florify/shared';
 import { todayLocalDate } from '@/lib/time';
+import { migrate } from '@/store/migrations';
 
 function resetStore() {
   useGameStore.setState({ state: createInitialState() });
@@ -15,10 +16,9 @@ function mockTree(overrides: Partial<TreeInstance> = {}): TreeInstance {
     seed: 1,
     speciesId: 0,
     rarity: 'common',
-    requiredWaterings: 3,
+    requiredWaterings: 15,
     currentWaterings: 0,
     plantedAt: Date.now(),
-    lastWateredAt: null,
     harvestedAt: null,
     ...overrides,
   };
@@ -31,12 +31,30 @@ describe('plantTree', () => {
     const tree = useGameStore.getState().plantTree();
     const active = useGameStore.getState().state.activeTree;
     expect(active?.id).toBe(tree.id);
-    expect(tree.requiredWaterings).toBeGreaterThanOrEqual(1);
-    expect(tree.requiredWaterings).toBeLessThanOrEqual(10);
+    expect(tree.requiredWaterings).toBeGreaterThanOrEqual(FIRST_FLORA_COST);
+    expect(tree.requiredWaterings).toBeLessThanOrEqual(MAX_WATER_COST);
     expect(tree.currentWaterings).toBe(0);
-    expect(tree.lastWateredAt).toBeNull();
     expect(tree.harvestedAt).toBeNull();
     expect(['common', 'rare', 'legendary']).toContain(tree.rarity);
+  });
+
+  it('first-ever tree costs FIRST_FLORA_COST drops', () => {
+    const tree = useGameStore.getState().plantTree();
+    expect(tree.requiredWaterings).toBe(FIRST_FLORA_COST);
+  });
+
+  it('subsequent trees cost MIN_WATER_COST to MAX_WATER_COST drops', () => {
+    // Simulate having already planted and harvested one tree
+    useGameStore.setState((s) => ({
+      state: {
+        ...s.state,
+        stats: { ...s.state.stats, totalPlanted: 1 },
+        collection: [mockTree({ id: 'c1', harvestedAt: Date.now() })],
+      },
+    }));
+    const tree = useGameStore.getState().plantTree();
+    expect(tree.requiredWaterings).toBeGreaterThanOrEqual(MIN_WATER_COST);
+    expect(tree.requiredWaterings).toBeLessThanOrEqual(MAX_WATER_COST);
   });
 
   it('increments totalPlanted', () => {
@@ -58,7 +76,9 @@ describe('waterTree', () => {
   });
 
   it('first water succeeds and increments counter', () => {
-    useGameStore.setState((s) => ({ state: { ...s.state, activeTree: mockTree() } }));
+    useGameStore.setState((s) => ({
+      state: { ...s.state, activeTree: mockTree(), waterDrops: 10, lastDropRegenAt: Date.now() },
+    }));
     const r = useGameStore.getState().waterTree();
     expect(r.ok).toBe(true);
     expect(r.harvested).toBeUndefined();
@@ -66,31 +86,36 @@ describe('waterTree', () => {
     expect(useGameStore.getState().state.stats.totalWatered).toBe(1);
   });
 
-  it('rejects water during cooldown', () => {
+  it('deducts 1 drop per water', () => {
     useGameStore.setState((s) => ({
-      state: {
-        ...s.state,
-        activeTree: mockTree({ lastWateredAt: Date.now(), currentWaterings: 1 }),
-      },
+      state: { ...s.state, activeTree: mockTree(), waterDrops: 10, lastDropRegenAt: Date.now() },
+    }));
+    useGameStore.getState().waterTree();
+    expect(useGameStore.getState().state.waterDrops).toBe(9);
+  });
+
+  it('rejects water when 0 drops', () => {
+    useGameStore.setState((s) => ({
+      state: { ...s.state, activeTree: mockTree(), waterDrops: 0, lastDropRegenAt: Date.now() },
     }));
     const r = useGameStore.getState().waterTree();
     expect(r.ok).toBe(false);
-    expect(r.nextAvailableAt).toBeDefined();
-    expect(r.nextAvailableAt).toBeGreaterThan(Date.now());
   });
 
-  it('allows water after cooldown elapsed', () => {
-    const past = Date.now() - COOLDOWN_MS - 1000;
+  it('rapid watering deducts correct number of drops', () => {
     useGameStore.setState((s) => ({
-      state: { ...s.state, activeTree: mockTree({ lastWateredAt: past, currentWaterings: 1 }) },
+      state: { ...s.state, activeTree: mockTree({ requiredWaterings: 20 }), waterDrops: 10, lastDropRegenAt: Date.now() },
     }));
-    expect(useGameStore.getState().waterTree().ok).toBe(true);
-    expect(useGameStore.getState().state.activeTree?.currentWaterings).toBe(2);
+    for (let i = 0; i < 5; i++) {
+      useGameStore.getState().waterTree();
+    }
+    expect(useGameStore.getState().state.waterDrops).toBe(5);
+    expect(useGameStore.getState().state.activeTree?.currentWaterings).toBe(5);
   });
 
   it('reaching requiredWaterings triggers harvest', () => {
     useGameStore.setState((s) => ({
-      state: { ...s.state, activeTree: mockTree({ requiredWaterings: 1 }) },
+      state: { ...s.state, activeTree: mockTree({ requiredWaterings: 1 }), waterDrops: 5, lastDropRegenAt: Date.now() },
     }));
     const r = useGameStore.getState().waterTree();
     expect(r.ok).toBe(true);
@@ -100,6 +125,7 @@ describe('waterTree', () => {
     expect(state.activeTree).toBeNull();
     expect(state.collection.length).toBe(1);
     expect(state.stats.totalHarvested).toBe(1);
+    expect(state.waterDrops).toBe(4);
   });
 
   it('harvested tree preserves speciesId + seed for replay', () => {
@@ -107,6 +133,8 @@ describe('waterTree', () => {
       state: {
         ...s.state,
         activeTree: mockTree({ requiredWaterings: 1, seed: 4242, speciesId: 7 }),
+        waterDrops: 5,
+        lastDropRegenAt: Date.now(),
       },
     }));
     const r = useGameStore.getState().waterTree();
@@ -115,26 +143,74 @@ describe('waterTree', () => {
   });
 });
 
-describe('canWater / nextWaterAt', () => {
+describe('computeDrops', () => {
+  it('regenerates drops based on elapsed time', () => {
+    const now = Date.now();
+    const state = {
+      ...createInitialState(),
+      waterDrops: 10,
+      lastDropRegenAt: now - 3 * DROP_REGEN_MS,
+    };
+    vi.spyOn(Date, 'now').mockReturnValue(now);
+    const { drops, regenAt } = computeDrops(state);
+    expect(drops).toBe(13);
+    expect(regenAt).toBe(state.lastDropRegenAt + 3 * DROP_REGEN_MS);
+    vi.restoreAllMocks();
+  });
+
+  it('caps at MAX_WATER_DROPS', () => {
+    const now = Date.now();
+    const state = {
+      ...createInitialState(),
+      waterDrops: 28,
+      lastDropRegenAt: now - 5 * DROP_REGEN_MS,
+    };
+    vi.spyOn(Date, 'now').mockReturnValue(now);
+    const { drops } = computeDrops(state);
+    expect(drops).toBe(MAX_WATER_DROPS);
+    vi.restoreAllMocks();
+  });
+
+  it('handles future lastDropRegenAt gracefully', () => {
+    const now = Date.now();
+    const state = {
+      ...createInitialState(),
+      waterDrops: 10,
+      lastDropRegenAt: now + 60_000,
+    };
+    vi.spyOn(Date, 'now').mockReturnValue(now);
+    const { drops } = computeDrops(state);
+    expect(drops).toBe(10);
+    vi.restoreAllMocks();
+  });
+});
+
+describe('canWater / waterDrops', () => {
   beforeEach(resetStore);
 
   it('canWater is false with no tree', () => {
     expect(useGameStore.getState().canWater()).toBe(false);
   });
 
-  it('canWater is true immediately after plant (lastWateredAt null)', () => {
-    useGameStore.setState((s) => ({ state: { ...s.state, activeTree: mockTree() } }));
+  it('canWater is true when tree exists and drops > 0', () => {
+    useGameStore.setState((s) => ({
+      state: { ...s.state, activeTree: mockTree(), waterDrops: 5, lastDropRegenAt: Date.now() },
+    }));
     expect(useGameStore.getState().canWater()).toBe(true);
-    expect(useGameStore.getState().nextWaterAt()).toBeNull();
   });
 
-  it('canWater is false during cooldown; nextWaterAt reflects the wait', () => {
-    const wateredAt = Date.now();
+  it('canWater is false when drops are 0', () => {
     useGameStore.setState((s) => ({
-      state: { ...s.state, activeTree: mockTree({ lastWateredAt: wateredAt }) },
+      state: { ...s.state, activeTree: mockTree(), waterDrops: 0, lastDropRegenAt: Date.now() },
     }));
     expect(useGameStore.getState().canWater()).toBe(false);
-    expect(useGameStore.getState().nextWaterAt()).toBe(wateredAt + COOLDOWN_MS);
+  });
+
+  it('waterDrops returns current computed count', () => {
+    useGameStore.setState((s) => ({
+      state: { ...s.state, waterDrops: 15, lastDropRegenAt: Date.now() },
+    }));
+    expect(useGameStore.getState().waterDrops()).toBe(15);
   });
 });
 
@@ -310,5 +386,59 @@ describe('resetAllProgress', () => {
     expect(s.activeTree).toBeNull();
     expect(s.collection).toEqual([]);
     expect(s.stats.totalPlanted).toBe(0);
+    expect(s.waterDrops).toBe(MAX_WATER_DROPS);
+  });
+});
+
+describe('migrate v2 → v3', () => {
+  it('adds water drop fields and strips lastWateredAt from active tree', () => {
+    const v2State = {
+      schemaVersion: 2,
+      userId: 'test-user',
+      displayName: 'Guest',
+      createdAt: 1000,
+      updatedAt: 2000,
+      activeTree: {
+        id: 't1',
+        seed: 42,
+        speciesId: 5,
+        rarity: 'common',
+        requiredWaterings: 3,
+        currentWaterings: 1,
+        plantedAt: 1500,
+        lastWateredAt: 1800,
+        harvestedAt: null,
+      },
+      collection: [],
+      stats: { totalPlanted: 1, totalWatered: 1, totalHarvested: 0 },
+      streak: { currentStreak: 0, longestStreak: 0, lastCheckinDate: '' },
+    };
+
+    const result = migrate(v2State as unknown as { schemaVersion: number } & Record<string, unknown>);
+    expect(result.schemaVersion).toBe(3);
+    expect(result.waterDrops).toBe(MAX_WATER_DROPS);
+    expect(result.lastDropRegenAt).toBeGreaterThan(0);
+    expect(result.activeTree).toBeDefined();
+    // lastWateredAt should be stripped
+    expect((result.activeTree as unknown as Record<string, unknown>)['lastWateredAt']).toBeUndefined();
+  });
+
+  it('handles v2 state with no active tree', () => {
+    const v2State = {
+      schemaVersion: 2,
+      userId: 'test-user',
+      displayName: 'Guest',
+      createdAt: 1000,
+      updatedAt: 2000,
+      activeTree: null,
+      collection: [],
+      stats: { totalPlanted: 0, totalWatered: 0, totalHarvested: 0 },
+      streak: { currentStreak: 0, longestStreak: 0, lastCheckinDate: '' },
+    };
+
+    const result = migrate(v2State as unknown as { schemaVersion: number } & Record<string, unknown>);
+    expect(result.schemaVersion).toBe(3);
+    expect(result.waterDrops).toBe(MAX_WATER_DROPS);
+    expect(result.activeTree).toBeNull();
   });
 });

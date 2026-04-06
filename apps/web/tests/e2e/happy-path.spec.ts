@@ -4,9 +4,8 @@ import { test, expect } from '@playwright/test';
  * Plant → force requiredWaterings=1 → water → harvest overlay → gallery.
  *
  * We force `requiredWaterings=1` via a direct store mutation (exposed
- * in dev via `window.__gameStore`) so the test doesn't need to step
- * through a real 30-minute cooldown. That's the canonical pattern from
- * designs/09 §9.4.
+ * in dev via `window.__gameStore`) so the test doesn't need to spend
+ * many water drops. That's the canonical pattern from designs/09 §9.4.
  */
 
 test('plant → water → harvest happy path', async ({ page }) => {
