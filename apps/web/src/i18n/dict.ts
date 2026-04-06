@@ -21,11 +21,25 @@ export const dict = {
     'plot.switchLanguage': 'เปลี่ยนภาษา',
 
     // ── Gallery ────────────────────────────────
-    'gallery.title': 'แกลเลอรี',
+    'gallery.title': 'Floripedia',
     'gallery.back': 'กลับไปหน้าหลัก',
     'gallery.harvested': 'เก็บเกี่ยวแล้ว',
     'gallery.speciesUnlocked': 'สายพันธุ์ที่ปลดล็อก',
     'gallery.empty': 'ยังไม่มีต้นไม้ที่เก็บไว้ — เริ่มปลูกเลย',
+    'gallery.rarityProgress': 'ความคืบหน้าตามความหายาก',
+    'gallery.searchPlaceholder': 'ค้นหาชื่อ, คำอธิบาย, collection…',
+    'gallery.filterStatus': 'สถานะ',
+    'gallery.filter.all': 'ทั้งหมด',
+    'gallery.filter.found': 'เจอแล้ว',
+    'gallery.filter.missing': 'ยังไม่เจอ',
+    'gallery.filterRarity': 'ความหายาก',
+    'gallery.rarity.common': 'ธรรมดา',
+    'gallery.rarity.rare': 'หายาก',
+    'gallery.rarity.legendary': 'ตำนาน',
+    'gallery.filterCollection': 'Collection',
+    'gallery.resetFilters': 'รีเซ็ตตัวกรอง',
+    'gallery.showing': 'แสดง {count} จาก {total} สายพันธุ์',
+    'gallery.noResults': 'ไม่พบผลลัพธ์ — ลองปรับตัวกรองหรือคำค้น',
 
     // ── Settings sheet ─────────────────────────
     'settings.title': 'ตั้งค่า',
@@ -150,11 +164,25 @@ export const dict = {
     'plot.switchLanguage': 'Switch language',
 
     // ── Gallery ────────────────────────────────
-    'gallery.title': 'Gallery',
+    'gallery.title': 'Floripedia',
     'gallery.back': 'Back to home',
     'gallery.harvested': 'harvested',
     'gallery.speciesUnlocked': 'species unlocked',
     'gallery.empty': 'No saved plants yet — start growing',
+    'gallery.rarityProgress': 'Rarity Progress',
+    'gallery.searchPlaceholder': 'Search name, description, collection…',
+    'gallery.filterStatus': 'Status',
+    'gallery.filter.all': 'All',
+    'gallery.filter.found': 'Found',
+    'gallery.filter.missing': 'Not found',
+    'gallery.filterRarity': 'Rarity',
+    'gallery.rarity.common': 'Common',
+    'gallery.rarity.rare': 'Rare',
+    'gallery.rarity.legendary': 'Legendary',
+    'gallery.filterCollection': 'Collection',
+    'gallery.resetFilters': 'Reset filters',
+    'gallery.showing': 'Showing {count} of {total} species',
+    'gallery.noResults': 'No results — try adjusting filters or search',
 
     // ── Settings sheet ─────────────────────────
     'settings.title': 'Settings',
