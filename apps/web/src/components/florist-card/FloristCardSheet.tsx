@@ -6,6 +6,7 @@ import { Button } from '@/components/Button';
 import { selectFloristCard, useGameStore } from '@/store/gameStore';
 import { toast } from '@/lib/toast';
 import { encodePassportLink } from '@/lib/passportLink';
+import { copyText } from '@/lib/clipboard';
 import { PassportCard } from './PassportCard';
 import { sharePassport, type ShareResult } from './sharePassport';
 
@@ -91,13 +92,12 @@ export function FloristCardSheet({ open, onClose }: Props) {
 
   const handleCopyLink = useCallback(async () => {
     try {
-      const url = await encodePassportLink(data);
-      if (typeof navigator === 'undefined' || !navigator.clipboard) {
+      const copied = await copyText(encodePassportLink(data));
+      if (copied) {
+        toast('คัดลอกลิงค์พาสปอร์ตแล้ว 🔗');
+      } else {
         toast('เบราว์เซอร์นี้ไม่รองรับการคัดลอก');
-        return;
       }
-      await navigator.clipboard.writeText(url);
-      toast('คัดลอกลิงค์พาสปอร์ตแล้ว 🔗');
     } catch {
       toast('คัดลอกลิงค์ไม่ได้ ลองอีกครั้งนะ');
     }

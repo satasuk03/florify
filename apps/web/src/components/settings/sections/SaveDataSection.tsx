@@ -5,6 +5,7 @@ import { Button } from '@/components/Button';
 import { Card } from '@/components/Card';
 import { useGameStore } from '@/store/gameStore';
 import { exportSaveString, importSaveString } from '@/lib/saveTransfer';
+import { copyText } from '@/lib/clipboard';
 import { toast } from '@/lib/toast';
 import { useT } from '@/i18n/useT';
 
@@ -27,13 +28,15 @@ export function SaveDataSection() {
 
   const handleExport = async () => {
     try {
-      const encoded = await exportSaveString(state);
-      if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
-        await navigator.clipboard.writeText(encoded);
+      // Pass the Promise directly — copyText hands it to ClipboardItem
+      // so the clipboard.write() call is synchronous within the user
+      // gesture, which keeps Safari from revoking permission.
+      const promise = exportSaveString(state);
+      const copied = await copyText(promise);
+      if (copied) {
         toast(t('settings.exportCopied'));
       } else {
-        // Fallback: show the string in a prompt so the user can copy
-        // manually on browsers where clipboard API is unavailable.
+        const encoded = await promise;
         window.prompt(t('settings.exportManualPrompt'), encoded);
       }
     } catch (err) {
