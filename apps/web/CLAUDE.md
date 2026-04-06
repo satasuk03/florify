@@ -5,14 +5,14 @@
 Watering is resource-based, not cooldown-based. Players accumulate **water drops** over time and spend 1 drop per tap of the Water button.
 
 - **Constants** (`packages/shared/src/config/constants.ts`):
-  - `MAX_WATER_DROPS = 30` — pool cap
+  - `MAX_WATER_DROPS = 50` — pool cap
   - `DROP_REGEN_MS = 2 min` — 1 drop regenerates every 2 minutes
   - `MIN_WATER_COST = 12`, `MAX_WATER_COST = 25` — drops needed per flora (random)
   - `FIRST_FLORA_COST = 10` — first-ever flora costs less for onboarding
 - **Debug override** (`src/lib/debug.ts`): `DROP_REGEN_MS` is shorter in debug mode. Always import from here, not from `@florify/shared`.
 - **`computeDrops(state)`** (`src/store/gameStore.ts`): pure function that calculates current drops from `lastDropRegenAt` + elapsed time. Timestamp-based so it self-corrects after background tabs or sleep.
 - **Selectors**: `canWater()` (drops >= 1 && tree exists), `waterDrops()` (computed count), `nextDropAt()` (epoch ms of next regen, null if full).
-- **UI** (`src/components/DropsIndicator.tsx`): glassy pill showing `💧 N/30 · ⏳ M:SS`. Has pop animation on count change and bounce on the emoji.
+- **UI** (`src/components/DropsIndicator.tsx`): glassy pill showing `💧 N/50 · ⏳ M:SS`. Has pop animation on count change and bounce on the emoji.
 - **No cooldown** between taps — user can rapid-fire water until drops run out.
 - **Schema version 3** — migration from v2 in `src/store/migrations.ts` grants full drops and strips `lastWateredAt` from `TreeInstance`.
 
