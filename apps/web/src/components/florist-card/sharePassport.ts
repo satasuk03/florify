@@ -1,13 +1,10 @@
 "use client";
 
 import type { FloristCardData } from "@/store/gameStore";
-import { SPECIES_BY_RARITY } from "@/data/species";
+import { SPECIES } from "@/data/species";
 import { renderPassportImage } from "./renderPassportImage";
 
-const TOTAL_SPECIES =
-  SPECIES_BY_RARITY.common.length +
-  SPECIES_BY_RARITY.rare.length +
-  SPECIES_BY_RARITY.legendary.length;
+const TOTAL_SPECIES = SPECIES.length;
 
 /**
  * Share pipeline with graceful fallbacks. Matches designs/11 §11.6.
