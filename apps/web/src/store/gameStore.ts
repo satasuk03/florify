@@ -53,6 +53,8 @@ export interface FloristCardData {
   serial: string;
   /** Display name — "Guest" until cloud auth lands. */
   displayName: string;
+  /** Epoch ms when the passport snapshot was taken. Only present in shared links. */
+  sharedAt?: number;
 }
 
 /**

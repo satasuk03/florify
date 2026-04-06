@@ -54,6 +54,7 @@ interface PackedPayload {
   rr: number; // rarity rare unlocked
   rl: number; // rarity legendary unlocked
   t: number; // startedAt (epoch ms)
+  d?: number; // sharedAt (epoch ms) — when the snapshot was taken
 }
 
 export type DecodeResult =
@@ -77,6 +78,7 @@ export async function encodePassportPayload(data: FloristCardData): Promise<stri
     rr: data.rarityProgress.rare.unlocked,
     rl: data.rarityProgress.legendary.unlocked,
     t: data.startedAt,
+    d: Date.now(),
   };
   const json = JSON.stringify(packed);
   const compressed = await gzip(new TextEncoder().encode(json));
@@ -164,6 +166,7 @@ function unpack(p: PackedPayload): FloristCardData {
     startedAt: p.t,
     serial: p.s,
     displayName: p.n,
+    sharedAt: p.d,
   };
 }
 

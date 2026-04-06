@@ -366,6 +366,19 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
     color: PASSPORT_COLORS.ink500,
     align: "left",
   });
+  if (data.sharedAt) {
+    ops.push({
+      type: "text",
+      text: `Data as of ${formatDate(data.sharedAt)}`,
+      x: col.left,
+      y: 1785,
+      size: 24,
+      weight: 400,
+      family: "sans",
+      color: PASSPORT_COLORS.ink300,
+      align: "left",
+    });
+  }
 
   // ── Footer URL ───────────────────────────────────────────────────
   ops.push({

@@ -83,6 +83,11 @@ export default function PassportSharePage() {
             <p className="text-center text-sm text-ink-600 font-serif italic">
               {view.data.displayName} · {view.data.speciesUnlocked}/{TOTAL_SPECIES} species
             </p>
+            {view.data.sharedAt && (
+              <p className="text-center text-xs text-ink-400">
+                ข้อมูลเมื่อ {new Date(view.data.sharedAt).toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric' })}
+              </p>
+            )}
           </>
         )}
 
