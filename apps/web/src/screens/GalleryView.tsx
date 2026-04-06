@@ -10,7 +10,6 @@ import { AnimatedNumber } from '@/components/AnimatedNumber';
 import { useGameStore } from '@/store/gameStore';
 import { SPECIES, SpeciesCollection } from '@/data/species';
 import type { SpeciesDef } from '@/data/species';
-import { TOTAL_SPECIES } from '@florify/shared';
 import type { Rarity } from '@florify/shared';
 import { useT } from '@/i18n/useT';
 
@@ -173,7 +172,7 @@ export function GalleryView() {
         </Card>
         <Card className="p-3 animate-fade-up" style={{ animationDelay: '160ms' }}>
           <div className="text-3xl font-serif text-ink-900 tabular-nums">
-            <AnimatedNumber value={unlocked} /> / <AnimatedNumber value={TOTAL_SPECIES} duration={1400} />
+            <AnimatedNumber value={unlocked} /> / <AnimatedNumber value={SPECIES.length} duration={1400} />
           </div>
           <div className="text-xs text-ink-500 mt-1">{t('gallery.speciesUnlocked')}</div>
         </Card>
