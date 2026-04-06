@@ -321,7 +321,7 @@ pnpm --filter @florify/web build
    - **Build output directory**: `apps/web/out`
    - **Root directory**: (leave blank — build from repo root so pnpm workspace resolves)
    - **Environment variables**: `NODE_VERSION=20`, `PNPM_VERSION=9`
-4. Deploy → ได้ `florify.pages.dev` + preview ทุก branch/PR
+4. Deploy → ได้ `florify.zeze.app` + preview ทุก branch/PR
 
 > **ทำไมไม่ใช้ `@cloudflare/next-on-pages`:** แอพนี้เป็น client-only 3D game ไม่มี SSR/Route Handlers ให้ deploy → static export เพียงพอและง่ายกว่า. ถ้าภายหลังเริ่มใช้ Route Handlers เป็น API แทน Workers ค่อยย้ายไป adapter
 

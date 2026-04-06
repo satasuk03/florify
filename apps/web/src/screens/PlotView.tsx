@@ -63,6 +63,8 @@ export function PlotView() {
     saveSettings({ ...loadSettings(), hasSeenWelcome: true });
   };
   const [harvested, setHarvested] = useState<TreeInstance | null>(null);
+  const [pityPointsGained, setPityPointsGained] = useState(0);
+  const [pityReward, setPityReward] = useState<{ speciesId: number; rarity: import('@florify/shared').Rarity } | undefined>();
   // Monotonic counter keyed onto <WaterSplash> — incrementing it on
   // every successful water tap remounts the component and replays its
   // one-shot droplet animation from the start. 0 means "never tapped",
@@ -110,7 +112,11 @@ export function PlotView() {
     const result = water();
     if (!result.ok) return;
     setSplashKey((k) => k + 1);
-    if (result.harvested) setHarvested(result.harvested);
+    if (result.harvested) {
+      setHarvested(result.harvested);
+      setPityPointsGained(result.pityPointsGained ?? 0);
+      setPityReward(result.pityReward);
+    }
   };
 
   const handlePlant = () => {
@@ -334,7 +340,12 @@ export function PlotView() {
           setShowWelcome(true);
         }}
       />
-      <HarvestOverlay tree={harvested} onDismiss={() => setHarvested(null)} />
+      <HarvestOverlay
+        tree={harvested}
+        pityPointsGained={pityPointsGained}
+        pityReward={pityReward}
+        onDismiss={() => setHarvested(null)}
+      />
       {showWelcome && (
         <WelcomeDialogue
           onComplete={handleWelcomeComplete}

@@ -1,9 +1,13 @@
-export const SCHEMA_VERSION = 4 as const;
+export const SCHEMA_VERSION = 5 as const;
 export const MAX_WATER_DROPS = 50;
 export const DROP_REGEN_MS = 2 * 60 * 1000;     // 2 minutes per drop
 export const MIN_WATER_COST = 12;
 export const MAX_WATER_COST = 25;
 export const FIRST_FLORA_COST = 10;
 export const TOTAL_SPECIES = 302;
+export const PITY_THRESHOLD = 100;
+export const PITY_POINTS_COMMON = 1;
+export const PITY_POINTS_RARE = 3;
+export const PITY_POINTS_LEGENDARY = 10;
 export const STORAGE_KEY = 'florify:v1:player';
 export const SETTINGS_KEY = 'florify:v1:settings';

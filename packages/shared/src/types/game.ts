@@ -33,7 +33,7 @@ export interface PlayerStats {
 }
 
 export interface PlayerState {
-  schemaVersion: 4;
+  schemaVersion: 5;
   userId: string;              // local nanoid; linked to a cloud account later
   displayName: string;         // user-editable; 'Guest' until renamed
   createdAt: number;
@@ -44,6 +44,7 @@ export interface PlayerState {
   collection: CollectedSpecies[];  // aggregated per species, sorted by lastHarvestedAt desc
   stats: PlayerStats;
   streak: StreakState;
+  pityPoints: number;            // 0..PITY_THRESHOLD — dried leaves (🍂) accumulated from duplicates
 }
 
 export type Language = 'th' | 'en';

@@ -12,6 +12,7 @@ export function migrate(state: UnknownState): PlayerState {
   if (s.schemaVersion === 1) s = migrateV1toV2(s);
   if (s.schemaVersion === 2) s = migrateV2toV3(s);
   if (s.schemaVersion === 3) s = migrateV3toV4(s);
+  if (s.schemaVersion === 4) s = migrateV4toV5(s);
   if (s.schemaVersion !== SCHEMA_VERSION) {
     console.warn(`[migrate] unknown schemaVersion ${s.schemaVersion}, falling back to as-is`);
   }
@@ -82,4 +83,9 @@ function migrateV3toV4(s: UnknownState): UnknownState {
   const collection = [...map.values()].sort((a, b) => b.lastHarvestedAt - a.lastHarvestedAt);
 
   return { ...s, schemaVersion: 4, collection };
+}
+
+// v4 → v5: add pity points (dried leaves 🍂) counter for bad-luck protection.
+function migrateV4toV5(s: UnknownState): UnknownState {
+  return { ...s, schemaVersion: 5, pityPoints: 0 };
 }

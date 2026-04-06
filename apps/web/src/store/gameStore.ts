@@ -5,6 +5,10 @@ import {
   MAX_WATER_COST,
   MAX_WATER_DROPS,
   MIN_WATER_COST,
+  PITY_POINTS_COMMON,
+  PITY_POINTS_LEGENDARY,
+  PITY_POINTS_RARE,
+  PITY_THRESHOLD,
   TOTAL_SPECIES,
   type CollectedSpecies,
   type PlayerState,
@@ -34,6 +38,8 @@ import { haptic } from '@/lib/haptics';
 export interface WaterResult {
   ok: boolean;
   harvested?: TreeInstance;
+  pityPointsGained?: number;
+  pityReward?: { speciesId: number; rarity: Rarity };
 }
 
 export type FloristRank = 'Seedling' | 'Apprentice' | 'Gardener' | 'Master' | 'Legend';
@@ -155,6 +161,46 @@ function rollRarity(): Rarity {
   if (r < RARITY_ROLL_WEIGHTS.legendary) return 'legendary';
   if (r < RARITY_ROLL_WEIGHTS.legendary + RARITY_ROLL_WEIGHTS.rare) return 'rare';
   return 'common';
+}
+
+// ── Pity / Dried Leaves (🍂) ────────────────────────────────��───────
+const PITY_POINTS: Record<Rarity, number> = {
+  common: PITY_POINTS_COMMON,
+  rare: PITY_POINTS_RARE,
+  legendary: PITY_POINTS_LEGENDARY,
+};
+
+/**
+ * Roll for a pity reward species. Returns a species the player doesn't
+ * own yet from the rolled rarity tier, or `null` if the tier is fully
+ * collected (caller should treat as phantom duplicate).
+ */
+function rollPityReward(
+  collectedIds: Set<number>,
+): { speciesId: number; rarity: Rarity } | null {
+  const rarity = rollRarity();
+  const pool = SPECIES_BY_RARITY[rarity].filter((s) => !collectedIds.has(s.id));
+  if (pool.length === 0) return null;
+  const pick = pool[Math.floor(Math.random() * pool.length)]!;
+  return { speciesId: pick.id, rarity };
+}
+
+function addPityRewardToCollection(
+  collection: CollectedSpecies[],
+  reward: { speciesId: number; rarity: Rarity },
+): CollectedSpecies[] {
+  const now = Date.now();
+  return [
+    {
+      speciesId: reward.speciesId,
+      rarity: reward.rarity,
+      count: 1,
+      totalWaterings: 0,
+      firstHarvestedAt: now,
+      lastHarvestedAt: now,
+    },
+    ...collection,
+  ];
 }
 
 function deriveRank(unlocked: number): FloristRank {
@@ -287,13 +333,48 @@ export const useGameStore = create<GameStore>((set, get) => ({
         currentWaterings: nextWaterings,
         harvestedAt: now,
       };
-      const collection = upsertCollection(s.collection, harvested);
+      const isDuplicate = s.collection.some((c) => c.speciesId === harvested.speciesId);
+      let collection = upsertCollection(s.collection, harvested);
+
+      // ── Dried Leaves (🍂) pity accumulation ──────────────────────
+      let pityPoints = s.pityPoints;
+      let pityPointsGained = 0;
+      let pityReward: { speciesId: number; rarity: Rarity } | undefined;
+
+      if (collection.length < TOTAL_SPECIES) {
+        if (!isDuplicate) {
+          // New species from normal planting — reset pity
+          pityPoints = 0;
+        } else {
+          // Duplicate — accumulate dried leaves
+          const gained = PITY_POINTS[harvested.rarity];
+          pityPoints += gained;
+          pityPointsGained = gained;
+
+          // Check threshold — enter roll loop
+          const collectedIds = new Set(collection.map((c) => c.speciesId));
+          for (let attempt = 0; attempt < 20 && pityPoints >= PITY_THRESHOLD; attempt++) {
+            const reward = rollPityReward(collectedIds);
+            if (reward) {
+              collection = addPityRewardToCollection(collection, reward);
+              collectedIds.add(reward.speciesId);
+              pityReward = reward;
+              pityPoints = 0;
+              break;
+            }
+            // Tier fully collected — phantom duplicate, gain points for that tier
+            pityPoints += PITY_POINTS[rollRarity()];
+          }
+        }
+      }
+
       const next: PlayerState = {
         ...s,
         waterDrops: drops - 1,
         lastDropRegenAt: regenAt,
         activeTree: null,
         collection,
+        pityPoints,
         stats: {
           ...s.stats,
           totalWatered: s.stats.totalWatered + 1,
@@ -304,7 +385,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       set({ state: next });
       scheduleSave(next);
       haptic('harvest');
-      return { ok: true, harvested };
+      return { ok: true, harvested, pityPointsGained, pityReward };
     }
 
     const next: PlayerState = {

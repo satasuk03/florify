@@ -5,6 +5,8 @@ import { Card } from '@/components/Card';
 import { SPECIES, SPECIES_BY_RARITY } from '@/data/species';
 import { RARITY_ROLL_WEIGHTS } from '@/data/rarityWeights';
 import { useT } from '@/i18n/useT';
+import { useGameStore } from '@/store/gameStore';
+import { PITY_THRESHOLD, PITY_POINTS_COMMON, PITY_POINTS_RARE, PITY_POINTS_LEGENDARY } from '@florify/shared';
 import type { Rarity } from '@florify/shared';
 
 /**
@@ -66,6 +68,7 @@ export function GuideBookSheet({ open, onClose }: Props) {
           <HowToPlaySection />
           <RaritySection />
           <FeaturesSection />
+          <DriedLeavesSection />
           <SaveSection />
           <DeveloperSection />
         </div>
@@ -177,6 +180,55 @@ function FeaturesSection() {
             <div className="text-sm text-ink-700 leading-relaxed mt-0.5">{t(it.bodyKey)}</div>
           </div>
         ))}
+      </Card>
+    </section>
+  );
+}
+
+function DriedLeavesSection() {
+  const t = useT();
+  const pityPoints = useGameStore((s) => s.state.pityPoints);
+  const pct = Math.min(100, (pityPoints / PITY_THRESHOLD) * 100);
+  const rates: Array<{ key: Rarity; labelKey: 'guide.rarity.common' | 'guide.rarity.rare' | 'guide.rarity.legendary'; points: number; dotVar: string }> = [
+    { key: 'common', labelKey: 'guide.rarity.common', points: PITY_POINTS_COMMON, dotVar: 'var(--color-rarity-common)' },
+    { key: 'rare', labelKey: 'guide.rarity.rare', points: PITY_POINTS_RARE, dotVar: 'var(--color-rarity-rare)' },
+    { key: 'legendary', labelKey: 'guide.rarity.legendary', points: PITY_POINTS_LEGENDARY, dotVar: 'var(--color-rarity-legendary)' },
+  ];
+  return (
+    <section>
+      <SectionHeading>{t('guide.driedLeaves.title')}</SectionHeading>
+      <Card className="p-4 space-y-3">
+        <p className="text-sm text-ink-700 leading-relaxed">
+          {t('guide.driedLeaves.body', { threshold: PITY_THRESHOLD })}
+        </p>
+        <div className="space-y-1.5">
+          <div className="flex justify-between text-xs text-ink-500 tabular-nums">
+            <span>{t('guide.driedLeaves.progress', { current: pityPoints, threshold: PITY_THRESHOLD })}</span>
+          </div>
+          <div className="h-2 bg-cream-200 rounded-full overflow-hidden">
+            <div
+              className="h-full bg-clay-500 rounded-full transition-all duration-300"
+              style={{ width: `${pct}%` }}
+            />
+          </div>
+        </div>
+        <div className="space-y-2">
+          {rates.map((r) => (
+            <div key={r.key} className="flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <span
+                  className="w-2.5 h-2.5 rounded-full"
+                  style={{ backgroundColor: r.dotVar }}
+                  aria-hidden
+                />
+                <span className="text-sm text-ink-900">{t(r.labelKey)}</span>
+              </div>
+              <div className="text-xs text-ink-500 tabular-nums">
+                +{r.points} 🍂
+              </div>
+            </div>
+          ))}
+        </div>
       </Card>
     </section>
   );

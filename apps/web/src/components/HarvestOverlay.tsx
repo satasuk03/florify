@@ -25,6 +25,8 @@ import type { DictKey } from '@/i18n/dict';
 
 interface Props {
   tree: TreeInstance | null;
+  pityPointsGained?: number;
+  pityReward?: { speciesId: number; rarity: Rarity };
   onDismiss: () => void;
 }
 
@@ -61,7 +63,7 @@ interface FlyState {
  *  overlay dismisses the frame the clone lands, not before. */
 const FLY_DURATION_MS = 720;
 
-export function HarvestOverlay({ tree, onDismiss }: Props) {
+export function HarvestOverlay({ tree, pityPointsGained, pityReward, onDismiss }: Props) {
   const t = useT();
   const lang = useLanguage();
   const [toast, setToast] = useState<string | null>(null);
@@ -235,9 +237,29 @@ export function HarvestOverlay({ tree, onDismiss }: Props) {
           {t('harvest.waterings', { count: tree.requiredWaterings })}
         </p>
 
+        {pityPointsGained != null && pityPointsGained > 0 && (
+          <p
+            className="text-sm text-clay-600 font-medium animate-fade-up"
+            style={{ animationDelay: '500ms' }}
+          >
+            {t('harvest.driedLeavesGained', { points: pityPointsGained })}
+          </p>
+        )}
+
+        {pityReward && (
+          <p
+            className="text-sm text-leaf-500 font-medium animate-fade-up"
+            style={{ animationDelay: '560ms' }}
+          >
+            {t('harvest.driedLeavesReward')}
+            {' '}
+            <span className="text-ink-700">{SPECIES[pityReward.speciesId]?.name}</span>
+          </p>
+        )}
+
         <div
           className="flex flex-col sm:flex-row items-stretch gap-2 mt-2 animate-fade-up"
-          style={{ animationDelay: '500ms' }}
+          style={{ animationDelay: '620ms' }}
         >
           <Button
             size="lg"

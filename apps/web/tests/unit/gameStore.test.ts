@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { selectFloristCard, useGameStore, computeDrops } from '@/store/gameStore';
 import { createInitialState } from '@/store/initialState';
-import { MAX_WATER_DROPS, MAX_WATER_COST, MIN_WATER_COST, FIRST_FLORA_COST, DROP_REGEN_MS, type TreeInstance, type CollectedSpecies, type PlayerState } from '@florify/shared';
+import { MAX_WATER_DROPS, MAX_WATER_COST, MIN_WATER_COST, FIRST_FLORA_COST, DROP_REGEN_MS, PITY_THRESHOLD, PITY_POINTS_COMMON, PITY_POINTS_RARE, PITY_POINTS_LEGENDARY, TOTAL_SPECIES, type TreeInstance, type CollectedSpecies, type PlayerState } from '@florify/shared';
 import { todayLocalDate } from '@/lib/time';
 import { migrate } from '@/store/migrations';
 
@@ -445,7 +445,7 @@ describe('migrate v2 → v3', () => {
     };
 
     const result = migrate(v2State as unknown as { schemaVersion: number } & Record<string, unknown>);
-    expect(result.schemaVersion).toBe(4); // migrates through v3 → v4
+    expect(result.schemaVersion).toBe(5); // migrates through v3 → v4 → v5
     expect(result.waterDrops).toBe(MAX_WATER_DROPS);
     expect(result.lastDropRegenAt).toBeGreaterThan(0);
     expect(result.activeTree).toBeDefined();
@@ -467,9 +467,154 @@ describe('migrate v2 → v3', () => {
     };
 
     const result = migrate(v2State as unknown as { schemaVersion: number } & Record<string, unknown>);
-    expect(result.schemaVersion).toBe(4);
+    expect(result.schemaVersion).toBe(5);
     expect(result.waterDrops).toBe(MAX_WATER_DROPS);
     expect(result.activeTree).toBeNull();
+  });
+});
+
+describe('pity / dried leaves (🍂)', () => {
+  beforeEach(resetStore);
+
+  it('duplicate common harvest gains +1 pity point', () => {
+    useGameStore.setState((s) => ({
+      state: {
+        ...s.state,
+        activeTree: mockTree({ requiredWaterings: 1, speciesId: 0, rarity: 'common' }),
+        collection: [mockCollected({ speciesId: 0, rarity: 'common' })],
+        waterDrops: 5,
+        lastDropRegenAt: Date.now(),
+        pityPoints: 0,
+      },
+    }));
+    const r = useGameStore.getState().waterTree();
+    expect(r.pityPointsGained).toBe(PITY_POINTS_COMMON);
+    expect(useGameStore.getState().state.pityPoints).toBe(PITY_POINTS_COMMON);
+  });
+
+  it('duplicate rare harvest gains +3 pity points', () => {
+    useGameStore.setState((s) => ({
+      state: {
+        ...s.state,
+        activeTree: mockTree({ requiredWaterings: 1, speciesId: 200, rarity: 'rare' }),
+        collection: [mockCollected({ speciesId: 200, rarity: 'rare' })],
+        waterDrops: 5,
+        lastDropRegenAt: Date.now(),
+        pityPoints: 0,
+      },
+    }));
+    const r = useGameStore.getState().waterTree();
+    expect(r.pityPointsGained).toBe(PITY_POINTS_RARE);
+    expect(useGameStore.getState().state.pityPoints).toBe(PITY_POINTS_RARE);
+  });
+
+  it('duplicate legendary harvest gains +10 pity points', () => {
+    useGameStore.setState((s) => ({
+      state: {
+        ...s.state,
+        activeTree: mockTree({ requiredWaterings: 1, speciesId: 280, rarity: 'legendary' }),
+        collection: [mockCollected({ speciesId: 280, rarity: 'legendary' })],
+        waterDrops: 5,
+        lastDropRegenAt: Date.now(),
+        pityPoints: 0,
+      },
+    }));
+    const r = useGameStore.getState().waterTree();
+    expect(r.pityPointsGained).toBe(PITY_POINTS_LEGENDARY);
+    expect(useGameStore.getState().state.pityPoints).toBe(PITY_POINTS_LEGENDARY);
+  });
+
+  it('new species resets pity to 0', () => {
+    useGameStore.setState((s) => ({
+      state: {
+        ...s.state,
+        activeTree: mockTree({ requiredWaterings: 1, speciesId: 5, rarity: 'common' }),
+        collection: [mockCollected({ speciesId: 0, rarity: 'common' })],
+        waterDrops: 5,
+        lastDropRegenAt: Date.now(),
+        pityPoints: 50,
+      },
+    }));
+    useGameStore.getState().waterTree();
+    expect(useGameStore.getState().state.pityPoints).toBe(0);
+  });
+
+  it('reaching threshold grants a new species and resets to 0', () => {
+    // Set up: 1 species in collection, pity at 99, harvest a common duplicate → 99 + 1 = 100
+    useGameStore.setState((s) => ({
+      state: {
+        ...s.state,
+        activeTree: mockTree({ requiredWaterings: 1, speciesId: 0, rarity: 'common' }),
+        collection: [mockCollected({ speciesId: 0, rarity: 'common' })],
+        waterDrops: 5,
+        lastDropRegenAt: Date.now(),
+        pityPoints: PITY_THRESHOLD - PITY_POINTS_COMMON,
+      },
+    }));
+    const r = useGameStore.getState().waterTree();
+    const state = useGameStore.getState().state;
+    // Should have received a pity reward (new species)
+    expect(r.pityReward).toBeDefined();
+    expect(r.pityReward!.speciesId).not.toBe(0); // different from the one we already have
+    expect(state.pityPoints).toBe(0);
+    // Collection should have 2 unique species now (original + reward)
+    expect(state.collection.length).toBe(2);
+  });
+
+  it('does not accumulate when collection is complete', () => {
+    // Build a full collection
+    const fullCollection = Array.from({ length: TOTAL_SPECIES }, (_, i) =>
+      mockCollected({ speciesId: i, rarity: i < 200 ? 'common' : i < 280 ? 'rare' : 'legendary' }),
+    );
+    useGameStore.setState((s) => ({
+      state: {
+        ...s.state,
+        activeTree: mockTree({ requiredWaterings: 1, speciesId: 0, rarity: 'common' }),
+        collection: fullCollection,
+        waterDrops: 5,
+        lastDropRegenAt: Date.now(),
+        pityPoints: 50,
+      },
+    }));
+    useGameStore.getState().waterTree();
+    // pityPoints should stay unchanged (no accumulation)
+    expect(useGameStore.getState().state.pityPoints).toBe(50);
+  });
+
+  it('pity points accumulate across multiple harvests', () => {
+    useGameStore.setState((s) => ({
+      state: {
+        ...s.state,
+        activeTree: mockTree({ requiredWaterings: 1, speciesId: 0, rarity: 'common' }),
+        collection: [mockCollected({ speciesId: 0, rarity: 'common' })],
+        waterDrops: 10,
+        lastDropRegenAt: Date.now(),
+        pityPoints: 5,
+      },
+    }));
+    useGameStore.getState().waterTree();
+    expect(useGameStore.getState().state.pityPoints).toBe(5 + PITY_POINTS_COMMON);
+  });
+});
+
+describe('migrate v4 → v5', () => {
+  it('adds pityPoints field with value 0', () => {
+    const v4State = {
+      schemaVersion: 4,
+      userId: 'test-user',
+      displayName: 'Guest',
+      createdAt: 1000,
+      updatedAt: 2000,
+      waterDrops: 20,
+      lastDropRegenAt: 3000,
+      activeTree: null,
+      collection: [],
+      stats: { totalPlanted: 0, totalWatered: 0, totalHarvested: 0 },
+      streak: { currentStreak: 0, longestStreak: 0, lastCheckinDate: '' },
+    };
+    const result = migrate(v4State as unknown as { schemaVersion: number } & Record<string, unknown>);
+    expect(result.schemaVersion).toBe(5);
+    expect(result.pityPoints).toBe(0);
   });
 });
 
@@ -494,7 +639,7 @@ describe('migrate v3 → v4', () => {
     };
 
     const result = migrate(v3State as unknown as { schemaVersion: number } & Record<string, unknown>);
-    expect(result.schemaVersion).toBe(4);
+    expect(result.schemaVersion).toBe(5);
     expect(result.collection.length).toBe(2); // 2 unique species
 
     // Sorted by lastHarvestedAt desc: speciesId 5 (4000) before speciesId 10 (3000)
