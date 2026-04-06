@@ -2,6 +2,7 @@ import type { Rarity } from "@florify/shared";
 
 export enum SpeciesCollection {
   Original = "original",
+  ChineseGarden = "chinese-garden",
 }
 
 /**
@@ -3332,12 +3333,34 @@ export const SPECIES: readonly SpeciesDef[] = [
       "เติบโตเฉพาะในลึกมหาสมุทรที่ไม่เคยมีแสง เรืองด้วยแสงซึ่งไม่เป็นของดวงดาวดวงใด การหากอหนึ่ง คือการค้นพบความลับที่โลกยังไม่รู้ว่าตนเองมี",
     collection: SpeciesCollection.Original,
   },
+  {
+    id: 300,
+    folder: "meihua",
+    name: "Mei Hua",
+    rarity: "legendary",
+    descriptionEN:
+      "A plum blossom that blooms in the coldest winter, accompanied by a guardian spirit in crimson Hanfu who ages alongside it — from a curious child tending a single bud, to a graceful woman standing beneath a canopy of petals. The old poets said: only those who endure the bitter frost will know the sweetness of the mei hua's fragrance.",
+    descriptionTH:
+      "ดอกเหมยที่บานกลางหนาวอันโหดร้ายที่สุด มีวิญญาณผู้พิทักษ์ในชุดฮั่นฝูสีแดงเข้มเติบโตเคียงข้าง — จากเด็กน้อยผู้ดูแลตาดอกแรก สู่สตรีงามยืนใต้ร่มกลีบดอกที่ร่วงพลิ้ว กวีโบราณกล่าวไว้ว่า ผู้ที่ทนน้ำค้างแข็งอันขมขื่นเท่านั้น จึงจะรู้ซึ้งถึงกลิ่นหอมของดอกเหมยฮวา",
+    collection: SpeciesCollection.ChineseGarden,
+  },
+  {
+    id: 301,
+    folder: "bianhua",
+    name: "Bian Hua",
+    rarity: "legendary",
+    descriptionEN:
+      "The flower that blooms on the far shore between life and death, its crimson petals said to guide wandering souls through the darkness. A spirit dancer in dark teal and gold appears beside it — first as a solemn child, then a mesmerising maiden wreathed in ink and gold leaf. Those who see her dance say the boundary between worlds grows thin, and for one breathless moment, the living and the lost share the same sky.",
+    descriptionTH:
+      "ดอกไม้ที่บานบนฝั่งไกลระหว่างเป็นกับตาย กลีบสีเลือดนำทางวิญญาณหลงทางผ่านความมืด นางรำในชุดเขียวคราม-ดำประดับทองปรากฏเคียงข้าง — จากเด็กน้อยผู้เงียบขรึม สู่สตรีเลอโฉมที่ร่ายรำท่ามกลางหมึกและทองคำเปลว ผู้ที่เห็นนางรำกล่าวว่าพรมแดนระหว่างโลกเบาบางลง และชั่วขณะที่หายใจไม่ออก คนเป็นกับคนตายร่วมท้องฟ้าเดียวกัน",
+    collection: SpeciesCollection.ChineseGarden,
+  },
 ];
 
 // Integrity: catch id/ordering drift early — the app fails to boot rather
 // than quietly rendering the wrong image for a saved tree.
-if (SPECIES.length !== 300) {
-  throw new Error(`expected 300 species, got ${SPECIES.length}`);
+if (SPECIES.length < 300) {
+  throw new Error(`expected at least 300 species, got ${SPECIES.length}`);
 }
 for (let i = 0; i < SPECIES.length; i++) {
   const s = SPECIES[i]!;

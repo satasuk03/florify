@@ -4,6 +4,6 @@ export const DROP_REGEN_MS = 3 * 60 * 1000;     // 3 minutes per drop
 export const MIN_WATER_COST = 12;
 export const MAX_WATER_COST = 25;
 export const FIRST_FLORA_COST = 10;
-export const TOTAL_SPECIES = 300;
+export const TOTAL_SPECIES = 302;
 export const STORAGE_KEY = 'florify:v1:player';
 export const SETTINGS_KEY = 'florify:v1:settings';

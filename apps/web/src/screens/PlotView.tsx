@@ -22,10 +22,12 @@ import { HarvestOverlay } from "@/components/HarvestOverlay";
 import { SeedPacket } from "@/components/SeedPacket";
 import { WaterSplash } from "@/components/WaterSplash";
 import { LanguageToggle } from "@/components/LanguageToggle";
+import { WelcomeDialogue } from "@/components/welcome/WelcomeDialogue";
 import { useGameStore } from "@/store/gameStore";
 import { useHandheld } from "@/hooks/useHandheld";
 import { SPECIES } from "@/data/species";
 import { useT } from "@/i18n/useT";
+import { loadSettings, saveSettings } from "@/store/settingsStore";
 
 /**
  * Home screen — designs/07 §7.1.
@@ -47,6 +49,19 @@ export function PlotView() {
   const [showFlorist, setShowFlorist] = useState(false);
   const [showGuideBook, setShowGuideBook] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [showWelcome, setShowWelcome] = useState(false);
+  const displayName = useGameStore((s) => s.state.displayName);
+  const setDisplayName = useGameStore((s) => s.setDisplayName);
+
+  // Show welcome dialogue on first ever visit (after hydration).
+  useEffect(() => {
+    if (!loadSettings().hasSeenWelcome) setShowWelcome(true);
+  }, []);
+
+  const handleWelcomeComplete = () => {
+    setShowWelcome(false);
+    saveSettings({ ...loadSettings(), hasSeenWelcome: true });
+  };
   const [harvested, setHarvested] = useState<TreeInstance | null>(null);
   // Monotonic counter keyed onto <WaterSplash> — incrementing it on
   // every successful water tap remounts the component and replays its
@@ -314,8 +329,19 @@ export function PlotView() {
       <SettingsSheet
         open={showSettings}
         onClose={() => setShowSettings(false)}
+        onReplayWelcome={() => {
+          setShowSettings(false);
+          setShowWelcome(true);
+        }}
       />
       <HarvestOverlay tree={harvested} onDismiss={() => setHarvested(null)} />
+      {showWelcome && (
+        <WelcomeDialogue
+          onComplete={handleWelcomeComplete}
+          onNameChange={setDisplayName}
+          initialName={displayName}
+        />
+      )}
     </main>
   );
 }

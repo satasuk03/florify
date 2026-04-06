@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import { Button } from '@/components/Button';
 import { AccountSection } from './sections/AccountSection';
 import { PreferencesSection } from './sections/PreferencesSection';
 import { SaveDataSection } from './sections/SaveDataSection';
@@ -20,9 +21,10 @@ import { useT } from '@/i18n/useT';
 interface Props {
   open: boolean;
   onClose: () => void;
+  onReplayWelcome?: () => void;
 }
 
-export function SettingsSheet({ open, onClose }: Props) {
+export function SettingsSheet({ open, onClose, onReplayWelcome }: Props) {
   const t = useT();
   // Dismiss on Escape. Attach only while open so background shortcuts
   // still work when the sheet is closed.
@@ -65,6 +67,15 @@ export function SettingsSheet({ open, onClose }: Props) {
           <PreferencesSection />
           <SaveDataSection />
           <DangerZoneSection />
+          {onReplayWelcome && (
+            <Button
+              variant="ghost"
+              onClick={onReplayWelcome}
+              className="w-full text-sm"
+            >
+              {t('settings.replayWelcome')}
+            </Button>
+          )}
         </div>
       </div>
     </div>

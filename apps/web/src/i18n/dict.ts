@@ -104,6 +104,23 @@ export const dict = {
     'guide.developer.body': 'เกมนี้สร้างโดย Zeze — ดูผลงานอื่นๆ ได้ที่',
     'guide.developer.linkLabel': 'zeze.app/portfolio',
 
+    // ── Welcome dialogue ────────────────────────
+    'welcome.title': 'ยินดีต้อนรับสู่ Florify',
+    'welcome.subtitle': 'สวนเล็กๆ ที่เติบโตไปพร้อมคุณ',
+    'welcome.nameLabel': 'ตั้งชื่อของคุณ',
+    'welcome.namePlaceholder': 'ชื่อของคุณ',
+    'welcome.step1.title': 'เริ่มปลูก',
+    'welcome.step1.body': 'แตะปุ่มด้านล่างเพื่อสุ่มเมล็ดพันธุ์ใหม่',
+    'welcome.step2.title': 'รดน้ำ',
+    'welcome.step2.body': 'รดน้ำทีละหยด ดูต้นไม้เติบโตผ่าน 3 ระยะ',
+    'welcome.step3.title': 'เก็บเกี่ยว',
+    'welcome.step3.body': 'รดครบ ต้นไม้บาน เก็บเข้าแกลเลอรีของคุณ',
+    'welcome.rarity': 'สะสม {total} สายพันธุ์ — ธรรมดา หายาก และตำนาน',
+    'welcome.next': 'ถัดไป',
+    'welcome.start': 'เริ่มปลูกต้นแรก!',
+    'welcome.skip': 'ข้าม',
+    'settings.replayWelcome': 'ดู Welcome อีกครั้ง',
+
     // ── Harvest overlay ────────────────────────
     'harvest.headline.common': 'ต้นไม้ใหม่ 🌿',
     'harvest.headline.rare': 'พบของหายาก ✨',
@@ -215,6 +232,23 @@ export const dict = {
     'guide.developer.title': 'Made by',
     'guide.developer.body': 'Built by Zeze — see other projects at',
     'guide.developer.linkLabel': 'zeze.app/portfolio',
+
+    // ── Welcome dialogue ────────────────────────
+    'welcome.title': 'Welcome to Florify',
+    'welcome.subtitle': 'A quiet little garden that grows with you',
+    'welcome.nameLabel': 'Choose your name',
+    'welcome.namePlaceholder': 'Your name',
+    'welcome.step1.title': 'Plant',
+    'welcome.step1.body': 'Tap the button below to sow a random seed',
+    'welcome.step2.title': 'Water',
+    'welcome.step2.body': 'Water drop by drop and watch it grow through 3 stages',
+    'welcome.step3.title': 'Harvest',
+    'welcome.step3.body': 'Fully watered? It blooms and joins your Gallery',
+    'welcome.rarity': 'Collect {total} species — common, rare, and legendary',
+    'welcome.next': 'Next',
+    'welcome.start': 'Plant my first tree!',
+    'welcome.skip': 'Skip',
+    'settings.replayWelcome': 'Replay Welcome',
 
     // ── Harvest overlay ────────────────────────
     'harvest.headline.common': 'New addition 🌿',

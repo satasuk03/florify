@@ -20,18 +20,21 @@ if (!process.env.XAI_API_KEY) {
 
 interface CliOptions {
   all: boolean;
+  names: string[];
   concurrency: number;
   force: boolean;
 }
 
 function parseArgs(argv: string[]): CliOptions {
-  const opts: CliOptions = { all: false, concurrency: 3, force: false };
+  const opts: CliOptions = { all: false, names: [], concurrency: 3, force: false };
   for (const arg of argv) {
     if (arg === '--all') opts.all = true;
     else if (arg === '--force') opts.force = true;
     else if (arg.startsWith('--concurrency=')) {
       const n = Number(arg.slice('--concurrency='.length));
       if (Number.isFinite(n) && n > 0) opts.concurrency = n;
+    } else if (arg.startsWith('--name=')) {
+      opts.names.push(...arg.slice('--name='.length).split(','));
     }
   }
   return opts;
@@ -52,7 +55,12 @@ async function buildTaskQueue(opts: CliOptions): Promise<GenerationTask[]> {
   const prompts = JSON.parse(raw) as PromptMap;
 
   const entries = Object.entries(prompts);
-  const slice = opts.all ? entries : entries.slice(0, 5);
+  const slice =
+    opts.names.length > 0
+      ? entries.filter(([name]) => opts.names.includes(name))
+      : opts.all
+        ? entries
+        : entries.slice(0, 5);
 
   const tasks: GenerationTask[] = [];
   for (const [floraName, stagePrompts] of slice) {
@@ -173,8 +181,14 @@ async function main(): Promise<void> {
   const opts = parseArgs(process.argv.slice(2));
   const tasks = await buildTaskQueue(opts);
 
+  const modeLabel =
+    opts.names.length > 0
+      ? opts.names.join(', ')
+      : opts.all
+        ? 'all'
+        : 'POC: first 5 floras';
   console.log(
-    `queued ${tasks.length} image(s) (${opts.all ? 'all' : 'POC: first 5 floras'}, concurrency=${opts.concurrency}${opts.force ? ', force' : ''})`,
+    `queued ${tasks.length} image(s) (${modeLabel}, concurrency=${opts.concurrency}${opts.force ? ', force' : ''})`,
   );
 
   const results = await runWithConcurrency(tasks, opts.concurrency, opts.force);

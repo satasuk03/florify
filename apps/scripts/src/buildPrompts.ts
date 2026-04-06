@@ -101,6 +101,16 @@ const OVERRIDES: Record<string, [string, string, string]> = {
     'A young glowmoss cushion covering a stone in a shallow dish, lush bed of tiny emerald fronds glowing softly from within, warm-cool contrast lighting, cream background, painterly botanical style, vertical composition',
     'A mature glowmoss formation blanketing a stone in a shallow dish, dense carpet of luminous green-cyan moss with tiny glowing spore stalks rising upward, dreamy bioluminescent atmosphere, cream background, elegant botanical illustration, vertical composition',
   ],
+  bianhua: [
+    'A slender delicate anime child girl with big sparkling eyes, thin petite body, long black hair with simple red ribbon, wearing a flowing dark teal and gold Wuxia-style robe with elegant draping, the child standing gracefully beside a tiny red spider lily sprout emerging from dark earth, one hand gently extended toward the first crimson bud, hands hidden in long sleeves, refined Wuxia game art style, dark moody atmosphere, bold black ink wash splashes in the background with scattered gold leaf flakes floating, deep black teal and crimson palette with gold accents, white border edges with ink splatter, botanical illustration style, vertical composition',
+    'A beautiful teenage anime girl in elaborate dark teal and crimson silk dress with gold chain jewelry and ornate hair ornaments, alluring mysterious pose with flowing dark ribbons, standing beside young red spider lilies with glowing crimson petals, dark dramatic ink splash painting style, bold black ink wash background with gold leaf fragments floating, deep black and teal palette with blood-red and gold accents, sensual dark elegance, white border edges with ink splatter, botanical illustration style, vertical composition',
+    'A stunning slender adult anime woman with large breasts in luxurious dark teal and black silk robes with deep neckline and exposed shoulders, long flowing black hair with a simple elegant dark butterfly hairpin and minimal gold hair accessories, gold chain body jewelry and arm bracelets, seductive Dunhuang apsara dancing pose with one arm raised gracefully and flowing teal and crimson silk ribbons swirling dynamically around her body, surrounded by fully bloomed red spider lilies with ethereal crimson glow, anime illustration style matching stage 2 aesthetic, dark moody ink splash painting style, bold black ink wash background with gold leaf fragments floating, deep black and teal palette with blood-red and gold accents, dark sensual elegance, white border edges with ink splatter, botanical illustration style, vertical composition',
+  ],
+  meihua: [
+    'A cute small child girl in ornate red and gold Hanfu with intricate floral embroidery patterns, standing beside a tiny plum blossom seedling, the child curiously touching the first pink bud, detailed watercolor anime illustration style, vibrant saturated colors, delicate ink splatter accents, white background with soft watercolor washes, botanical illustration style, vertical composition',
+    'A beautiful teenage anime girl in elaborate crimson Hanfu with detailed floral and phoenix embroidery, flowing translucent silk sleeves, alluring confident pose, standing beside a young plum blossom tree with pink and white flowers blooming, cherry blossom petals floating in the air, detailed watercolor anime illustration style, vibrant saturated colors, soft sexy elegance, ink splatter accents, white background with watercolor washes, botanical illustration style, vertical composition',
+    'A stunning adult anime woman in luxurious deep red and gold Hanfu with rich detailed embroidery of dragons and peonies, flowing layered silk robes with translucent fabric, elegant seductive pose, hair ornaments with red flowers and gold accessories, standing beneath a fully bloomed plum blossom tree cascading with pink petals, detailed watercolor anime illustration style, vibrant saturated colors, sensual beauty, ink splatter accents, white background with watercolor washes, botanical illustration style, vertical composition',
+  ],
 };
 
 async function main(): Promise<void> {
@@ -120,9 +130,17 @@ async function main(): Promise<void> {
     }
   }
 
+  // Append user-added floras (outside the 300-grid)
+  const USER_ADDED = ['meihua', 'bianhua'] as const;
+  for (const name of USER_ADDED) {
+    if (OVERRIDES[name]) {
+      out[name] = OVERRIDES[name];
+    }
+  }
+
   const count = Object.keys(out).length;
-  if (count !== 300) {
-    throw new Error(`expected 300 floras, got ${count}`);
+  if (count < 300) {
+    throw new Error(`expected at least 300 floras, got ${count}`);
   }
 
   await writeFile(OUT_PATH, JSON.stringify(out, null, 2) + '\n', 'utf-8');

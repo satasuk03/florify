@@ -53,4 +53,5 @@ export interface Settings {
   haptics: boolean;
   notifications: boolean;      // in-tab Notification API opt-in
   language: Language;
+  hasSeenWelcome: boolean;
 }
