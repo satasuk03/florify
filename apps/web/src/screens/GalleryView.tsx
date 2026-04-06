@@ -128,6 +128,13 @@ export function GalleryView() {
         if (!haystack.includes(q)) return false;
       }
       return true;
+    }).sort((a, b) => {
+      // Rarity: legendary first, then rare, then common
+      const rarityRank: Record<Rarity, number> = { legendary: 0, rare: 1, common: 2 };
+      const rDiff = rarityRank[a.rarity] - rarityRank[b.rarity];
+      if (rDiff !== 0) return rDiff;
+      // Within same rarity: higher ID first
+      return b.id - a.id;
     });
   }, [search, selectedRarities, selectedCollections, showMode, discoveredSet]);
 
