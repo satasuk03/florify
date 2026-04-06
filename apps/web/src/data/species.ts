@@ -3355,6 +3355,17 @@ export const SPECIES: readonly SpeciesDef[] = [
       "ดอกไม้ที่บานบนฝั่งไกลระหว่างเป็นกับตาย กลีบสีเลือดนำทางวิญญาณหลงทางผ่านความมืด นางรำในชุดเขียวคราม-ดำประดับทองปรากฏเคียงข้าง — จากเด็กน้อยผู้เงียบขรึม สู่สตรีเลอโฉมที่ร่ายรำท่ามกลางหมึกและทองคำเปลว ผู้ที่เห็นนางรำกล่าวว่าพรมแดนระหว่างโลกเบาบางลง และชั่วขณะที่หายใจไม่ออก คนเป็นกับคนตายร่วมท้องฟ้าเดียวกัน",
     collection: SpeciesCollection.ChineseGarden,
   },
+  {
+    id: 302,
+    folder: "lianhua",
+    name: "Lian Hua",
+    rarity: "legendary",
+    descriptionEN:
+      "The sacred lotus that rises immaculate from the muddiest depths, its petals untouched by any stain. A celestial guardian in jade-green silk appears beside it — first as a gentle child kneeling by a bronze basin where a single bud breaks the still water, then as a radiant maiden crowned in gold holding a glowing lotus aloft, and at last as a divine dancer trailing silk ribbons above a pond of luminous blooms. The sutras say: as the lotus is born in mud yet blooms toward heaven, so does the pure heart rise above the suffering of the world.",
+    descriptionTH:
+      "ดอกบัวศักดิ์สิทธิ์ที่ผุดขึ้นจากโคลนตมอันลึกที่สุดโดยไม่มีมลทินใดแปดเปื้อน มีเทพธิดาในอาภรณ์ผ้าไหมสีเขียวหยกปรากฏเคียงข้าง — จากเด็กน้อยผู้อ่อนโยนคุกเข่าข้างอ่างสำริดที่ดอกตูมแรกแทรกผิวน้ำนิ่ง สู่สาวงามมงกุฎทองผู้ชูดอกบัวเรืองแสงขึ้นสูง และในที่สุดเป็นนางรำสวรรค์ผู้พลิ้วผ้าแพรเหนือสระบัวส่องสว่าง พระสูตรกล่าวไว้ว่า เฉกเช่นบัวเกิดในโคลนแต่บานสู่สรวงสวรรค์ ใจอันบริสุทธิ์ย่อมก้าวพ้นทุกข์ทั้งปวงของโลก",
+    collection: SpeciesCollection.ChineseGarden,
+  },
 ];
 
 // Integrity: catch id/ordering drift early — the app fails to boot rather
