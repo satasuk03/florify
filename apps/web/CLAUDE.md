@@ -6,7 +6,7 @@ Watering is resource-based, not cooldown-based. Players accumulate **water drops
 
 - **Constants** (`packages/shared/src/config/constants.ts`):
   - `MAX_WATER_DROPS = 30` — pool cap
-  - `DROP_REGEN_MS = 5 min` — 1 drop regenerates every 5 minutes
+  - `DROP_REGEN_MS = 2 min` — 1 drop regenerates every 2 minutes
   - `MIN_WATER_COST = 12`, `MAX_WATER_COST = 25` — drops needed per flora (random)
   - `FIRST_FLORA_COST = 10` — first-ever flora costs less for onboarding
 - **Debug override** (`src/lib/debug.ts`): `DROP_REGEN_MS` is shorter in debug mode. Always import from here, not from `@florify/shared`.
