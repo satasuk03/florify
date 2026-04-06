@@ -133,6 +133,8 @@ export const dict = {
     'welcome.next': 'ถัดไป',
     'welcome.start': 'เริ่มปลูกต้นแรก!',
     'welcome.skip': 'ข้าม',
+    'welcome.browserSave.title': 'ข้อมูลเซฟบนเบราว์เซอร์',
+    'welcome.browserSave.body': 'ข้อมูลเกมจะเซฟอยู่บนเบราว์เซอร์นี้เท่านั้น — แต่สามารถ Export ได้ในหน้าตั้งค่า',
     'settings.replayWelcome': 'ดู Welcome อีกครั้ง',
 
     // ── Harvest overlay ────────────────────────
@@ -276,6 +278,8 @@ export const dict = {
     'welcome.next': 'Next',
     'welcome.start': 'Plant my first tree!',
     'welcome.skip': 'Skip',
+    'welcome.browserSave.title': 'Browser-only save',
+    'welcome.browserSave.body': 'Your game data is saved in this browser only — but you can export it anytime in Settings',
     'settings.replayWelcome': 'Replay Welcome',
 
     // ── Harvest overlay ────────────────────────

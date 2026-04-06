@@ -29,7 +29,7 @@ export function WelcomeDialogue({ onComplete, onNameChange, initialName }: Props
     if (step === 0) {
       onNameChange(name.trim() || 'Guest');
     }
-    if (step < 2) {
+    if (step < 3) {
       setStep(step + 1);
     } else {
       onComplete();
@@ -108,6 +108,7 @@ export function WelcomeDialogue({ onComplete, onNameChange, initialName }: Props
                 className="w-full px-3 py-2.5 rounded-xl bg-cream-100 border border-cream-300 text-ink-900 text-center placeholder:text-ink-400 focus:outline-none focus:border-clay-500 transition-colors"
               />
             </div>
+
           </>
         )}
 
@@ -179,9 +180,34 @@ export function WelcomeDialogue({ onComplete, onNameChange, initialName }: Props
           </>
         )}
 
+        {/* Step 3: Browser-save notice */}
+        {step === 3 && (
+          <>
+            <div
+              className="text-5xl animate-fade-up"
+              style={{ animationDelay: '120ms' }}
+            >
+              ⚠️💾
+            </div>
+            <h2
+              key="title-3"
+              className="font-serif text-2xl text-ink-900 animate-fade-up"
+              style={{ animationDelay: '180ms' }}
+            >
+              {t('welcome.browserSave.title')}
+            </h2>
+            <p
+              className="text-sm text-ink-600 max-w-[280px] leading-relaxed animate-fade-up"
+              style={{ animationDelay: '240ms' }}
+            >
+              {t('welcome.browserSave.body')}
+            </p>
+          </>
+        )}
+
         {/* Step indicators */}
         <div className="flex gap-2 animate-fade-up" style={{ animationDelay: '420ms' }}>
-          {[0, 1, 2].map((i) => (
+          {[0, 1, 2, 3].map((i) => (
             <div
               key={i}
               className={`w-2 h-2 rounded-full transition-all duration-300 ${
@@ -201,7 +227,7 @@ export function WelcomeDialogue({ onComplete, onNameChange, initialName }: Props
           style={{ animationDelay: '480ms' }}
         >
           <Button size="lg" onClick={handleNext} className="w-full max-w-[260px]">
-            {step < 2 ? t('welcome.next') : t('welcome.start')}
+            {step < 3 ? t('welcome.next') : t('welcome.start')}
           </Button>
           <button
             onClick={handleSkip}
@@ -212,7 +238,7 @@ export function WelcomeDialogue({ onComplete, onNameChange, initialName }: Props
         </div>
 
         {/* Rarity teaser on last step */}
-        {step === 2 && (
+        {step === 3 && (
           <p
             className="text-xs text-ink-500 animate-fade-up"
             style={{ animationDelay: '540ms' }}
