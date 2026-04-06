@@ -61,8 +61,9 @@ describe("buildLayout", () => {
     const textContent = texts.map((t) => t.text);
     expect(textContent).toContain("FLORIFY");
     expect(textContent).toContain("BOTANICAL PASSPORT");
-    expect(textContent).toContain("47");
-    expect(textContent).toContain("SPECIES UNLOCKED");
+    expect(textContent).toContain("124");
+    expect(textContent).toContain("TOTAL HARVESTED");
+    expect(textContent).toContain("47 / 300 species unlocked");
     expect(textContent).toContain("◆  APPRENTICE  ◆");
     expect(textContent).toContain("Common");
     expect(textContent).toContain("Rare");

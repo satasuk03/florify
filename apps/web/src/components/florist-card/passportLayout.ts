@@ -176,10 +176,10 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
     width: 2,
   });
 
-  // ── Hero block: species unlocked ─────────────────────────────────
+  // ── Hero block: total harvested ──────────────────────────────────
   ops.push({
     type: "text",
-    text: `${data.speciesUnlocked}`,
+    text: `${data.totalHarvested}`,
     x: cx,
     y: 640,
     size: 180,
@@ -190,7 +190,7 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
   });
   ops.push({
     type: "text",
-    text: "SPECIES UNLOCKED",
+    text: "TOTAL HARVESTED",
     x: cx,
     y: 720,
     size: 36,
@@ -296,10 +296,27 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
     });
   }
 
+  // ── Species unlocked summary (below rarity bars) ─────────────────
+  const totalSpecies =
+    data.rarityProgress.common.total +
+    data.rarityProgress.rare.total +
+    data.rarityProgress.legendary.total;
+  ops.push({
+    type: "text",
+    text: `${data.speciesUnlocked} / ${totalSpecies} species unlocked`,
+    x: cx,
+    y: 1390,
+    size: 34,
+    weight: 600,
+    family: "sans",
+    color: PASSPORT_COLORS.ink700,
+    align: "center",
+  });
+
   // ── Stat line ────────────────────────────────────────────────────
   ops.push({
     type: "text",
-    text: `${data.totalHarvested} harvested  ·  🔥  ${data.currentStreak} day streak`,
+    text: `🔥  ${data.currentStreak} day streak`,
     x: cx,
     y: 1440,
     size: 34,
