@@ -1,6 +1,6 @@
 ---
 name: add-flora
-description: Add a new flora species to Florify. Takes a species description from the user, generates 3 stage images (seedling, young, mature) via the xAI image script, places the webps under apps/web/public/floras/{folder}/, and registers the species in apps/web/src/data/ (species.ts + floraNames.ts). Use when the user asks to add / create / register a new flora or species.
+description: Add a new flora species to Florify. Takes a species description from the user, generates 3 stage images (seedling, young, mature) via the xAI image script, places the webps under apps/web/public/floras/{folder}/, and registers the species in apps/web/src/data/species.ts. Use when the user asks to add / create / register a new flora or species.
 ---
 
 # add-flora
@@ -18,20 +18,20 @@ Before doing anything else, make sure you have:
 5. **Series** *(optional)* — `SpeciesSeries.Original` | `SpeciesSeries.Abnormal` (enum in `apps/web/src/data/species.ts`). Default `SpeciesSeries.Abnormal` for user-added floras, since `Original` is reserved for the hand-authored 300-species catalogue.
 6. **Thai description** *(optional)* — if the user doesn't provide one, translate the English description yourself into natural Thai in the same literary voice as existing entries in `apps/web/src/data/species.ts`.
 
-Do NOT reuse a folder name that already exists in `apps/web/src/data/floraNames.ts` or under `apps/web/public/floras/`. Check both before proceeding.
+Do NOT reuse a folder name that already exists in `SPECIES` (`apps/web/src/data/species.ts`) or under `apps/web/public/floras/`. Check both before proceeding.
 
 ## Architecture you must respect
 
-- The catalogue is a strictly-ordered array in `apps/web/src/data/species.ts`. `id` equals array index. `folder` must match the entry at the same index in `FLORA_NAMES` (`apps/web/src/data/floraNames.ts`).
+- The catalogue is a strictly-ordered array in `apps/web/src/data/species.ts`. `id` equals array index. `folder` must match `public/floras/{folder}/`.
 - Runtime images live at `apps/web/public/floras/{folder}/stage-{1|2|3}.webp`. Stage 1 = seedling, Stage 2 = young plant, Stage 3 = mature bloom.
 - Image generation is driven by `apps/scripts/` — prompts live in `apps/scripts/prompts.json`, the generator is `apps/scripts/src/generate.ts`, which writes to `apps/scripts/output/{folder}/stage-{N}.webp`. It reads `XAI_API_KEY` from `apps/scripts/.env`.
-- Both data files have hard integrity checks asserting `length === 300`. New species push the count past 300, so you must relax these to `>= 300` (see Step 5).
+- `species.ts` has a hard integrity check asserting `length === 300`. New species push the count past 300, so you must relax it to `>= 300` (see Step 5).
 
 ## Procedure
 
 ### 1. Gather inputs & pick a folder
 - Confirm description, folder, display name, rarity, and lore with the user if anything is ambiguous.
-- Verify `apps/web/public/floras/{folder}/` does not exist and `{folder}` is not already in `FLORA_NAMES`.
+- Verify `apps/web/public/floras/{folder}/` does not exist and `{folder}` is not already in `SPECIES`.
 
 ### 2. Craft 3 stage prompts
 Match the style of existing entries in `apps/scripts/src/buildPrompts.ts` (see `OVERRIDES` for the POC floras — `sunleaf`, `moonfern`, `emberbloom`, `frostpetal`, `glowmoss`). Each prompt must:
@@ -71,23 +71,14 @@ cp apps/scripts/output/{folder}/stage-*.webp apps/web/public/floras/{folder}/
 Verify all three files exist and are non-empty before moving on.
 
 ### 6. Register the species in data files
-1. **`apps/web/src/data/floraNames.ts`** — the current file builds `FLORA_NAMES` from `PREFIXES × SUFFIXES`. Append the new folder as an extra entry after `buildFloraEntries()` returns, e.g.:
-   ```ts
-   export const FLORA_ENTRIES: readonly FloraEntry[] = [
-     ...buildFloraEntries(),
-     { folder: '{folder}', prefix: '{folder}' as Prefix, suffix: 'bloom' }, // user-added
-   ];
-   ```
-   Cast as needed — the Prefix/Suffix unions are only used for grid math, not runtime lookups. Relax the `!== 300` guard to `< 300`.
-
-2. **`apps/web/src/data/species.ts`** — append a new `SpeciesDef` object to the `SPECIES` array with:
+**`apps/web/src/data/species.ts`** — append a new `SpeciesDef` object to the `SPECIES` array with:
    - `id`: next sequential integer (300 for the first user-added, 301 for the next, …)
-   - `folder`: matches the entry you just added to `FLORA_NAMES`
+   - `folder`: matches the folder created in step 5
    - `name`: display name
    - `rarity`: chosen rarity
    - `descriptionEN` / `descriptionTH`: the lore
    - `series`: `SpeciesSeries.Abnormal` by default for user-added floras (use `SpeciesSeries.Original` only if the user explicitly asks). Import the enum from the same file — it's exported alongside `SpeciesDef`.
-   Relax the `SPECIES.length !== 300` guard to `< 300`. Keep the id-equals-index and folder-matches-FLORA_NAMES checks intact — they still need to pass.
+   Relax the `SPECIES.length !== 300` guard to `< 300`. Keep the id-equals-index check intact — it still needs to pass.
 
 ### 7. Verify
 - `pnpm --filter @florify/web typecheck` (or the repo's equivalent) to make sure the integrity checks still pass at import time.
@@ -102,5 +93,5 @@ Summarize for the user:
 ## Guardrails
 - Never overwrite existing webps under `public/floras/`.
 - Never reuse an id or folder.
-- Never weaken the id-equals-index or folder-matches-FLORA_NAMES integrity checks — those catch real bugs. Only the `length === 300` assertion needs to be loosened, because the catalogue is growing.
+- Never weaken the id-equals-index integrity check — it catches real bugs. Only the `length === 300` assertion needs to be loosened, because the catalogue is growing.
 - If image generation fails (missing API key, rate limit, 4xx), stop and surface the error. Do not register a species whose images don't exist yet.

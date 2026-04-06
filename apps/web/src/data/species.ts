@@ -1,5 +1,4 @@
 import type { Rarity } from "@florify/shared";
-import { FLORA_NAMES } from "./floraNames";
 
 export enum SpeciesCollection {
   Original = "original",
@@ -3335,8 +3334,7 @@ export const SPECIES: readonly SpeciesDef[] = [
   },
 ];
 
-// Integrity: catch drift between this file and FLORA_NAMES early. If any
-// entry's id, folder, or ordering slips, the app fails to boot rather
+// Integrity: catch id/ordering drift early — the app fails to boot rather
 // than quietly rendering the wrong image for a saved tree.
 if (SPECIES.length !== 300) {
   throw new Error(`expected 300 species, got ${SPECIES.length}`);
@@ -3345,11 +3343,6 @@ for (let i = 0; i < SPECIES.length; i++) {
   const s = SPECIES[i]!;
   if (s.id !== i) {
     throw new Error(`species[${i}].id is ${s.id}, expected ${i}`);
-  }
-  if (s.folder !== FLORA_NAMES[i]) {
-    throw new Error(
-      `species[${i}].folder is ${s.folder}, expected ${FLORA_NAMES[i]}`,
-    );
   }
 }
 
