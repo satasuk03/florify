@@ -17,6 +17,15 @@ export interface StreakState {
   lastCheckinDate: string;     // 'YYYY-MM-DD' in local timezone
 }
 
+export interface CollectedSpecies {
+  speciesId: number;
+  rarity: Rarity;
+  count: number;                // how many times this species was harvested
+  totalWaterings: number;       // cumulative waterings across all harvests
+  firstHarvestedAt: number;     // epoch ms
+  lastHarvestedAt: number;      // epoch ms
+}
+
 export interface PlayerStats {
   totalPlanted: number;
   totalWatered: number;
@@ -24,7 +33,7 @@ export interface PlayerStats {
 }
 
 export interface PlayerState {
-  schemaVersion: 3;
+  schemaVersion: 4;
   userId: string;              // local nanoid; linked to a cloud account later
   displayName: string;         // user-editable; 'Guest' until renamed
   createdAt: number;
@@ -32,7 +41,7 @@ export interface PlayerState {
   waterDrops: number;          // 0..MAX_WATER_DROPS — current drop count
   lastDropRegenAt: number;     // epoch ms — last regen sync point
   activeTree: TreeInstance | null;
-  collection: TreeInstance[];  // harvested, append-only
+  collection: CollectedSpecies[];  // aggregated per species, sorted by lastHarvestedAt desc
   stats: PlayerStats;
   streak: StreakState;
 }

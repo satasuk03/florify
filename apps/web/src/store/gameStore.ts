@@ -6,6 +6,7 @@ import {
   MAX_WATER_DROPS,
   MIN_WATER_COST,
   TOTAL_SPECIES,
+  type CollectedSpecies,
   type PlayerState,
   type Rarity,
   type TreeInstance,
@@ -120,19 +121,15 @@ export const DISPLAY_NAME_MAX_LENGTH = 24;
  * cache. Consumers must derive it via `useMemo(() => selectFloristCard(state), [state])`.
  */
 export function selectFloristCard(state: PlayerState): FloristCardData {
-  const rarityByIdSeen = new Map<number, Rarity>();
-  for (const t of state.collection) {
-    if (!rarityByIdSeen.has(t.speciesId)) rarityByIdSeen.set(t.speciesId, t.rarity);
-  }
   let common = 0;
   let rare = 0;
   let legendary = 0;
-  for (const r of rarityByIdSeen.values()) {
-    if (r === 'common') common++;
-    else if (r === 'rare') rare++;
+  for (const c of state.collection) {
+    if (c.rarity === 'common') common++;
+    else if (c.rarity === 'rare') rare++;
     else legendary++;
   }
-  const speciesUnlocked = rarityByIdSeen.size;
+  const speciesUnlocked = state.collection.length;
   return {
     rank: deriveRank(speciesUnlocked),
     speciesUnlocked,
@@ -160,18 +157,43 @@ function rollRarity(): Rarity {
   return 'common';
 }
 
-function distinctSpeciesIds(collection: readonly TreeInstance[]): Set<number> {
-  const set = new Set<number>();
-  for (const t of collection) set.add(t.speciesId);
-  return set;
-}
-
 function deriveRank(unlocked: number): FloristRank {
   if (unlocked >= 250) return 'Legend';
   if (unlocked >= 150) return 'Master';
   if (unlocked >= 75) return 'Gardener';
   if (unlocked >= 20) return 'Apprentice';
   return 'Seedling';
+}
+
+function upsertCollection(
+  collection: CollectedSpecies[],
+  harvested: TreeInstance,
+): CollectedSpecies[] {
+  const now = harvested.harvestedAt!;
+  const idx = collection.findIndex((c) => c.speciesId === harvested.speciesId);
+  if (idx >= 0) {
+    const existing = collection[idx]!;
+    const updated: CollectedSpecies = {
+      ...existing,
+      count: existing.count + 1,
+      totalWaterings: existing.totalWaterings + harvested.requiredWaterings,
+      lastHarvestedAt: now,
+    };
+    // Move to front (most recent) and keep rest sorted
+    return [updated, ...collection.slice(0, idx), ...collection.slice(idx + 1)];
+  }
+  // New species — prepend (most recent first)
+  return [
+    {
+      speciesId: harvested.speciesId,
+      rarity: harvested.rarity,
+      count: 1,
+      totalWaterings: harvested.requiredWaterings,
+      firstHarvestedAt: now,
+      lastHarvestedAt: now,
+    },
+    ...collection,
+  ];
 }
 
 export const useGameStore = create<GameStore>((set, get) => ({
@@ -194,7 +216,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     return regenAt + DROP_REGEN_MS;
   },
 
-  uniqueSpeciesUnlocked: () => distinctSpeciesIds(get().state.collection).size,
+  uniqueSpeciesUnlocked: () => get().state.collection.length,
 
   // ── Hydrate from localStorage on app start ────────────────────────
   hydrate: async () => {
@@ -265,12 +287,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
         currentWaterings: nextWaterings,
         harvestedAt: now,
       };
+      const collection = upsertCollection(s.collection, harvested);
       const next: PlayerState = {
         ...s,
         waterDrops: drops - 1,
         lastDropRegenAt: regenAt,
         activeTree: null,
-        collection: [...s.collection, harvested],
+        collection,
         stats: {
           ...s.stats,
           totalWatered: s.stats.totalWatered + 1,

@@ -26,36 +26,38 @@ import { SPECIES } from '@/data/species';
 const COPY = {
   th: {
     notFound: 'ไม่พบต้นไม้',
-    seed: 'เมล็ด',
-    waterings: 'รดน้ำ',
+    count: 'ปลูกแล้ว',
+    countUnit: 'ต้น',
+    waterings: 'รดน้ำรวม',
     waterUnit: 'หยด',
-    planted: 'ปลูกเมื่อ',
-    harvested: 'เก็บเกี่ยว',
+    firstHarvested: 'ได้รับครั้งแรก',
+    lastHarvested: 'ได้รับล่าสุด',
     locale: 'th-TH' as const,
     stageLabel: (n: Stage) => `ระยะ ${n}`,
   },
   en: {
     notFound: 'Tree not found',
-    seed: 'Seed',
-    waterings: 'Waterings',
+    count: 'Harvested',
+    countUnit: 'times',
+    waterings: 'Total waterings',
     waterUnit: 'drops',
-    planted: 'Planted',
-    harvested: 'Harvested',
+    firstHarvested: 'First obtained',
+    lastHarvested: 'Last obtained',
     locale: 'en-US' as const,
     stageLabel: (n: Stage) => `Stage ${n}`,
   },
 };
 
-export function DetailView({ id }: { id: string | null }) {
+export function DetailView({ speciesId }: { speciesId: number | null }) {
   const [lang, setLang] = useState<Lang>('th');
   const [stage, setStage] = useState<Stage>(3);
   const t = COPY[lang];
 
-  const tree = useGameStore((s) =>
-    id ? s.state.collection.find((t) => t.id === id) ?? null : null,
+  const entry = useGameStore((s) =>
+    speciesId != null ? s.state.collection.find((c) => c.speciesId === speciesId) ?? null : null,
   );
 
-  if (!tree) {
+  if (!entry) {
     return (
       <div className="h-full bg-cream-50 safe-top safe-bottom flex flex-col">
         <header className="flex items-center px-4 py-3">
@@ -74,7 +76,7 @@ export function DetailView({ id }: { id: string | null }) {
     );
   }
 
-  const species = SPECIES[tree.speciesId];
+  const species = SPECIES[entry.speciesId];
   const description = lang === 'th' ? species?.descriptionTH : species?.descriptionEN;
 
   return (
@@ -87,7 +89,7 @@ export function DetailView({ id }: { id: string | null }) {
         >
           <BackIcon />
         </Link>
-        <RarityBadge rarity={tree.rarity} />
+        <RarityBadge rarity={entry.rarity} />
       </header>
 
       <div className="flex-1 min-h-0 flex items-center justify-center px-4 pb-2">
@@ -112,8 +114,8 @@ export function DetailView({ id }: { id: string | null }) {
           </div>
 
           <FloraImage
-            key={`${tree.id}-${stage}`}
-            speciesId={tree.speciesId}
+            key={`${entry.speciesId}-${stage}`}
+            speciesId={entry.speciesId}
             progress={STAGE_PROGRESS[stage]}
             className="relative max-h-[88%] max-w-[82%] object-contain drop-shadow-[0_18px_30px_rgba(75,55,30,0.18)]"
           />
@@ -147,27 +149,25 @@ export function DetailView({ id }: { id: string | null }) {
 
           <div className="mt-4 pt-4 border-t border-cream-300/70">
             <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-xs">
-              <dt className="text-ink-500">{t.seed}</dt>
-              <dd className="font-mono text-ink-700 text-right truncate">{tree.seed}</dd>
+              <dt className="text-ink-500">{t.count}</dt>
+              <dd className="text-ink-700 text-right">
+                {entry.count} {t.countUnit}
+              </dd>
 
               <dt className="text-ink-500">{t.waterings}</dt>
               <dd className="text-ink-700 text-right">
-                {tree.requiredWaterings} {t.waterUnit}
+                {entry.totalWaterings} {t.waterUnit}
               </dd>
 
-              <dt className="text-ink-500">{t.planted}</dt>
+              <dt className="text-ink-500">{t.firstHarvested}</dt>
               <dd className="text-ink-700 text-right">
-                {new Date(tree.plantedAt).toLocaleDateString(t.locale)}
+                {new Date(entry.firstHarvestedAt).toLocaleDateString(t.locale)}
               </dd>
 
-              {tree.harvestedAt && (
-                <>
-                  <dt className="text-ink-500">{t.harvested}</dt>
-                  <dd className="text-ink-700 text-right">
-                    {new Date(tree.harvestedAt).toLocaleDateString(t.locale)}
-                  </dd>
-                </>
-              )}
+              <dt className="text-ink-500">{t.lastHarvested}</dt>
+              <dd className="text-ink-700 text-right">
+                {new Date(entry.lastHarvestedAt).toLocaleDateString(t.locale)}
+              </dd>
             </dl>
           </div>
         </div>

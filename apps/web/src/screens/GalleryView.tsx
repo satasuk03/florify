@@ -20,9 +20,9 @@ export function GalleryView() {
   const t = useT();
   const collection = useGameStore((s) => s.state.collection);
   const unlocked = useGameStore((s) => s.uniqueSpeciesUnlocked());
-  const sorted = [...collection].sort(
-    (a, b) => (b.harvestedAt ?? 0) - (a.harvestedAt ?? 0),
-  );
+  const totalHarvested = collection.reduce((sum, c) => sum + c.count, 0);
+  // Collection is already sorted by lastHarvestedAt desc from store
+  const sorted = collection;
 
   return (
     <div className="min-h-full h-full overflow-y-auto bg-cream-50 safe-top safe-bottom px-4 pb-24">
@@ -44,7 +44,7 @@ export function GalleryView() {
           style={{ animationDelay: '80ms' }}
         >
           <div className="text-3xl font-serif text-ink-900 tabular-nums">
-            <AnimatedNumber value={collection.length} />
+            <AnimatedNumber value={totalHarvested} />
           </div>
           <div className="text-xs text-ink-500 mt-1">{t('gallery.harvested')}</div>
         </Card>
@@ -65,17 +65,17 @@ export function GalleryView() {
         </div>
       ) : (
         <div className="grid grid-cols-3 gap-3">
-          {sorted.map((tree, i) => (
+          {sorted.map((entry, i) => (
             <Link
-              key={tree.id}
-              href={{ pathname: '/gallery/detail', query: { id: tree.id } }}
+              key={entry.speciesId}
+              href={{ pathname: '/gallery/detail', query: { speciesId: String(entry.speciesId) } }}
               className="group block animate-fade-up"
               // Cap stagger at ~12 items so large collections don't wait forever.
               style={{ animationDelay: `${Math.min(i, 12) * 45 + 240}ms` }}
             >
-              <GalleryTile speciesId={tree.speciesId} rarity={tree.rarity} />
+              <GalleryTile speciesId={entry.speciesId} rarity={entry.rarity} count={entry.count} />
               <div className="text-xs mt-1 text-ink-700 truncate">
-                {SPECIES[tree.speciesId]?.name}
+                {SPECIES[entry.speciesId]?.name}
               </div>
             </Link>
           ))}
@@ -88,9 +88,11 @@ export function GalleryView() {
 function GalleryTile({
   speciesId,
   rarity,
+  count,
 }: {
   speciesId: number;
   rarity: 'common' | 'rare' | 'legendary';
+  count: number;
 }) {
   return (
     <Card className="overflow-hidden aspect-[3/4] relative group-hover:-translate-y-1 group-hover:shadow-soft-md">
@@ -102,6 +104,11 @@ function GalleryTile({
       <div className="absolute top-1 right-1">
         <RarityBadge rarity={rarity} />
       </div>
+      {count > 1 && (
+        <div className="absolute bottom-1 left-1 bg-ink-900/60 text-cream-50 text-[10px] font-medium px-1.5 py-0.5 rounded-full backdrop-blur-sm">
+          ×{count}
+        </div>
+      )}
     </Card>
   );
 }

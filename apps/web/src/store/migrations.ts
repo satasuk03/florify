@@ -1,4 +1,4 @@
-import { MAX_WATER_DROPS, SCHEMA_VERSION, type PlayerState } from '@florify/shared';
+import { MAX_WATER_DROPS, SCHEMA_VERSION, type PlayerState, type CollectedSpecies, type Rarity } from '@florify/shared';
 
 type UnknownState = { schemaVersion: number } & Record<string, unknown>;
 
@@ -11,6 +11,7 @@ export function migrate(state: UnknownState): PlayerState {
   let s = state;
   if (s.schemaVersion === 1) s = migrateV1toV2(s);
   if (s.schemaVersion === 2) s = migrateV2toV3(s);
+  if (s.schemaVersion === 3) s = migrateV3toV4(s);
   if (s.schemaVersion !== SCHEMA_VERSION) {
     console.warn(`[migrate] unknown schemaVersion ${s.schemaVersion}, falling back to as-is`);
   }
@@ -44,4 +45,41 @@ function migrateV2toV3(s: UnknownState): UnknownState {
   }
 
   return result;
+}
+
+// v3 → v4: aggregate collection from TreeInstance[] to CollectedSpecies[].
+// Group by speciesId, summing waterings and tracking first/last harvest times.
+function migrateV3toV4(s: UnknownState): UnknownState {
+  const oldCollection = (s.collection ?? []) as Array<{
+    speciesId: number;
+    rarity: Rarity;
+    requiredWaterings: number;
+    harvestedAt: number | null;
+  }>;
+
+  const map = new Map<number, CollectedSpecies>();
+  for (const tree of oldCollection) {
+    const harvestedAt = tree.harvestedAt ?? 0;
+    const existing = map.get(tree.speciesId);
+    if (existing) {
+      existing.count += 1;
+      existing.totalWaterings += tree.requiredWaterings;
+      if (harvestedAt < existing.firstHarvestedAt) existing.firstHarvestedAt = harvestedAt;
+      if (harvestedAt > existing.lastHarvestedAt) existing.lastHarvestedAt = harvestedAt;
+    } else {
+      map.set(tree.speciesId, {
+        speciesId: tree.speciesId,
+        rarity: tree.rarity,
+        count: 1,
+        totalWaterings: tree.requiredWaterings,
+        firstHarvestedAt: harvestedAt,
+        lastHarvestedAt: harvestedAt,
+      });
+    }
+  }
+
+  // Sort by lastHarvestedAt desc
+  const collection = [...map.values()].sort((a, b) => b.lastHarvestedAt - a.lastHarvestedAt);
+
+  return { ...s, schemaVersion: 4, collection };
 }

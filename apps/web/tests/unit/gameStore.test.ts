@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { selectFloristCard, useGameStore, computeDrops } from '@/store/gameStore';
 import { createInitialState } from '@/store/initialState';
-import { MAX_WATER_DROPS, MAX_WATER_COST, MIN_WATER_COST, FIRST_FLORA_COST, DROP_REGEN_MS, type TreeInstance, type PlayerState } from '@florify/shared';
+import { MAX_WATER_DROPS, MAX_WATER_COST, MIN_WATER_COST, FIRST_FLORA_COST, DROP_REGEN_MS, type TreeInstance, type CollectedSpecies, type PlayerState } from '@florify/shared';
 import { todayLocalDate } from '@/lib/time';
 import { migrate } from '@/store/migrations';
 
@@ -20,6 +20,18 @@ function mockTree(overrides: Partial<TreeInstance> = {}): TreeInstance {
     currentWaterings: 0,
     plantedAt: Date.now(),
     harvestedAt: null,
+    ...overrides,
+  };
+}
+
+function mockCollected(overrides: Partial<CollectedSpecies> = {}): CollectedSpecies {
+  return {
+    speciesId: 0,
+    rarity: 'common',
+    count: 1,
+    totalWaterings: 15,
+    firstHarvestedAt: Date.now(),
+    lastHarvestedAt: Date.now(),
     ...overrides,
   };
 }
@@ -49,7 +61,7 @@ describe('plantTree', () => {
       state: {
         ...s.state,
         stats: { ...s.state.stats, totalPlanted: 1 },
-        collection: [mockTree({ id: 'c1', harvestedAt: Date.now() })],
+        collection: [mockCollected()],
       },
     }));
     const tree = useGameStore.getState().plantTree();
@@ -124,6 +136,8 @@ describe('waterTree', () => {
     const state = useGameStore.getState().state;
     expect(state.activeTree).toBeNull();
     expect(state.collection.length).toBe(1);
+    expect(state.collection[0]!.speciesId).toBe(0);
+    expect(state.collection[0]!.count).toBe(1);
     expect(state.stats.totalHarvested).toBe(1);
     expect(state.waterDrops).toBe(4);
   });
@@ -140,6 +154,23 @@ describe('waterTree', () => {
     const r = useGameStore.getState().waterTree();
     expect(r.harvested?.seed).toBe(4242);
     expect(r.harvested?.speciesId).toBe(7);
+  });
+
+  it('second harvest of same species increments count', () => {
+    useGameStore.setState((s) => ({
+      state: {
+        ...s.state,
+        activeTree: mockTree({ requiredWaterings: 1, speciesId: 5 }),
+        collection: [mockCollected({ speciesId: 5, count: 2, totalWaterings: 30 })],
+        waterDrops: 5,
+        lastDropRegenAt: Date.now(),
+      },
+    }));
+    useGameStore.getState().waterTree();
+    const c = useGameStore.getState().state.collection;
+    expect(c.length).toBe(1); // still 1 unique species
+    expect(c[0]!.count).toBe(3);
+    expect(c[0]!.totalWaterings).toBe(31); // 30 + 1 (requiredWaterings=1)
   });
 });
 
@@ -222,7 +253,7 @@ describe('resetActiveTree', () => {
       state: {
         ...s.state,
         activeTree: mockTree({ currentWaterings: 2 }),
-        collection: [mockTree({ id: 'c1', harvestedAt: Date.now() })],
+        collection: [mockCollected()],
       },
     }));
     useGameStore.getState().resetActiveTree();
@@ -304,10 +335,9 @@ describe('selectFloristCard', () => {
       state: {
         ...s.state,
         collection: [
-          mockTree({ id: 'a', speciesId: 1, rarity: 'common', harvestedAt: 1 }),
-          mockTree({ id: 'b', speciesId: 1, rarity: 'common', harvestedAt: 2 }), // dup
-          mockTree({ id: 'c', speciesId: 250, rarity: 'rare', harvestedAt: 3 }),
-          mockTree({ id: 'd', speciesId: 290, rarity: 'legendary', harvestedAt: 4 }),
+          mockCollected({ speciesId: 1, rarity: 'common', count: 2 }),
+          mockCollected({ speciesId: 250, rarity: 'rare' }),
+          mockCollected({ speciesId: 290, rarity: 'legendary' }),
         ],
         stats: { totalPlanted: 4, totalWatered: 20, totalHarvested: 4 },
       },
@@ -323,7 +353,7 @@ describe('selectFloristCard', () => {
   it('promotes rank at thresholds', () => {
     // 20 distinct species → Apprentice
     const collection = Array.from({ length: 20 }, (_, i) =>
-      mockTree({ id: `t${i}`, speciesId: i, rarity: 'common', harvestedAt: i + 1 }),
+      mockCollected({ speciesId: i, rarity: 'common', lastHarvestedAt: i + 1 }),
     );
     useGameStore.setState((s) => ({ state: { ...s.state, collection } }));
     expect(selectFloristCard(useGameStore.getState().state).rank).toBe('Apprentice');
@@ -377,7 +407,7 @@ describe('resetAllProgress', () => {
       state: {
         ...s.state,
         activeTree: mockTree(),
-        collection: [mockTree({ id: 'c1', harvestedAt: Date.now() })],
+        collection: [mockCollected()],
         stats: { totalPlanted: 5, totalWatered: 10, totalHarvested: 2 },
       },
     }));
@@ -415,7 +445,7 @@ describe('migrate v2 → v3', () => {
     };
 
     const result = migrate(v2State as unknown as { schemaVersion: number } & Record<string, unknown>);
-    expect(result.schemaVersion).toBe(3);
+    expect(result.schemaVersion).toBe(4); // migrates through v3 → v4
     expect(result.waterDrops).toBe(MAX_WATER_DROPS);
     expect(result.lastDropRegenAt).toBeGreaterThan(0);
     expect(result.activeTree).toBeDefined();
@@ -437,8 +467,47 @@ describe('migrate v2 → v3', () => {
     };
 
     const result = migrate(v2State as unknown as { schemaVersion: number } & Record<string, unknown>);
-    expect(result.schemaVersion).toBe(3);
+    expect(result.schemaVersion).toBe(4);
     expect(result.waterDrops).toBe(MAX_WATER_DROPS);
     expect(result.activeTree).toBeNull();
+  });
+});
+
+describe('migrate v3 → v4', () => {
+  it('aggregates TreeInstance[] collection into CollectedSpecies[]', () => {
+    const v3State = {
+      schemaVersion: 3,
+      userId: 'test-user',
+      displayName: 'Guest',
+      createdAt: 1000,
+      updatedAt: 2000,
+      waterDrops: 20,
+      lastDropRegenAt: 3000,
+      activeTree: null,
+      collection: [
+        { id: 't1', seed: 1, speciesId: 5, rarity: 'common', requiredWaterings: 12, currentWaterings: 12, plantedAt: 1000, harvestedAt: 2000 },
+        { id: 't2', seed: 2, speciesId: 5, rarity: 'common', requiredWaterings: 15, currentWaterings: 15, plantedAt: 2000, harvestedAt: 4000 },
+        { id: 't3', seed: 3, speciesId: 10, rarity: 'rare', requiredWaterings: 20, currentWaterings: 20, plantedAt: 1500, harvestedAt: 3000 },
+      ],
+      stats: { totalPlanted: 3, totalWatered: 47, totalHarvested: 3 },
+      streak: { currentStreak: 1, longestStreak: 1, lastCheckinDate: '2026-01-01' },
+    };
+
+    const result = migrate(v3State as unknown as { schemaVersion: number } & Record<string, unknown>);
+    expect(result.schemaVersion).toBe(4);
+    expect(result.collection.length).toBe(2); // 2 unique species
+
+    // Sorted by lastHarvestedAt desc: speciesId 5 (4000) before speciesId 10 (3000)
+    const first = result.collection[0]!;
+    expect(first.speciesId).toBe(5);
+    expect(first.count).toBe(2);
+    expect(first.totalWaterings).toBe(27); // 12 + 15
+    expect(first.firstHarvestedAt).toBe(2000);
+    expect(first.lastHarvestedAt).toBe(4000);
+
+    const second = result.collection[1]!;
+    expect(second.speciesId).toBe(10);
+    expect(second.count).toBe(1);
+    expect(second.totalWaterings).toBe(20);
   });
 });

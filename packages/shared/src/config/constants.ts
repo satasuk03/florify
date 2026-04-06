@@ -1,4 +1,4 @@
-export const SCHEMA_VERSION = 3 as const;
+export const SCHEMA_VERSION = 4 as const;
 export const MAX_WATER_DROPS = 30;
 export const DROP_REGEN_MS = 5 * 60 * 1000;     // 5 minutes per drop
 export const MIN_WATER_COST = 12;

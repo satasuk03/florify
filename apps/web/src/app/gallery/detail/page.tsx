@@ -21,6 +21,7 @@ export default function GalleryDetailPage() {
 
 function DetailPageInner() {
   const params = useSearchParams();
-  const id = params.get('id');
-  return <DetailView id={id} />;
+  const raw = params.get('speciesId');
+  const speciesId = raw != null ? Number(raw) : null;
+  return <DetailView speciesId={Number.isFinite(speciesId) ? speciesId : null} />;
 }
