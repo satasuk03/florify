@@ -12,15 +12,12 @@
  * twice and doesn't flicker. The component self-unmounts once the
  * longest timeline finishes.
  *
- * Respects `prefers-reduced-motion`: if the user has motion reduced,
- * returns null — the glow + card celebration are enough.
  */
 
 import {
   useEffect,
   useMemo,
   useState,
-  useSyncExternalStore,
   type CSSProperties,
 } from 'react';
 import type { Rarity } from '@florify/shared';
@@ -143,41 +140,20 @@ function buildParticles(rarity: Rarity, playKey: string | number) {
   return { leaves, sparkles };
 }
 
-/** Subscribes to `prefers-reduced-motion` via useSyncExternalStore so
- *  the value is up-to-date on mount AND updates live if the user flips
- *  the OS setting while the overlay is open. SSR-safe — returns false
- *  during prerender. */
-function subscribeReducedMotion(onChange: () => void): () => void {
-  if (typeof window === 'undefined') return () => {};
-  const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-  mq.addEventListener('change', onChange);
-  return () => mq.removeEventListener('change', onChange);
-}
-function getReducedMotion(): boolean {
-  if (typeof window === 'undefined') return false;
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-}
-
 export function HarvestConfetti({ rarity, playKey }: Props) {
-  const reduced = useSyncExternalStore(
-    subscribeReducedMotion,
-    getReducedMotion,
-    () => false,
-  );
   const [alive, setAlive] = useState(true);
 
   useEffect(() => {
-    if (reduced) return;
     const id = window.setTimeout(() => setAlive(false), TOTAL_MS + 60);
     return () => window.clearTimeout(id);
-  }, [reduced, playKey]);
+  }, [playKey]);
 
   const { leaves, sparkles } = useMemo(
     () => buildParticles(rarity, playKey),
     [rarity, playKey],
   );
 
-  if (reduced || !alive) return null;
+  if (!alive) return null;
 
   return (
     <div
