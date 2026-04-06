@@ -104,16 +104,6 @@
      that feels "settled" rather than bouncy — the luxurious-but-
      quiet register this app wants. */
 
-  /* Flora image loading spinner */
-  .flora-spinner {
-    width: 24px;
-    height: 24px;
-    border: 2.5px solid rgba(255, 255, 255, 0.2);
-    border-top-color: rgba(255, 255, 255, 0.7);
-    border-radius: 50%;
-    animation: flora-spin 0.6s linear infinite;
-  }
-
   /* Flora stage-change entry animation — plays when FloraImage
      remounts the current-stage <img> via a keyed element. */
   .animate-flora-stage-in {
@@ -288,12 +278,6 @@
   }
   .shine-on-hover:hover::after {
     transform: translateX(120%);
-  }
-}
-
-@keyframes flora-spin {
-  to {
-    transform: rotate(360deg);
   }
 }
 

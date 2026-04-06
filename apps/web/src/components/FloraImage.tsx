@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { SPECIES } from '@/data/species';
 
 /**
@@ -13,8 +12,6 @@ import { SPECIES } from '@/data/species';
  * a `key` tied to the stage, which replays the `animate-flora-stage-in`
  * CSS animation — a short fade + subtle scale pop so growth reads as
  * a distinct reward moment instead of a silent src swap.
- *
- * Shows a small spinner while the image is loading.
  */
 
 interface Props {
@@ -35,26 +32,19 @@ export function FloraImage({ speciesId, progress, className, alt }: Props) {
   if (!species) return null;
   const stage = stageFromProgress(progress);
   const src = `/floras/${species.folder}/stage-${stage}.webp`;
-  const [loaded, setLoaded] = useState(false);
-
   return (
-    // key on wrapper so loaded state resets when stage changes
-    <div key={stage} className="relative inline-flex items-center justify-center">
-      {!loaded && (
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="flora-spinner" />
-        </div>
-      )}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={src}
-        alt={alt ?? species.name}
-        className={`${className ?? ''} animate-flora-stage-in`}
-        loading="lazy"
-        decoding="async"
-        draggable={false}
-        onLoad={() => setLoaded(true)}
-      />
-    </div>
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      // Remount on stage change so the entry animation replays. For
+      // the very first render (no prior stage) this is harmless — the
+      // fade-in just doubles as a load-in.
+      key={stage}
+      src={src}
+      alt={alt ?? species.name}
+      className={`${className ?? ''} animate-flora-stage-in`}
+      loading="lazy"
+      decoding="async"
+      draggable={false}
+    />
   );
 }
