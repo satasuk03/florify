@@ -9,14 +9,13 @@ import {
   PITY_POINTS_LEGENDARY,
   PITY_POINTS_RARE,
   PITY_THRESHOLD,
-  TOTAL_SPECIES,
   type CollectedSpecies,
   type PlayerState,
   type Rarity,
   type TreeInstance,
 } from '@florify/shared';
 import { DROP_REGEN_MS } from '@/lib/debug';
-import { SPECIES_BY_RARITY } from '@/data/species';
+import { SPECIES, SPECIES_BY_RARITY } from '@/data/species';
 import { RARITY_ROLL_WEIGHTS } from '@/data/rarityWeights';
 import { mulberry32, randInt, randPick, randSeed } from '@/engine/rng';
 import { saveStore } from './saveStore';
@@ -341,7 +340,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       let pityPointsGained = 0;
       let pityReward: { speciesId: number; rarity: Rarity } | undefined;
 
-      if (collection.length < TOTAL_SPECIES) {
+      if (collection.length < SPECIES.length) {
         if (!isDuplicate) {
           // New species from normal planting — reset pity
           pityPoints = 0;
@@ -461,4 +460,4 @@ export const useGameStore = create<GameStore>((set, get) => ({
 }));
 
 // Tiny helper for tests / dev console
-export const TOTAL_SPECIES_FOR_DEV = TOTAL_SPECIES;
+export const TOTAL_SPECIES_FOR_DEV = SPECIES.length;

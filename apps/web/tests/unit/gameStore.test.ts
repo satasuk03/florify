@@ -1,7 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { selectFloristCard, useGameStore, computeDrops } from '@/store/gameStore';
 import { createInitialState } from '@/store/initialState';
-import { MAX_WATER_DROPS, MAX_WATER_COST, MIN_WATER_COST, FIRST_FLORA_COST, DROP_REGEN_MS, PITY_THRESHOLD, PITY_POINTS_COMMON, PITY_POINTS_RARE, PITY_POINTS_LEGENDARY, TOTAL_SPECIES, type TreeInstance, type CollectedSpecies, type PlayerState } from '@florify/shared';
+import { MAX_WATER_DROPS, MAX_WATER_COST, MIN_WATER_COST, FIRST_FLORA_COST, DROP_REGEN_MS, PITY_THRESHOLD, PITY_POINTS_COMMON, PITY_POINTS_RARE, PITY_POINTS_LEGENDARY, type TreeInstance, type CollectedSpecies, type PlayerState } from '@florify/shared';
+import { SPECIES } from '@/data/species';
 import { todayLocalDate } from '@/lib/time';
 import { migrate } from '@/store/migrations';
 
@@ -327,7 +328,7 @@ describe('selectFloristCard', () => {
     const card = selectFloristCard(useGameStore.getState().state);
     expect(card.rank).toBe('Seedling');
     expect(card.speciesUnlocked).toBe(0);
-    expect(card.rarityProgress.common.total).toBe(200);
+    expect(card.rarityProgress.common.total).toBe(SPECIES.filter(s => s.rarity === 'common').length);
   });
 
   it('counts unique species per rarity', () => {
@@ -563,7 +564,7 @@ describe('pity / dried leaves (🍂)', () => {
 
   it('does not accumulate when collection is complete', () => {
     // Build a full collection
-    const fullCollection = Array.from({ length: TOTAL_SPECIES }, (_, i) =>
+    const fullCollection = Array.from({ length: SPECIES.length }, (_, i) =>
       mockCollected({ speciesId: i, rarity: i < 200 ? 'common' : i < 280 ? 'rare' : 'legendary' }),
     );
     useGameStore.setState((s) => ({
