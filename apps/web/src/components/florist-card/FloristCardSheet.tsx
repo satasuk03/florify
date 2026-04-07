@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import Link from 'next/link';
-import { Button } from '@/components/Button';
-import { selectFloristCard, useGameStore } from '@/store/gameStore';
-import { toast } from '@/lib/toast';
-import { encodePassportLink } from '@/lib/passportLink';
-import { copyText } from '@/lib/clipboard';
-import { PassportCard } from './PassportCard';
-import { sharePassport, type ShareResult } from './sharePassport';
-import { gameEventBus } from '@/lib/gameEventBus';
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import Link from "next/link";
+import { Button } from "@/components/Button";
+import { selectFloristCard, useGameStore } from "@/store/gameStore";
+import { toast } from "@/lib/toast";
+import { encodePassportLink } from "@/lib/passportLink";
+import { copyText } from "@/lib/clipboard";
+import { PassportCard } from "./PassportCard";
+import { sharePassport, type ShareResult } from "./sharePassport";
+import { gameEventBus } from "@/lib/gameEventBus";
 
 /**
  * Florist Card modal — passport preview + share action.
@@ -22,11 +22,11 @@ import { gameEventBus } from '@/lib/gameEventBus';
  */
 
 type SheetState =
-  | { phase: 'viewing' }
-  | { phase: 'generating' }
-  | { phase: 'shared' }
-  | { phase: 'downloaded'; filename: string }
-  | { phase: 'error'; message: string };
+  | { phase: "viewing" }
+  | { phase: "generating" }
+  | { phase: "shared" }
+  | { phase: "downloaded"; filename: string }
+  | { phase: "error"; message: string };
 
 interface Props {
   open: boolean;
@@ -41,7 +41,7 @@ export function FloristCardSheet({ open, onClose }: Props) {
   // triggers an infinite render loop. See selectFloristCard docstring.
   const state = useGameStore((s) => s.state);
   const data = useMemo(() => selectFloristCard(state), [state]);
-  const [sheet, setSheet] = useState<SheetState>({ phase: 'viewing' });
+  const [sheet, setSheet] = useState<SheetState>({ phase: "viewing" });
   const contentRef = useRef<HTMLDivElement>(null);
   const [cardWidth, setCardWidth] = useState(320);
 
@@ -52,13 +52,13 @@ export function FloristCardSheet({ open, onClose }: Props) {
   const [prevOpen, setPrevOpen] = useState(open);
   if (open !== prevOpen) {
     setPrevOpen(open);
-    if (open) setSheet({ phase: 'viewing' });
+    if (open) setSheet({ phase: "viewing" });
   }
 
   // Auto-clear success states back to viewing after 3s
   useEffect(() => {
-    if (sheet.phase === 'shared' || sheet.phase === 'downloaded') {
-      const id = setTimeout(() => setSheet({ phase: 'viewing' }), 3000);
+    if (sheet.phase === "shared" || sheet.phase === "downloaded") {
+      const id = setTimeout(() => setSheet({ phase: "viewing" }), 3000);
       return () => clearTimeout(id);
     }
     return undefined;
@@ -68,10 +68,10 @@ export function FloristCardSheet({ open, onClose }: Props) {
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === "Escape") onClose();
     };
-    document.addEventListener('keydown', onKey);
-    return () => document.removeEventListener('keydown', onKey);
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
   }, [open, onClose]);
 
   // Measure card-container width so we can pass a concrete pixel size
@@ -87,41 +87,41 @@ export function FloristCardSheet({ open, onClose }: Props) {
       setCardWidth(w);
     };
     update();
-    window.addEventListener('resize', update);
-    return () => window.removeEventListener('resize', update);
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
   }, [open]);
 
   const handleCopyLink = useCallback(async () => {
     try {
       const copied = await copyText(encodePassportLink(data));
       if (copied) {
-        toast('คัดลอกลิงค์พาสปอร์ตแล้ว 🔗');
+        toast("คัดลอกลิงค์พาสปอร์ตแล้ว 🔗");
       } else {
-        toast('เบราว์เซอร์นี้ไม่รองรับการคัดลอก');
+        toast("เบราว์เซอร์นี้ไม่รองรับการคัดลอก");
       }
     } catch {
-      toast('คัดลอกลิงค์ไม่ได้ ลองอีกครั้งนะ');
+      toast("คัดลอกลิงค์ไม่ได้ ลองอีกครั้งนะ");
     }
   }, [data]);
 
   const handleShare = useCallback(async () => {
-    setSheet({ phase: 'generating' });
+    setSheet({ phase: "generating" });
     const result: ShareResult = await sharePassport(data);
     switch (result.kind) {
-      case 'shared':
-        setSheet({ phase: 'shared' });
-        gameEventBus.emit({ type: 'share' });
+      case "shared":
+        setSheet({ phase: "shared" });
+        gameEventBus.emit({ type: "share" });
         return;
-      case 'downloaded':
-        setSheet({ phase: 'downloaded', filename: result.filename });
-        gameEventBus.emit({ type: 'share' });
-        toast('บันทึกรูปแล้ว — เปิด Instagram แล้วเลือกจากคลังได้เลย');
+      case "downloaded":
+        setSheet({ phase: "downloaded", filename: result.filename });
+        gameEventBus.emit({ type: "share" });
+        toast("บันทึกรูปแล้ว — เปิด Instagram แล้วเลือกจากคลังได้เลย");
         return;
-      case 'cancelled':
-        setSheet({ phase: 'viewing' });
+      case "cancelled":
+        setSheet({ phase: "viewing" });
         return;
-      case 'error':
-        setSheet({ phase: 'error', message: result.message });
+      case "error":
+        setSheet({ phase: "error", message: result.message });
         return;
     }
   }, [data]);
@@ -130,26 +130,26 @@ export function FloristCardSheet({ open, onClose }: Props) {
 
   const shareLabel = (() => {
     switch (sheet.phase) {
-      case 'generating':
-        return 'กำลังสร้างรูป…';
-      case 'shared':
-        return 'แชร์อีกครั้ง';
-      case 'downloaded':
-        return 'บันทึกอีกครั้ง';
-      case 'error':
-        return 'ลองอีกครั้ง';
+      case "generating":
+        return "กำลังสร้างรูป…";
+      case "shared":
+        return "แชร์อีกครั้ง";
+      case "downloaded":
+        return "บันทึกอีกครั้ง";
+      case "error":
+        return "ลองอีกครั้ง";
       default:
-        return 'แชร์';
+        return "แชร์";
     }
   })();
 
   const hint = (() => {
     switch (sheet.phase) {
-      case 'shared':
-        return '✅ แชร์แล้ว';
-      case 'downloaded':
-        return '💾 บันทึกแล้ว — เปิด Instagram → Stories → คลังรูป';
-      case 'error':
+      case "shared":
+        return "✅ แชร์แล้ว";
+      case "downloaded":
+        return "💾 บันทึกแล้ว — เปิด Instagram → Stories → คลังรูป";
+      case "error":
         return `⚠️ ${sheet.message}`;
       default:
         return null;
@@ -195,10 +195,10 @@ export function FloristCardSheet({ open, onClose }: Props) {
               size="md"
               className="flex-1"
               onClick={handleShare}
-              disabled={sheet.phase === 'generating'}
+              disabled={sheet.phase === "generating"}
               aria-label="Share Florist Card to Instagram or Facebook story"
             >
-              {shareLabel}  🌼
+              {shareLabel} 🌼
             </Button>
           </div>
           <Button
@@ -208,18 +208,11 @@ export function FloristCardSheet({ open, onClose }: Props) {
             onClick={handleCopyLink}
             aria-label="Copy a shareable link to this passport"
           >
-            คัดลอกลิงค์พาสปอร์ต  🔗
+            คัดลอกลิงค์พาสปอร์ต 🔗
           </Button>
           {hint && (
             <div className="text-xs text-ink-500 mt-1 text-center">{hint}</div>
           )}
-          <Link
-            href="/settings"
-            onClick={onClose}
-            className="text-xs text-ink-500 hover:text-ink-700 underline underline-offset-2 mt-2"
-          >
-            Settings
-          </Link>
         </div>
       </div>
     </div>
