@@ -291,14 +291,21 @@ function MissionCard({
       {/* Points badge */}
       <div className={`relative flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-500 ${
         mission.completed
-          ? 'bg-clay-500/15 border border-clay-400/40'
+          ? 'bg-gradient-to-br from-clay-400 to-clay-600 border border-clay-600/40 shadow-[0_2px_8px_rgba(199,130,90,0.35)]'
           : 'bg-clay-500/10 border border-clay-400/25'
-      }`}>
-        <span className={`text-[11px] font-bold tracking-tight ${
-          mission.completed ? 'text-clay-600' : 'text-clay-600'
-        }`}>
-          {MISSION_POINTS_PER}P
-        </span>
+      }`}
+        style={mission.completed ? {
+          animation: 'mission-check-pop 500ms cubic-bezier(0.34, 1.56, 0.64, 1) both',
+          animationDelay: `${400 + index * 80}ms`,
+        } : undefined}
+      >
+        {mission.completed ? (
+          <CheckIcon size={18} className="text-cream-50" />
+        ) : (
+          <span className="text-[11px] font-bold tracking-tight text-clay-600">
+            {MISSION_POINTS_PER}P
+          </span>
+        )}
       </div>
 
       {/* Description + progress */}
@@ -332,22 +339,6 @@ function MissionCard({
         </div>
       </div>
 
-      {/* Status indicator */}
-      <div className="relative flex-shrink-0">
-        {mission.completed ? (
-          <div
-            className="w-8 h-8 rounded-full bg-gradient-to-br from-clay-400 to-clay-600 flex items-center justify-center shadow-[0_2px_8px_rgba(199,130,90,0.35)]"
-            style={{
-              animation: 'mission-check-pop 500ms cubic-bezier(0.34, 1.56, 0.64, 1) both',
-              animationDelay: `${400 + index * 80}ms`,
-            }}
-          >
-            <CheckIcon size={15} className="text-cream-50" />
-          </div>
-        ) : (
-          <div className="w-8 h-8 rounded-full border-2 border-cream-300 bg-cream-50 transition-colors duration-300" />
-        )}
-      </div>
     </div>
   );
 }
