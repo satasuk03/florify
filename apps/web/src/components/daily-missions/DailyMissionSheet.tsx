@@ -122,95 +122,90 @@ function MilestoneBar() {
   const fillPct = Math.min(100, (totalPoints / maxPoints) * 100);
 
   return (
-    <div className="mb-5 rounded-2xl bg-cream-100 border border-cream-200 p-4"
+    <div className="mb-5 rounded-2xl bg-cream-100 border border-cream-200 px-5 pt-4 pb-4"
       style={{ animation: 'mission-card-in 500ms cubic-bezier(0.22, 1, 0.36, 1) both', animationDelay: '80ms' }}
     >
       {/* Points display */}
-      <div className="flex items-baseline justify-between mb-2.5">
-        <div className="flex items-baseline gap-1">
-          <span className="font-serif text-lg font-bold text-ink-900 tabular-nums">{totalPoints}</span>
-          <span className="text-xs text-ink-400">/ {maxPoints}P</span>
-        </div>
+      <div className="flex items-baseline gap-1 mb-4">
+        <span className="font-serif text-lg font-bold text-ink-900 tabular-nums">{totalPoints}</span>
+        <span className="text-xs text-ink-400">/ {maxPoints}P</span>
       </div>
 
-      {/* Track */}
-      <div className="relative h-2 bg-cream-300/60 rounded-full overflow-hidden mb-4">
-        <div
-          className="absolute inset-y-0 left-0 bg-gradient-to-r from-clay-600 to-clay-400 rounded-full"
-          style={{
-            width: `${fillPct}%`,
-            transformOrigin: 'left',
-            animation: 'mission-progress-fill 800ms cubic-bezier(0.22, 1, 0.36, 1) both',
-            animationDelay: '300ms',
-          }}
-        >
-          {fillPct > 0 && (
-            <div className="absolute inset-0 overflow-hidden rounded-full" aria-hidden>
-              <div
-                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent"
-                style={{ animation: 'shimmer-sweep 2s ease-in-out infinite', animationDelay: '1s' }}
-              />
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Milestone markers */}
-      <div className="flex justify-between">
+      {/* Milestone stepping stones */}
+      <div className="flex items-center">
         {MISSION_MILESTONES.map((milestone, i) => {
           const drops = MISSION_MILESTONE_DROPS[i]!;
           const reached = totalPoints >= milestone;
           const claimed = claimedMilestones.includes(milestone);
-          const isNext = !reached && (i === 0 || totalPoints >= MISSION_MILESTONES[i - 1]!);
+          const isLast = i === MISSION_MILESTONES.length - 1;
+
+          // Is the segment between this milestone and the next filled?
+          const nextMilestone = MISSION_MILESTONES[i + 1];
+          const segmentFilled = nextMilestone ? totalPoints >= nextMilestone : false;
+          const segmentPartial = nextMilestone
+            ? totalPoints > milestone && totalPoints < nextMilestone
+            : false;
+          const segmentPct = nextMilestone && segmentPartial
+            ? ((totalPoints - milestone) / (nextMilestone - milestone)) * 100
+            : segmentFilled ? 100 : 0;
+
           return (
-            <div
-              key={milestone}
-              className="flex flex-col items-center gap-1.5"
+            <div key={milestone} className={`flex items-center ${isLast ? '' : 'flex-1'}`}
               style={{
                 animation: 'mission-card-in 400ms cubic-bezier(0.22, 1, 0.36, 1) both',
-                animationDelay: `${400 + i * 60}ms`,
+                animationDelay: `${300 + i * 80}ms`,
               }}
             >
-              <div
-                className={`relative w-9 h-9 rounded-xl flex items-center justify-center text-xs font-bold border-2 transition-all duration-500 ${
-                  claimed
-                    ? 'bg-clay-500 border-clay-600 text-cream-50 shadow-[0_0_12px_rgba(199,130,90,0.4)]'
-                    : reached
-                      ? 'bg-clay-400/20 border-clay-400 text-clay-600'
-                      : isNext
-                        ? 'bg-cream-50 border-cream-400 text-ink-500'
-                        : 'bg-cream-50 border-cream-300 text-ink-300'
-                }`}
-                style={
-                  reached && !claimed
-                    ? { animation: 'milestone-glow 2s ease-in-out infinite' }
-                    : claimed
-                      ? { animation: 'milestone-unlock 500ms cubic-bezier(0.22, 1, 0.36, 1) both' }
-                      : undefined
-                }
-              >
-                {claimed ? (
-                  <CheckIcon size={16} />
-                ) : (
-                  <span className="flex items-center gap-0.5">
+              {/* Milestone node */}
+              <div className="flex flex-col items-center gap-1.5">
+                <div
+                  className={`relative w-9 h-9 rounded-full flex items-center justify-center transition-all duration-500 ${
+                    claimed
+                      ? 'bg-gradient-to-br from-clay-400 to-clay-600 shadow-[0_2px_10px_rgba(199,130,90,0.4)]'
+                      : reached
+                        ? 'bg-gradient-to-br from-clay-300/40 to-clay-400/50 ring-2 ring-clay-400/60 ring-offset-1 ring-offset-cream-100'
+                        : 'bg-cream-200/80 ring-2 ring-cream-300/60 ring-offset-1 ring-offset-cream-100'
+                  }`}
+                  style={
+                    reached && !claimed
+                      ? { animation: 'milestone-glow 2s ease-in-out infinite' }
+                      : claimed
+                        ? { animation: 'milestone-unlock 500ms cubic-bezier(0.22, 1, 0.36, 1) both' }
+                        : undefined
+                  }
+                >
+                  {claimed ? (
+                    <CheckIcon size={16} className="text-cream-50" />
+                  ) : (
                     <span
+                      className={`text-sm ${reached ? '' : 'grayscale opacity-40'}`}
                       style={reached ? { animation: 'drop-icon-wobble 600ms ease-in-out' } : undefined}
                     >
                       💧
                     </span>
-                  </span>
-                )}
-              </div>
-              <div className="flex flex-col items-center">
-                <span className={`text-[10px] font-bold tabular-nums ${
+                  )}
+                </div>
+                <span className={`text-[10px] font-bold tabular-nums leading-none ${
                   claimed ? 'text-clay-600' : reached ? 'text-clay-500' : 'text-ink-300'
                 }`}>
                   +{drops}
                 </span>
-                <span className={`text-[9px] tabular-nums ${reached ? 'text-ink-500' : 'text-ink-300'}`}>
-                  {milestone}P
-                </span>
               </div>
+
+              {/* Connector segment */}
+              {!isLast && (
+                <div className="flex-1 h-[3px] mx-1 rounded-full bg-cream-300/70 overflow-hidden self-start mt-[18px]">
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-clay-500 to-clay-400"
+                    style={{
+                      width: `${segmentPct}%`,
+                      transformOrigin: 'left',
+                      animation: segmentPct > 0 ? 'mission-progress-fill 800ms cubic-bezier(0.22, 1, 0.36, 1) both' : undefined,
+                      animationDelay: `${400 + i * 100}ms`,
+                    }}
+                  />
+                </div>
+              )}
             </div>
           );
         })}
