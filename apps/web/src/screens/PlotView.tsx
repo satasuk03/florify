@@ -20,6 +20,7 @@ import { FloristCardSheet } from "@/components/florist-card/FloristCardSheet";
 import { GuideBookSheet } from "@/components/guidebook/GuideBookSheet";
 import { SettingsSheet } from "@/components/settings/SettingsSheet";
 import { DailyMissionSheet } from "@/components/daily-missions/DailyMissionSheet";
+import { CheckinModal } from "@/components/daily-missions/CheckinModal";
 import { HarvestOverlay } from "@/components/HarvestOverlay";
 import { SeedPacket } from "@/components/SeedPacket";
 import { WaterSplash } from "@/components/WaterSplash";
@@ -31,6 +32,7 @@ import { SPECIES } from "@/data/species";
 import { useT } from "@/i18n/useT";
 import { loadSettings, saveSettings } from "@/store/settingsStore";
 import { MISSION_POINTS_PER, MISSION_MILESTONES } from "@florify/shared";
+import { todayLocalDate } from "@/lib/time";
 
 /**
  * Home screen — designs/07 §7.1.
@@ -53,18 +55,34 @@ export function PlotView() {
   const [showGuideBook, setShowGuideBook] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [showMissions, setShowMissions] = useState(false);
+  const [showCheckin, setShowCheckin] = useState(false);
   const [showWelcome, setShowWelcome] = useState(false);
+  const hydrated = useGameStore((s) => s.hydrated);
+  const lastRewardDate = useGameStore((s) => s.state.streak.lastRewardDate);
   const displayName = useGameStore((s) => s.state.displayName);
   const setDisplayName = useGameStore((s) => s.setDisplayName);
 
-  // Show welcome dialogue on first ever visit (after hydration).
+  // Show welcome dialogue on first ever visit, or check-in modal after hydration.
+  const [checkinShown, setCheckinShown] = useState(false);
   useEffect(() => {
-    if (!loadSettings().hasSeenWelcome) setShowWelcome(true);
-  }, []);
+    if (!loadSettings().hasSeenWelcome) {
+      setShowWelcome(true);
+      return;
+    }
+    if (hydrated && !checkinShown && lastRewardDate !== todayLocalDate()) {
+      setCheckinShown(true);
+      setShowCheckin(true);
+    }
+  }, [hydrated, lastRewardDate, checkinShown]);
 
   const handleWelcomeComplete = () => {
     setShowWelcome(false);
     saveSettings({ ...loadSettings(), hasSeenWelcome: true });
+    // Flow into check-in modal for first-time users
+    if (hydrated && lastRewardDate !== todayLocalDate()) {
+      setCheckinShown(true);
+      setShowCheckin(true);
+    }
   };
   const [harvested, setHarvested] = useState<TreeInstance | null>(null);
   const [pityPointsGained, setPityPointsGained] = useState(0);
@@ -329,6 +347,10 @@ export function PlotView() {
         </div>
       </div>
 
+      <CheckinModal
+        open={showCheckin}
+        onClose={() => setShowCheckin(false)}
+      />
       <DailyMissionSheet
         open={showMissions}
         onClose={() => setShowMissions(false)}

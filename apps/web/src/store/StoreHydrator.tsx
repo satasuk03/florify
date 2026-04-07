@@ -33,10 +33,8 @@ export function StoreHydrator() {
 
   // Initial hydrate on mount.
   useEffect(() => {
-    hydrate()
-      .then(() => ensureDailyMissions())
-      .catch((err) => console.error('[StoreHydrator] hydrate failed', err));
-  }, [hydrate, ensureDailyMissions]);
+    hydrate().catch((err) => console.error('[StoreHydrator] hydrate failed', err));
+  }, [hydrate]);
 
   // Re-run streak check when the tab comes back to foreground. Also
   // forces a re-render so `computeDrops` picks up elapsed time and

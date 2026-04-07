@@ -48,6 +48,7 @@ export interface StreakState {
   currentStreak: number;       // consecutive days
   longestStreak: number;
   lastCheckinDate: string;     // 'YYYY-MM-DD' in local timezone
+  lastRewardDate: string;      // 'YYYY-MM-DD' — last date check-in reward was claimed
 }
 
 export interface CollectedSpecies {
@@ -66,7 +67,7 @@ export interface PlayerStats {
 }
 
 export interface PlayerState {
-  schemaVersion: 6;
+  schemaVersion: 7;
   userId: string;              // local nanoid; linked to a cloud account later
   displayName: string;         // user-editable; 'Guest' until renamed
   createdAt: number;

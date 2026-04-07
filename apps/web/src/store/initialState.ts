@@ -14,7 +14,7 @@ export function createInitialState(): PlayerState {
     activeTree: null,
     collection: [],
     stats: { totalPlanted: 0, totalWatered: 0, totalHarvested: 0 },
-    streak: { currentStreak: 0, longestStreak: 0, lastCheckinDate: '' },
+    streak: { currentStreak: 0, longestStreak: 0, lastCheckinDate: '', lastRewardDate: '' },
     pityPoints: 0,
     dailyMissions: {
       date: '',

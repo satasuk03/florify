@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 import { nanoid } from 'nanoid';
 import {
+  CHECKIN_BASE_DROPS,
+  CHECKIN_STREAK_BONUS_MAX,
   FIRST_FLORA_COST,
   MAX_WATER_COST,
   MAX_WATER_DROPS,
@@ -104,6 +106,7 @@ export function computeDrops(state: PlayerState): { drops: number; regenAt: numb
 
 export interface GameStore {
   state: PlayerState;
+  hydrated: boolean;
 
   // Derived — primitive returns only (objects would break useSyncExternalStore
   // equality checks; derive object shapes from raw state via useMemo instead).
@@ -126,6 +129,11 @@ export interface GameStore {
   ensureDailyMissions: () => void;
   trackMission: (type: MissionType, increment?: number) => void;
   claimMissions: () => { dropsAwarded: number };
+
+  // Daily check-in
+  canClaimCheckin: () => boolean;
+  checkinDrops: () => { base: number; bonus: number; total: number };
+  claimCheckin: () => { dropsAwarded: number; streakBonus: number };
 }
 
 export const DISPLAY_NAME_MAX_LENGTH = 24;
@@ -259,6 +267,7 @@ function upsertCollection(
 
 export const useGameStore = create<GameStore>((set, get) => ({
   state: createInitialState(),
+  hydrated: false,
 
   // ── Derived selectors ─────────────────────────────────────────────
   canWater: () => {
@@ -284,6 +293,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const loaded = await saveStore.load();
     if (loaded) set({ state: loaded });
     get().checkinStreak();
+    get().ensureDailyMissions();
+    set({ hydrated: true });
   },
 
   // ── Plant ─────────────────────────────────────────────────────────
@@ -442,7 +453,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     const next: PlayerState = {
       ...s,
-      streak: { currentStreak, longestStreak, lastCheckinDate: today },
+      streak: { ...s.streak, currentStreak, longestStreak, lastCheckinDate: today },
       updatedAt: Date.now(),
     };
     set({ state: next });
@@ -556,6 +567,41 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set({ state: next });
     scheduleSave(next);
     return { dropsAwarded };
+  },
+
+  // ── Daily check-in ───────────────────────────────────────────────
+
+  canClaimCheckin: () => {
+    const s = get().state;
+    return s.streak.lastRewardDate !== todayLocalDate();
+  },
+
+  checkinDrops: () => {
+    const s = get().state;
+    const bonus = Math.min(Math.max(s.streak.currentStreak - 1, 0), CHECKIN_STREAK_BONUS_MAX);
+    const base = CHECKIN_BASE_DROPS;
+    return { base, bonus, total: base + bonus };
+  },
+
+  claimCheckin: (): { dropsAwarded: number; streakBonus: number } => {
+    const s = get().state;
+    const today = todayLocalDate();
+    if (s.streak.lastRewardDate === today) return { dropsAwarded: 0, streakBonus: 0 };
+
+    const bonus = Math.min(Math.max(s.streak.currentStreak - 1, 0), CHECKIN_STREAK_BONUS_MAX);
+    const dropsAwarded = CHECKIN_BASE_DROPS + bonus;
+    const { drops: currentDrops, regenAt } = computeDrops(s);
+
+    const next: PlayerState = {
+      ...s,
+      waterDrops: currentDrops + dropsAwarded,
+      lastDropRegenAt: regenAt,
+      streak: { ...s.streak, lastRewardDate: today },
+      updatedAt: Date.now(),
+    };
+    set({ state: next });
+    scheduleSave(next);
+    return { dropsAwarded, streakBonus: bonus };
   },
 }));
 

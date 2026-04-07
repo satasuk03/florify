@@ -14,6 +14,7 @@ export function migrate(state: UnknownState): PlayerState {
   if (s.schemaVersion === 3) s = migrateV3toV4(s);
   if (s.schemaVersion === 4) s = migrateV4toV5(s);
   if (s.schemaVersion === 5) s = migrateV5toV6(s);
+  if (s.schemaVersion === 6) s = migrateV6toV7(s);
   if (s.schemaVersion !== SCHEMA_VERSION) {
     console.warn(`[migrate] unknown schemaVersion ${s.schemaVersion}, falling back to as-is`);
   }
@@ -102,5 +103,15 @@ function migrateV5toV6(s: UnknownState): UnknownState {
       claimedPoints: 0,
       claimedMilestones: [],
     },
+  };
+}
+
+// v6 → v7: add lastRewardDate to streak for daily check-in rewards.
+function migrateV6toV7(s: UnknownState): UnknownState {
+  const streak = (s.streak ?? {}) as Record<string, unknown>;
+  return {
+    ...s,
+    schemaVersion: 7,
+    streak: { ...streak, lastRewardDate: '' },
   };
 }
