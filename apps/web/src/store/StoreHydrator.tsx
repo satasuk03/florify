@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { useGameStore } from './gameStore';
 import { flushSave } from './debouncedSave';
+import { initMissionSubscriber } from './missionSubscriber';
 
 /**
  * Root-level hydrator. Mounted once from `app/layout.tsx` so:
@@ -14,6 +15,7 @@ import { flushSave } from './debouncedSave';
 export function StoreHydrator() {
   const hydrate = useGameStore((s) => s.hydrate);
   const checkinStreak = useGameStore((s) => s.checkinStreak);
+  const ensureDailyMissions = useGameStore((s) => s.ensureDailyMissions);
 
   // Expose the store on window in non-production builds so Playwright
   // e2e tests can force state (e.g. requiredWaterings=1 to skip many
@@ -22,6 +24,12 @@ export function StoreHydrator() {
     if (process.env.NODE_ENV !== 'production') {
       (window as unknown as { __gameStore?: typeof useGameStore }).__gameStore = useGameStore;
     }
+  }, []);
+
+  // Initialize mission event subscriber (once).
+  useEffect(() => {
+    const cleanup = initMissionSubscriber();
+    return cleanup;
   }, []);
 
   // Initial hydrate on mount.
@@ -36,10 +44,11 @@ export function StoreHydrator() {
     const onVisible = () => {
       if (document.visibilityState !== 'visible') return;
       checkinStreak();
+      ensureDailyMissions();
     };
     document.addEventListener('visibilitychange', onVisible);
     return () => document.removeEventListener('visibilitychange', onVisible);
-  }, [checkinStreak]);
+  }, [checkinStreak, ensureDailyMissions]);
 
   // Flush any pending debounced save before the tab is killed
   useEffect(() => {

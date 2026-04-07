@@ -39,6 +39,7 @@ export function DropsIndicator({
     return () => clearTimeout(id);
   }, [popKey]);
 
+  const isOverflow = drops > MAX_WATER_DROPS;
   const showCountdown = nextDropAt !== null && drops < MAX_WATER_DROPS;
 
   return (
@@ -53,11 +54,13 @@ export function DropsIndicator({
         <span
           key={popKey}
           className={`tabular-nums font-mono text-sm font-medium transition-colors duration-300 ${
-            animating && direction === 'up'
-              ? 'text-sky-600 animate-count-pop'
-              : animating && direction === 'down'
-                ? 'text-clay-600 animate-count-pop'
-                : 'text-ink-700'
+            isOverflow
+              ? 'text-leaf-600'
+              : animating && direction === 'up'
+                ? 'text-sky-600 animate-count-pop'
+                : animating && direction === 'down'
+                  ? 'text-clay-600 animate-count-pop'
+                  : 'text-ink-700'
           }`}
         >
           {drops}/{MAX_WATER_DROPS}

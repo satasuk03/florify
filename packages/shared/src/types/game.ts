@@ -1,5 +1,38 @@
 export type Rarity = 'common' | 'rare' | 'legendary';
 
+// ── Daily Missions ─────────────────────────────────────────────────
+export type MissionType =
+  | 'water'
+  | 'plant'
+  | 'harvest'
+  | 'harvest_rare'
+  | 'visit_gallery'
+  | 'visit_floripedia'
+  | 'share_florist_card';
+
+export interface DailyMission {
+  templateId: string;     // references MissionTemplate.id
+  type: MissionType;
+  target: number;
+  progress: number;       // 0..target
+  completed: boolean;     // progress >= target
+}
+
+export interface DailyMissionState {
+  date: string;                    // 'YYYY-MM-DD'
+  missions: DailyMission[];        // always length 5
+  claimedPoints: number;           // 0-50
+  claimedMilestones: number[];     // subset of [10,20,30,40,50]
+}
+
+// ── Game Event Bus ─────────────────────────────────────────────────
+export type GameEvent =
+  | { type: 'water' }
+  | { type: 'plant' }
+  | { type: 'harvest'; rarity: Rarity; isNew: boolean }
+  | { type: 'visit'; screen: 'gallery' | 'floripedia' }
+  | { type: 'share' };
+
 export interface TreeInstance {
   id: string;                  // nanoid()
   seed: number;                // uint32 — deterministic geometry
@@ -15,6 +48,7 @@ export interface StreakState {
   currentStreak: number;       // consecutive days
   longestStreak: number;
   lastCheckinDate: string;     // 'YYYY-MM-DD' in local timezone
+  lastRewardDate: string;      // 'YYYY-MM-DD' — last date check-in reward was claimed
 }
 
 export interface CollectedSpecies {
@@ -33,7 +67,7 @@ export interface PlayerStats {
 }
 
 export interface PlayerState {
-  schemaVersion: 5;
+  schemaVersion: 7;
   userId: string;              // local nanoid; linked to a cloud account later
   displayName: string;         // user-editable; 'Guest' until renamed
   createdAt: number;
@@ -45,6 +79,7 @@ export interface PlayerState {
   stats: PlayerStats;
   streak: StreakState;
   pityPoints: number;            // 0..PITY_THRESHOLD — dried leaves (🍂) accumulated from duplicates
+  dailyMissions: DailyMissionState;
 }
 
 export type Language = 'th' | 'en';

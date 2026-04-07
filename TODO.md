@@ -1,8 +1,9 @@
-- เพิ่มต้น Liu https://i.pinimg.com/webp/736x/e2/bb/41/e2bb419dbaa5b717f15d849940826725.webp
 - Acheivements
 - หาต้นไม้ที่ใช่สำหรับคุณ -> Viral Marketing
+- Juicy Animation
 
 ## Done
+- เพิ่มต้น Liu https://i.pinimg.com/webp/736x/e2/bb/41/e2bb419dbaa5b717f15d849940826725.webp
 - Passport/Gallery ต้องมี filter แบบ all or by collection
 - Sharable passport -> ต้องโชว์ วันที่ share ด้วยนะ -> ไม่้งั้นข้อมูลเก่า
 - แล้วตอนกดปิดก็มี animation เก็บเข้า gallery
