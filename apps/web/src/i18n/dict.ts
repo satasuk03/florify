@@ -143,6 +143,24 @@ export const dict = {
     'welcome.browserSave.body': 'ข้อมูลเกมจะเซฟอยู่บนเบราว์เซอร์นี้เท่านั้น — แต่สามารถ Export ได้ในหน้าตั้งค่า',
     'settings.replayWelcome': 'ดู Welcome อีกครั้ง',
 
+    // ── Daily Missions ─────────────────────────
+    'plot.openMissions': 'เปิดภารกิจประจำวัน',
+    'missions.title': 'ภารกิจประจำวัน',
+    'missions.close': 'ปิด',
+    'missions.resetIn': 'รีเซ็ตใน {time}',
+    'missions.claimAll': 'รับรางวัลทั้งหมด',
+    'missions.claimed': 'รับแล้ว',
+    'missions.noClaim': 'ทำภารกิจเพื่อรับรางวัล',
+    'missions.drops': '{drops} หยด',
+    'missions.dropsAwarded': 'ได้รับ {drops} หยด!',
+    'missions.water': 'รดน้ำ {target} ครั้ง',
+    'missions.plant': 'ปลูกต้นไม้ {target} ต้น',
+    'missions.harvest': 'เก็บเกี่ยว {target} ต้น',
+    'missions.harvest_rare': 'เก็บเกี่ยวสายพันธุ์หายาก',
+    'missions.visit_gallery': 'เยี่ยมชมแกลเลอรี',
+    'missions.visit_floripedia': 'เยี่ยมชม Floripedia',
+    'missions.share_florist_card': 'แชร์ Florist Card',
+
     // ── Harvest overlay ────────────────────────
     'harvest.headline.common': 'ต้นไม้ใหม่ 🌿',
     'harvest.headline.rare': 'พบของหายาก ✨',
@@ -293,6 +311,24 @@ export const dict = {
     'welcome.browserSave.title': 'Browser-only save',
     'welcome.browserSave.body': 'Your game data is saved in this browser only — but you can export it anytime in Settings',
     'settings.replayWelcome': 'Replay Welcome',
+
+    // ── Daily Missions ─────────────────────────
+    'plot.openMissions': 'Open Daily Missions',
+    'missions.title': 'Daily Missions',
+    'missions.close': 'Close',
+    'missions.resetIn': 'Resets in {time}',
+    'missions.claimAll': 'Claim All',
+    'missions.claimed': 'Claimed',
+    'missions.noClaim': 'Complete missions for rewards',
+    'missions.drops': '{drops} drops',
+    'missions.dropsAwarded': 'Received {drops} drops!',
+    'missions.water': 'Water {target} times',
+    'missions.plant': 'Plant {target} trees',
+    'missions.harvest': 'Harvest {target} trees',
+    'missions.harvest_rare': 'Harvest a rare species',
+    'missions.visit_gallery': 'Visit Gallery',
+    'missions.visit_floripedia': 'Visit Floripedia',
+    'missions.share_florist_card': 'Share Florist Card',
 
     // ── Harvest overlay ────────────────────────
     'harvest.headline.common': 'New addition 🌿',

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import { Card } from '@/components/Card';
 import { RarityBadge } from '@/components/RarityBadge';
@@ -8,6 +8,7 @@ import { BackIcon } from '@/components/icons';
 import { FloraImage } from '@/components/FloraImage';
 import { AnimatedNumber } from '@/components/AnimatedNumber';
 import { useGameStore } from '@/store/gameStore';
+import { gameEventBus } from '@/lib/gameEventBus';
 import { SPECIES, SpeciesCollection } from '@/data/species';
 import type { SpeciesDef } from '@/data/species';
 import type { Rarity } from '@florify/shared';
@@ -63,6 +64,10 @@ export function GalleryView() {
   const t = useT();
   const collection = useGameStore((s) => s.state.collection);
   const unlocked = useGameStore((s) => s.uniqueSpeciesUnlocked());
+
+  useEffect(() => {
+    gameEventBus.emit({ type: 'visit', screen: 'gallery' });
+  }, []);
   const totalHarvested = collection.reduce((sum, c) => sum + c.count, 0);
 
   // Build a set of discovered speciesIds for quick lookup

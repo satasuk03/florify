@@ -5,11 +5,15 @@ import {
   MAX_WATER_COST,
   MAX_WATER_DROPS,
   MIN_WATER_COST,
+  MISSION_MILESTONES,
+  MISSION_MILESTONE_DROPS,
+  MISSION_POINTS_PER,
   PITY_POINTS_COMMON,
   PITY_POINTS_LEGENDARY,
   PITY_POINTS_RARE,
   PITY_THRESHOLD,
   type CollectedSpecies,
+  type MissionType,
   type PlayerState,
   type Rarity,
   type TreeInstance,
@@ -23,6 +27,8 @@ import { scheduleSave, flushSave } from './debouncedSave';
 import { createInitialState } from './initialState';
 import { isYesterday, todayLocalDate } from '@/lib/time';
 import { haptic } from '@/lib/haptics';
+import { gameEventBus } from '@/lib/gameEventBus';
+import { pickDailyMissions } from '@/lib/missionPicker';
 
 /**
  * Florify game store.
@@ -81,6 +87,11 @@ export function computeDrops(state: PlayerState): { drops: number; regenAt: numb
   // Guard against missing fields from un-migrated saves
   const baseDrops = state.waterDrops ?? MAX_WATER_DROPS;
   const baseRegen = state.lastDropRegenAt ?? Date.now();
+  // If overflowed past cap (e.g. from mission rewards), no regen —
+  // return current count as-is. Regen resumes once drops fall below cap.
+  if (baseDrops >= MAX_WATER_DROPS) {
+    return { drops: baseDrops, regenAt: baseRegen };
+  }
   const elapsed = Date.now() - baseRegen;
   const gained = Math.max(0, Math.floor(elapsed / DROP_REGEN_MS));
   const drops = Math.min(baseDrops + gained, MAX_WATER_DROPS);
@@ -110,6 +121,11 @@ export interface GameStore {
   resetAllProgress: () => void;
   setDisplayName: (name: string) => void;
   replaceState: (next: PlayerState) => void;
+
+  // Daily missions
+  ensureDailyMissions: () => void;
+  trackMission: (type: MissionType, increment?: number) => void;
+  claimMissions: () => { dropsAwarded: number };
 }
 
 export const DISPLAY_NAME_MAX_LENGTH = 24;
@@ -309,6 +325,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set({ state: next });
     scheduleSave(next);
     haptic('tap');
+    gameEventBus.emit({ type: 'plant' });
     return tree;
   },
 
@@ -384,6 +401,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       set({ state: next });
       scheduleSave(next);
       haptic('harvest');
+      gameEventBus.emit({ type: 'water' });
+      gameEventBus.emit({ type: 'harvest', rarity: harvested.rarity, isNew: !isDuplicate });
       return { ok: true, harvested, pityPointsGained, pityReward };
     }
 
@@ -398,6 +417,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set({ state: next });
     scheduleSave(next);
     haptic('water');
+    gameEventBus.emit({ type: 'water' });
     return { ok: true };
   },
 
@@ -456,6 +476,86 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const stamped: PlayerState = { ...next, updatedAt: Date.now() };
     set({ state: stamped });
     flushSave(stamped);
+  },
+
+  // ── Daily missions ───────────────────────────────────────────────
+
+  ensureDailyMissions: () => {
+    const s = get().state;
+    const today = todayLocalDate();
+    if (s.dailyMissions.date === today) return;
+
+    const missions = pickDailyMissions(today, s.userId);
+    const next: PlayerState = {
+      ...s,
+      dailyMissions: {
+        date: today,
+        missions,
+        claimedPoints: 0,
+        claimedMilestones: [],
+      },
+      updatedAt: Date.now(),
+    };
+    set({ state: next });
+    scheduleSave(next);
+  },
+
+  trackMission: (type: MissionType, increment = 1) => {
+    const s = get().state;
+    const { missions } = s.dailyMissions;
+    let changed = false;
+    const updated = missions.map((m) => {
+      if (m.type !== type || m.completed) return m;
+      const progress = Math.min(m.progress + increment, m.target);
+      changed = true;
+      return { ...m, progress, completed: progress >= m.target };
+    });
+    if (!changed) return;
+    const next: PlayerState = {
+      ...s,
+      dailyMissions: { ...s.dailyMissions, missions: updated },
+      updatedAt: Date.now(),
+    };
+    set({ state: next });
+    scheduleSave(next);
+  },
+
+  claimMissions: (): { dropsAwarded: number } => {
+    const s = get().state;
+    const { missions, claimedMilestones } = s.dailyMissions;
+
+    // Total points from all completed missions
+    const totalPoints = missions.filter((m) => m.completed).length * MISSION_POINTS_PER;
+
+    // Find newly reachable milestones
+    let dropsAwarded = 0;
+    const newClaimed = [...claimedMilestones];
+    for (let i = 0; i < MISSION_MILESTONES.length; i++) {
+      const milestone = MISSION_MILESTONES[i]!;
+      const drops = MISSION_MILESTONE_DROPS[i]!;
+      if (totalPoints >= milestone && !claimedMilestones.includes(milestone)) {
+        newClaimed.push(milestone);
+        dropsAwarded += drops;
+      }
+    }
+    if (dropsAwarded === 0) return { dropsAwarded: 0 };
+
+    // Award drops — allow overflow past MAX_WATER_DROPS
+    const { drops: currentDrops, regenAt } = computeDrops(s);
+    const next: PlayerState = {
+      ...s,
+      waterDrops: currentDrops + dropsAwarded,
+      lastDropRegenAt: regenAt,
+      dailyMissions: {
+        ...s.dailyMissions,
+        claimedPoints: totalPoints,
+        claimedMilestones: newClaimed,
+      },
+      updatedAt: Date.now(),
+    };
+    set({ state: next });
+    scheduleSave(next);
+    return { dropsAwarded };
   },
 }));
 

@@ -14,10 +14,12 @@ import {
   SettingsIcon,
   WaterDropIcon,
   SproutIcon,
+  CalendarIcon,
 } from "@/components/icons";
 import { FloristCardSheet } from "@/components/florist-card/FloristCardSheet";
 import { GuideBookSheet } from "@/components/guidebook/GuideBookSheet";
 import { SettingsSheet } from "@/components/settings/SettingsSheet";
+import { DailyMissionSheet } from "@/components/daily-missions/DailyMissionSheet";
 import { HarvestOverlay } from "@/components/HarvestOverlay";
 import { SeedPacket } from "@/components/SeedPacket";
 import { WaterSplash } from "@/components/WaterSplash";
@@ -28,6 +30,7 @@ import { useHandheld } from "@/hooks/useHandheld";
 import { SPECIES } from "@/data/species";
 import { useT } from "@/i18n/useT";
 import { loadSettings, saveSettings } from "@/store/settingsStore";
+import { MISSION_POINTS_PER, MISSION_MILESTONES } from "@florify/shared";
 
 /**
  * Home screen — designs/07 §7.1.
@@ -49,6 +52,7 @@ export function PlotView() {
   const [showFlorist, setShowFlorist] = useState(false);
   const [showGuideBook, setShowGuideBook] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [showMissions, setShowMissions] = useState(false);
   const [showWelcome, setShowWelcome] = useState(false);
   const displayName = useGameStore((s) => s.state.displayName);
   const setDisplayName = useGameStore((s) => s.setDisplayName);
@@ -249,6 +253,7 @@ export function PlotView() {
             <GalleryIcon />
           </CornerButton>
         </div>
+        <MissionCornerButton onClick={() => setShowMissions(true)} />
         <LanguageToggle />
       </div>
 
@@ -324,6 +329,10 @@ export function PlotView() {
         </div>
       </div>
 
+      <DailyMissionSheet
+        open={showMissions}
+        onClose={() => setShowMissions(false)}
+      />
       <FloristCardSheet
         open={showFlorist}
         onClose={() => setShowFlorist(false)}
@@ -408,6 +417,35 @@ function ActionButton({
           <span className="font-serif tracking-wide">{label}</span>
         </span>
       </Button>
+    </div>
+  );
+}
+
+/**
+ * Mission corner button with a notification dot when there are
+ * unclaimed completed missions.
+ */
+function MissionCornerButton({ onClick }: { onClick: () => void }) {
+  const t = useT();
+  const missions = useGameStore((s) => s.state.dailyMissions.missions);
+  const claimedMilestones = useGameStore((s) => s.state.dailyMissions.claimedMilestones);
+
+  const totalPoints = missions.filter((m) => m.completed).length * MISSION_POINTS_PER;
+  const hasUnclaimed = MISSION_MILESTONES.some(
+    (ms) => totalPoints >= ms && !claimedMilestones.includes(ms),
+  );
+
+  return (
+    <div className="pointer-events-auto relative">
+      <CornerButton onClick={onClick} label={t('plot.openMissions')} size="primary">
+        <CalendarIcon />
+      </CornerButton>
+      {hasUnclaimed && (
+        <span
+          className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-leaf-500 ring-2 ring-cream-50 animate-pulse"
+          aria-hidden
+        />
+      )}
     </div>
   );
 }

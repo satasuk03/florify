@@ -9,6 +9,7 @@ import { encodePassportLink } from '@/lib/passportLink';
 import { copyText } from '@/lib/clipboard';
 import { PassportCard } from './PassportCard';
 import { sharePassport, type ShareResult } from './sharePassport';
+import { gameEventBus } from '@/lib/gameEventBus';
 
 /**
  * Florist Card modal — passport preview + share action.
@@ -109,9 +110,11 @@ export function FloristCardSheet({ open, onClose }: Props) {
     switch (result.kind) {
       case 'shared':
         setSheet({ phase: 'shared' });
+        gameEventBus.emit({ type: 'share' });
         return;
       case 'downloaded':
         setSheet({ phase: 'downloaded', filename: result.filename });
+        gameEventBus.emit({ type: 'share' });
         toast('บันทึกรูปแล้ว — เปิด Instagram แล้วเลือกจากคลังได้เลย');
         return;
       case 'cancelled':

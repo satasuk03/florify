@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { selectFloristCard, useGameStore, computeDrops } from '@/store/gameStore';
 import { createInitialState } from '@/store/initialState';
-import { MAX_WATER_DROPS, MAX_WATER_COST, MIN_WATER_COST, FIRST_FLORA_COST, DROP_REGEN_MS, PITY_THRESHOLD, PITY_POINTS_COMMON, PITY_POINTS_RARE, PITY_POINTS_LEGENDARY, type TreeInstance, type CollectedSpecies, type PlayerState } from '@florify/shared';
+import { MAX_WATER_DROPS, MAX_WATER_COST, MIN_WATER_COST, FIRST_FLORA_COST, DROP_REGEN_MS, PITY_THRESHOLD, PITY_POINTS_COMMON, PITY_POINTS_RARE, PITY_POINTS_LEGENDARY, SCHEMA_VERSION, type TreeInstance, type CollectedSpecies, type PlayerState } from '@florify/shared';
 import { SPECIES } from '@/data/species';
 import { todayLocalDate } from '@/lib/time';
 import { migrate } from '@/store/migrations';
@@ -446,7 +446,7 @@ describe('migrate v2 → v3', () => {
     };
 
     const result = migrate(v2State as unknown as { schemaVersion: number } & Record<string, unknown>);
-    expect(result.schemaVersion).toBe(5); // migrates through v3 → v4 → v5
+    expect(result.schemaVersion).toBe(SCHEMA_VERSION); // migrates through v3 → v4 → v5
     expect(result.waterDrops).toBe(MAX_WATER_DROPS);
     expect(result.lastDropRegenAt).toBeGreaterThan(0);
     expect(result.activeTree).toBeDefined();
@@ -468,7 +468,7 @@ describe('migrate v2 → v3', () => {
     };
 
     const result = migrate(v2State as unknown as { schemaVersion: number } & Record<string, unknown>);
-    expect(result.schemaVersion).toBe(5);
+    expect(result.schemaVersion).toBe(SCHEMA_VERSION);
     expect(result.waterDrops).toBe(MAX_WATER_DROPS);
     expect(result.activeTree).toBeNull();
   });
@@ -614,7 +614,7 @@ describe('migrate v4 → v5', () => {
       streak: { currentStreak: 0, longestStreak: 0, lastCheckinDate: '' },
     };
     const result = migrate(v4State as unknown as { schemaVersion: number } & Record<string, unknown>);
-    expect(result.schemaVersion).toBe(5);
+    expect(result.schemaVersion).toBe(SCHEMA_VERSION);
     expect(result.pityPoints).toBe(0);
   });
 });
@@ -640,7 +640,7 @@ describe('migrate v3 → v4', () => {
     };
 
     const result = migrate(v3State as unknown as { schemaVersion: number } & Record<string, unknown>);
-    expect(result.schemaVersion).toBe(5);
+    expect(result.schemaVersion).toBe(SCHEMA_VERSION);
     expect(result.collection.length).toBe(2); // 2 unique species
 
     // Sorted by lastHarvestedAt desc: speciesId 5 (4000) before speciesId 10 (3000)

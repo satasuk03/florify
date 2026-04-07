@@ -13,6 +13,7 @@ export function migrate(state: UnknownState): PlayerState {
   if (s.schemaVersion === 2) s = migrateV2toV3(s);
   if (s.schemaVersion === 3) s = migrateV3toV4(s);
   if (s.schemaVersion === 4) s = migrateV4toV5(s);
+  if (s.schemaVersion === 5) s = migrateV5toV6(s);
   if (s.schemaVersion !== SCHEMA_VERSION) {
     console.warn(`[migrate] unknown schemaVersion ${s.schemaVersion}, falling back to as-is`);
   }
@@ -88,4 +89,18 @@ function migrateV3toV4(s: UnknownState): UnknownState {
 // v4 → v5: add pity points (dried leaves 🍂) counter for bad-luck protection.
 function migrateV4toV5(s: UnknownState): UnknownState {
   return { ...s, schemaVersion: 5, pityPoints: 0 };
+}
+
+// v5 → v6: add daily missions system.
+function migrateV5toV6(s: UnknownState): UnknownState {
+  return {
+    ...s,
+    schemaVersion: 6,
+    dailyMissions: {
+      date: '',
+      missions: [],
+      claimedPoints: 0,
+      claimedMilestones: [],
+    },
+  };
 }

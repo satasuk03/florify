@@ -16,5 +16,11 @@ export function createInitialState(): PlayerState {
     stats: { totalPlanted: 0, totalWatered: 0, totalHarvested: 0 },
     streak: { currentStreak: 0, longestStreak: 0, lastCheckinDate: '' },
     pityPoints: 0,
+    dailyMissions: {
+      date: '',
+      missions: [],
+      claimedPoints: 0,
+      claimedMilestones: [],
+    },
   };
 }
