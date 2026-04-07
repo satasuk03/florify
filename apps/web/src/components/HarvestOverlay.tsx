@@ -9,6 +9,7 @@ import { HarvestConfetti } from '@/components/HarvestConfetti';
 import { SPECIES } from '@/data/species';
 import { useT, useLanguage } from '@/i18n/useT';
 import { shareSpecies } from '@/lib/shareSpecies';
+import { useGameStore } from '@/store/gameStore';
 import type { DictKey } from '@/i18n/dict';
 
 /**
@@ -66,6 +67,7 @@ const FLY_DURATION_MS = 720;
 export function HarvestOverlay({ tree, pityPointsGained, pityReward, onDismiss }: Props) {
   const t = useT();
   const lang = useLanguage();
+  const displayName = useGameStore((s) => s.state.displayName);
   const [toast, setToast] = useState<string | null>(null);
   const [collecting, setCollecting] = useState(false);
   const [flying, setFlying] = useState<FlyState | null>(null);
@@ -143,10 +145,17 @@ export function HarvestOverlay({ tree, pityPointsGained, pityReward, onDismiss }
 
   const handleShare = async () => {
     if (!species) return;
-    const result = await shareSpecies(species.id, {
-      title: t('floripedia.shareTitle', { name: species.name }),
-      text: t('floripedia.shareText', { name: species.name }),
-    });
+    const result = await shareSpecies(
+      species.id,
+      {
+        title: t('floripedia.shareTitle', { name: species.name }),
+        text: t('floripedia.shareText', { name: species.name }),
+      },
+      {
+        harvester: displayName,
+        harvestedAt: tree.harvestedAt ?? Date.now(),
+      },
+    );
     if (result.kind === 'copied') {
       setToast(t('floripedia.copied'));
       setTimeout(() => setToast(null), 2400);

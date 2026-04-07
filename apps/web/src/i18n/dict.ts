@@ -206,6 +206,7 @@ export const dict = {
     "floripedia.shareTitle": "Florify — {name}",
     "floripedia.shareText": "ฉันเจอ {name} ใน Florify 🌿",
     "floripedia.copied": "คัดลอกลิงก์แล้ว",
+    "floripedia.harvestedBy": "เก็บเกี่ยวโดย {name}",
   },
   en: {
     // ── PlotView ───────────────────────────────
@@ -405,6 +406,7 @@ export const dict = {
     "floripedia.shareTitle": "Florify — {name}",
     "floripedia.shareText": "I found {name} in Florify 🌿",
     "floripedia.copied": "Link copied",
+    "floripedia.harvestedBy": "Harvested by {name}",
   },
 } as const satisfies Record<Language, Record<string, string>>;
 

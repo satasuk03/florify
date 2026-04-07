@@ -41,9 +41,11 @@ const STAGE_LABEL: Record<Lang, (s: Stage) => string> = {
 
 interface Props {
   speciesId: number | null;
+  harvester?: string | null;
+  harvestedAt?: number | null;
 }
 
-export function FloripediaView({ speciesId }: Props) {
+export function FloripediaView({ speciesId, harvester, harvestedAt }: Props) {
   const t = useT();
   const appLang = useLanguage();
   const hydrated = useGameStore((s) => s.hydrated);
@@ -170,6 +172,26 @@ export function FloripediaView({ speciesId }: Props) {
           >
             {description}
           </p>
+
+          {harvester && (
+            <div className="mt-3 flex items-center gap-2 text-xs text-ink-500">
+              <span>{t('floripedia.harvestedBy', { name: harvester })}</span>
+              {harvestedAt && (
+                <>
+                  <span aria-hidden>·</span>
+                  <time dateTime={new Date(harvestedAt).toISOString()}>
+                    {new Date(harvestedAt).toLocaleDateString(lang === 'th' ? 'th-TH' : 'en-US', {
+                      year: 'numeric',
+                      month: 'short',
+                      day: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })}
+                  </time>
+                </>
+              )}
+            </div>
+          )}
 
           <div className="mt-4 pt-4 border-t border-cream-300/70 flex justify-end">
             <Button variant="secondary" size="md" onClick={handleShare}>

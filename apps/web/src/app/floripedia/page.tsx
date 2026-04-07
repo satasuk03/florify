@@ -27,5 +27,24 @@ function FloripediaPageInner() {
   const raw = params.get('id');
   const parsed = raw == null ? null : Number(raw);
   const speciesId = parsed != null && Number.isFinite(parsed) ? parsed : null;
-  return <FloripediaView speciesId={speciesId} />;
+
+  // Decode optional harvest context (base64-encoded by shareSpecies).
+  let harvester: string | null = null;
+  let harvestedAt: number | null = null;
+  try {
+    const byRaw = params.get('by');
+    const atRaw = params.get('at');
+    if (byRaw) harvester = decodeURIComponent(atob(byRaw));
+    if (atRaw) harvestedAt = Number(atob(atRaw)) || null;
+  } catch {
+    // Malformed params — ignore silently.
+  }
+
+  return (
+    <FloripediaView
+      speciesId={speciesId}
+      harvester={harvester}
+      harvestedAt={harvestedAt}
+    />
+  );
 }

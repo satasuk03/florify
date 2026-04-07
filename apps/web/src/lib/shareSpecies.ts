@@ -29,12 +29,21 @@ interface ShareCopy {
   text: string;
 }
 
+/** Optional harvest context embedded in the share URL. */
+export interface HarvestInfo {
+  /** Display name of the player who harvested. */
+  harvester: string;
+  /** Epoch-ms timestamp of the harvest. */
+  harvestedAt: number;
+}
+
 export async function shareSpecies(
   speciesId: number,
   copy: ShareCopy,
+  harvest?: HarvestInfo,
 ): Promise<ShareResult> {
   try {
-    const url = buildSpeciesUrl(speciesId);
+    const url = buildSpeciesUrl(speciesId, harvest);
 
     if (canShareUrl()) {
       try {
@@ -56,12 +65,22 @@ export async function shareSpecies(
   }
 }
 
-function buildSpeciesUrl(speciesId: number): string {
+function buildSpeciesUrl(speciesId: number, harvest?: HarvestInfo): string {
   // `trailingSlash: true` in next.config.ts → the route is /floripedia/
   // not /floripedia. Keep the slash before the query string so the URL
   // matches the emitted static file exactly.
   const origin = typeof window !== 'undefined' ? window.location.origin : '';
-  return `${origin}/floripedia/?id=${speciesId}`;
+  let url = `${origin}/floripedia/?id=${speciesId}`;
+
+  if (harvest) {
+    // Base64-encode harvester name and timestamp so the URL stays clean
+    // and non-ASCII names (Thai, etc.) don't bloat the link.
+    const by = btoa(encodeURIComponent(harvest.harvester));
+    const at = btoa(String(harvest.harvestedAt));
+    url += `&by=${by}&at=${at}`;
+  }
+
+  return url;
 }
 
 function canShareUrl(): boolean {
