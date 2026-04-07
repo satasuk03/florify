@@ -96,6 +96,7 @@ export function FloristCardSheet({ open, onClose }: Props) {
       const copied = await copyText(encodePassportLink(data));
       if (copied) {
         toast("คัดลอกลิงค์พาสปอร์ตแล้ว 🔗");
+        gameEventBus.emit({ type: "share" });
       } else {
         toast("เบราว์เซอร์นี้ไม่รองรับการคัดลอก");
       }
