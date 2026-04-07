@@ -19,15 +19,15 @@
 import { useEffect, useState } from "react";
 
 type Drop = {
-  dx: number;      // horizontal scatter in px
-  delay: number;   // ms before this droplet starts falling
+  dx: number; // horizontal scatter in px
+  delay: number; // ms before this droplet starts falling
 };
 
 const DROPS: Drop[] = [
   { dx: -28, delay: 0 },
-  { dx: 14,  delay: 80 },
-  { dx: -6,  delay: 150 },
-  { dx: 32,  delay: 220 },
+  { dx: 14, delay: 80 },
+  { dx: -6, delay: 150 },
+  { dx: 32, delay: 220 },
   { dx: -18, delay: 300 },
 ];
 
@@ -57,7 +57,7 @@ export function WaterSplash() {
       {/* Anchor at roughly the visual base of the plant — the flora
           image is full-bleed object-cover so the stem base tends to
           sit around the lower third of the viewport. */}
-      <div className="absolute left-1/2 bottom-[26%] -translate-x-1/2">
+      <div className="absolute left-1/2 bottom-[40%] -translate-x-1/2">
         {DROPS.map((d, i) => (
           <span key={i} className="contents">
             {/* Droplet — a chunky elongated teardrop in water blue.

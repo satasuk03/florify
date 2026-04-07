@@ -1,10 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { MAX_WATER_DROPS, type TreeInstance } from "@florify/shared";
-import { FloraImage } from "@/components/FloraImage";
 import { PerlinNoise } from "@/components/PerlinNoise";
-import { Button } from "@/components/Button";
 import { DropsIndicator } from "@/components/DropsIndicator";
 import { CornerButton } from "@/components/CornerButton";
 import {
@@ -14,7 +12,6 @@ import {
   SettingsIcon,
   WaterDropIcon,
   SproutIcon,
-  CalendarIcon,
 } from "@/components/icons";
 import { FloristCardSheet } from "@/components/florist-card/FloristCardSheet";
 import { GuideBookSheet } from "@/components/guidebook/GuideBookSheet";
@@ -26,12 +23,15 @@ import { SeedPacket } from "@/components/SeedPacket";
 import { WaterSplash } from "@/components/WaterSplash";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import { WelcomeDialogue } from "@/components/welcome/WelcomeDialogue";
+import {
+  ActionButton,
+  MissionCornerButton,
+  HandheldFlora,
+} from "@/components/plot-view";
 import { useGameStore } from "@/store/gameStore";
-import { useHandheld } from "@/hooks/useHandheld";
 import { SPECIES } from "@/data/species";
 import { useT } from "@/i18n/useT";
 import { loadSettings, saveSettings } from "@/store/settingsStore";
-import { MISSION_POINTS_PER, MISSION_MILESTONES } from "@florify/shared";
 import { todayLocalDate } from "@/lib/time";
 
 /**
@@ -86,7 +86,9 @@ export function PlotView() {
   };
   const [harvested, setHarvested] = useState<TreeInstance | null>(null);
   const [pityPointsGained, setPityPointsGained] = useState(0);
-  const [pityReward, setPityReward] = useState<{ speciesId: number; rarity: import('@florify/shared').Rarity } | undefined>();
+  const [pityReward, setPityReward] = useState<
+    { speciesId: number; rarity: import("@florify/shared").Rarity } | undefined
+  >();
   // Monotonic counter keyed onto <WaterSplash> — incrementing it on
   // every successful water tap remounts the component and replays its
   // one-shot droplet animation from the start. 0 means "never tapped",
@@ -267,7 +269,11 @@ export function PlotView() {
         {/* id is read by HarvestOverlay to measure the fly-to-gallery
             target rect when the player taps "Collect". */}
         <div id="fly-target-gallery" className="pointer-events-auto">
-          <CornerButton to="/gallery" label={t('plot.openGallery')} size="primary">
+          <CornerButton
+            to="/gallery"
+            label={t("plot.openGallery")}
+            size="primary"
+          >
             <GalleryIcon />
           </CornerButton>
         </div>
@@ -285,7 +291,7 @@ export function PlotView() {
       >
         <CornerButton
           onClick={() => setShowFlorist(true)}
-          label={t('plot.openFloristCard')}
+          label={t("plot.openFloristCard")}
           size="primary"
         >
           <FloristCardIcon />
@@ -293,7 +299,7 @@ export function PlotView() {
 
         <CornerButton
           onClick={() => setShowGuideBook(true)}
-          label={t('plot.openGuideBook')}
+          label={t("plot.openGuideBook")}
           size="primary"
         >
           <GuideBookIcon />
@@ -301,7 +307,7 @@ export function PlotView() {
 
         <CornerButton
           onClick={() => setShowSettings(true)}
-          label={t('plot.openSettings')}
+          label={t("plot.openSettings")}
           size="primary"
         >
           <SettingsIcon />
@@ -310,14 +316,14 @@ export function PlotView() {
 
       {/* ─── BOTTOM CENTER ACTION ──────────────────────── */}
       <div
-        className="absolute bottom-0 left-0 right-0 flex flex-col items-center pointer-events-none animate-fade-up"
+        className="absolute bottom-0 left-0 right-0 flex flex-col items-center pointer-events-none animate-fade-up overflow-visible"
         style={{
           paddingBottom: "calc(env(safe-area-inset-bottom) + 1.5rem)",
           animationDelay: "280ms",
         }}
       >
         <div
-          className={`pointer-events-auto flex flex-col items-center transition-opacity duration-[240ms] ease-out ${
+          className={`pointer-events-auto flex flex-col items-center overflow-visible transition-opacity duration-[240ms] ease-out ${
             phase === "opening"
               ? "opacity-0 pointer-events-none"
               : "opacity-100"
@@ -332,25 +338,20 @@ export function PlotView() {
             <ActionButton
               onClick={handlePlant}
               icon={<SproutIcon size={22} />}
-              label={t('plot.plant')}
-              tone="plant"
+              label={t("plot.plant")}
             />
           ) : phase === "tree" ? (
             <ActionButton
               onClick={handleWater}
               disabled={!canWater}
               icon={<WaterDropIcon size={22} />}
-              label={t('plot.water')}
-              tone="water"
+              label={t("plot.water")}
             />
           ) : null}
         </div>
       </div>
 
-      <CheckinModal
-        open={showCheckin}
-        onClose={() => setShowCheckin(false)}
-      />
+      <CheckinModal open={showCheckin} onClose={() => setShowCheckin(false)} />
       <DailyMissionSheet
         open={showMissions}
         onClose={() => setShowMissions(false)}
@@ -385,168 +386,5 @@ export function PlotView() {
         />
       )}
     </main>
-  );
-}
-
-/**
- * Bottom-center action button (Plant / Water). A tuned variant of the
- * primary Button: full pill, icon + label pair, warm gradient fill, inner
- * highlight ring, and a soft halo behind it that tints to match the action
- * (clay for "plant", a cooler sky-tinted clay for "water"). Disabled state
- * drops the halo and desaturates — the parent still shows the countdown.
- *
- * On tap the button plays a multi-layered "juicy" feedback sequence:
- *   1. Squish & spring-bounce on the whole wrapper
- *   2. Halo flash — scale + opacity burst on the background glow
- *   3. Icon wobble-splash — the water-drop icon rocks & scales
- *   4. Shine sweep — a glossy highlight sweeps across the pill
- */
-function ActionButton({
-  onClick,
-  disabled,
-  icon,
-  label,
-  tone,
-}: {
-  onClick: () => void;
-  disabled?: boolean;
-  icon: React.ReactNode;
-  label: string;
-  tone: "plant" | "water";
-}) {
-  const [tapping, setTapping] = useState(0);
-  const handleClick = useCallback(() => {
-    if (disabled) return;
-    setTapping((n) => n + 1);
-    onClick();
-  }, [disabled, onClick]);
-
-  return (
-    <div
-      className="relative"
-      style={
-        tapping
-          ? { animation: "water-btn-squish 420ms cubic-bezier(.22,.68,.36,1.2) both" }
-          : undefined
-      }
-      key={tapping}
-    >
-      {/* Warm clay halo — deeply saturated orange glow behind the glass
-          so the tint reads vividly against the cream backdrop. Hidden
-          when disabled so the cooldown state looks visibly "asleep". */}
-      <div
-        aria-hidden
-        className={`absolute -inset-5 rounded-full blur-2xl transition-opacity duration-500
-          bg-[radial-gradient(ellipse_at_center,rgba(222,145,95,0.55),rgba(199,130,90,0.32)_55%,transparent_82%)]
-          ${disabled ? "opacity-0" : "opacity-100 animate-pulse-slow"}`}
-        style={
-          tapping
-            ? { animation: "water-btn-halo-flash 500ms ease-out both" }
-            : undefined
-        }
-        key={`halo-${tapping}`}
-      />
-      <Button
-        size="lg"
-        onClick={handleClick}
-        disabled={disabled}
-        className={`relative !rounded-full !h-14 px-10 min-w-[220px]
-          !bg-[rgba(216,148,110,0.55)] backdrop-blur-xl backdrop-saturate-150
-          text-cream-50
-          ring-1 ring-inset ring-white/40
-          border border-clay-300/50
-          shadow-[0_10px_28px_-10px_rgba(185,100,60,0.5),inset_0_1px_0_0_rgba(255,235,215,0.6),inset_0_-8px_18px_-8px_rgba(170,85,45,0.4)]
-          hover:!bg-[rgba(220,152,114,0.65)] hover:shadow-[0_14px_36px_-10px_rgba(185,100,60,0.6),inset_0_1px_0_0_rgba(255,240,220,0.65),inset_0_-8px_18px_-8px_rgba(170,85,45,0.45)]
-          before:content-[''] before:absolute before:inset-x-3 before:top-1 before:h-1/2 before:rounded-full
-          before:bg-gradient-to-b before:from-white/50 before:to-transparent before:pointer-events-none
-          overflow-hidden active:!scale-100
-          ${disabled ? "saturate-50 opacity-60" : ""}`}
-      >
-        <span className="relative flex items-center justify-center gap-2.5 drop-shadow-[0_1px_1px_rgba(90,45,20,0.45)]">
-          <span
-            className="text-cream-50"
-            style={
-              tapping
-                ? { animation: "water-btn-icon-splash 450ms cubic-bezier(.22,.68,.36,1.15) both", display: "inline-block" }
-                : { display: "inline-block" }
-            }
-            key={`icon-${tapping}`}
-          >
-            {icon}
-          </span>
-          <span className="font-serif tracking-wide">{label}</span>
-        </span>
-        {/* Shine sweep — a glossy band that crosses the pill on tap */}
-        {tapping > 0 && (
-          <span
-            key={`shine-${tapping}`}
-            aria-hidden
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              animation: "water-btn-shine 400ms ease-out 80ms both",
-              background: "linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.45) 50%, transparent 65%)",
-            }}
-          />
-        )}
-      </Button>
-    </div>
-  );
-}
-
-/**
- * Mission corner button with a notification dot when there are
- * unclaimed completed missions.
- */
-function MissionCornerButton({ onClick }: { onClick: () => void }) {
-  const t = useT();
-  const missions = useGameStore((s) => s.state.dailyMissions.missions);
-  const claimedMilestones = useGameStore((s) => s.state.dailyMissions.claimedMilestones);
-
-  const totalPoints = missions.filter((m) => m.completed).length * MISSION_POINTS_PER;
-  const hasUnclaimed = MISSION_MILESTONES.some(
-    (ms) => totalPoints >= ms && !claimedMilestones.includes(ms),
-  );
-
-  return (
-    <div className="pointer-events-auto relative">
-      <CornerButton onClick={onClick} label={t('plot.openMissions')} size="primary">
-        <CalendarIcon />
-      </CornerButton>
-      {hasUnclaimed && (
-        <span
-          className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-clay-500 ring-2 ring-cream-50 animate-pulse"
-          aria-hidden
-        />
-      )}
-    </div>
-  );
-}
-
-/**
- * Flora layer with handheld-camera wobble. Extracted so the `useHandheld`
- * effect mounts with the ref'd div — calling the hook higher up in
- * `PlotView` fires its effect before the gated flora div exists, so
- * `ref.current` is null and the RAF loop never starts.
- */
-function HandheldFlora({
-  speciesId,
-  progress,
-}: {
-  speciesId: number;
-  progress: number;
-}) {
-  const ref = useRef<HTMLDivElement>(null);
-  useHandheld(ref);
-  return (
-    <div
-      ref={ref}
-      className="absolute inset-0 pointer-events-none select-none will-change-transform animate-fade-in"
-    >
-      <FloraImage
-        speciesId={speciesId}
-        progress={progress}
-        className="absolute inset-0 h-full w-full object-cover"
-      />
-    </div>
   );
 }

@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
-import { useEffect, useState, useCallback } from 'react';
-import { Button } from '@/components/Button';
-import { CheckIcon } from '@/components/icons';
-import { useGameStore } from '@/store/gameStore';
-import { useT } from '@/i18n/useT';
-import { toast } from '@/lib/toast';
-import { haptic } from '@/lib/haptics';
+import { useEffect, useState, useCallback } from "react";
+import { Button } from "@/components/Button";
+import { CheckIcon } from "@/components/icons";
+import { useGameStore } from "@/store/gameStore";
+import { useT } from "@/i18n/useT";
+import { toast } from "@/lib/toast";
+import { haptic } from "@/lib/haptics";
 import {
   MISSION_MILESTONES,
   MISSION_MILESTONE_DROPS,
   MISSION_POINTS_PER,
   type DailyMission,
-} from '@florify/shared';
-import { ClaimBurst } from './ClaimBurst';
+} from "@florify/shared";
+import { ClaimBurst } from "./ClaimBurst";
 
 interface Props {
   open: boolean;
@@ -26,10 +26,10 @@ export function DailyMissionSheet({ open, onClose }: Props) {
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === "Escape") onClose();
     };
-    document.addEventListener('keydown', onKey);
-    return () => document.removeEventListener('keydown', onKey);
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
   }, [open, onClose]);
 
   if (!open) return null;
@@ -40,7 +40,7 @@ export function DailyMissionSheet({ open, onClose }: Props) {
       onClick={onClose}
       role="dialog"
       aria-modal="true"
-      aria-label={t('missions.title')}
+      aria-label={t("missions.title")}
     >
       <div
         className="w-full sm:max-w-md bg-cream-50 rounded-t-3xl sm:rounded-3xl shadow-soft-lg max-h-[92dvh] overflow-y-auto scrollbar-elegant animate-sheet-up"
@@ -49,7 +49,7 @@ export function DailyMissionSheet({ open, onClose }: Props) {
         {/* Decorative header with gradient */}
         <div className="relative overflow-hidden rounded-t-3xl sm:rounded-t-3xl">
           <div className="absolute inset-0 bg-gradient-to-b from-clay-400/8 to-transparent pointer-events-none" />
-          <div className="relative px-6 pt-6 pb-4">
+          <div className="relative px-6 pt-4 pb-4">
             <Header onClose={onClose} />
           </div>
         </div>
@@ -72,17 +72,17 @@ function Header({ onClose }: { onClose: () => void }) {
     <div className="flex justify-between items-start">
       <div>
         <h2 className="font-serif text-2xl text-ink-900 tracking-tight">
-          {t('missions.title')}
+          {t("missions.title")}
         </h2>
         <div className="flex items-center gap-1.5 text-xs text-ink-400 mt-1">
           <span className="inline-block w-1.5 h-1.5 rounded-full bg-clay-500 animate-pulse" />
-          {t('missions.resetIn', { time: '' })}
+          {t("missions.resetIn", { time: "" })}
           <MidnightCountdown />
         </div>
       </div>
       <button
         onClick={onClose}
-        aria-label={t('missions.close')}
+        aria-label={t("missions.close")}
         className="text-ink-400 text-xl leading-none w-9 h-9 flex items-center justify-center hover:bg-cream-100 rounded-full transition-colors -mt-0.5 -mr-1"
       >
         ✕
@@ -107,7 +107,7 @@ function MidnightCountdown() {
 
   return (
     <span className="tabular-nums font-mono font-medium text-ink-500">
-      {h}:{m.toString().padStart(2, '0')}:{s.toString().padStart(2, '0')}
+      {h}:{m.toString().padStart(2, "0")}:{s.toString().padStart(2, "0")}
     </span>
   );
 }
@@ -117,20 +117,30 @@ function MidnightCountdown() {
 function MilestoneBar() {
   const t = useT();
   const missions = useGameStore((s) => s.state.dailyMissions.missions);
-  const claimedMilestones = useGameStore((s) => s.state.dailyMissions.claimedMilestones);
-  const totalPoints = missions.filter((m) => m.completed).length * MISSION_POINTS_PER;
+  const claimedMilestones = useGameStore(
+    (s) => s.state.dailyMissions.claimedMilestones,
+  );
+  const totalPoints =
+    missions.filter((m) => m.completed).length * MISSION_POINTS_PER;
   const maxPoints = MISSION_MILESTONES[MISSION_MILESTONES.length - 1]!;
-  const fillPct = Math.min(100, (totalPoints / maxPoints) * 100);
 
   return (
-    <div className="mb-5 rounded-2xl bg-cream-100 border border-cream-200 px-5 pt-4 pb-4"
-      style={{ animation: 'mission-card-in 500ms cubic-bezier(0.22, 1, 0.36, 1) both', animationDelay: '80ms' }}
+    <div
+      className="mb-4 rounded-2xl bg-cream-100 border border-cream-200 px-5 pt-2 pb-2"
+      style={{
+        animation: "mission-card-in 500ms cubic-bezier(0.22, 1, 0.36, 1) both",
+        animationDelay: "80ms",
+      }}
     >
       {/* Points display */}
       <div className="flex items-baseline justify-between mb-4">
-        <span className="text-sm text-ink-500">{t('missions.milestoneLabel')}</span>
+        <span className="text-sm text-ink-500">
+          {t("missions.milestoneLabel")}
+        </span>
         <div className="flex items-baseline gap-1">
-          <span className="font-serif text-lg font-bold text-ink-900 tabular-nums">{totalPoints}</span>
+          <span className="font-serif text-lg font-bold text-ink-900 tabular-nums">
+            {totalPoints}
+          </span>
           <span className="text-xs text-ink-400">/ {maxPoints}P</span>
         </div>
       </div>
@@ -145,18 +155,26 @@ function MilestoneBar() {
 
           // Is the segment between this milestone and the next filled?
           const nextMilestone = MISSION_MILESTONES[i + 1];
-          const segmentFilled = nextMilestone ? totalPoints >= nextMilestone : false;
+          const segmentFilled = nextMilestone
+            ? totalPoints >= nextMilestone
+            : false;
           const segmentPartial = nextMilestone
             ? totalPoints > milestone && totalPoints < nextMilestone
             : false;
-          const segmentPct = nextMilestone && segmentPartial
-            ? ((totalPoints - milestone) / (nextMilestone - milestone)) * 100
-            : segmentFilled ? 100 : 0;
+          const segmentPct =
+            nextMilestone && segmentPartial
+              ? ((totalPoints - milestone) / (nextMilestone - milestone)) * 100
+              : segmentFilled
+                ? 100
+                : 0;
 
           return (
-            <div key={milestone} className={`flex items-center ${isLast ? '' : 'flex-1'}`}
+            <div
+              key={milestone}
+              className={`flex items-center ${isLast ? "" : "flex-1"}`}
               style={{
-                animation: 'mission-card-in 400ms cubic-bezier(0.22, 1, 0.36, 1) both',
+                animation:
+                  "mission-card-in 400ms cubic-bezier(0.22, 1, 0.36, 1) both",
                 animationDelay: `${300 + i * 80}ms`,
               }}
             >
@@ -165,16 +183,19 @@ function MilestoneBar() {
                 <div
                   className={`relative w-9 h-9 rounded-full flex items-center justify-center transition-all duration-500 ${
                     claimed
-                      ? 'bg-gradient-to-br from-clay-400 to-clay-600 shadow-[0_2px_10px_rgba(199,130,90,0.4)]'
+                      ? "bg-gradient-to-br from-clay-400 to-clay-600 shadow-[0_2px_10px_rgba(199,130,90,0.4)]"
                       : reached
-                        ? 'bg-gradient-to-br from-clay-300/40 to-clay-400/50 ring-2 ring-clay-400/60 ring-offset-1 ring-offset-cream-100'
-                        : 'bg-cream-200/80 ring-2 ring-cream-300/60 ring-offset-1 ring-offset-cream-100'
+                        ? "bg-gradient-to-br from-clay-300/40 to-clay-400/50 ring-2 ring-clay-400/60 ring-offset-1 ring-offset-cream-100"
+                        : "bg-cream-200/80 ring-2 ring-cream-300/60 ring-offset-1 ring-offset-cream-100"
                   }`}
                   style={
                     reached && !claimed
-                      ? { animation: 'milestone-glow 2s ease-in-out infinite' }
+                      ? { animation: "milestone-glow 2s ease-in-out infinite" }
                       : claimed
-                        ? { animation: 'milestone-unlock 500ms cubic-bezier(0.22, 1, 0.36, 1) both' }
+                        ? {
+                            animation:
+                              "milestone-unlock 500ms cubic-bezier(0.22, 1, 0.36, 1) both",
+                          }
                         : undefined
                   }
                 >
@@ -182,16 +203,26 @@ function MilestoneBar() {
                     <CheckIcon size={16} className="text-cream-50" />
                   ) : (
                     <span
-                      className={`text-sm ${reached ? '' : 'grayscale opacity-40'}`}
-                      style={reached ? { animation: 'drop-icon-wobble 600ms ease-in-out' } : undefined}
+                      className={`text-sm ${reached ? "" : "grayscale opacity-40"}`}
+                      style={
+                        reached
+                          ? { animation: "drop-icon-wobble 600ms ease-in-out" }
+                          : undefined
+                      }
                     >
                       💧
                     </span>
                   )}
                 </div>
-                <span className={`text-[10px] font-bold tabular-nums leading-none ${
-                  claimed ? 'text-clay-600' : reached ? 'text-clay-500' : 'text-ink-300'
-                }`}>
+                <span
+                  className={`text-[10px] font-bold tabular-nums leading-none ${
+                    claimed
+                      ? "text-clay-600"
+                      : reached
+                        ? "text-clay-500"
+                        : "text-ink-300"
+                  }`}
+                >
                   +{drops}
                 </span>
               </div>
@@ -203,8 +234,11 @@ function MilestoneBar() {
                     className="h-full rounded-full bg-gradient-to-r from-clay-500 to-clay-400"
                     style={{
                       width: `${segmentPct}%`,
-                      transformOrigin: 'left',
-                      animation: segmentPct > 0 ? 'mission-progress-fill 800ms cubic-bezier(0.22, 1, 0.36, 1) both' : undefined,
+                      transformOrigin: "left",
+                      animation:
+                        segmentPct > 0
+                          ? "mission-progress-fill 800ms cubic-bezier(0.22, 1, 0.36, 1) both"
+                          : undefined,
                       animationDelay: `${400 + i * 100}ms`,
                     }}
                   />
@@ -221,15 +255,18 @@ function MilestoneBar() {
 // ── Mission List ────────────────────────────────────────────────────
 
 const MISSION_LABEL_KEYS: Record<string, string> = {
-  water: 'missions.water',
-  plant: 'missions.plant',
-  harvest: 'missions.harvest',
-  harvest_rare: 'missions.harvest_rare',
-  visit_floripedia: 'missions.visit_floripedia',
-  share_florist_card: 'missions.share_florist_card',
+  water: "missions.water",
+  plant: "missions.plant",
+  harvest: "missions.harvest",
+  harvest_rare: "missions.harvest_rare",
+  visit_floripedia: "missions.visit_floripedia",
+  share_florist_card: "missions.share_florist_card",
 };
 
-function missionLabel(t: ReturnType<typeof useT>, mission: DailyMission): string {
+function missionLabel(
+  t: ReturnType<typeof useT>,
+  mission: DailyMission,
+): string {
   const key = MISSION_LABEL_KEYS[mission.type] as Parameters<typeof t>[0];
   return t(key, { target: mission.target });
 }
@@ -241,7 +278,7 @@ function MissionList() {
   if (missions.length === 0) return null;
 
   return (
-    <div className="space-y-2.5 mb-5">
+    <div className="space-y-2.5 mb-4">
       {missions.map((mission, i) => (
         <MissionCard
           key={mission.templateId}
@@ -267,36 +304,48 @@ function MissionCard({
 
   return (
     <div
-      className={`relative overflow-hidden rounded-2xl border p-3.5 flex items-center gap-3.5 transition-all duration-500 ${
+      className={`relative overflow-hidden rounded-2xl border p-2 flex items-center gap-3.5 transition-all duration-500 ${
         mission.completed
-          ? 'bg-clay-400/8 border-clay-400/40 shadow-[0_0_0_1px_rgba(199,130,90,0.08)]'
-          : 'bg-cream-100 border-cream-200 hover:border-cream-300 hover:shadow-soft-sm'
+          ? "bg-clay-400/8 border-clay-400/40 shadow-[0_0_0_1px_rgba(199,130,90,0.08)]"
+          : "bg-cream-100 border-cream-200 hover:border-cream-300 hover:shadow-soft-sm"
       }`}
       style={{
-        animation: 'mission-card-in 480ms cubic-bezier(0.22, 1, 0.36, 1) both',
+        animation: "mission-card-in 480ms cubic-bezier(0.22, 1, 0.36, 1) both",
         animationDelay: `${200 + index * 80}ms`,
       }}
     >
       {/* Completed shimmer overlay */}
       {mission.completed && (
-        <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden>
+        <div
+          className="absolute inset-0 overflow-hidden pointer-events-none"
+          aria-hidden
+        >
           <div
             className="absolute inset-0 bg-gradient-to-r from-transparent via-clay-400/10 to-transparent"
-            style={{ animation: 'shimmer-sweep 3s ease-in-out infinite', animationDelay: `${index * 400}ms` }}
+            style={{
+              animation: "shimmer-sweep 3s ease-in-out infinite",
+              animationDelay: `${index * 400}ms`,
+            }}
           />
         </div>
       )}
 
       {/* Points badge */}
-      <div className={`relative flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-500 ${
-        mission.completed
-          ? 'bg-gradient-to-br from-clay-400 to-clay-600 border border-clay-600/40 shadow-[0_2px_8px_rgba(199,130,90,0.35)]'
-          : 'bg-clay-500/10 border border-clay-400/25'
-      }`}
-        style={mission.completed ? {
-          animation: 'mission-check-pop 500ms cubic-bezier(0.34, 1.56, 0.64, 1) both',
-          animationDelay: `${400 + index * 80}ms`,
-        } : undefined}
+      <div
+        className={`relative flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-500 ${
+          mission.completed
+            ? "bg-gradient-to-br from-clay-400 to-clay-600 border border-clay-600/40 shadow-[0_2px_8px_rgba(199,130,90,0.35)]"
+            : "bg-clay-500/10 border border-clay-400/25"
+        }`}
+        style={
+          mission.completed
+            ? {
+                animation:
+                  "mission-check-pop 500ms cubic-bezier(0.34, 1.56, 0.64, 1) both",
+                animationDelay: `${400 + index * 80}ms`,
+              }
+            : undefined
+        }
       >
         {mission.completed ? (
           <CheckIcon size={18} className="text-cream-50" />
@@ -309,9 +358,11 @@ function MissionCard({
 
       {/* Description + progress */}
       <div className="relative flex-1 min-w-0">
-        <div className={`text-sm font-medium truncate transition-colors duration-300 ${
-          mission.completed ? 'text-ink-700' : 'text-ink-800'
-        }`}>
+        <div
+          className={`text-sm font-medium truncate transition-colors duration-300 ${
+            mission.completed ? "text-ink-700" : "text-ink-800"
+          }`}
+        >
           {label}
         </div>
         <div className="flex items-center gap-2.5 mt-1.5">
@@ -319,25 +370,27 @@ function MissionCard({
             <div
               className={`h-full rounded-full ${
                 mission.completed
-                  ? 'bg-gradient-to-r from-clay-600 to-clay-400'
-                  : 'bg-gradient-to-r from-clay-500/60 to-clay-400/50'
+                  ? "bg-gradient-to-r from-clay-600 to-clay-400"
+                  : "bg-gradient-to-r from-clay-500/60 to-clay-400/50"
               }`}
               style={{
                 width: `${progressPct}%`,
-                transformOrigin: 'left',
-                animation: 'mission-progress-fill 600ms cubic-bezier(0.22, 1, 0.36, 1) both',
+                transformOrigin: "left",
+                animation:
+                  "mission-progress-fill 600ms cubic-bezier(0.22, 1, 0.36, 1) both",
                 animationDelay: `${350 + index * 80}ms`,
               }}
             />
           </div>
-          <span className={`text-[11px] tabular-nums font-mono flex-shrink-0 ${
-            mission.completed ? 'text-clay-600 font-medium' : 'text-ink-400'
-          }`}>
+          <span
+            className={`text-[11px] tabular-nums font-mono flex-shrink-0 ${
+              mission.completed ? "text-clay-600 font-medium" : "text-ink-400"
+            }`}
+          >
             {mission.progress}/{mission.target}
           </span>
         </div>
       </div>
-
     </div>
   );
 }
@@ -347,11 +400,14 @@ function MissionCard({
 function ClaimButton() {
   const t = useT();
   const missions = useGameStore((s) => s.state.dailyMissions.missions);
-  const claimedMilestones = useGameStore((s) => s.state.dailyMissions.claimedMilestones);
+  const claimedMilestones = useGameStore(
+    (s) => s.state.dailyMissions.claimedMilestones,
+  );
   const claimMissions = useGameStore((s) => s.claimMissions);
   const [burstKey, setBurstKey] = useState(0);
 
-  const totalPoints = missions.filter((m) => m.completed).length * MISSION_POINTS_PER;
+  const totalPoints =
+    missions.filter((m) => m.completed).length * MISSION_POINTS_PER;
 
   let unclaimedDrops = 0;
   for (let i = 0; i < MISSION_MILESTONES.length; i++) {
@@ -368,9 +424,9 @@ function ClaimButton() {
   const handleClaim = useCallback(() => {
     const { dropsAwarded } = claimMissions();
     if (dropsAwarded > 0) {
-      haptic('harvest');
+      haptic("harvest");
       setBurstKey((k) => k + 1);
-      toast(t('missions.dropsAwarded', { drops: dropsAwarded }));
+      toast(t("missions.dropsAwarded", { drops: dropsAwarded }));
     }
   }, [claimMissions, t]);
 
@@ -380,9 +436,9 @@ function ClaimButton() {
       key={`squish-${burstKey}`}
       style={{
         animation: burstKey
-          ? 'water-btn-squish 420ms cubic-bezier(.22,.68,.36,1.2) both'
-          : 'mission-card-in 480ms cubic-bezier(0.22, 1, 0.36, 1) both',
-        animationDelay: burstKey ? undefined : '600ms',
+          ? "water-btn-squish 420ms cubic-bezier(.22,.68,.36,1.2) both"
+          : "mission-card-in 480ms cubic-bezier(0.22, 1, 0.36, 1) both",
+        animationDelay: burstKey ? undefined : "600ms",
       }}
     >
       {burstKey > 0 && <ClaimBurst key={burstKey} />}
@@ -391,24 +447,34 @@ function ClaimButton() {
         onClick={handleClaim}
         disabled={!canClaim}
         className="relative w-full !rounded-2xl font-serif tracking-wide overflow-hidden active:!scale-100"
-        style={canClaim ? { animation: 'claim-btn-glow 2.5s ease-in-out infinite' } : undefined}
+        style={
+          canClaim
+            ? { animation: "claim-btn-glow 2.5s ease-in-out infinite" }
+            : undefined
+        }
       >
         <span className="flex items-center justify-center gap-2">
           {allClaimed ? (
             <>
               <CheckIcon size={18} />
-              {t('missions.claimed')}
+              {t("missions.claimed")}
             </>
           ) : canClaim ? (
             <>
-              {t('missions.claimAll')}
+              {t("missions.claimAll")}
               <span className="inline-flex items-center gap-1 bg-white/20 rounded-full px-2.5 py-0.5 text-sm">
-                <span style={{ animation: 'drop-icon-wobble 800ms ease-in-out infinite' }}>💧</span>
+                <span
+                  style={{
+                    animation: "drop-icon-wobble 800ms ease-in-out infinite",
+                  }}
+                >
+                  💧
+                </span>
                 +{unclaimedDrops}
               </span>
             </>
           ) : (
-            t('missions.noClaim')
+            t("missions.noClaim")
           )}
         </span>
         {burstKey > 0 && (
@@ -417,8 +483,9 @@ function ClaimButton() {
             aria-hidden
             className="absolute inset-0 pointer-events-none"
             style={{
-              animation: 'water-btn-shine 400ms ease-out 80ms both',
-              background: 'linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.45) 50%, transparent 65%)',
+              animation: "water-btn-shine 400ms ease-out 80ms both",
+              background:
+                "linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.45) 50%, transparent 65%)",
             }}
           />
         )}
@@ -426,4 +493,3 @@ function ClaimButton() {
     </div>
   );
 }
-
