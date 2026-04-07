@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Fraunces, Sarabun } from "next/font/google";
 import { StoreHydrator } from "@/store/StoreHydrator";
+import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistration";
 import { ToastContainer } from "@/components/ToastContainer";
 import { MobileFrame } from "@/components/MobileFrame";
 import { SPECIES } from "@/data/species";
@@ -91,6 +92,19 @@ export const metadata: Metadata = {
     },
   },
   category: "game",
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    title: "Florify",
+    statusBarStyle: "default",
+  },
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "16x16 32x32" },
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+    apple: [{ url: "/icons/apple-touch-icon.png", sizes: "180x180" }],
+  },
 };
 
 export const viewport: Viewport = {
@@ -114,6 +128,7 @@ export default function RootLayout({
     >
       <body className="min-h-full bg-cream-50 md:bg-cream-200 text-ink-900">
         <StoreHydrator />
+        <ServiceWorkerRegistration />
         <MobileFrame>{children}</MobileFrame>
         <ToastContainer />
       </body>

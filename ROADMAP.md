@@ -45,3 +45,10 @@
   - 30 วัน → การันตี rare species ครั้งถัดไป
   - 100 วัน → cosmetic badge พิเศษบน Florist Card
 - **Streak Calendar UI** — ปฏิทินแสดงวันที่เข้าเกม เห็นภาพรวม streak ชัดเจน
+
+## 12. New currency sprout
+- ได้เวลาเก็บเกี่ยว
+- ไว้ใช้ refresh quest
+- หรือซื้อของในชอป 
+
+common: 1, rare: 3, legendary: 10
