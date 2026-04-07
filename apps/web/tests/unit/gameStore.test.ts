@@ -525,7 +525,7 @@ describe('pity / dried leaves (🍂)', () => {
     expect(useGameStore.getState().state.pityPoints).toBe(PITY_POINTS_LEGENDARY);
   });
 
-  it('new species resets pity to 0', () => {
+  it('new species preserves pity points', () => {
     useGameStore.setState((s) => ({
       state: {
         ...s.state,
@@ -537,7 +537,7 @@ describe('pity / dried leaves (🍂)', () => {
       },
     }));
     useGameStore.getState().waterTree();
-    expect(useGameStore.getState().state.pityPoints).toBe(0);
+    expect(useGameStore.getState().state.pityPoints).toBe(50);
   });
 
   it('reaching threshold grants a new species and resets to 0', () => {

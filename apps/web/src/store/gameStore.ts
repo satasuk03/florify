@@ -341,10 +341,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       let pityReward: { speciesId: number; rarity: Rarity } | undefined;
 
       if (collection.length < SPECIES.length) {
-        if (!isDuplicate) {
-          // New species from normal planting — reset pity
-          pityPoints = 0;
-        } else {
+        if (isDuplicate) {
           // Duplicate — accumulate dried leaves
           const gained = PITY_POINTS[harvested.rarity];
           pityPoints += gained;
