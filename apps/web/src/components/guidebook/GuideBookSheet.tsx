@@ -165,10 +165,7 @@ function RaritySection() {
 
 function FeaturesSection() {
   const t = useT();
-  const items: Array<{ titleKey: 'guide.features.gallery.title' | 'guide.features.passport.title' | 'guide.features.streak.title' | 'guide.features.rank.title'; bodyKey: 'guide.features.gallery.body' | 'guide.features.passport.body' | 'guide.features.streak.body' | 'guide.features.rank.body' }> = [
-    { titleKey: 'guide.features.gallery.title', bodyKey: 'guide.features.gallery.body' },
-    { titleKey: 'guide.features.passport.title', bodyKey: 'guide.features.passport.body' },
-    { titleKey: 'guide.features.streak.title', bodyKey: 'guide.features.streak.body' },
+  const items: Array<{ titleKey: 'guide.features.rank.title'; bodyKey: 'guide.features.rank.body' }> = [
     { titleKey: 'guide.features.rank.title', bodyKey: 'guide.features.rank.body' },
   ];
   return (

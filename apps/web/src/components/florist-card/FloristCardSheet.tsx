@@ -189,7 +189,7 @@ export function FloristCardSheet({ open, onClose }: Props) {
           <div className="flex gap-3 w-full">
             <Link href="/gallery" onClick={onClose} className="flex-1">
               <Button variant="secondary" size="md" className="w-full">
-                ← Gallery
+                ← Floripedia
               </Button>
             </Link>
             <Button
