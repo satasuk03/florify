@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import Link from 'next/link';
 import { RarityBadge } from '@/components/RarityBadge';
 import { BackIcon } from '@/components/icons';
@@ -56,7 +56,10 @@ const COPY = {
 export function DetailView({ speciesId }: { speciesId: number | null }) {
   const [lang, setLang] = useState<Lang>('th');
   const [stage, setStage] = useState<Stage>(3);
+  const [lightbox, setLightbox] = useState(false);
   const t = COPY[lang];
+
+  const closeLightbox = useCallback(() => setLightbox(false), []);
 
   const entry = useGameStore((s) =>
     speciesId != null ? s.state.collection.find((c) => c.speciesId === speciesId) ?? null : null,
@@ -123,12 +126,21 @@ export function DetailView({ speciesId }: { speciesId: number | null }) {
             <span className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-cream-400/60 rounded-br-md" />
           </div>
 
-          <FloraImage
-            key={`${entry.speciesId}-${stage}`}
-            speciesId={entry.speciesId}
-            progress={STAGE_PROGRESS[stage]}
-            className="relative max-h-[88%] max-w-[82%] object-contain drop-shadow-[0_18px_30px_rgba(75,55,30,0.18)]"
-          />
+          <div
+            role="button"
+            tabIndex={0}
+            onClick={() => setLightbox(true)}
+            onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && setLightbox(true)}
+            className="relative flex items-center justify-center max-h-[88%] max-w-[82%] h-full w-full cursor-zoom-in"
+            aria-label="View fullscreen"
+          >
+            <FloraImage
+              key={`${entry.speciesId}-${stage}`}
+              speciesId={entry.speciesId}
+              progress={STAGE_PROGRESS[stage]}
+              className="max-h-full max-w-full object-contain drop-shadow-[0_18px_30px_rgba(75,55,30,0.18)]"
+            />
+          </div>
 
           {/* Stage selector floats over the bottom edge of the frame. */}
           <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 animate-fade-up" style={{ animationDelay: '220ms' }}>
@@ -182,6 +194,25 @@ export function DetailView({ speciesId }: { speciesId: number | null }) {
           </div>
         </div>
       </div>
+
+      {lightbox && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm cursor-zoom-out animate-fade-in"
+          onClick={closeLightbox}
+          onKeyDown={(e) => e.key === 'Escape' && closeLightbox()}
+          role="dialog"
+          aria-modal
+          aria-label="Fullscreen image"
+          tabIndex={0}
+          ref={(el) => el?.focus()}
+        >
+          <FloraImage
+            speciesId={entry.speciesId}
+            progress={STAGE_PROGRESS[stage]}
+            className="max-h-[90vh] max-w-[90vw] object-contain drop-shadow-[0_0_60px_rgba(255,255,255,0.1)]"
+          />
+        </div>
+      )}
     </div>
   );
 }

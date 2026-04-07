@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
-import { FloripediaView } from '@/screens/FloripediaView';
+import { Suspense } from "react";
+import { useSearchParams } from "next/navigation";
+import { FloripediaView } from "@/screens/FloripediaView";
 
 /**
  * Floripedia — public per-species page reached via a shared link.
@@ -24,7 +24,7 @@ export default function FloripediaPage() {
 
 function FloripediaPageInner() {
   const params = useSearchParams();
-  const raw = params.get('id');
+  const raw = params.get("id");
   const parsed = raw == null ? null : Number(raw);
   const speciesId = parsed != null && Number.isFinite(parsed) ? parsed : null;
 
@@ -32,8 +32,8 @@ function FloripediaPageInner() {
   let harvester: string | null = null;
   let harvestedAt: number | null = null;
   try {
-    const byRaw = params.get('by');
-    const atRaw = params.get('at');
+    const byRaw = params.get("by");
+    const atRaw = params.get("at");
     if (byRaw) harvester = decodeURIComponent(atob(byRaw));
     if (atRaw) harvestedAt = Number(atob(atRaw)) || null;
   } catch {
