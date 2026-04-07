@@ -64,10 +64,12 @@ export function GalleryView() {
   const t = useT();
   const collection = useGameStore((s) => s.state.collection);
   const unlocked = useGameStore((s) => s.uniqueSpeciesUnlocked());
+  const hydrated = useGameStore((s) => s.hydrated);
 
   useEffect(() => {
+    if (!hydrated) return;
     gameEventBus.emit({ type: 'visit', screen: 'gallery' });
-  }, []);
+  }, [hydrated]);
   const totalHarvested = collection.reduce((sum, c) => sum + c.count, 0);
 
   // Build a set of discovered speciesIds for quick lookup

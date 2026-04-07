@@ -16,6 +16,7 @@ import { SPECIES, SpeciesCollection } from '@/data/species';
 import { useT, useLanguage } from '@/i18n/useT';
 import { shareSpecies } from '@/lib/shareSpecies';
 import { gameEventBus } from '@/lib/gameEventBus';
+import { useGameStore } from '@/store/gameStore';
 
 /**
  * Floripedia — the public, species-only detail page behind a shared link.
@@ -45,10 +46,12 @@ interface Props {
 export function FloripediaView({ speciesId }: Props) {
   const t = useT();
   const appLang = useLanguage();
+  const hydrated = useGameStore((s) => s.hydrated);
 
   useEffect(() => {
+    if (!hydrated) return;
     gameEventBus.emit({ type: 'visit', screen: 'floripedia' });
-  }, []);
+  }, [hydrated]);
   // Local override — lets a visitor read the lore in their preferred
   // language without changing app-wide settings.
   const [lang, setLang] = useState<Lang>(appLang);
