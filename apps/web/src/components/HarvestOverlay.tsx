@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState, type CSSProperties } from 'react';
+import { useCallback, useRef, useState, type CSSProperties } from 'react';
 import type { Rarity, TreeInstance } from '@florify/shared';
 import { Button } from '@/components/Button';
 import { RarityBadge } from '@/components/RarityBadge';
@@ -270,14 +270,11 @@ export function HarvestOverlay({ tree, pityPointsGained, pityReward, onDismiss }
           className="flex flex-col sm:flex-row items-stretch gap-2 mt-2 animate-fade-up"
           style={{ animationDelay: '620ms' }}
         >
-          <Button
-            size="lg"
+          <JuicyCollectButton
             onClick={handleCollect}
             disabled={collecting}
-            className="min-w-[180px]"
-          >
-            {t('harvest.collect')}
-          </Button>
+            label={t('harvest.collect')}
+          />
           <Button
             size="lg"
             variant="secondary"
@@ -317,6 +314,54 @@ export function HarvestOverlay({ tree, pityPointsGained, pityReward, onDismiss }
           style={flying.style}
         />
       )}
+    </div>
+  );
+}
+
+/** Collect button with juicy squish/shine feedback. Fires once — the
+ *  fly-to-gallery animation takes over immediately after. */
+function JuicyCollectButton({
+  onClick,
+  disabled,
+  label,
+}: {
+  onClick: () => void;
+  disabled?: boolean;
+  label: string;
+}) {
+  const [pressed, setPressed] = useState(false);
+  const handleClick = useCallback(() => {
+    if (disabled || pressed) return;
+    setPressed(true);
+    onClick();
+  }, [disabled, pressed, onClick]);
+
+  return (
+    <div
+      style={
+        pressed
+          ? { animation: 'water-btn-squish 420ms cubic-bezier(.22,.68,.36,1.2) both' }
+          : undefined
+      }
+    >
+      <Button
+        size="lg"
+        onClick={handleClick}
+        disabled={disabled}
+        className="min-w-[180px] overflow-hidden active:!scale-100 relative"
+      >
+        {label}
+        {pressed && (
+          <span
+            aria-hidden
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              animation: 'water-btn-shine 400ms ease-out 80ms both',
+              background: 'linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.45) 50%, transparent 65%)',
+            }}
+          />
+        )}
+      </Button>
     </div>
   );
 }

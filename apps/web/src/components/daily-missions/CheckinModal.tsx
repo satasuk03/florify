@@ -228,16 +228,19 @@ function ClaimSection({ onClose }: { onClose: () => void }) {
   return (
     <div
       className="relative"
+      key={`squish-${burstKey}`}
       style={{
-        animation: 'mission-card-in 480ms cubic-bezier(0.22, 1, 0.36, 1) both',
-        animationDelay: '450ms',
+        animation: burstKey
+          ? 'water-btn-squish 420ms cubic-bezier(.22,.68,.36,1.2) both'
+          : 'mission-card-in 480ms cubic-bezier(0.22, 1, 0.36, 1) both',
+        animationDelay: burstKey ? undefined : '450ms',
       }}
     >
       {burstKey > 0 && <ClaimBurst key={burstKey} />}
       <Button
         size="lg"
         onClick={handleClaim}
-        className="relative w-full !rounded-2xl font-serif tracking-wide"
+        className="relative w-full !rounded-2xl font-serif tracking-wide overflow-hidden active:!scale-100"
         style={{ animation: 'claim-btn-glow 2.5s ease-in-out infinite' }}
       >
         <span className="flex items-center justify-center gap-2">
@@ -247,6 +250,17 @@ function ClaimSection({ onClose }: { onClose: () => void }) {
             +{total}
           </span>
         </span>
+        {burstKey > 0 && (
+          <span
+            key={`shine-${burstKey}`}
+            aria-hidden
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              animation: 'water-btn-shine 400ms ease-out 80ms both',
+              background: 'linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.45) 50%, transparent 65%)',
+            }}
+          />
+        )}
       </Button>
     </div>
   );
