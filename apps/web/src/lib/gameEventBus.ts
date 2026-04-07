@@ -14,7 +14,7 @@ const listeners = new Set<Listener>();
  */
 export const gameEventBus = {
   emit(event: GameEvent) {
-    console.debug('[gameEventBus]', event.type, event, '| listeners:', listeners.size);
+    console.log('[gameEventBus]', event.type, event, '| listeners:', listeners.size);
     for (const fn of listeners) fn(event);
   },
   on(fn: Listener) {
