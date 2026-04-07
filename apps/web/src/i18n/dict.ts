@@ -207,6 +207,27 @@ export const dict = {
     "floripedia.shareText": "ฉันเจอ {name} ใน Florify 🌿",
     "floripedia.copied": "คัดลอกลิงก์แล้ว",
     "floripedia.harvestedBy": "เก็บเกี่ยวโดย {name}",
+
+    // ── Cloud Save (Google Drive) ──────────────
+    "cloud.title": "Cloud Save",
+    "cloud.hint":
+      "เชื่อมต่อ Google Drive เพื่อบันทึกข้อมูลบน cloud — ย้ายเครื่องหรือเปลี่ยนเบราว์เซอร์ได้โดยไม่สูญเสียข้อมูล",
+    "cloud.signIn": "เข้าสู่ระบบด้วย Google",
+    "cloud.signOut": "ออกจากระบบ",
+    "cloud.syncing": "กำลังซิงค์…",
+    "cloud.lastSynced": "ซิงค์ล่าสุด: {time}",
+    "cloud.neverSynced": "ยังไม่เคยซิงค์",
+    "cloud.syncNow": "ซิงค์เดี๋ยวนี้",
+    "cloud.pullFromCloud": "ดึงข้อมูลจาก Cloud",
+    "cloud.pushToCloud": "อัปโหลดไป Cloud",
+    "cloud.syncSuccess": "ซิงค์สำเร็จ!",
+    "cloud.syncError": "ซิงค์ล้มเหลว: {reason}",
+    "cloud.conflictTitle": "พบข้อมูลบน Cloud",
+    "cloud.conflictMsg":
+      "ข้อมูลบน Cloud ใหม่กว่า — ต้องการโหลดข้อมูลจาก Cloud แทนหรือไม่?",
+    "cloud.useCloud": "ใช้ข้อมูล Cloud",
+    "cloud.useLocal": "ใช้ข้อมูลในเครื่อง",
+    "cloud.notConfigured": "ยังไม่ได้ตั้งค่า Google Client ID",
   },
   en: {
     // ── PlotView ───────────────────────────────
@@ -407,6 +428,27 @@ export const dict = {
     "floripedia.shareText": "I found {name} in Florify 🌿",
     "floripedia.copied": "Link copied",
     "floripedia.harvestedBy": "Harvested by {name}",
+
+    // ── Cloud Save (Google Drive) ──────────────
+    "cloud.title": "Cloud Save",
+    "cloud.hint":
+      "Connect Google Drive to save your data in the cloud — switch devices or browsers without losing progress",
+    "cloud.signIn": "Sign in with Google",
+    "cloud.signOut": "Sign out",
+    "cloud.syncing": "Syncing…",
+    "cloud.lastSynced": "Last synced: {time}",
+    "cloud.neverSynced": "Never synced",
+    "cloud.syncNow": "Sync now",
+    "cloud.pullFromCloud": "Pull from Cloud",
+    "cloud.pushToCloud": "Push to Cloud",
+    "cloud.syncSuccess": "Synced successfully!",
+    "cloud.syncError": "Sync failed: {reason}",
+    "cloud.conflictTitle": "Cloud data found",
+    "cloud.conflictMsg":
+      "Cloud data is newer — do you want to load from Cloud instead?",
+    "cloud.useCloud": "Use Cloud data",
+    "cloud.useLocal": "Use local data",
+    "cloud.notConfigured": "Google Client ID not configured",
   },
 } as const satisfies Record<Language, Record<string, string>>;
 

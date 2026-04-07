@@ -5,6 +5,7 @@ import { BackIcon } from '@/components/icons';
 import { AccountSection } from '@/components/settings/sections/AccountSection';
 import { PreferencesSection } from '@/components/settings/sections/PreferencesSection';
 import { SaveDataSection } from '@/components/settings/sections/SaveDataSection';
+import { CloudSaveSection } from '@/components/settings/sections/CloudSaveSection';
 import { DangerZoneSection } from '@/components/settings/sections/DangerZoneSection';
 
 /**
@@ -30,6 +31,7 @@ export function SettingsView() {
       <div className="mt-4 space-y-8 animate-fade-up">
         <AccountSection />
         <PreferencesSection />
+        <CloudSaveSection />
         <SaveDataSection />
         <DangerZoneSection />
       </div>

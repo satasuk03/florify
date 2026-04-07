@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Fraunces, Sarabun } from "next/font/google";
+import Script from "next/script";
 import { StoreHydrator } from "@/store/StoreHydrator";
 import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistration";
 import { ToastContainer } from "@/components/ToastContainer";
@@ -127,6 +128,10 @@ export default function RootLayout({
       className={`${sarabun.variable} ${fraunces.variable} h-full antialiased`}
     >
       <body className="min-h-full bg-cream-50 md:bg-cream-200 text-ink-900">
+        <Script
+          src="https://accounts.google.com/gsi/client"
+          strategy="lazyOnload"
+        />
         <StoreHydrator />
         <ServiceWorkerRegistration />
         <MobileFrame>{children}</MobileFrame>

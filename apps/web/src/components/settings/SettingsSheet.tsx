@@ -5,6 +5,7 @@ import { Button } from '@/components/Button';
 import { AccountSection } from './sections/AccountSection';
 import { PreferencesSection } from './sections/PreferencesSection';
 import { SaveDataSection } from './sections/SaveDataSection';
+import { CloudSaveSection } from './sections/CloudSaveSection';
 import { DangerZoneSection } from './sections/DangerZoneSection';
 import { useT } from '@/i18n/useT';
 
@@ -65,6 +66,7 @@ export function SettingsSheet({ open, onClose, onReplayWelcome }: Props) {
         <div className="space-y-6">
           <AccountSection />
           <PreferencesSection />
+          <CloudSaveSection />
           <SaveDataSection />
           <DangerZoneSection />
           {onReplayWelcome && (
