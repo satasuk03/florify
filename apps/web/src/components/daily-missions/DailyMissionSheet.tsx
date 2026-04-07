@@ -115,6 +115,7 @@ function MidnightCountdown() {
 // ── Milestone Progress Bar ──────────────────────────────────────────
 
 function MilestoneBar() {
+  const t = useT();
   const missions = useGameStore((s) => s.state.dailyMissions.missions);
   const claimedMilestones = useGameStore((s) => s.state.dailyMissions.claimedMilestones);
   const totalPoints = missions.filter((m) => m.completed).length * MISSION_POINTS_PER;
@@ -126,9 +127,12 @@ function MilestoneBar() {
       style={{ animation: 'mission-card-in 500ms cubic-bezier(0.22, 1, 0.36, 1) both', animationDelay: '80ms' }}
     >
       {/* Points display */}
-      <div className="flex items-baseline gap-1 mb-4">
-        <span className="font-serif text-lg font-bold text-ink-900 tabular-nums">{totalPoints}</span>
-        <span className="text-xs text-ink-400">/ {maxPoints}P</span>
+      <div className="flex items-baseline justify-between mb-4">
+        <span className="text-sm text-ink-500">{t('missions.milestoneLabel')}</span>
+        <div className="flex items-baseline gap-1">
+          <span className="font-serif text-lg font-bold text-ink-900 tabular-nums">{totalPoints}</span>
+          <span className="text-xs text-ink-400">/ {maxPoints}P</span>
+        </div>
       </div>
 
       {/* Milestone stepping stones */}

@@ -166,6 +166,7 @@ export const dict = {
     // ── Daily Missions ─────────────────────────
     "plot.openMissions": "เปิดภารกิจประจำวัน",
     "missions.title": "ภารกิจประจำวัน",
+    "missions.milestoneLabel": "ทำภารกิจรับน้ำกันเถอะ!",
     "missions.close": "ปิด",
     "missions.resetIn": "รีเซ็ตใน {time}",
     "missions.claimAll": "รับรางวัลทั้งหมด",
@@ -367,6 +368,7 @@ export const dict = {
     // ── Daily Missions ─────────────────────────
     "plot.openMissions": "Open Daily Missions",
     "missions.title": "Daily Missions",
+    "missions.milestoneLabel": "Complete missions, earn drops!",
     "missions.close": "Close",
     "missions.resetIn": "Resets in {time}",
     "missions.claimAll": "Claim All",
