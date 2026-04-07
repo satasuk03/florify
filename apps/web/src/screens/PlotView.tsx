@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { MAX_WATER_DROPS, type TreeInstance } from "@florify/shared";
 import { FloraImage } from "@/components/FloraImage";
 import { PerlinNoise } from "@/components/PerlinNoise";
@@ -394,6 +394,12 @@ export function PlotView() {
  * highlight ring, and a soft halo behind it that tints to match the action
  * (clay for "plant", a cooler sky-tinted clay for "water"). Disabled state
  * drops the halo and desaturates — the parent still shows the countdown.
+ *
+ * On tap the button plays a multi-layered "juicy" feedback sequence:
+ *   1. Squish & spring-bounce on the whole wrapper
+ *   2. Halo flash — scale + opacity burst on the background glow
+ *   3. Icon wobble-splash — the water-drop icon rocks & scales
+ *   4. Shine sweep — a glossy highlight sweeps across the pill
  */
 function ActionButton({
   onClick,
@@ -408,8 +414,23 @@ function ActionButton({
   label: string;
   tone: "plant" | "water";
 }) {
+  const [tapping, setTapping] = useState(0);
+  const handleClick = useCallback(() => {
+    if (disabled) return;
+    setTapping((n) => n + 1);
+    onClick();
+  }, [disabled, onClick]);
+
   return (
-    <div className="relative">
+    <div
+      className="relative"
+      style={
+        tapping
+          ? { animation: "water-btn-squish 420ms cubic-bezier(.22,.68,.36,1.2) both" }
+          : undefined
+      }
+      key={tapping}
+    >
       {/* Warm clay halo — deeply saturated orange glow behind the glass
           so the tint reads vividly against the cream backdrop. Hidden
           when disabled so the cooldown state looks visibly "asleep". */}
@@ -418,10 +439,16 @@ function ActionButton({
         className={`absolute -inset-5 rounded-full blur-2xl transition-opacity duration-500
           bg-[radial-gradient(ellipse_at_center,rgba(222,145,95,0.55),rgba(199,130,90,0.32)_55%,transparent_82%)]
           ${disabled ? "opacity-0" : "opacity-100 animate-pulse-slow"}`}
+        style={
+          tapping
+            ? { animation: "water-btn-halo-flash 500ms ease-out both" }
+            : undefined
+        }
+        key={`halo-${tapping}`}
       />
       <Button
         size="lg"
-        onClick={onClick}
+        onClick={handleClick}
         disabled={disabled}
         className={`relative !rounded-full !h-14 px-10 min-w-[220px]
           !bg-[rgba(216,148,110,0.55)] backdrop-blur-xl backdrop-saturate-150
@@ -432,12 +459,35 @@ function ActionButton({
           hover:!bg-[rgba(220,152,114,0.65)] hover:shadow-[0_14px_36px_-10px_rgba(185,100,60,0.6),inset_0_1px_0_0_rgba(255,240,220,0.65),inset_0_-8px_18px_-8px_rgba(170,85,45,0.45)]
           before:content-[''] before:absolute before:inset-x-3 before:top-1 before:h-1/2 before:rounded-full
           before:bg-gradient-to-b before:from-white/50 before:to-transparent before:pointer-events-none
+          overflow-hidden active:!scale-100
           ${disabled ? "saturate-50 opacity-60" : ""}`}
       >
         <span className="relative flex items-center justify-center gap-2.5 drop-shadow-[0_1px_1px_rgba(90,45,20,0.45)]">
-          <span className="text-cream-50">{icon}</span>
+          <span
+            className="text-cream-50"
+            style={
+              tapping
+                ? { animation: "water-btn-icon-splash 450ms cubic-bezier(.22,.68,.36,1.15) both", display: "inline-block" }
+                : { display: "inline-block" }
+            }
+            key={`icon-${tapping}`}
+          >
+            {icon}
+          </span>
           <span className="font-serif tracking-wide">{label}</span>
         </span>
+        {/* Shine sweep — a glossy band that crosses the pill on tap */}
+        {tapping > 0 && (
+          <span
+            key={`shine-${tapping}`}
+            aria-hidden
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              animation: "water-btn-shine 400ms ease-out 80ms both",
+              background: "linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.45) 50%, transparent 65%)",
+            }}
+          />
+        )}
       </Button>
     </div>
   );
