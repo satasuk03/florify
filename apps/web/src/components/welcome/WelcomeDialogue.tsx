@@ -3,7 +3,9 @@
 import { useState } from 'react';
 import { Button } from '@/components/Button';
 import { DISPLAY_NAME_MAX_LENGTH } from '@/store/gameStore';
-import { useT } from '@/i18n/useT';
+import { useLanguage, useT } from '@/i18n/useT';
+import { loadSettings, saveSettings } from '@/store/settingsStore';
+import type { Language } from '@florify/shared';
 import type { DictKey } from '@/i18n/dict';
 import { SPECIES } from '@/data/species';
 
@@ -22,8 +24,13 @@ const STEP_FLORA = [
 
 export function WelcomeDialogue({ onComplete, onNameChange, initialName }: Props) {
   const t = useT();
+  const language = useLanguage();
   const [step, setStep] = useState(0);
   const [name, setName] = useState(initialName);
+
+  const setLanguage = (lang: Language) => {
+    saveSettings({ ...loadSettings(), language: lang });
+  };
 
   const handleNext = () => {
     if (step === 0) {
@@ -67,6 +74,26 @@ export function WelcomeDialogue({ onComplete, onNameChange, initialName }: Props
             >
               {t('welcome.subtitle')}
             </p>
+
+            {/* Language selector */}
+            <div
+              className="flex rounded-full bg-cream-200 p-0.5 animate-fade-up"
+              style={{ animationDelay: '220ms' }}
+            >
+              {(['th', 'en'] as const).map((lang) => (
+                <button
+                  key={lang}
+                  onClick={() => setLanguage(lang)}
+                  className={`px-4 py-1.5 rounded-full text-xs font-semibold uppercase transition-all duration-200 ${
+                    language === lang
+                      ? 'bg-cream-50 text-ink-900 shadow-sm'
+                      : 'text-ink-500 hover:text-ink-700'
+                  }`}
+                >
+                  {lang === 'th' ? 'TH' : 'EN'}
+                </button>
+              ))}
+            </div>
 
             {/* Flora showcase — show 3 stages side by side */}
             <div
