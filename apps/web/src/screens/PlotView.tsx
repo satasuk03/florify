@@ -442,7 +442,7 @@ function MissionCornerButton({ onClick }: { onClick: () => void }) {
       </CornerButton>
       {hasUnclaimed && (
         <span
-          className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-leaf-500 ring-2 ring-cream-50 animate-pulse"
+          className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-clay-500 ring-2 ring-cream-50 animate-pulse"
           aria-hidden
         />
       )}

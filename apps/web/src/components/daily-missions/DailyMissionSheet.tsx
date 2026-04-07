@@ -47,7 +47,7 @@ export function DailyMissionSheet({ open, onClose }: Props) {
       >
         {/* Decorative header with gradient */}
         <div className="relative overflow-hidden rounded-t-3xl sm:rounded-t-3xl">
-          <div className="absolute inset-0 bg-gradient-to-b from-leaf-500/8 to-transparent pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-b from-clay-400/8 to-transparent pointer-events-none" />
           <div className="relative px-6 pt-6 pb-4">
             <Header onClose={onClose} />
           </div>
@@ -74,7 +74,7 @@ function Header({ onClose }: { onClose: () => void }) {
           {t('missions.title')}
         </h2>
         <div className="flex items-center gap-1.5 text-xs text-ink-400 mt-1">
-          <span className="inline-block w-1.5 h-1.5 rounded-full bg-leaf-500 animate-pulse" />
+          <span className="inline-block w-1.5 h-1.5 rounded-full bg-clay-500 animate-pulse" />
           {t('missions.resetIn', { time: '' })}
           <MidnightCountdown />
         </div>
@@ -135,7 +135,7 @@ function MilestoneBar() {
       {/* Track */}
       <div className="relative h-2 bg-cream-300/60 rounded-full overflow-hidden mb-4">
         <div
-          className="absolute inset-y-0 left-0 bg-gradient-to-r from-leaf-500 to-leaf-300 rounded-full"
+          className="absolute inset-y-0 left-0 bg-gradient-to-r from-clay-600 to-clay-400 rounded-full"
           style={{
             width: `${fillPct}%`,
             transformOrigin: 'left',
@@ -143,12 +143,8 @@ function MilestoneBar() {
             animationDelay: '300ms',
           }}
         >
-          {/* Shimmer on the progress bar */}
           {fillPct > 0 && (
-            <div
-              className="absolute inset-0 overflow-hidden rounded-full"
-              aria-hidden
-            >
+            <div className="absolute inset-0 overflow-hidden rounded-full" aria-hidden>
               <div
                 className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent"
                 style={{ animation: 'shimmer-sweep 2s ease-in-out infinite', animationDelay: '1s' }}
@@ -177,9 +173,9 @@ function MilestoneBar() {
               <div
                 className={`relative w-9 h-9 rounded-xl flex items-center justify-center text-xs font-bold border-2 transition-all duration-500 ${
                   claimed
-                    ? 'bg-leaf-500 border-leaf-600 text-cream-50 shadow-[0_0_12px_rgba(107,142,78,0.4)]'
+                    ? 'bg-clay-500 border-clay-600 text-cream-50 shadow-[0_0_12px_rgba(199,130,90,0.4)]'
                     : reached
-                      ? 'bg-leaf-100 border-leaf-400 text-leaf-700'
+                      ? 'bg-clay-400/20 border-clay-400 text-clay-600'
                       : isNext
                         ? 'bg-cream-50 border-cream-400 text-ink-500'
                         : 'bg-cream-50 border-cream-300 text-ink-300'
@@ -206,7 +202,7 @@ function MilestoneBar() {
               </div>
               <div className="flex flex-col items-center">
                 <span className={`text-[10px] font-bold tabular-nums ${
-                  claimed ? 'text-leaf-600' : reached ? 'text-leaf-500' : 'text-ink-300'
+                  claimed ? 'text-clay-600' : reached ? 'text-clay-500' : 'text-ink-300'
                 }`}>
                   +{drops}
                 </span>
@@ -274,7 +270,7 @@ function MissionCard({
     <div
       className={`relative overflow-hidden rounded-2xl border p-3.5 flex items-center gap-3.5 transition-all duration-500 ${
         mission.completed
-          ? 'bg-leaf-500/5 border-leaf-300/60 shadow-[0_0_0_1px_rgba(107,142,78,0.1)]'
+          ? 'bg-clay-400/8 border-clay-400/40 shadow-[0_0_0_1px_rgba(199,130,90,0.08)]'
           : 'bg-cream-100 border-cream-200 hover:border-cream-300 hover:shadow-soft-sm'
       }`}
       style={{
@@ -286,7 +282,7 @@ function MissionCard({
       {mission.completed && (
         <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden>
           <div
-            className="absolute inset-0 bg-gradient-to-r from-transparent via-leaf-300/15 to-transparent"
+            className="absolute inset-0 bg-gradient-to-r from-transparent via-clay-400/10 to-transparent"
             style={{ animation: 'shimmer-sweep 3s ease-in-out infinite', animationDelay: `${index * 400}ms` }}
           />
         </div>
@@ -295,11 +291,11 @@ function MissionCard({
       {/* Points badge */}
       <div className={`relative flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-500 ${
         mission.completed
-          ? 'bg-leaf-500/15 border border-leaf-400/40'
+          ? 'bg-clay-500/15 border border-clay-400/40'
           : 'bg-clay-500/10 border border-clay-400/25'
       }`}>
         <span className={`text-[11px] font-bold tracking-tight ${
-          mission.completed ? 'text-leaf-700' : 'text-clay-600'
+          mission.completed ? 'text-clay-600' : 'text-clay-600'
         }`}>
           {MISSION_POINTS_PER}P
         </span>
@@ -308,7 +304,7 @@ function MissionCard({
       {/* Description + progress */}
       <div className="relative flex-1 min-w-0">
         <div className={`text-sm font-medium truncate transition-colors duration-300 ${
-          mission.completed ? 'text-leaf-800' : 'text-ink-800'
+          mission.completed ? 'text-ink-700' : 'text-ink-800'
         }`}>
           {label}
         </div>
@@ -317,8 +313,8 @@ function MissionCard({
             <div
               className={`h-full rounded-full ${
                 mission.completed
-                  ? 'bg-gradient-to-r from-leaf-500 to-leaf-300'
-                  : 'bg-gradient-to-r from-clay-500 to-clay-400'
+                  ? 'bg-gradient-to-r from-clay-600 to-clay-400'
+                  : 'bg-gradient-to-r from-clay-500/60 to-clay-400/50'
               }`}
               style={{
                 width: `${progressPct}%`,
@@ -329,7 +325,7 @@ function MissionCard({
             />
           </div>
           <span className={`text-[11px] tabular-nums font-mono flex-shrink-0 ${
-            mission.completed ? 'text-leaf-600 font-medium' : 'text-ink-400'
+            mission.completed ? 'text-clay-600 font-medium' : 'text-ink-400'
           }`}>
             {mission.progress}/{mission.target}
           </span>
@@ -340,7 +336,7 @@ function MissionCard({
       <div className="relative flex-shrink-0">
         {mission.completed ? (
           <div
-            className="w-8 h-8 rounded-full bg-gradient-to-br from-leaf-500 to-leaf-700 flex items-center justify-center shadow-[0_2px_8px_rgba(107,142,78,0.4)]"
+            className="w-8 h-8 rounded-full bg-gradient-to-br from-clay-400 to-clay-600 flex items-center justify-center shadow-[0_2px_8px_rgba(199,130,90,0.35)]"
             style={{
               animation: 'mission-check-pop 500ms cubic-bezier(0.34, 1.56, 0.64, 1) both',
               animationDelay: `${400 + index * 80}ms`,
