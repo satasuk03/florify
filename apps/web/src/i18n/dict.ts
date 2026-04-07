@@ -120,7 +120,7 @@ export const dict = {
       "5 ระดับ: Seedling → Apprentice (20+) → Gardener (75+) → Master (150+) → Legend (250+)",
     "guide.driedLeaves.title": "🍂 ใบไม้แห้ง",
     "guide.driedLeaves.body":
-      "เก็บเกี่ยวต้นไม้ที่มีแล้วจะได้ใบไม้แห้ง สะสมครบ {threshold} ใบจะได้สายพันธุ์ใหม่ที่ยังไม่เคยมี 1 ต้น ⚠️ ใบไม้แห้งจะรีเซ็ตเป็น 0 ทุกครั้งที่ได้สายพันธุ์ใหม่ (ไม่ว่าจากการสุ่มปกติหรือจากรางวัลใบไม้แห้ง)",
+      "เก็บเกี่ยวต้นไม้ที่มีแล้วจะได้ใบไม้แห้ง สะสมครบ {threshold} ใบจะได้สายพันธุ์ใหม่ที่ยังไม่เคยมี 1 ต้น ⚠️ ใบไม้แห้งจะรีเซ็ตเป็น 0 ทุกครั้งที่ได้สายพันธุ์ใหม่",
     "guide.driedLeaves.rates":
       "+{common} ธรรมดา · +{rare} หายาก · +{legendary} ตำนาน",
     "guide.driedLeaves.progress": "🍂 {current} / {threshold}",
@@ -319,7 +319,7 @@ export const dict = {
       "Five tiers: Seedling → Apprentice (20+) → Gardener (75+) → Master (150+) → Legend (250+)",
     "guide.driedLeaves.title": "🍂 Dried Leaves",
     "guide.driedLeaves.body":
-      "Harvesting a species you already own earns dried leaves. Collect {threshold} to receive a new species you have never had. ⚠️ Dried leaves reset to 0 every time you obtain a new species (whether from normal planting or from dried leaves rewards).",
+      "Harvesting a species you already own earns dried leaves. Collect {threshold} to receive a new species you have never had. ⚠️ Dried leaves reset to 0 every time you obtain a new species.",
     "guide.driedLeaves.rates":
       "+{common} common · +{rare} rare · +{legendary} legendary",
     "guide.driedLeaves.progress": "🍂 {current} / {threshold}",
