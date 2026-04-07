@@ -8,6 +8,7 @@ import { useT } from '@/i18n/useT';
 import { toast } from '@/lib/toast';
 import { haptic } from '@/lib/haptics';
 import { CHECKIN_BASE_DROPS, CHECKIN_STREAK_BONUS_MAX } from '@florify/shared';
+import { ClaimBurst } from './ClaimBurst';
 
 interface Props {
   open: boolean;
@@ -251,45 +252,3 @@ function ClaimSection({ onClose }: { onClose: () => void }) {
   );
 }
 
-// ── Claim Burst (reused pattern) ────────────────────────────────────
-
-const BURST_COUNT = 10;
-
-function ClaimBurst() {
-  const [visible, setVisible] = useState(true);
-
-  useEffect(() => {
-    const id = setTimeout(() => setVisible(false), 900);
-    return () => clearTimeout(id);
-  }, []);
-
-  if (!visible) return null;
-
-  return (
-    <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10" aria-hidden>
-      {Array.from({ length: BURST_COUNT }, (_, i) => {
-        const angle = (i / BURST_COUNT) * Math.PI * 2 + (Math.random() - 0.5) * 0.4;
-        const dist = 50 + Math.random() * 40;
-        const dx = Math.cos(angle) * dist;
-        const dy = Math.sin(angle) * dist;
-        const delay = Math.random() * 80;
-        const size = 14 + Math.random() * 8;
-        return (
-          <span
-            key={i}
-            className="absolute"
-            style={{
-              '--dx': `${dx}px`,
-              '--dy': `${dy}px`,
-              fontSize: `${size}px`,
-              animation: `claim-drop-burst 700ms cubic-bezier(0.22, 1, 0.36, 1) both`,
-              animationDelay: `${delay}ms`,
-            } as React.CSSProperties}
-          >
-            💧
-          </span>
-        );
-      })}
-    </div>
-  );
-}

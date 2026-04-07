@@ -1,10 +1,18 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { selectFloristCard, useGameStore, computeDrops } from '@/store/gameStore';
 import { createInitialState } from '@/store/initialState';
-import { MAX_WATER_DROPS, MAX_WATER_COST, MIN_WATER_COST, FIRST_FLORA_COST, DROP_REGEN_MS, PITY_THRESHOLD, PITY_POINTS_COMMON, PITY_POINTS_RARE, PITY_POINTS_LEGENDARY, SCHEMA_VERSION, type TreeInstance, type CollectedSpecies, type PlayerState } from '@florify/shared';
+import {
+  MAX_WATER_DROPS, MAX_WATER_COST, MIN_WATER_COST, FIRST_FLORA_COST,
+  DROP_REGEN_MS, PITY_THRESHOLD, PITY_POINTS_COMMON, PITY_POINTS_RARE, PITY_POINTS_LEGENDARY,
+  SCHEMA_VERSION,
+  CHECKIN_BASE_DROPS, CHECKIN_STREAK_BONUS_MAX,
+  MISSION_MILESTONES, MISSION_MILESTONE_DROPS, MISSION_POINTS_PER, DAILY_MISSION_COUNT,
+  type TreeInstance, type CollectedSpecies, type PlayerState, type DailyMission,
+} from '@florify/shared';
 import { SPECIES } from '@/data/species';
 import { todayLocalDate } from '@/lib/time';
 import { migrate } from '@/store/migrations';
+import { pickDailyMissions } from '@/lib/missionPicker';
 
 function resetStore() {
   useGameStore.setState({ state: createInitialState() });
@@ -295,7 +303,7 @@ describe('checkinStreak', () => {
     useGameStore.setState((s) => ({
       state: {
         ...s.state,
-        streak: { currentStreak: 3, longestStreak: 3, lastCheckinDate: yesterdayStr },
+        streak: { currentStreak: 3, longestStreak: 3, lastCheckinDate: yesterdayStr, lastRewardDate: '' },
       },
     }));
     useGameStore.getState().checkinStreak();
@@ -311,7 +319,7 @@ describe('checkinStreak', () => {
     useGameStore.setState((s) => ({
       state: {
         ...s.state,
-        streak: { currentStreak: 5, longestStreak: 5, lastCheckinDate: stale },
+        streak: { currentStreak: 5, longestStreak: 5, lastCheckinDate: stale, lastRewardDate: '' },
       },
     }));
     useGameStore.getState().checkinStreak();
@@ -655,5 +663,461 @@ describe('migrate v3 → v4', () => {
     expect(second.speciesId).toBe(10);
     expect(second.count).toBe(1);
     expect(second.totalWaterings).toBe(20);
+  });
+});
+
+// ── Daily Missions ─────────────────────────────────────────────────
+
+describe('pickDailyMissions', () => {
+  it('returns exactly DAILY_MISSION_COUNT missions', () => {
+    const missions = pickDailyMissions('2026-04-07', 'user-abc');
+    expect(missions.length).toBe(DAILY_MISSION_COUNT);
+  });
+
+  it('is deterministic — same inputs produce same output', () => {
+    const a = pickDailyMissions('2026-04-07', 'user-abc');
+    const b = pickDailyMissions('2026-04-07', 'user-abc');
+    expect(a).toEqual(b);
+  });
+
+  it('produces different missions for different users', () => {
+    const a = pickDailyMissions('2026-04-07', 'user-abc');
+    const b = pickDailyMissions('2026-04-07', 'user-xyz');
+    const aIds = a.map((m) => m.templateId);
+    const bIds = b.map((m) => m.templateId);
+    // Extremely unlikely to be identical — different seed
+    expect(aIds).not.toEqual(bIds);
+  });
+
+  it('produces different missions for different dates', () => {
+    const a = pickDailyMissions('2026-04-07', 'user-abc');
+    const b = pickDailyMissions('2026-04-08', 'user-abc');
+    const aIds = a.map((m) => m.templateId);
+    const bIds = b.map((m) => m.templateId);
+    expect(aIds).not.toEqual(bIds);
+  });
+
+  it('returns missions with all 5 unique templateIds', () => {
+    const missions = pickDailyMissions('2026-04-07', 'user-abc');
+    const ids = new Set(missions.map((m) => m.templateId));
+    expect(ids.size).toBe(DAILY_MISSION_COUNT);
+  });
+
+  it('initializes progress=0 and completed=false', () => {
+    const missions = pickDailyMissions('2026-04-07', 'user-abc');
+    for (const m of missions) {
+      expect(m.progress).toBe(0);
+      expect(m.completed).toBe(false);
+      expect(m.target).toBeGreaterThan(0);
+    }
+  });
+});
+
+describe('ensureDailyMissions', () => {
+  beforeEach(resetStore);
+
+  it('populates missions on first call', () => {
+    useGameStore.getState().ensureDailyMissions();
+    const dm = useGameStore.getState().state.dailyMissions;
+    expect(dm.date).toBe(todayLocalDate());
+    expect(dm.missions.length).toBe(DAILY_MISSION_COUNT);
+    expect(dm.claimedPoints).toBe(0);
+    expect(dm.claimedMilestones).toEqual([]);
+  });
+
+  it('is idempotent on the same day', () => {
+    useGameStore.getState().ensureDailyMissions();
+    const first = useGameStore.getState().state.dailyMissions.missions;
+    useGameStore.getState().ensureDailyMissions();
+    const second = useGameStore.getState().state.dailyMissions.missions;
+    expect(first).toBe(second); // same reference — no mutation
+  });
+
+  it('resets missions when date changes', () => {
+    useGameStore.getState().ensureDailyMissions();
+    // Simulate yesterday's missions with progress
+    useGameStore.setState((s) => ({
+      state: {
+        ...s.state,
+        dailyMissions: {
+          ...s.state.dailyMissions,
+          date: '2026-01-01',
+          claimedPoints: 30,
+          claimedMilestones: [10, 20, 30],
+        },
+      },
+    }));
+    useGameStore.getState().ensureDailyMissions();
+    const dm = useGameStore.getState().state.dailyMissions;
+    expect(dm.date).toBe(todayLocalDate());
+    expect(dm.claimedPoints).toBe(0);
+    expect(dm.claimedMilestones).toEqual([]);
+  });
+});
+
+describe('trackMission', () => {
+  beforeEach(resetStore);
+
+  function setupMissions() {
+    useGameStore.getState().ensureDailyMissions();
+  }
+
+  it('increments progress for matching mission type', () => {
+    setupMissions();
+    const missions = useGameStore.getState().state.dailyMissions.missions;
+    const waterMission = missions.find((m) => m.type === 'water');
+    if (!waterMission) return; // skip if no water mission picked today
+
+    useGameStore.getState().trackMission('water');
+    const updated = useGameStore.getState().state.dailyMissions.missions.find(
+      (m) => m.templateId === waterMission.templateId,
+    )!;
+    expect(updated.progress).toBe(1);
+  });
+
+  it('caps progress at target and sets completed=true', () => {
+    setupMissions();
+    // Manually set a mission with target=1 and progress=0
+    useGameStore.setState((s) => ({
+      state: {
+        ...s.state,
+        dailyMissions: {
+          ...s.state.dailyMissions,
+          missions: [
+            { templateId: 'test_1', type: 'water', target: 1, progress: 0, completed: false },
+          ],
+        },
+      },
+    }));
+
+    useGameStore.getState().trackMission('water');
+    const m = useGameStore.getState().state.dailyMissions.missions[0]!;
+    expect(m.progress).toBe(1);
+    expect(m.completed).toBe(true);
+  });
+
+  it('does not over-increment past target', () => {
+    setupMissions();
+    useGameStore.setState((s) => ({
+      state: {
+        ...s.state,
+        dailyMissions: {
+          ...s.state.dailyMissions,
+          missions: [
+            { templateId: 'test_1', type: 'water', target: 2, progress: 0, completed: false },
+          ],
+        },
+      },
+    }));
+
+    useGameStore.getState().trackMission('water');
+    useGameStore.getState().trackMission('water');
+    useGameStore.getState().trackMission('water'); // extra
+    const m = useGameStore.getState().state.dailyMissions.missions[0]!;
+    expect(m.progress).toBe(2);
+    expect(m.completed).toBe(true);
+  });
+
+  it('is a no-op for non-matching mission types', () => {
+    setupMissions();
+    useGameStore.setState((s) => ({
+      state: {
+        ...s.state,
+        dailyMissions: {
+          ...s.state.dailyMissions,
+          missions: [
+            { templateId: 'test_1', type: 'plant', target: 2, progress: 0, completed: false },
+          ],
+        },
+      },
+    }));
+
+    useGameStore.getState().trackMission('water');
+    const m = useGameStore.getState().state.dailyMissions.missions[0]!;
+    expect(m.progress).toBe(0);
+  });
+});
+
+describe('claimMissions', () => {
+  beforeEach(resetStore);
+
+  function setupWithCompletedMissions(count: number) {
+    const missions: DailyMission[] = [];
+    for (let i = 0; i < DAILY_MISSION_COUNT; i++) {
+      missions.push({
+        templateId: `test_${i}`,
+        type: 'water',
+        target: 1,
+        progress: i < count ? 1 : 0,
+        completed: i < count,
+      });
+    }
+    useGameStore.setState((s) => ({
+      state: {
+        ...s.state,
+        dailyMissions: {
+          date: todayLocalDate(),
+          missions,
+          claimedPoints: 0,
+          claimedMilestones: [],
+        },
+        waterDrops: 10,
+        lastDropRegenAt: Date.now(),
+      },
+    }));
+  }
+
+  it('awards drops for reaching first milestone (1 completed = 10P)', () => {
+    setupWithCompletedMissions(1);
+    const { dropsAwarded } = useGameStore.getState().claimMissions();
+    expect(dropsAwarded).toBe(MISSION_MILESTONE_DROPS[0]);
+    expect(useGameStore.getState().state.dailyMissions.claimedMilestones).toContain(MISSION_MILESTONES[0]);
+  });
+
+  it('awards cumulative drops for multiple milestones', () => {
+    setupWithCompletedMissions(3); // 30P → milestones at 10, 20, 30
+    const { dropsAwarded } = useGameStore.getState().claimMissions();
+    const expected = MISSION_MILESTONE_DROPS[0]! + MISSION_MILESTONE_DROPS[1]! + MISSION_MILESTONE_DROPS[2]!;
+    expect(dropsAwarded).toBe(expected);
+    expect(useGameStore.getState().state.dailyMissions.claimedMilestones.length).toBe(3);
+  });
+
+  it('returns 0 when no milestones are reached', () => {
+    setupWithCompletedMissions(0);
+    const { dropsAwarded } = useGameStore.getState().claimMissions();
+    expect(dropsAwarded).toBe(0);
+  });
+
+  it('does not double-claim already claimed milestones', () => {
+    setupWithCompletedMissions(2); // 20P → milestones at 10, 20
+    useGameStore.getState().claimMissions();
+
+    // Claim again — should get 0
+    const { dropsAwarded } = useGameStore.getState().claimMissions();
+    expect(dropsAwarded).toBe(0);
+  });
+
+  it('allows overflow past MAX_WATER_DROPS', () => {
+    useGameStore.setState((s) => ({
+      state: {
+        ...s.state,
+        waterDrops: MAX_WATER_DROPS,
+        lastDropRegenAt: Date.now(),
+        dailyMissions: {
+          date: todayLocalDate(),
+          missions: [
+            { templateId: 'test_0', type: 'water', target: 1, progress: 1, completed: true },
+          ],
+          claimedPoints: 0,
+          claimedMilestones: [],
+        },
+      },
+    }));
+    useGameStore.getState().claimMissions();
+    expect(useGameStore.getState().state.waterDrops).toBe(MAX_WATER_DROPS + MISSION_MILESTONE_DROPS[0]!);
+  });
+
+  it('claims only newly reached milestones when called incrementally', () => {
+    setupWithCompletedMissions(1);
+    useGameStore.getState().claimMissions(); // claim 10P milestone
+
+    // Complete 2 more missions → 30P total
+    useGameStore.setState((s) => {
+      const missions = s.state.dailyMissions.missions.map((m, i) =>
+        i < 3 ? { ...m, progress: 1, completed: true } : m,
+      );
+      return {
+        state: {
+          ...s.state,
+          dailyMissions: { ...s.state.dailyMissions, missions },
+        },
+      };
+    });
+
+    const { dropsAwarded } = useGameStore.getState().claimMissions();
+    // Should only get drops for milestones 20P and 30P (10P already claimed)
+    expect(dropsAwarded).toBe(MISSION_MILESTONE_DROPS[1]! + MISSION_MILESTONE_DROPS[2]!);
+  });
+});
+
+// ── Daily Check-in ─────────────────────────────────────────────────
+
+describe('canClaimCheckin', () => {
+  beforeEach(resetStore);
+
+  it('returns true when lastRewardDate is empty', () => {
+    expect(useGameStore.getState().canClaimCheckin()).toBe(true);
+  });
+
+  it('returns false after claiming today', () => {
+    useGameStore.setState((s) => ({
+      state: {
+        ...s.state,
+        streak: { ...s.state.streak, lastRewardDate: todayLocalDate() },
+      },
+    }));
+    expect(useGameStore.getState().canClaimCheckin()).toBe(false);
+  });
+
+  it('returns true when last reward was a different day', () => {
+    useGameStore.setState((s) => ({
+      state: {
+        ...s.state,
+        streak: { ...s.state.streak, lastRewardDate: '2026-01-01' },
+      },
+    }));
+    expect(useGameStore.getState().canClaimCheckin()).toBe(true);
+  });
+});
+
+describe('checkinDrops', () => {
+  beforeEach(resetStore);
+
+  it('returns base drops with no streak bonus at streak=0', () => {
+    const { base, bonus, total } = useGameStore.getState().checkinDrops();
+    expect(base).toBe(CHECKIN_BASE_DROPS);
+    expect(bonus).toBe(0);
+    expect(total).toBe(CHECKIN_BASE_DROPS);
+  });
+
+  it('returns base drops with no bonus at streak=1', () => {
+    useGameStore.setState((s) => ({
+      state: { ...s.state, streak: { ...s.state.streak, currentStreak: 1 } },
+    }));
+    const { bonus } = useGameStore.getState().checkinDrops();
+    expect(bonus).toBe(0);
+  });
+
+  it('returns streak-1 bonus at streak=5', () => {
+    useGameStore.setState((s) => ({
+      state: { ...s.state, streak: { ...s.state.streak, currentStreak: 5 } },
+    }));
+    const { bonus, total } = useGameStore.getState().checkinDrops();
+    expect(bonus).toBe(4);
+    expect(total).toBe(CHECKIN_BASE_DROPS + 4);
+  });
+
+  it('caps bonus at CHECKIN_STREAK_BONUS_MAX', () => {
+    useGameStore.setState((s) => ({
+      state: { ...s.state, streak: { ...s.state.streak, currentStreak: 100 } },
+    }));
+    const { bonus } = useGameStore.getState().checkinDrops();
+    expect(bonus).toBe(CHECKIN_STREAK_BONUS_MAX);
+  });
+});
+
+describe('claimCheckin', () => {
+  beforeEach(resetStore);
+
+  it('awards drops and sets lastRewardDate', () => {
+    useGameStore.setState((s) => ({
+      state: {
+        ...s.state,
+        streak: { ...s.state.streak, currentStreak: 1, lastRewardDate: '' },
+        waterDrops: 10,
+        lastDropRegenAt: Date.now(),
+      },
+    }));
+    const { dropsAwarded, streakBonus } = useGameStore.getState().claimCheckin();
+    expect(dropsAwarded).toBe(CHECKIN_BASE_DROPS);
+    expect(streakBonus).toBe(0);
+    expect(useGameStore.getState().state.streak.lastRewardDate).toBe(todayLocalDate());
+    expect(useGameStore.getState().state.waterDrops).toBe(10 + CHECKIN_BASE_DROPS);
+  });
+
+  it('prevents double-claim on the same day', () => {
+    useGameStore.setState((s) => ({
+      state: {
+        ...s.state,
+        streak: { ...s.state.streak, currentStreak: 1, lastRewardDate: '' },
+        waterDrops: 10,
+        lastDropRegenAt: Date.now(),
+      },
+    }));
+    useGameStore.getState().claimCheckin();
+    const { dropsAwarded } = useGameStore.getState().claimCheckin();
+    expect(dropsAwarded).toBe(0);
+  });
+
+  it('includes streak bonus in drops awarded', () => {
+    useGameStore.setState((s) => ({
+      state: {
+        ...s.state,
+        streak: { ...s.state.streak, currentStreak: 10, lastRewardDate: '' },
+        waterDrops: 5,
+        lastDropRegenAt: Date.now(),
+      },
+    }));
+    const { dropsAwarded, streakBonus } = useGameStore.getState().claimCheckin();
+    expect(streakBonus).toBe(9); // streak 10 → bonus = min(9, 20) = 9
+    expect(dropsAwarded).toBe(CHECKIN_BASE_DROPS + 9);
+  });
+
+  it('allows overflow past MAX_WATER_DROPS', () => {
+    useGameStore.setState((s) => ({
+      state: {
+        ...s.state,
+        streak: { ...s.state.streak, currentStreak: 1, lastRewardDate: '' },
+        waterDrops: MAX_WATER_DROPS,
+        lastDropRegenAt: Date.now(),
+      },
+    }));
+    useGameStore.getState().claimCheckin();
+    expect(useGameStore.getState().state.waterDrops).toBe(MAX_WATER_DROPS + CHECKIN_BASE_DROPS);
+  });
+});
+
+// ── Migrations v5→v6, v6→v7 ───────────────────────────────────────
+
+describe('migrate v5 → v6', () => {
+  it('adds empty dailyMissions state', () => {
+    const v5State = {
+      schemaVersion: 5,
+      userId: 'test-user',
+      displayName: 'Guest',
+      createdAt: 1000,
+      updatedAt: 2000,
+      waterDrops: 20,
+      lastDropRegenAt: 3000,
+      activeTree: null,
+      collection: [],
+      stats: { totalPlanted: 0, totalWatered: 0, totalHarvested: 0 },
+      streak: { currentStreak: 2, longestStreak: 5, lastCheckinDate: '2026-04-06' },
+      pityPoints: 0,
+    };
+    const result = migrate(v5State as unknown as { schemaVersion: number } & Record<string, unknown>);
+    expect(result.schemaVersion).toBe(SCHEMA_VERSION);
+    expect(result.dailyMissions).toEqual({
+      date: '',
+      missions: [],
+      claimedPoints: 0,
+      claimedMilestones: [],
+    });
+  });
+});
+
+describe('migrate v6 → v7', () => {
+  it('adds lastRewardDate to streak', () => {
+    const v6State = {
+      schemaVersion: 6,
+      userId: 'test-user',
+      displayName: 'Guest',
+      createdAt: 1000,
+      updatedAt: 2000,
+      waterDrops: 20,
+      lastDropRegenAt: 3000,
+      activeTree: null,
+      collection: [],
+      stats: { totalPlanted: 0, totalWatered: 0, totalHarvested: 0 },
+      streak: { currentStreak: 3, longestStreak: 5, lastCheckinDate: '2026-04-06' },
+      pityPoints: 0,
+      dailyMissions: { date: '', missions: [], claimedPoints: 0, claimedMilestones: [] },
+    };
+    const result = migrate(v6State as unknown as { schemaVersion: number } & Record<string, unknown>);
+    expect(result.schemaVersion).toBe(SCHEMA_VERSION);
+    expect(result.streak.lastRewardDate).toBe('');
+    // Existing streak fields preserved
+    expect(result.streak.currentStreak).toBe(3);
+    expect(result.streak.longestStreak).toBe(5);
   });
 });

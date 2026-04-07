@@ -120,7 +120,7 @@ export const dict = {
       "5 ระดับ: Seedling → Apprentice (20+) → Gardener (75+) → Master (150+) → Legend (250+)",
     "guide.driedLeaves.title": "🍂 ใบไม้แห้ง",
     "guide.driedLeaves.body":
-      "เก็บเกี่ยวต้นไม้ที่มีแล้วจะได้ใบไม้แห้ง สะสมครบ {threshold} ใบจะได้สายพันธุ์ใหม่ที่ยังไม่เคยมี 1 ต้น",
+      "เก็บเกี่ยวต้นไม้ที่มีแล้วจะได้ใบไม้แห้ง สะสมครบ {threshold} ใบจะได้สายพันธุ์ใหม่ที่ยังไม่เคยมี 1 ต้น ⚠️ ใบไม้แห้งจะรีเซ็ตเป็น 0 ทุกครั้งที่ได้สายพันธุ์ใหม่ (ไม่ว่าจากการสุ่มปกติหรือจากรางวัลใบไม้แห้ง)",
     "guide.driedLeaves.rates":
       "+{common} ธรรมดา · +{rare} หายาก · +{legendary} ตำนาน",
     "guide.driedLeaves.progress": "🍂 {current} / {threshold}",
@@ -136,6 +136,9 @@ export const dict = {
     "guide.save.backup.title": "สำรอง / กู้คืนด้วยรหัสเซฟ",
     "guide.save.backup.body":
       "ไปที่ตั้งค่า → ข้อมูลบันทึก → คัดลอกรหัส แล้วเก็บไว้ในโน้ตหรือแชท ถ้าอยากย้ายเครื่องก็วางรหัสกลับเข้าไปที่ Import",
+    "guide.daily.title": "เช็คอิน & ภารกิจประจำวัน",
+    "guide.daily.body":
+      "เช็คอินรับ 30 หยด + โบนัสสตรีคสูงสุด +20 · ภารกิจ 5 อัน (10P/อัน) สะสมครบไมล์สโตนได้หยดเพิ่ม · รีเซ็ตทุกเที่ยงคืน",
     "guide.developer.title": "พัฒนาโดย",
     "guide.developer.body": "เกมนี้สร้างโดย Zeze — ดูผลงานอื่นๆ ได้ที่",
     "guide.developer.linkLabel": "zeze.app/portfolio",
@@ -173,7 +176,7 @@ export const dict = {
     "missions.water": "รดน้ำ {target} ครั้ง",
     "missions.plant": "ปลูกต้นไม้ {target} ต้น",
     "missions.harvest": "เก็บเกี่ยว {target} ต้น",
-    "missions.harvest_rare": "เก็บเกี่ยวสายพันธุ์หายาก",
+    "missions.harvest_rare": "เก็บเกี่ยวสายพันธุ์หายาก {target} ต้น",
     "missions.visit_gallery": "เยี่ยมชมแกลเลอรี",
     "missions.visit_floripedia": "เยี่ยมชม Floripedia",
     "missions.share_florist_card": "แชร์ Florist Card",
@@ -316,7 +319,7 @@ export const dict = {
       "Five tiers: Seedling → Apprentice (20+) → Gardener (75+) → Master (150+) → Legend (250+)",
     "guide.driedLeaves.title": "🍂 Dried Leaves",
     "guide.driedLeaves.body":
-      "Harvesting a species you already own earns dried leaves. Collect {threshold} to receive a new species you have never had.",
+      "Harvesting a species you already own earns dried leaves. Collect {threshold} to receive a new species you have never had. ⚠️ Dried leaves reset to 0 every time you obtain a new species (whether from normal planting or from dried leaves rewards).",
     "guide.driedLeaves.rates":
       "+{common} common · +{rare} rare · +{legendary} legendary",
     "guide.driedLeaves.progress": "🍂 {current} / {threshold}",
@@ -332,6 +335,9 @@ export const dict = {
     "guide.save.backup.title": "Back up / restore with a save code",
     "guide.save.backup.body":
       "Open Settings → Save data → copy the code and keep it in a note or chat. To move to another device, paste the code into Import.",
+    "guide.daily.title": "Check-in & Daily Missions",
+    "guide.daily.body":
+      "Check in for 30 drops + streak bonus up to +20 · 5 missions (10P each), hit milestones for bonus drops · Resets at midnight",
     "guide.developer.title": "Made by",
     "guide.developer.body": "Built by Zeze — see other projects at",
     "guide.developer.linkLabel": "zeze.app/portfolio",
@@ -370,7 +376,7 @@ export const dict = {
     "missions.water": "Water {target} times",
     "missions.plant": "Plant {target} trees",
     "missions.harvest": "Harvest {target} trees",
-    "missions.harvest_rare": "Harvest a rare species",
+    "missions.harvest_rare": "Harvest {target} rare species",
     "missions.visit_gallery": "Visit Gallery",
     "missions.visit_floripedia": "Visit Floripedia",
     "missions.share_florist_card": "Share Florist Card",

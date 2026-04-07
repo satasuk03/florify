@@ -28,7 +28,8 @@ export function StoreHydrator() {
 
   // Initialize mission event subscriber (once).
   useEffect(() => {
-    initMissionSubscriber();
+    const cleanup = initMissionSubscriber();
+    return cleanup;
   }, []);
 
   // Initial hydrate on mount.

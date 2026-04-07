@@ -4,7 +4,8 @@ import { useGameStore } from './gameStore';
 
 /**
  * Subscribes to the game event bus and maps events to mission progress.
- * Called once from StoreHydrator on mount.
+ * Called once from StoreHydrator on mount. Returns a cleanup function
+ * that unregisters the listener (important for HMR and testing).
  */
 
 function handleEvent(event: GameEvent) {
@@ -35,8 +36,12 @@ function handleEvent(event: GameEvent) {
 
 let initialized = false;
 
-export function initMissionSubscriber() {
-  if (initialized) return;
+export function initMissionSubscriber(): () => void {
+  if (initialized) return () => {};
   initialized = true;
   gameEventBus.on(handleEvent);
+  return () => {
+    gameEventBus.off(handleEvent);
+    initialized = false;
+  };
 }

@@ -68,6 +68,7 @@ export function GuideBookSheet({ open, onClose }: Props) {
           <HowToPlaySection />
           <RaritySection />
           <FeaturesSection />
+          <DailySection />
           <DriedLeavesSection />
           <SaveSection />
           <DeveloperSection />
@@ -180,6 +181,20 @@ function FeaturesSection() {
             <div className="text-sm text-ink-700 leading-relaxed mt-0.5">{t(it.bodyKey)}</div>
           </div>
         ))}
+      </Card>
+    </section>
+  );
+}
+
+function DailySection() {
+  const t = useT();
+  return (
+    <section>
+      <SectionHeading>{t('guide.daily.title')}</SectionHeading>
+      <Card className="p-4">
+        <p className="text-sm text-ink-700 leading-relaxed">
+          {t('guide.daily.body')}
+        </p>
       </Card>
     </section>
   );
