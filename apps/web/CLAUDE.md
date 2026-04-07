@@ -42,7 +42,7 @@ Bilingual support is **client-side only** — no library, no locale routes, no S
 
 # Flora & Species
 
-- 300 species in `src/data/species.ts` (0-199 common, 200-279 rare, 280-299 legendary).
+- 305 species split across `src/data/species/series-{0,1,2,3}.ts`, re-exported from `src/data/species/index.ts`. Types live in `src/data/species/types.ts`. To add a new batch, create a new `series-N.ts` and import it in `index.ts`.
 - Rarity weights: 75% common, 22% rare, 3% legendary (`src/data/rarityWeights.ts`).
 - Images: `public/floras/{folder}/stage-{1,2,3}.webp` — 3 growth stages per species.
 - Stage thresholds: < 1/3 progress → stage 1, < 2/3 → stage 2, >= 2/3 → stage 3.

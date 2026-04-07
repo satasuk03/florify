@@ -1,6 +1,6 @@
 ---
 name: add-flora
-description: Add a new flora species to Florify. Takes a species description from the user, generates 3 stage images (seedling, young, mature) via the xAI image script, places the webps under apps/web/public/floras/{folder}/, and registers the species in apps/web/src/data/species.ts. Use when the user asks to add / create / register a new flora or species.
+description: Add a new flora species to Florify. Takes a species description from the user, generates 3 stage images (seedling, young, mature) via the xAI image script, places the webps under apps/web/public/floras/{folder}/, and registers the species in the latest series file under apps/web/src/data/species/. Use when the user asks to add / create / register a new flora or species.
 ---
 
 # add-flora
@@ -15,17 +15,17 @@ Before doing anything else, make sure you have:
 2. **Folder name** *(optional)* — lowercase, no spaces, ascii only (e.g. `voidlotus`). If not supplied, propose one based on the description and confirm.
 3. **Display name** *(optional)* — defaults to Title-cased folder.
 4. **Rarity** *(optional)* — `common` | `rare` | `legendary`. Default `rare` for user-added floras unless the description clearly implies otherwise.
-5. **Collection** *(optional)* — `SpeciesCollection.Original` | `SpeciesCollection.ChineseGarden` (enum in `apps/web/src/data/species.ts`). Default `SpeciesCollection.ChineseGarden` for Chinese-themed floras, `SpeciesCollection.Original` is reserved for the hand-authored 300-species catalogue. Add new enum values if the user wants a new collection theme.
-6. **Thai description** *(optional)* — if the user doesn't provide one, translate the English description yourself into natural Thai in the same literary voice as existing entries in `apps/web/src/data/species.ts`.
+5. **Collection** *(optional)* — `SpeciesCollection.Original` | `SpeciesCollection.ChineseGarden` (enum in `apps/web/src/data/species/types.ts`). Default `SpeciesCollection.ChineseGarden` for Chinese-themed floras, `SpeciesCollection.Original` is reserved for the hand-authored 300-species catalogue. Add new enum values if the user wants a new collection theme.
+6. **Thai description** *(optional)* — if the user doesn't provide one, translate the English description yourself into natural Thai in the same literary voice as existing entries in the species series files.
 
-Do NOT reuse a folder name that already exists in `SPECIES` (`apps/web/src/data/species.ts`) or under `apps/web/public/floras/`. Check both before proceeding.
+Do NOT reuse a folder name that already exists in `SPECIES` (check series files under `apps/web/src/data/species/`) or under `apps/web/public/floras/`. Check both before proceeding.
 
 ## Architecture you must respect
 
-- The catalogue is a strictly-ordered array in `apps/web/src/data/species.ts`. `id` equals array index. `folder` must match `public/floras/{folder}/`.
+- Species are split into series files under `apps/web/src/data/species/series-{N}.ts` (100 species each), registered and re-exported from `apps/web/src/data/species/index.ts`. Types live in `apps/web/src/data/species/types.ts`. `id` equals array index. `folder` must match `public/floras/{folder}/`.
 - Runtime images live at `apps/web/public/floras/{folder}/stage-{1|2|3}.webp`. Stage 1 = seedling, Stage 2 = young plant, Stage 3 = mature bloom.
 - Image generation is driven by `apps/scripts/` — prompts live in `apps/scripts/prompts.json`, the generator is `apps/scripts/src/generate.ts`, which writes to `apps/scripts/output/{folder}/stage-{N}.webp`. It reads `XAI_API_KEY` from `apps/scripts/.env`.
-- `species.ts` has an integrity check asserting `length >= 300` (already relaxed for user-added species). The id-equals-index check remains strict.
+- `index.ts` has an integrity check asserting `length >= 300`. The id-equals-index check remains strict.
 
 ## Procedure
 
@@ -82,14 +82,14 @@ cp apps/scripts/output/{folder}/stage-*.webp apps/web/public/floras/{folder}/
 Verify all three files exist and are non-empty before moving on.
 
 ### 6. Register the species in data files
-**`apps/web/src/data/species.ts`** — append a new `SpeciesDef` object to the `SPECIES` array with:
-   - `id`: next sequential integer (300 for the first user-added, 301 for the next, …)
+Append a new `SpeciesDef` object to the **latest series file** under `apps/web/src/data/species/` (e.g. `series-3.ts` for ids 300+). If the current series has 100 entries, create a new `series-N.ts` and import it in `index.ts`.
+   - `id`: next sequential integer (check the last id in the latest series file)
    - `folder`: matches the folder created in step 5
    - `name`: display name
    - `rarity`: chosen rarity
    - `descriptionEN` / `descriptionTH`: the lore
-   - `series`: `SpeciesSeries.Abnormal` by default for user-added floras (use `SpeciesSeries.Original` only if the user explicitly asks). Import the enum from the same file — it's exported alongside `SpeciesDef`.
-   Relax the `SPECIES.length !== 300` guard to `< 300`. Keep the id-equals-index check intact — it still needs to pass.
+   - `collection`: `SpeciesCollection.ChineseGarden` by default for user-added floras (use `SpeciesCollection.Original` only if the user explicitly asks). Import from `./types`.
+   Keep the id-equals-index check intact — it still needs to pass.
 
 ### 7. Verify
 - `pnpm --filter @florify/web typecheck` (or the repo's equivalent) to make sure the integrity checks still pass at import time.
