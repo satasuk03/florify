@@ -68,7 +68,7 @@ export function GalleryView() {
 
   useEffect(() => {
     if (!hydrated) return;
-    gameEventBus.emit({ type: 'visit', screen: 'gallery' });
+    gameEventBus.emit({ type: 'visit' });
   }, [hydrated]);
   const totalHarvested = collection.reduce((sum, c) => sum + c.count, 0);
 

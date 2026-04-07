@@ -50,7 +50,7 @@ export function FloripediaView({ speciesId }: Props) {
 
   useEffect(() => {
     if (!hydrated) return;
-    gameEventBus.emit({ type: 'visit', screen: 'floripedia' });
+    gameEventBus.emit({ type: 'visit' });
   }, [hydrated]);
   // Local override — lets a visitor read the lore in their preferred
   // language without changing app-wide settings.

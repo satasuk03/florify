@@ -177,8 +177,7 @@ export const dict = {
     "missions.plant": "ปลูกต้นไม้ {target} ต้น",
     "missions.harvest": "เก็บเกี่ยว {target} ต้น",
     "missions.harvest_rare": "เก็บเกี่ยวสายพันธุ์หายาก {target} ต้น",
-    "missions.visit_gallery": "เยี่ยมชมแกลเลอรี",
-    "missions.visit_floripedia": "เยี่ยมชม Floripedia",
+    "missions.visit_floripedia": "เยี่ยมชมแกลเลอรี",
     "missions.share_florist_card": "แชร์ Florist Card",
 
     // ── Daily Check-in ─────────────────────────
@@ -377,8 +376,7 @@ export const dict = {
     "missions.plant": "Plant {target} trees",
     "missions.harvest": "Harvest {target} trees",
     "missions.harvest_rare": "Harvest {target} rare species",
-    "missions.visit_gallery": "Visit Gallery",
-    "missions.visit_floripedia": "Visit Floripedia",
+    "missions.visit_floripedia": "Visit Gallery",
     "missions.share_florist_card": "Share Florist Card",
 
     // ── Daily Check-in ─────────────────────────

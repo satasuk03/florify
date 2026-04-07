@@ -25,8 +25,7 @@ function handleEvent(event: GameEvent) {
       }
       break;
     case 'visit':
-      if (event.screen === 'gallery') trackMission('visit_gallery');
-      else if (event.screen === 'floripedia') trackMission('visit_floripedia');
+      trackMission('visit_floripedia');
       break;
     case 'share':
       trackMission('share_florist_card');

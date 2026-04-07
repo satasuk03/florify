@@ -838,6 +838,41 @@ describe('trackMission', () => {
   });
 });
 
+describe('visit quest via event bus', () => {
+  beforeEach(resetStore);
+
+  it('completes visit_floripedia mission when visit event is emitted', async () => {
+    const { gameEventBus } = await import('@/lib/gameEventBus');
+    const { initMissionSubscriber } = await import('@/store/missionSubscriber');
+
+    const cleanup = initMissionSubscriber();
+
+    useGameStore.setState((s) => ({
+      state: {
+        ...s.state,
+        dailyMissions: {
+          date: todayLocalDate(),
+          missions: [
+            { templateId: 'visit_floripedia', type: 'visit_floripedia' as const, target: 1, progress: 0, completed: false },
+          ],
+          claimedPoints: 0,
+          claimedMilestones: [],
+        },
+      },
+    }));
+
+    gameEventBus.emit({ type: 'visit' });
+
+    const missions = useGameStore.getState().state.dailyMissions.missions;
+    const visitMission = missions.find((m) => m.type === 'visit_floripedia');
+    expect(visitMission).toBeDefined();
+    expect(visitMission!.progress).toBe(1);
+    expect(visitMission!.completed).toBe(true);
+
+    cleanup();
+  });
+});
+
 describe('claimMissions', () => {
   beforeEach(resetStore);
 

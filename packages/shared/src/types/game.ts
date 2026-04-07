@@ -6,7 +6,6 @@ export type MissionType =
   | 'plant'
   | 'harvest'
   | 'harvest_rare'
-  | 'visit_gallery'
   | 'visit_floripedia'
   | 'share_florist_card';
 
@@ -30,7 +29,7 @@ export type GameEvent =
   | { type: 'water' }
   | { type: 'plant' }
   | { type: 'harvest'; rarity: Rarity; isNew: boolean }
-  | { type: 'visit'; screen: 'gallery' | 'floripedia' }
+  | { type: 'visit' }
   | { type: 'share' };
 
 export interface TreeInstance {

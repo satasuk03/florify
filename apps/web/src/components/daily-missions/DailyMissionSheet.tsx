@@ -226,7 +226,6 @@ const MISSION_LABEL_KEYS: Record<string, string> = {
   plant: 'missions.plant',
   harvest: 'missions.harvest',
   harvest_rare: 'missions.harvest_rare',
-  visit_gallery: 'missions.visit_gallery',
   visit_floripedia: 'missions.visit_floripedia',
   share_florist_card: 'missions.share_florist_card',
 };
