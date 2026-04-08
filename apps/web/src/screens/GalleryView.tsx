@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useEffect, memo } from 'react';
+import { useState, useMemo, useEffect, useRef, useCallback, memo } from 'react';
 import Link from 'next/link';
 import { Card } from '@/components/Card';
 import { RarityBadge } from '@/components/RarityBadge';
@@ -23,7 +23,12 @@ const COLLECTION_LABELS: Record<SpeciesCollection, { th: string; en: string }> =
 
 const RARITY_ORDER: Rarity[] = ['common', 'rare', 'legendary'];
 
-const ALL_COLLECTIONS = Object.values(SpeciesCollection);
+/* Newest collection first */
+const ALL_COLLECTIONS: SpeciesCollection[] = [
+  SpeciesCollection.AbyssalGarden,
+  SpeciesCollection.ChineseGarden,
+  SpeciesCollection.Original,
+];
 
 /* ── Icons (inline SVGs to avoid extra deps) ────────────────────── */
 function SearchIcon() {
@@ -149,6 +154,35 @@ export function GalleryView() {
     });
   }, [search, selectedRarities, selectedCollections, showMode, discoveredSet]);
 
+  /* ── Group filtered species by collection (newest first) ─────── */
+  const groupedByCollection = useMemo(() => {
+    const groups: { collection: SpeciesCollection; species: SpeciesDef[] }[] = [];
+    for (const col of ALL_COLLECTIONS) {
+      const items = filtered.filter((sp) => sp.collection === col);
+      if (items.length > 0) groups.push({ collection: col, species: items });
+    }
+    return groups;
+  }, [filtered]);
+
+  /* ── Scroll-to-top ────────────────────────────────────────────── */
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  const scrollTicking = useRef(false);
+
+  const onScroll = useCallback(() => {
+    if (scrollTicking.current) return;
+    scrollTicking.current = true;
+    requestAnimationFrame(() => {
+      const el = scrollRef.current;
+      if (el) setShowScrollTop(el.scrollTop > 400);
+      scrollTicking.current = false;
+    });
+  }, []);
+
+  const scrollToTop = useCallback(() => {
+    scrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
   const isDefaultFilters =
     selectedRarities.size === RARITY_ORDER.length &&
     selectedCollections.size === ALL_COLLECTIONS.length &&
@@ -160,7 +194,7 @@ export function GalleryView() {
     (showMode !== 'all' ? 1 : 0);
 
   return (
-    <div className="min-h-full h-full overflow-y-auto bg-cream-50 safe-top safe-bottom px-4 pb-24 scrollbar-elegant">
+    <div ref={scrollRef} onScroll={onScroll} className="relative min-h-full h-full overflow-y-auto bg-cream-50 safe-top safe-bottom px-4 pb-24 scrollbar-elegant">
       {/* ── Header ──────────────────────────────────────────────── */}
       <header className="flex items-center justify-between py-4 animate-fade-down">
         <Link
@@ -356,47 +390,80 @@ export function GalleryView() {
         </span>
       </div>
 
-      {/* ── Species grid ────────────────────────────────────────── */}
+      {/* ── Species grid grouped by collection ────────────────── */}
       {filtered.length === 0 ? (
         <div className="text-center text-ink-500 text-sm mt-16 animate-fade-in">
           {search ? t('gallery.noResults') : t('gallery.empty')}
         </div>
       ) : (
-        <div className="grid grid-cols-3 gap-3">
-          {filtered.map((sp, i) => {
-            const isFound = discoveredSet.has(sp.id);
-            const entry = isFound ? collectionMap.get(sp.id) : undefined;
-            // Only animate the first 12 tiles; the rest appear instantly
-            const animate = i < 12;
+        <div className="space-y-6">
+          {groupedByCollection.map((group, gi) => {
+            const label = COLLECTION_LABELS[group.collection];
+            const countInGroup = group.species.filter((sp) => discoveredSet.has(sp.id)).length;
+            return (
+              <section key={group.collection}>
+                {/* Section header — hide if only one collection visible */}
+                {groupedByCollection.length > 1 && (
+                  <div className="sticky top-0 z-10 flex items-center gap-2 mb-3 py-2 bg-cream-50/90 backdrop-blur-sm -mx-4 px-4">
+                    <h2 className="text-sm font-serif text-ink-800">{label.en}</h2>
+                    <span className="text-[10px] text-ink-400 tabular-nums">
+                      {countInGroup}/{group.species.length}
+                    </span>
+                    <div className="flex-1 border-b border-cream-300/60" />
+                  </div>
+                )}
+                <div className="grid grid-cols-3 gap-3">
+                  {group.species.map((sp, i) => {
+                    const isFound = discoveredSet.has(sp.id);
+                    const entry = isFound ? collectionMap.get(sp.id) : undefined;
+                    // Only animate first 12 tiles of the first group
+                    const animate = gi === 0 && i < 12;
 
-            return isFound ? (
-              <Link
-                key={sp.id}
-                href={{ pathname: '/gallery/detail', query: { speciesId: String(sp.id) } }}
-                className={`group block ${animate ? 'animate-fade-up' : ''}`}
-                style={{
-                  animationDelay: animate ? `${i * 40 + 100}ms` : undefined,
-                  contentVisibility: 'auto',
-                  containIntrinsicSize: 'auto 140px',
-                } as React.CSSProperties}
-              >
-                <GalleryTile species={sp} count={entry?.count ?? 1} />
-              </Link>
-            ) : (
-              <div
-                key={sp.id}
-                className={`block ${animate ? 'animate-fade-up' : ''}`}
-                style={{
-                  animationDelay: animate ? `${i * 40 + 100}ms` : undefined,
-                  contentVisibility: 'auto',
-                  containIntrinsicSize: 'auto 140px',
-                } as React.CSSProperties}
-              >
-                <LockedTile species={sp} />
-              </div>
+                    return isFound ? (
+                      <Link
+                        key={sp.id}
+                        href={{ pathname: '/gallery/detail', query: { speciesId: String(sp.id) } }}
+                        className={`group block ${animate ? 'animate-fade-up' : ''}`}
+                        style={{
+                          animationDelay: animate ? `${i * 40 + 100}ms` : undefined,
+                          contentVisibility: 'auto',
+                          containIntrinsicSize: 'auto 140px',
+                        } as React.CSSProperties}
+                      >
+                        <GalleryTile species={sp} count={entry?.count ?? 1} />
+                      </Link>
+                    ) : (
+                      <div
+                        key={sp.id}
+                        className={`block ${animate ? 'animate-fade-up' : ''}`}
+                        style={{
+                          animationDelay: animate ? `${i * 40 + 100}ms` : undefined,
+                          contentVisibility: 'auto',
+                          containIntrinsicSize: 'auto 140px',
+                        } as React.CSSProperties}
+                      >
+                        <LockedTile species={sp} />
+                      </div>
+                    );
+                  })}
+                </div>
+              </section>
             );
           })}
         </div>
+      )}
+
+      {/* ── Scroll to top FAB ──────────────────────────────────── */}
+      {showScrollTop && (
+        <button
+          onClick={scrollToTop}
+          className="sticky bottom-6 left-full z-20 -mr-1 w-10 h-10 rounded-full bg-cream-100/90 border border-cream-300 shadow-soft-md backdrop-blur-sm flex items-center justify-center text-ink-600 hover:bg-cream-200 transition-all duration-200 animate-fade-up"
+          aria-label="Scroll to top"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="18 15 12 9 6 15" />
+          </svg>
+        </button>
       )}
     </div>
   );

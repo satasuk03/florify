@@ -4,6 +4,7 @@
 - Compress images
 - Next Collection: Fungi Kingdom
 
+- อยากให้ Single source of truth เรื่อง Collection
 ## Done
 - Stats -> DriedLeavesGained, SproutsGained, SproutsSpent, BoosterPacksOpened (each tier)
 - Juicy Animation
