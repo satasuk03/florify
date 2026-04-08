@@ -77,7 +77,6 @@ export function DailyMissionSheet({ open, onClose }: Props) {
               onRequestRefresh={setConfirmIndex}
               canRefresh={sprouts >= SPROUT_QUEST_REFRESH_COST}
             />
-            <AllMissionsBonus />
             <ClaimButton />
           </div>
         </div>
@@ -214,9 +213,8 @@ function MilestoneBar() {
           const drops = MISSION_MILESTONE_DROPS[i]!;
           const reached = totalPoints >= milestone;
           const claimed = claimedMilestones.includes(milestone);
-          const isLast = i === MISSION_MILESTONES.length - 1;
 
-          // Is the segment between this milestone and the next filled?
+          // Segment to next milestone
           const nextMilestone = MISSION_MILESTONES[i + 1];
           const segmentFilled = nextMilestone
             ? totalPoints >= nextMilestone
@@ -234,7 +232,7 @@ function MilestoneBar() {
           return (
             <div
               key={milestone}
-              className={`flex items-center ${isLast ? "" : "flex-1"}`}
+              className="flex items-center flex-1"
               style={{
                 animation:
                   "mission-card-in 400ms cubic-bezier(0.22, 1, 0.36, 1) both",
@@ -291,7 +289,7 @@ function MilestoneBar() {
               </div>
 
               {/* Connector segment */}
-              {!isLast && (
+              {nextMilestone && (
                 <div className="flex-1 h-[3px] mx-1 rounded-full bg-cream-300/70 overflow-hidden self-start mt-[18px]">
                   <div
                     className="h-full rounded-full bg-gradient-to-r from-clay-500 to-clay-400"
@@ -310,6 +308,78 @@ function MilestoneBar() {
             </div>
           );
         })}
+
+        {/* 6th node: Sprout bonus for completing all 5 */}
+        <SproutMilestoneNode allComplete={totalPoints >= maxPoints} />
+      </div>
+    </div>
+  );
+}
+
+function SproutMilestoneNode({ allComplete }: { allComplete: boolean }) {
+  const allCompletedClaimed = useGameStore(
+    (s) => s.state.dailyMissions.allCompletedClaimed,
+  );
+  const claimed = allComplete && allCompletedClaimed;
+
+  return (
+    <div
+      className="flex items-center"
+      style={{
+        animation: "mission-card-in 400ms cubic-bezier(0.22, 1, 0.36, 1) both",
+        animationDelay: "700ms",
+      }}
+    >
+      {/* Connector from 50P to sprout node */}
+      <div className="w-3 h-[3px] mx-1 rounded-full bg-cream-300/70 overflow-hidden self-start mt-[18px]">
+        <div
+          className="h-full rounded-full bg-gradient-to-r from-leaf-500 to-leaf-300"
+          style={{ width: allComplete ? "100%" : "0%" }}
+        />
+      </div>
+
+      {/* Sprout node */}
+      <div className="flex flex-col items-center gap-1.5">
+        <div
+          className={`relative w-9 h-9 rounded-full flex items-center justify-center transition-all duration-500 ${
+            claimed
+              ? "bg-gradient-to-br from-leaf-500 to-leaf-700 shadow-[0_2px_10px_rgba(107,142,78,0.4)]"
+              : allComplete
+                ? "bg-gradient-to-br from-leaf-300/40 to-leaf-500/50 ring-2 ring-leaf-500/60 ring-offset-1 ring-offset-cream-100"
+                : "bg-cream-200/80 ring-2 ring-cream-300/60 ring-offset-1 ring-offset-cream-100"
+          }`}
+          style={
+            allComplete && !claimed
+              ? { animation: "milestone-glow 2s ease-in-out infinite" }
+              : claimed
+                ? {
+                    animation:
+                      "milestone-unlock 500ms cubic-bezier(0.22, 1, 0.36, 1) both",
+                  }
+                : undefined
+          }
+        >
+          {claimed ? (
+            <CheckIcon size={16} className="text-cream-50" />
+          ) : (
+            <span
+              className={`text-sm ${allComplete ? "" : "grayscale opacity-40"}`}
+            >
+              🌱
+            </span>
+          )}
+        </div>
+        <span
+          className={`text-[10px] font-bold tabular-nums leading-none ${
+            claimed
+              ? "text-leaf-700"
+              : allComplete
+                ? "text-leaf-500"
+                : "text-ink-300"
+          }`}
+        >
+          +{SPROUT_ALL_MISSIONS_BONUS}
+        </span>
       </div>
     </div>
   );
@@ -558,7 +628,11 @@ function ClaimButton() {
   const claimedMilestones = useGameStore(
     (s) => s.state.dailyMissions.claimedMilestones,
   );
+  const allCompletedClaimed = useGameStore(
+    (s) => s.state.dailyMissions.allCompletedClaimed,
+  );
   const claimMissions = useGameStore((s) => s.claimMissions);
+  const claimAllCompletedBonus = useGameStore((s) => s.claimAllCompletedBonus);
   const [burstKey, setBurstKey] = useState(0);
 
   const totalPoints =
@@ -573,17 +647,28 @@ function ClaimButton() {
     }
   }
 
-  const canClaim = unclaimedDrops > 0;
-  const allClaimed = claimedMilestones.length === MISSION_MILESTONES.length;
+  const allComplete = missions.length === DAILY_MISSION_COUNT && missions.every((m) => m.completed);
+  const canClaimSprouts = allComplete && !allCompletedClaimed;
+  const canClaim = unclaimedDrops > 0 || canClaimSprouts;
+  const allClaimed = claimedMilestones.length === MISSION_MILESTONES.length && (!allComplete || allCompletedClaimed);
 
   const handleClaim = useCallback(() => {
+    let claimed = false;
     const { dropsAwarded } = claimMissions();
     if (dropsAwarded > 0) {
+      toast(t("missions.dropsAwarded", { drops: dropsAwarded }));
+      claimed = true;
+    }
+    const { sproutsAwarded } = claimAllCompletedBonus();
+    if (sproutsAwarded > 0) {
+      toast(t("missions.sproutsAwarded", { sprouts: sproutsAwarded }));
+      claimed = true;
+    }
+    if (claimed) {
       haptic("harvest");
       setBurstKey((k) => k + 1);
-      toast(t("missions.dropsAwarded", { drops: dropsAwarded }));
     }
-  }, [claimMissions, t]);
+  }, [claimMissions, claimAllCompletedBonus, t]);
 
   return (
     <div
@@ -617,16 +702,23 @@ function ClaimButton() {
           ) : canClaim ? (
             <>
               {t("missions.claimAll")}
-              <span className="inline-flex items-center gap-1 bg-white/20 rounded-full px-2.5 py-0.5 text-sm">
-                <span
-                  style={{
-                    animation: "drop-icon-wobble 800ms ease-in-out infinite",
-                  }}
-                >
-                  💧
+              {unclaimedDrops > 0 && (
+                <span className="inline-flex items-center gap-1 bg-white/20 rounded-full px-2.5 py-0.5 text-sm">
+                  <span
+                    style={{
+                      animation: "drop-icon-wobble 800ms ease-in-out infinite",
+                    }}
+                  >
+                    💧
+                  </span>
+                  +{unclaimedDrops}
                 </span>
-                +{unclaimedDrops}
-              </span>
+              )}
+              {canClaimSprouts && (
+                <span className="inline-flex items-center gap-1 bg-white/20 rounded-full px-2.5 py-0.5 text-sm">
+                  🌱 +{SPROUT_ALL_MISSIONS_BONUS}
+                </span>
+              )}
             </>
           ) : (
             t("missions.noClaim")

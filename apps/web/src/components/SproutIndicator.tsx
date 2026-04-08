@@ -8,6 +8,7 @@ import { useGameStore } from '@/store/gameStore';
  * Pop animation on count change, similar to DropsIndicator.
  */
 export function SproutIndicator() {
+  const hydrated = useGameStore((s) => s.hydrated);
   const sprouts = useGameStore((s) => s.state.sprouts);
   const prevSprouts = useRef(sprouts);
   const [popKey, setPopKey] = useState(0);
@@ -26,6 +27,8 @@ export function SproutIndicator() {
     const id = setTimeout(() => setAnimating(false), 400);
     return () => clearTimeout(id);
   }, [popKey]);
+
+  if (!hydrated) return null;
 
   return (
     <div className="flex items-center gap-1.5 rounded-full bg-cream-50/30 backdrop-blur-md border border-cream-200/60 shadow-soft-sm px-3 py-1">

@@ -215,19 +215,21 @@ export function PlotView() {
         </div>
       </div>
       {/* Sprout indicator — positioned between the title and the readout card.
-          Rendered as a separate sibling (like the readout card) to avoid
-          pushing the readout down or blocking its backdrop-blur. */}
-      <div
-        className="absolute left-0 right-0 flex justify-center pointer-events-none animate-fade-in"
-        style={{
-          top: "calc(env(safe-area-inset-top) + 3rem)",
-          animationDelay: "100ms",
-        }}
-      >
-        <div className="pointer-events-auto">
-          <SproutIndicator />
+          Gated on `hydrated` to avoid SSR/client mismatch (sprouts come
+          from localStorage which isn't available during SSR). */}
+      {hydrated && (
+        <div
+          className="absolute left-0 right-0 flex justify-center pointer-events-none animate-fade-in"
+          style={{
+            top: "calc(env(safe-area-inset-top) + 3rem)",
+            animationDelay: "100ms",
+          }}
+        >
+          <div className="pointer-events-auto">
+            <SproutIndicator />
+          </div>
         </div>
-      </div>
+      )}
       {/* Readout card lives OUTSIDE the animate-fade-down wrapper above.
           That wrapper's keyframes leave `transform: translateY(0)` set via
           `animation-fill-mode: both`, which creates a stacking context and

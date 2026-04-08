@@ -126,10 +126,14 @@ export function ActionButton({
     clearTimeout(comboTimerRef.current);
     setCombo((c) => {
       const next = c + 1;
+      // Defer event emission out of the setState updater to avoid
+      // triggering store updates (trackMission) during React's render
+      // phase, which causes "Cannot update a component while rendering
+      // a different component" warnings on rapid taps.
       for (const level of [10, 15, 20]) {
         if (next >= level && !comboEmittedRef.current.has(level)) {
           comboEmittedRef.current.add(level);
-          gameEventBus.emit({ type: 'combo', level });
+          queueMicrotask(() => gameEventBus.emit({ type: 'combo', level }));
         }
       }
       return next;
