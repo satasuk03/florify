@@ -1,8 +1,8 @@
 - Acheivements
 - หาต้นไม้ที่ใช่สำหรับคุณ -> Viral Marketing
-- Stats -> DriedLeavesGained, SproutsGained, SproutsSpent, BoosterPacksOpened (each tier)
 
 ## Done
+- Stats -> DriedLeavesGained, SproutsGained, SproutsSpent, BoosterPacksOpened (each tier)
 - Juicy Animation
 - เพิ่มต้น Liu https://i.pinimg.com/webp/736x/e2/bb/41/e2bb419dbaa5b717f15d849940826725.webp
 - Passport/Gallery ต้องมี filter แบบ all or by collection

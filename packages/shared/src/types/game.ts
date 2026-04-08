@@ -67,14 +67,24 @@ export interface CollectedSpecies {
   lastHarvestedAt: number;      // epoch ms
 }
 
+export interface ShopPurchases {
+  common: number;
+  rare: number;
+  legendary: number;
+}
+
 export interface PlayerStats {
   totalPlanted: number;
   totalWatered: number;
   totalHarvested: number;
+  driedLeavesGained: number;
+  sproutsGained: number;
+  sproutsSpent: number;
+  shopPurchases: ShopPurchases;
 }
 
 export interface PlayerState {
-  schemaVersion: 8;
+  schemaVersion: 9;
   userId: string;              // local nanoid; linked to a cloud account later
   displayName: string;         // user-editable; 'Guest' until renamed
   createdAt: number;

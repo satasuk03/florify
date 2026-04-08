@@ -351,7 +351,7 @@ describe('selectFloristCard', () => {
           mockCollected({ speciesId: 250, rarity: 'rare' }),
           mockCollected({ speciesId: 290, rarity: 'legendary' }),
         ],
-        stats: { totalPlanted: 4, totalWatered: 20, totalHarvested: 4 },
+        stats: { totalPlanted: 4, totalWatered: 20, totalHarvested: 4, driedLeavesGained: 0, sproutsGained: 0, sproutsSpent: 0, shopPurchases: { common: 0, rare: 0, legendary: 0 } },
       },
     }));
     const card = selectFloristCard(useGameStore.getState().state);
@@ -420,7 +420,7 @@ describe('resetAllProgress', () => {
         ...s.state,
         activeTree: mockTree(),
         collection: [mockCollected()],
-        stats: { totalPlanted: 5, totalWatered: 10, totalHarvested: 2 },
+        stats: { totalPlanted: 5, totalWatered: 10, totalHarvested: 2, driedLeavesGained: 0, sproutsGained: 0, sproutsSpent: 0, shopPurchases: { common: 0, rare: 0, legendary: 0 } },
       },
     }));
     useGameStore.getState().resetAllProgress();
@@ -452,7 +452,7 @@ describe('migrate v2 → v3', () => {
         harvestedAt: null,
       },
       collection: [],
-      stats: { totalPlanted: 1, totalWatered: 1, totalHarvested: 0 },
+      stats: { totalPlanted: 1, totalWatered: 1, totalHarvested: 0, driedLeavesGained: 0, sproutsGained: 0, sproutsSpent: 0, shopPurchases: { common: 0, rare: 0, legendary: 0 } },
       streak: { currentStreak: 0, longestStreak: 0, lastCheckinDate: '' },
     };
 
@@ -474,7 +474,7 @@ describe('migrate v2 → v3', () => {
       updatedAt: 2000,
       activeTree: null,
       collection: [],
-      stats: { totalPlanted: 0, totalWatered: 0, totalHarvested: 0 },
+      stats: { totalPlanted: 0, totalWatered: 0, totalHarvested: 0, driedLeavesGained: 0, sproutsGained: 0, sproutsSpent: 0, shopPurchases: { common: 0, rare: 0, legendary: 0 } },
       streak: { currentStreak: 0, longestStreak: 0, lastCheckinDate: '' },
     };
 
@@ -621,7 +621,7 @@ describe('migrate v4 → v5', () => {
       lastDropRegenAt: 3000,
       activeTree: null,
       collection: [],
-      stats: { totalPlanted: 0, totalWatered: 0, totalHarvested: 0 },
+      stats: { totalPlanted: 0, totalWatered: 0, totalHarvested: 0, driedLeavesGained: 0, sproutsGained: 0, sproutsSpent: 0, shopPurchases: { common: 0, rare: 0, legendary: 0 } },
       streak: { currentStreak: 0, longestStreak: 0, lastCheckinDate: '' },
     };
     const result = migrate(v4State as unknown as { schemaVersion: number } & Record<string, unknown>);
@@ -646,7 +646,7 @@ describe('migrate v3 → v4', () => {
         { id: 't2', seed: 2, speciesId: 5, rarity: 'common', requiredWaterings: 15, currentWaterings: 15, plantedAt: 2000, harvestedAt: 4000 },
         { id: 't3', seed: 3, speciesId: 10, rarity: 'rare', requiredWaterings: 20, currentWaterings: 20, plantedAt: 1500, harvestedAt: 3000 },
       ],
-      stats: { totalPlanted: 3, totalWatered: 47, totalHarvested: 3 },
+      stats: { totalPlanted: 3, totalWatered: 47, totalHarvested: 3, driedLeavesGained: 0, sproutsGained: 0, sproutsSpent: 0, shopPurchases: { common: 0, rare: 0, legendary: 0 } },
       streak: { currentStreak: 1, longestStreak: 1, lastCheckinDate: '2026-01-01' },
     };
 
@@ -1122,7 +1122,7 @@ describe('migrate v5 → v6', () => {
       lastDropRegenAt: 3000,
       activeTree: null,
       collection: [],
-      stats: { totalPlanted: 0, totalWatered: 0, totalHarvested: 0 },
+      stats: { totalPlanted: 0, totalWatered: 0, totalHarvested: 0, driedLeavesGained: 0, sproutsGained: 0, sproutsSpent: 0, shopPurchases: { common: 0, rare: 0, legendary: 0 } },
       streak: { currentStreak: 2, longestStreak: 5, lastCheckinDate: '2026-04-06' },
       pityPoints: 0,
     };
@@ -1150,7 +1150,7 @@ describe('migrate v6 → v7', () => {
       lastDropRegenAt: 3000,
       activeTree: null,
       collection: [],
-      stats: { totalPlanted: 0, totalWatered: 0, totalHarvested: 0 },
+      stats: { totalPlanted: 0, totalWatered: 0, totalHarvested: 0, driedLeavesGained: 0, sproutsGained: 0, sproutsSpent: 0, shopPurchases: { common: 0, rare: 0, legendary: 0 } },
       streak: { currentStreak: 3, longestStreak: 5, lastCheckinDate: '2026-04-06' },
       pityPoints: 0,
       dailyMissions: { date: '', missions: [], claimedPoints: 0, claimedMilestones: [] },
@@ -1179,7 +1179,7 @@ describe('migrate v7 → v8', () => {
       lastDropRegenAt: 3000,
       activeTree: null,
       collection: [],
-      stats: { totalPlanted: 5, totalWatered: 100, totalHarvested: 5 },
+      stats: { totalPlanted: 5, totalWatered: 100, totalHarvested: 5, driedLeavesGained: 0, sproutsGained: 0, sproutsSpent: 0, shopPurchases: { common: 0, rare: 0, legendary: 0 } },
       streak: { currentStreak: 3, longestStreak: 5, lastCheckinDate: '2026-04-06', lastRewardDate: '2026-04-06' },
       pityPoints: 42,
       dailyMissions: { date: '2026-04-06', missions: [], claimedPoints: 20, claimedMilestones: [10, 20] },
@@ -1191,6 +1191,37 @@ describe('migrate v7 → v8', () => {
     // Existing fields preserved
     expect(result.pityPoints).toBe(42);
     expect(result.dailyMissions.claimedPoints).toBe(20);
+  });
+});
+
+describe('migrate v8 → v9', () => {
+  it('adds lifetime stats fields with zero defaults', () => {
+    const v8State = {
+      schemaVersion: 8,
+      userId: 'test',
+      displayName: 'Guest',
+      createdAt: 0,
+      updatedAt: 0,
+      waterDrops: MAX_WATER_DROPS,
+      lastDropRegenAt: 0,
+      activeTree: null,
+      collection: [],
+      stats: { totalPlanted: 10, totalWatered: 50, totalHarvested: 8 },
+      streak: { currentStreak: 1, longestStreak: 3, lastCheckinDate: '2026-04-06', lastRewardDate: '2026-04-06' },
+      pityPoints: 15,
+      sprouts: 200,
+      dailyMissions: { date: '2026-04-06', missions: [], claimedPoints: 0, claimedMilestones: [], allCompletedClaimed: false },
+    };
+    const result = migrate(v8State as unknown as { schemaVersion: number } & Record<string, unknown>);
+    expect(result.schemaVersion).toBe(SCHEMA_VERSION);
+    expect(result.stats.driedLeavesGained).toBe(0);
+    expect(result.stats.sproutsGained).toBe(0);
+    expect(result.stats.sproutsSpent).toBe(0);
+    expect(result.stats.shopPurchases).toEqual({ common: 0, rare: 0, legendary: 0 });
+    // Existing fields preserved
+    expect(result.stats.totalPlanted).toBe(10);
+    expect(result.stats.totalHarvested).toBe(8);
+    expect(result.sprouts).toBe(200);
   });
 });
 

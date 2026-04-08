@@ -474,6 +474,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
           ...s.stats,
           totalWatered: s.stats.totalWatered + 1,
           totalHarvested: s.stats.totalHarvested + 1,
+          driedLeavesGained: s.stats.driedLeavesGained + result.pityPointsGained,
+          sproutsGained: s.stats.sproutsGained + sproutsGained,
         },
         updatedAt: now,
       };
@@ -663,6 +665,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const next: PlayerState = {
       ...s,
       sprouts: s.sprouts - SPROUT_QUEST_REFRESH_COST,
+      stats: {
+        ...s.stats,
+        sproutsSpent: s.stats.sproutsSpent + SPROUT_QUEST_REFRESH_COST,
+      },
       dailyMissions: { ...s.dailyMissions, missions: updated },
       updatedAt: Date.now(),
     };
@@ -681,6 +687,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const next: PlayerState = {
       ...s,
       sprouts: s.sprouts + SPROUT_ALL_MISSIONS_BONUS,
+      stats: {
+        ...s.stats,
+        sproutsGained: s.stats.sproutsGained + SPROUT_ALL_MISSIONS_BONUS,
+      },
       dailyMissions: { ...s.dailyMissions, allCompletedClaimed: true },
       updatedAt: Date.now(),
     };
@@ -714,6 +724,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
       stats: {
         ...s.stats,
         totalHarvested: s.stats.totalHarvested + 1,
+        driedLeavesGained: s.stats.driedLeavesGained + result.pityPointsGained,
+        sproutsGained: s.stats.sproutsGained + sproutsGained,
+        sproutsSpent: s.stats.sproutsSpent + cost,
+        shopPurchases: {
+          ...s.stats.shopPurchases,
+          [tier]: s.stats.shopPurchases[tier] + 1,
+        },
       },
       updatedAt: Date.now(),
     };

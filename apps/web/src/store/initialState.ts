@@ -13,7 +13,11 @@ export function createInitialState(): PlayerState {
     lastDropRegenAt: now,
     activeTree: null,
     collection: [],
-    stats: { totalPlanted: 0, totalWatered: 0, totalHarvested: 0 },
+    stats: {
+      totalPlanted: 0, totalWatered: 0, totalHarvested: 0,
+      driedLeavesGained: 0, sproutsGained: 0, sproutsSpent: 0,
+      shopPurchases: { common: 0, rare: 0, legendary: 0 },
+    },
     streak: { currentStreak: 0, longestStreak: 0, lastCheckinDate: '', lastRewardDate: '' },
     pityPoints: 0,
     sprouts: 0,

@@ -16,6 +16,7 @@ export function migrate(state: UnknownState): PlayerState {
   if (s.schemaVersion === 5) s = migrateV5toV6(s);
   if (s.schemaVersion === 6) s = migrateV6toV7(s);
   if (s.schemaVersion === 7) s = migrateV7toV8(s);
+  if (s.schemaVersion === 8) s = migrateV8toV9(s);
   if (s.schemaVersion !== SCHEMA_VERSION) {
     console.warn(`[migrate] unknown schemaVersion ${s.schemaVersion}, falling back to as-is`);
   }
@@ -115,6 +116,22 @@ function migrateV7toV8(s: UnknownState): UnknownState {
     schemaVersion: 8,
     sprouts: 0,
     dailyMissions: { ...dailyMissions, allCompletedClaimed: false },
+  };
+}
+
+// v8 → v9: add lifetime stats (driedLeavesGained, sproutsGained, sproutsSpent, shopPurchases).
+function migrateV8toV9(s: UnknownState): UnknownState {
+  const stats = (s.stats ?? {}) as Record<string, unknown>;
+  return {
+    ...s,
+    schemaVersion: 9,
+    stats: {
+      ...stats,
+      driedLeavesGained: 0,
+      sproutsGained: 0,
+      sproutsSpent: 0,
+      shopPurchases: { common: 0, rare: 0, legendary: 0 },
+    },
   };
 }
 
