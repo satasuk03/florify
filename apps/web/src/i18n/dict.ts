@@ -118,7 +118,7 @@ export const dict = {
     "guide.features.rank.title": "อันดับนักจัดดอกไม้",
     "guide.features.rank.body":
       "5 ระดับ: Seedling → Apprentice (20+) → Gardener (75+) → Master (150+) → Legend (250+)",
-    "guide.driedLeaves.title": "🍂 ใบไม้แห้ง",
+    "guide.driedLeaves.title": "ใบไม้แห้ง",
     "guide.driedLeaves.body":
       "เก็บเกี่ยวต้นไม้ที่มีแล้วจะได้ใบไม้แห้ง สะสมครบ {threshold} ใบจะได้สายพันธุ์ใหม่ที่ยังไม่เคยมี 1 ต้น ⚠️ ใบไม้แห้งจะรีเซ็ตเป็น 0 ทุกครั้งที่ได้สายพันธุ์ใหม่",
     "guide.driedLeaves.rates":
@@ -126,7 +126,7 @@ export const dict = {
     "guide.driedLeaves.progress": "🍂 {current} / {threshold}",
     "harvest.driedLeavesGained": "🍂 +{points}",
     "harvest.driedLeavesReward": "🍂 ได้สายพันธุ์ใหม่!",
-    "guide.save.title": "การเซฟเกม",
+    "guide.save.title": "⚠️ การเซฟเกม",
     "guide.save.auto.title": "บันทึกอัตโนมัติ",
     "guide.save.auto.body":
       "ทุกการปลูก รดน้ำ เก็บเกี่ยว จะถูกเซฟลงเบราว์เซอร์ของคุณทันที ไม่มีเซิร์ฟเวอร์ ข้อมูลอยู่ในเครื่องคุณล้วนๆ",
@@ -326,7 +326,7 @@ export const dict = {
     "guide.features.rank.title": "Florist rank",
     "guide.features.rank.body":
       "Five tiers: Seedling → Apprentice (20+) → Gardener (75+) → Master (150+) → Legend (250+)",
-    "guide.driedLeaves.title": "🍂 Dried Leaves",
+    "guide.driedLeaves.title": "Dried Leaves",
     "guide.driedLeaves.body":
       "Harvesting a species you already own earns dried leaves. Collect {threshold} to receive a new species you have never had. ⚠️ Dried leaves reset to 0 every time you obtain a new species.",
     "guide.driedLeaves.rates":
@@ -334,7 +334,7 @@ export const dict = {
     "guide.driedLeaves.progress": "🍂 {current} / {threshold}",
     "harvest.driedLeavesGained": "🍂 +{points}",
     "harvest.driedLeavesReward": "🍂 New species unlocked!",
-    "guide.save.title": "Saving your game",
+    "guide.save.title": "⚠️ Saving your game",
     "guide.save.auto.title": "Autosave",
     "guide.save.auto.body":
       "Every plant, water, and harvest is saved to your browser instantly. No server — your data lives on your device only.",
