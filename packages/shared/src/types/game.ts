@@ -6,6 +6,10 @@ export type MissionType =
   | 'plant'
   | 'harvest'
   | 'harvest_rare'
+  | 'harvest_legendary'
+  | 'combo10'
+  | 'combo15'
+  | 'combo20'
   | 'visit_floripedia'
   | 'share_florist_card';
 
@@ -29,6 +33,7 @@ export type GameEvent =
   | { type: 'water' }
   | { type: 'plant' }
   | { type: 'harvest'; rarity: Rarity; isNew: boolean }
+  | { type: 'combo'; level: number }
   | { type: 'visit' }
   | { type: 'share' };
 

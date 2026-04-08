@@ -17,6 +17,11 @@ export const MISSION_POOL: MissionTemplate[] = [
   { id: "harvest_rare_2", type: "harvest_rare", target: 2 },
   { id: "harvest_rare_3", type: "harvest_rare", target: 3 },
   { id: "harvest_rare_5", type: "harvest_rare", target: 5 },
+  { id: "harvest_legendary_1", type: "harvest_legendary", target: 1 },
+  { id: "harvest_legendary_2", type: "harvest_legendary", target: 2 },
+  { id: "combo10_5", type: "combo10", target: 5 },
+  { id: "combo15_3", type: "combo15", target: 3 },
+  { id: "combo20_1", type: "combo20", target: 1 },
   { id: "visit_floripedia", type: "visit_floripedia", target: 1 },
   { id: "share_florist_card", type: "share_florist_card", target: 1 },
 ];

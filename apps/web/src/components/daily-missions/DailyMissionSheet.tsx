@@ -259,6 +259,10 @@ const MISSION_LABEL_KEYS: Record<string, string> = {
   plant: "missions.plant",
   harvest: "missions.harvest",
   harvest_rare: "missions.harvest_rare",
+  harvest_legendary: "missions.harvest_legendary",
+  combo10: "missions.combo10",
+  combo15: "missions.combo15",
+  combo20: "missions.combo20",
   visit_floripedia: "missions.visit_floripedia",
   share_florist_card: "missions.share_florist_card",
 };

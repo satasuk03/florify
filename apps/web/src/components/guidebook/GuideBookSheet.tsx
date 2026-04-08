@@ -69,6 +69,7 @@ export function GuideBookSheet({ open, onClose }: Props) {
           <RaritySection />
           <FeaturesSection />
           <DailySection />
+          <ComboSection />
           <DriedLeavesSection />
           <SaveSection />
           <DeveloperSection />
@@ -191,6 +192,20 @@ function DailySection() {
       <Card className="p-4">
         <p className="text-sm text-ink-700 leading-relaxed">
           {t('guide.daily.body')}
+        </p>
+      </Card>
+    </section>
+  );
+}
+
+function ComboSection() {
+  const t = useT();
+  return (
+    <section>
+      <SectionHeading>{t('guide.combo.title')}</SectionHeading>
+      <Card className="p-4">
+        <p className="text-sm text-ink-700 leading-relaxed">
+          {t('guide.combo.body')}
         </p>
       </Card>
     </section>

@@ -46,6 +46,8 @@ export type DrawOp =
       color: string;
       align: Align;
       letterSpacing?: number;
+      /** DOM-only: count-up animation metadata (ignored by canvas renderer). */
+      animate?: { value: number; delay?: number };
     }
   | {
       type: "rect";
@@ -55,6 +57,8 @@ export type DrawOp =
       h: number;
       color: string;
       radius?: number;
+      /** DOM-only: bar-grow animation metadata (ignored by canvas renderer). */
+      animate?: { delay?: number };
     }
   | {
       type: "line";
@@ -176,6 +180,11 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
     width: 2,
   });
 
+  // ── Stagger delays for DOM count-up animations ───────────────────
+  const DELAY_HERO = 0;
+  const DELAY_BARS = 200;
+  const DELAY_STATS = 400;
+
   // ── Hero block: total harvested ──────────────────────────────────
   ops.push({
     type: "text",
@@ -187,6 +196,7 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
     family: "serif",
     color: PASSPORT_COLORS.ink900,
     align: "center",
+    animate: { value: data.totalHarvested, delay: DELAY_HERO },
   });
   ops.push({
     type: "text",
@@ -280,6 +290,7 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
         h: barH,
         color: row.fill,
         radius: barH / 2,
+        animate: { delay: DELAY_BARS + i * 50 },
       });
     }
     // Count
@@ -293,6 +304,7 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
       family: "sans",
       color: PASSPORT_COLORS.ink500,
       align: "right",
+      animate: { value: row.unlocked, delay: DELAY_BARS + i * 50 },
     });
   }
 
@@ -311,6 +323,7 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
     family: "sans",
     color: PASSPORT_COLORS.ink700,
     align: "center",
+    animate: { value: data.speciesUnlocked, delay: DELAY_STATS },
   });
 
   // ── Stat line ────────────────────────────────────────────────────
@@ -324,6 +337,7 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
     family: "sans",
     color: PASSPORT_COLORS.ink700,
     align: "center",
+    animate: { value: data.currentStreak, delay: DELAY_STATS + 50 },
   });
   ops.push({
     type: "text",
@@ -335,6 +349,7 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
     family: "sans",
     color: PASSPORT_COLORS.ink500,
     align: "center",
+    animate: { value: data.longestStreak, delay: DELAY_STATS + 100 },
   });
 
   // ── Divider ──────────────────────────────────────────────────────

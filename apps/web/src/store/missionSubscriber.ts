@@ -23,6 +23,14 @@ function handleEvent(event: GameEvent) {
       if (event.rarity === 'rare' || event.rarity === 'legendary') {
         trackMission('harvest_rare');
       }
+      if (event.rarity === 'legendary') {
+        trackMission('harvest_legendary');
+      }
+      break;
+    case 'combo':
+      if (event.level >= 10) trackMission('combo10');
+      if (event.level >= 15) trackMission('combo15');
+      if (event.level >= 20) trackMission('combo20');
       break;
     case 'visit':
       trackMission('visit_floripedia');

@@ -3,6 +3,7 @@
 import { useState, useCallback, useRef, type CSSProperties } from "react";
 import { Button } from "@/components/Button";
 import { ComboBurst } from "@/components/ComboBurst";
+import { gameEventBus } from "@/lib/gameEventBus";
 
 /**
  * Bottom-center action button (Plant / Water).
@@ -116,14 +117,27 @@ export function ActionButton({
   const [tapping, setTapping] = useState(0);
   const [combo, setCombo] = useState(0);
   const comboTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const comboEmittedRef = useRef(new Set<number>());
 
   const handleClick = useCallback(() => {
     if (disabled) return;
 
     // Advance combo
     clearTimeout(comboTimerRef.current);
-    setCombo((c) => c + 1);
-    comboTimerRef.current = setTimeout(() => setCombo(0), COMBO_RESET_MS);
+    setCombo((c) => {
+      const next = c + 1;
+      for (const level of [10, 15, 20]) {
+        if (next >= level && !comboEmittedRef.current.has(level)) {
+          comboEmittedRef.current.add(level);
+          gameEventBus.emit({ type: 'combo', level });
+        }
+      }
+      return next;
+    });
+    comboTimerRef.current = setTimeout(() => {
+      setCombo(0);
+      comboEmittedRef.current.clear();
+    }, COMBO_RESET_MS);
 
     setTapping((n) => n + 1);
     onClick();

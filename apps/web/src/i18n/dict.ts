@@ -139,6 +139,9 @@ export const dict = {
     "guide.daily.title": "เช็คอิน & ภารกิจประจำวัน",
     "guide.daily.body":
       "เช็คอินรับ 30 หยด + โบนัสสตรีคสูงสุด +20 · ภารกิจ 5 อัน (10P/อัน) สะสมครบไมล์สโตนได้หยดเพิ่ม · รีเซ็ตทุกเที่ยงคืน",
+    "guide.combo.title": "ระบบ Combo",
+    "guide.combo.body":
+      "กดรดน้ำติดๆ กันภายใน 1.5 วินาที จะเริ่มนับ Combo — ภารกิจบางอันจะท้าให้ทำ Combo ถึง x10, x15 หรือ x20",
     "guide.developer.title": "พัฒนาโดย",
     "guide.developer.body": "เกมนี้สร้างโดย Zeze — ดูผลงานอื่นๆ ได้ที่",
     "guide.developer.linkLabel": "zeze.app/portfolio",
@@ -178,6 +181,10 @@ export const dict = {
     "missions.plant": "ปลูกต้นไม้ {target} ต้น",
     "missions.harvest": "เก็บเกี่ยว {target} ต้น",
     "missions.harvest_rare": "เก็บเกี่ยวสายพันธุ์หายาก {target} ต้น",
+    "missions.harvest_legendary": "เก็บเกี่ยว Legendary {target} ต้น",
+    "missions.combo10": "ทำ Combo x10 {target} ครั้ง",
+    "missions.combo15": "ทำ Combo x15 {target} ครั้ง",
+    "missions.combo20": "ทำ Combo x20 {target} ครั้ง",
     "missions.visit_floripedia": "เยี่ยมชมแกลเลอรี",
     "missions.share_florist_card": "แชร์ Florist Card",
 
@@ -340,6 +347,9 @@ export const dict = {
     "guide.daily.title": "Check-in & Daily Missions",
     "guide.daily.body":
       "Check in for 30 drops + streak bonus up to +20 · 5 missions (10P each), hit milestones for bonus drops · Resets at midnight",
+    "guide.combo.title": "Combo System",
+    "guide.combo.body":
+      "Tap rapidly within 1.5 seconds to build a Combo — some missions challenge you to reach x10, x15, or x20.",
     "guide.developer.title": "Made by",
     "guide.developer.body": "Built by Zeze — see other projects at",
     "guide.developer.linkLabel": "zeze.app/portfolio",
@@ -380,6 +390,10 @@ export const dict = {
     "missions.plant": "Plant {target} trees",
     "missions.harvest": "Harvest {target} trees",
     "missions.harvest_rare": "Harvest {target} rare species",
+    "missions.harvest_legendary": "Harvest {target} legendary species",
+    "missions.combo10": "Reach Combo x10 {target} times",
+    "missions.combo15": "Reach Combo x15 {target} times",
+    "missions.combo20": "Reach Combo x20 {target} times",
     "missions.visit_floripedia": "Visit Gallery",
     "missions.share_florist_card": "Share Florist Card",
 

@@ -2,6 +2,7 @@
 
 import type { CSSProperties } from 'react';
 import type { FloristCardData } from '@/store/gameStore';
+import { AnimatedNumber } from '@/components/AnimatedNumber';
 import {
   buildLayout,
   PASSPORT_COLORS,
@@ -85,13 +86,57 @@ function renderOp(op: DrawOp, key: number) {
         // For center we just let textAlign do it; the full-width div is fine
         whiteSpace: 'nowrap',
       };
+
+      // If this op has animate metadata, replace the numeric portion
+      // with <AnimatedNumber> for a count-up effect.
+      if (op.animate) {
+        const valStr = String(op.animate.value);
+        const idx = op.text.indexOf(valStr);
+        if (idx >= 0) {
+          const prefix = op.text.slice(0, idx);
+          const suffix = op.text.slice(idx + valStr.length);
+          return (
+            <div key={key} style={style}>
+              {prefix}
+              <AnimatedNumber
+                value={op.animate.value}
+                delay={op.animate.delay}
+              />
+              {suffix}
+            </div>
+          );
+        }
+      }
+
       return (
         <div key={key} style={style}>
           {op.text}
         </div>
       );
     }
-    case 'rect':
+    case 'rect': {
+      if (op.animate) {
+        // Animated bar fill: start at width 0, transition to final width.
+        const delay = op.animate.delay ?? 0;
+        return (
+          <div
+            key={key}
+            ref={(el) => {
+              if (el) requestAnimationFrame(() => { el.style.width = `${op.w}px`; });
+            }}
+            style={{
+              position: 'absolute',
+              left: op.x,
+              top: op.y,
+              width: 0,
+              height: op.h,
+              background: op.color,
+              borderRadius: op.radius ?? 0,
+              transition: `width 900ms cubic-bezier(0.22, 1, 0.36, 1) ${delay}ms`,
+            }}
+          />
+        );
+      }
       return (
         <div
           key={key}
@@ -106,6 +151,7 @@ function renderOp(op: DrawOp, key: number) {
           }}
         />
       );
+    }
     case 'line':
       return (
         <div
