@@ -8,9 +8,12 @@ import { useT } from "@/i18n/useT";
 import { toast } from "@/lib/toast";
 import { haptic } from "@/lib/haptics";
 import {
+  DAILY_MISSION_COUNT,
   MISSION_MILESTONES,
   MISSION_MILESTONE_DROPS,
   MISSION_POINTS_PER,
+  SPROUT_ALL_MISSIONS_BONUS,
+  SPROUT_QUEST_REFRESH_COST,
   type DailyMission,
 } from "@florify/shared";
 import { ClaimBurst } from "./ClaimBurst";
@@ -22,45 +25,101 @@ interface Props {
 
 export function DailyMissionSheet({ open, onClose }: Props) {
   const t = useT();
+  const sprouts = useGameStore((s) => s.state.sprouts);
+  const refreshMission = useGameStore((s) => s.refreshMission);
+  const [confirmIndex, setConfirmIndex] = useState<number | null>(null);
 
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") {
+        if (confirmIndex !== null) setConfirmIndex(null);
+        else onClose();
+      }
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [open, onClose]);
+  }, [open, confirmIndex, onClose]);
 
   if (!open) return null;
 
+  const handleConfirmRefresh = () => {
+    if (confirmIndex !== null && refreshMission(confirmIndex)) {
+      haptic("tap");
+    }
+    setConfirmIndex(null);
+  };
+
   return (
-    <div
-      className="fixed inset-0 z-40 bg-ink-900/50 backdrop-blur-sm flex items-end sm:items-center justify-center animate-overlay-in"
-      onClick={onClose}
-      role="dialog"
-      aria-modal="true"
-      aria-label={t("missions.title")}
-    >
+    <>
       <div
-        className="w-full sm:max-w-md bg-cream-50 rounded-t-3xl sm:rounded-3xl shadow-soft-lg max-h-[92dvh] overflow-y-auto scrollbar-elegant animate-sheet-up"
-        onClick={(e) => e.stopPropagation()}
+        className="fixed inset-0 z-40 bg-ink-900/50 backdrop-blur-sm flex items-end sm:items-center justify-center animate-overlay-in"
+        onClick={onClose}
+        role="dialog"
+        aria-modal="true"
+        aria-label={t("missions.title")}
       >
-        {/* Decorative header with gradient */}
-        <div className="relative overflow-hidden rounded-t-3xl sm:rounded-t-3xl">
-          <div className="absolute inset-0 bg-gradient-to-b from-clay-400/8 to-transparent pointer-events-none" />
-          <div className="relative px-6 pt-4 pb-4">
-            <Header onClose={onClose} />
+        <div
+          className="w-full sm:max-w-md bg-cream-50 rounded-t-3xl sm:rounded-3xl shadow-soft-lg max-h-[92dvh] overflow-y-auto scrollbar-elegant animate-sheet-up"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Decorative header with gradient */}
+          <div className="relative overflow-hidden rounded-t-3xl sm:rounded-t-3xl">
+            <div className="absolute inset-0 bg-gradient-to-b from-clay-400/8 to-transparent pointer-events-none" />
+            <div className="relative px-6 pt-4 pb-4">
+              <Header onClose={onClose} />
+            </div>
+          </div>
+
+          <div className="px-6 pb-6">
+            <MilestoneBar />
+            <MissionList
+              onRequestRefresh={setConfirmIndex}
+              canRefresh={sprouts >= SPROUT_QUEST_REFRESH_COST}
+            />
+            <AllMissionsBonus />
+            <ClaimButton />
           </div>
         </div>
-
-        <div className="px-6 pb-6">
-          <MilestoneBar />
-          <MissionList />
-          <ClaimButton />
-        </div>
       </div>
-    </div>
+
+      {/* Refresh confirm modal — rendered OUTSIDE the sheet so it layers above */}
+      {confirmIndex !== null && (
+        <div
+          className="fixed inset-0 z-50 bg-ink-900/40 backdrop-blur-sm flex items-center justify-center animate-overlay-in"
+          onClick={() => setConfirmIndex(null)}
+        >
+          <div
+            className="bg-cream-50 rounded-2xl shadow-soft-lg p-6 mx-6 max-w-xs w-full text-center animate-scale-in"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="text-2xl mb-2">🔄</div>
+            <p className="font-serif text-lg text-ink-800 mb-1">
+              {t("missions.refreshConfirmTitle")}
+            </p>
+            <p className="text-sm text-ink-500 mb-5">
+              {t("missions.refreshConfirmBody", { cost: SPROUT_QUEST_REFRESH_COST })}
+            </p>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => setConfirmIndex(null)}
+                className="flex-1 py-2.5 rounded-xl text-sm font-medium text-ink-600 bg-cream-200 hover:bg-cream-300 transition-colors"
+              >
+                {t("missions.refreshCancel")}
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmRefresh}
+                className="flex-1 py-2.5 rounded-xl text-sm font-semibold text-cream-50 bg-clay-500 hover:bg-clay-400 active:bg-clay-600 active:scale-[0.98] shadow-soft-md transition-all"
+              >
+                {t("missions.refreshConfirm", { cost: SPROUT_QUEST_REFRESH_COST })}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
@@ -275,7 +334,13 @@ function missionLabel(
   return t(key, { target: mission.target });
 }
 
-function MissionList() {
+function MissionList({
+  onRequestRefresh,
+  canRefresh,
+}: {
+  onRequestRefresh: (index: number) => void;
+  canRefresh: boolean;
+}) {
   const t = useT();
   const missions = useGameStore((s) => s.state.dailyMissions.missions);
 
@@ -289,6 +354,8 @@ function MissionList() {
           mission={mission}
           label={missionLabel(t, mission)}
           index={i}
+          onRequestRefresh={onRequestRefresh}
+          canRefresh={canRefresh}
         />
       ))}
     </div>
@@ -299,11 +366,16 @@ function MissionCard({
   mission,
   label,
   index,
+  onRequestRefresh,
+  canRefresh,
 }: {
   mission: DailyMission;
   label: string;
   index: number;
+  onRequestRefresh: (index: number) => void;
+  canRefresh: boolean;
 }) {
+  const t = useT();
   const progressPct = Math.min(100, (mission.progress / mission.target) * 100);
 
   return (
@@ -395,6 +467,85 @@ function MissionCard({
           </span>
         </div>
       </div>
+
+      {/* Refresh icon */}
+      {!mission.completed && (
+        <button
+          type="button"
+          onClick={() => onRequestRefresh(index)}
+          disabled={!canRefresh}
+          className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 ${
+            canRefresh
+              ? "text-ink-400 hover:text-ink-600 hover:bg-cream-200 active:scale-90"
+              : "text-ink-200 cursor-not-allowed"
+          }`}
+          aria-label={t("missions.refresh")}
+        >
+          <RefreshIcon />
+        </button>
+      )}
+    </div>
+  );
+}
+
+function RefreshIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="23 4 23 10 17 10" />
+      <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+    </svg>
+  );
+}
+
+// ── All Missions Bonus ─────────────────────────────────────────────
+
+function AllMissionsBonus() {
+  const t = useT();
+  const missions = useGameStore((s) => s.state.dailyMissions.missions);
+  const allCompletedClaimed = useGameStore(
+    (s) => s.state.dailyMissions.allCompletedClaimed,
+  );
+  const claimAllCompletedBonus = useGameStore((s) => s.claimAllCompletedBonus);
+
+  const allComplete =
+    missions.length === DAILY_MISSION_COUNT &&
+    missions.every((m) => m.completed);
+
+  if (!allComplete) return null;
+
+  const handleClaim = () => {
+    const { sproutsAwarded } = claimAllCompletedBonus();
+    if (sproutsAwarded > 0) {
+      haptic("harvest");
+      toast(t("missions.sproutsAwarded", { sprouts: sproutsAwarded }));
+    }
+  };
+
+  return (
+    <div
+      className="mb-4 rounded-2xl border-2 border-leaf-300 bg-leaf-50 p-4 text-center"
+      style={{
+        animation: "mission-card-in 480ms cubic-bezier(0.22, 1, 0.36, 1) both",
+        animationDelay: "700ms",
+      }}
+    >
+      <div className="font-serif text-lg font-medium text-ink-800 mb-2">
+        {t("missions.allComplete")}
+      </div>
+      <button
+        type="button"
+        onClick={handleClaim}
+        disabled={allCompletedClaimed}
+        className={`w-full py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 ${
+          allCompletedClaimed
+            ? "bg-leaf-200 text-leaf-500 cursor-not-allowed"
+            : "bg-leaf-600 text-cream-50 hover:bg-leaf-500 active:scale-[0.98] shadow-soft-sm"
+        }`}
+      >
+        {allCompletedClaimed
+          ? t("missions.allCompleteClaimed")
+          : t("missions.allCompleteBonus", { sprouts: SPROUT_ALL_MISSIONS_BONUS })}
+      </button>
     </div>
   );
 }

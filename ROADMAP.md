@@ -46,9 +46,18 @@
   - 100 วัน → cosmetic badge พิเศษบน Florist Card
 - **Streak Calendar UI** — ปฏิทินแสดงวันที่เข้าเกม เห็นภาพรวม streak ชัดเจน
 
-## 12. New currency sprout
-- ได้เวลาเก็บเกี่ยว
-- ไว้ใช้ refresh quest
-- หรือซื้อของในชอป 
-
+# New currency sprout 🌱
+- ได้เวลาเก็บเกี่ยวต้นไม้ โชว์ตอน Harvest Overlay
 common: 1, rare: 3, legendary: 10
+
+### Quest
+- ไว้ใช้ refresh quest -> 10 🌱 per 1 quest
+
+### Shop
+มีขายอะไรบ้าง?
+- 1 water drops = 1 🌱
+- Common Booster Pack 100 🌱 (common 80%, rare 15%, legendary 5%)
+- Rare Booster Pack 300 🌱 (common 30%, rare 60%, legendary 10%)
+- Legendary Booster Pack 1000 🌱 (common 5%, rare 45%, legendary 45%)
+
+Booster pack เวลาสุ่มก็ใช้ harvest overlay เหมือนเดิมก็ได้ แล้วก็ได้ใบไม้แห้งอะไรตามปกติถ้าซ้ำ

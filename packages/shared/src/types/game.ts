@@ -1,4 +1,5 @@
 export type Rarity = 'common' | 'rare' | 'legendary';
+export type BoosterTier = 'common' | 'rare' | 'legendary';
 
 // ── Daily Missions ─────────────────────────────────────────────────
 export type MissionType =
@@ -26,6 +27,7 @@ export interface DailyMissionState {
   missions: DailyMission[];        // always length 5
   claimedPoints: number;           // 0-50
   claimedMilestones: number[];     // subset of [10,20,30,40,50]
+  allCompletedClaimed: boolean;    // whether the 100🌱 bonus for 5/5 has been claimed today
 }
 
 // ── Game Event Bus ─────────────────────────────────────────────────
@@ -35,7 +37,8 @@ export type GameEvent =
   | { type: 'harvest'; rarity: Rarity; isNew: boolean }
   | { type: 'combo'; level: number }
   | { type: 'visit' }
-  | { type: 'share' };
+  | { type: 'share' }
+  | { type: 'booster_open'; tier: BoosterTier; rarity: Rarity; isNew: boolean };
 
 export interface TreeInstance {
   id: string;                  // nanoid()
@@ -71,7 +74,7 @@ export interface PlayerStats {
 }
 
 export interface PlayerState {
-  schemaVersion: 7;
+  schemaVersion: 8;
   userId: string;              // local nanoid; linked to a cloud account later
   displayName: string;         // user-editable; 'Guest' until renamed
   createdAt: number;
@@ -83,6 +86,7 @@ export interface PlayerState {
   stats: PlayerStats;
   streak: StreakState;
   pityPoints: number;            // 0..PITY_THRESHOLD — dried leaves (🍂) accumulated from duplicates
+  sprouts: number;               // 🌱 currency — no cap
   dailyMissions: DailyMissionState;
 }
 

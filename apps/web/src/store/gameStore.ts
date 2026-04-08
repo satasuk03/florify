@@ -1,8 +1,12 @@
 import { create } from 'zustand';
 import { nanoid } from 'nanoid';
 import {
+  BOOSTER_COST_COMMON,
+  BOOSTER_COST_RARE,
+  BOOSTER_COST_LEGENDARY,
   CHECKIN_BASE_DROPS,
   CHECKIN_STREAK_BONUS_MAX,
+  DAILY_MISSION_COUNT,
   FIRST_FLORA_COST,
   MAX_WATER_COST,
   MAX_WATER_DROPS,
@@ -10,10 +14,17 @@ import {
   MISSION_MILESTONES,
   MISSION_MILESTONE_DROPS,
   MISSION_POINTS_PER,
+  MISSION_POOL,
   PITY_POINTS_COMMON,
   PITY_POINTS_LEGENDARY,
   PITY_POINTS_RARE,
   PITY_THRESHOLD,
+  SPROUT_ALL_MISSIONS_BONUS,
+  SPROUT_HARVEST_COMMON,
+  SPROUT_HARVEST_LEGENDARY,
+  SPROUT_HARVEST_RARE,
+  SPROUT_QUEST_REFRESH_COST,
+  type BoosterTier,
   type CollectedSpecies,
   type MissionType,
   type PlayerState,
@@ -23,6 +34,7 @@ import {
 import { DROP_REGEN_MS } from '@/lib/debug';
 import { SPECIES, SPECIES_BY_RARITY } from '@/data/species';
 import { RARITY_ROLL_WEIGHTS } from '@/data/rarityWeights';
+import { BOOSTER_ROLL_WEIGHTS } from '@/data/boosterWeights';
 import { mulberry32, randInt, randPick, randSeed } from '@/engine/rng';
 import { saveStore } from './saveStore';
 import { scheduleSave, flushSave } from './debouncedSave';
@@ -47,6 +59,7 @@ export interface WaterResult {
   harvested?: TreeInstance;
   pityPointsGained?: number;
   pityReward?: { speciesId: number; rarity: Rarity };
+  sproutsGained?: number;
 }
 
 export type FloristRank = 'Seedling' | 'Apprentice' | 'Gardener' | 'Master' | 'Legend';
@@ -104,6 +117,15 @@ export function computeDrops(state: PlayerState): { drops: number; regenAt: numb
   return { drops, regenAt };
 }
 
+export interface BoosterResult {
+  speciesId: number;
+  rarity: Rarity;
+  isNew: boolean;
+  pityPointsGained: number;
+  pityReward?: { speciesId: number; rarity: Rarity };
+  sproutsGained: number;
+}
+
 export interface GameStore {
   state: PlayerState;
   hydrated: boolean;
@@ -125,10 +147,15 @@ export interface GameStore {
   setDisplayName: (name: string) => void;
   replaceState: (next: PlayerState) => void;
 
+  // Sprout currency / Shop
+  openBooster: (tier: BoosterTier) => BoosterResult | null;
+
   // Daily missions
   ensureDailyMissions: () => void;
   trackMission: (type: MissionType, increment?: number) => void;
   claimMissions: () => { dropsAwarded: number };
+  refreshMission: (index: number) => boolean;
+  claimAllCompletedBonus: () => { sproutsAwarded: number };
 
   // Daily check-in
   canClaimCheckin: () => boolean;
@@ -187,6 +214,20 @@ function rollRarity(): Rarity {
 }
 
 // ── Pity / Dried Leaves (🍂) ────────────────────────────────��───────
+// ── Sprout gain per rarity ───────────────────────────────────────────
+const SPROUT_GAIN: Record<Rarity, number> = {
+  common: SPROUT_HARVEST_COMMON,
+  rare: SPROUT_HARVEST_RARE,
+  legendary: SPROUT_HARVEST_LEGENDARY,
+};
+
+// ── Booster cost per tier ───────────────────────────────────────────
+const BOOSTER_COST: Record<BoosterTier, number> = {
+  common: BOOSTER_COST_COMMON,
+  rare: BOOSTER_COST_RARE,
+  legendary: BOOSTER_COST_LEGENDARY,
+};
+
 const PITY_POINTS: Record<Rarity, number> = {
   common: PITY_POINTS_COMMON,
   rare: PITY_POINTS_RARE,
@@ -198,6 +239,14 @@ const PITY_POINTS: Record<Rarity, number> = {
  * own yet from the rolled rarity tier, or `null` if the tier is fully
  * collected (caller should treat as phantom duplicate).
  */
+function rollBoosterRarity(tier: BoosterTier): Rarity {
+  const weights = BOOSTER_ROLL_WEIGHTS[tier];
+  const r = Math.random();
+  if (r < weights.legendary) return 'legendary';
+  if (r < weights.legendary + weights.rare) return 'rare';
+  return 'common';
+}
+
 function rollPityReward(
   collectedIds: Set<number>,
 ): { speciesId: number; rarity: Rarity } | null {
@@ -206,6 +255,82 @@ function rollPityReward(
   if (pool.length === 0) return null;
   const pick = pool[Math.floor(Math.random() * pool.length)]!;
   return { speciesId: pick.id, rarity };
+}
+
+export interface HarvestCollectionResult {
+  collection: CollectedSpecies[];
+  pityPoints: number;
+  pityPointsGained: number;
+  pityReward?: { speciesId: number; rarity: Rarity };
+}
+
+/**
+ * Shared helper: upsert a species into the collection and handle pity
+ * logic. Used by both waterTree (normal harvest) and openBooster (gacha).
+ */
+function applyHarvestToCollection(
+  collection: CollectedSpecies[],
+  speciesId: number,
+  rarity: Rarity,
+  waterings: number,
+  currentPityPoints: number,
+): HarvestCollectionResult {
+  const now = Date.now();
+  const isDuplicate = collection.some((c) => c.speciesId === speciesId);
+  const entry: CollectedSpecies = {
+    speciesId,
+    rarity,
+    count: 1,
+    totalWaterings: waterings,
+    firstHarvestedAt: now,
+    lastHarvestedAt: now,
+  };
+
+  // Upsert
+  const idx = collection.findIndex((c) => c.speciesId === speciesId);
+  let updated: CollectedSpecies[];
+  if (idx >= 0) {
+    const existing = collection[idx]!;
+    const merged: CollectedSpecies = {
+      ...existing,
+      count: existing.count + 1,
+      totalWaterings: existing.totalWaterings + waterings,
+      lastHarvestedAt: now,
+    };
+    updated = [merged, ...collection.slice(0, idx), ...collection.slice(idx + 1)];
+  } else {
+    updated = [entry, ...collection];
+  }
+
+  // Pity accumulation
+  let pityPoints = currentPityPoints;
+  let pityPointsGained = 0;
+  let pityReward: { speciesId: number; rarity: Rarity } | undefined;
+
+  if (updated.length < SPECIES.length) {
+    if (!isDuplicate) {
+      pityPoints = 0;
+    } else {
+      const gained = PITY_POINTS[rarity];
+      pityPoints += gained;
+      pityPointsGained = gained;
+
+      const collectedIds = new Set(updated.map((c) => c.speciesId));
+      for (let attempt = 0; attempt < 20 && pityPoints >= PITY_THRESHOLD; attempt++) {
+        const reward = rollPityReward(collectedIds);
+        if (reward) {
+          updated = addPityRewardToCollection(updated, reward);
+          collectedIds.add(reward.speciesId);
+          pityReward = reward;
+          pityPoints = 0;
+          break;
+        }
+        pityPoints += PITY_POINTS[rollRarity()];
+      }
+    }
+  }
+
+  return { collection: updated, pityPoints, pityPointsGained, pityReward };
 }
 
 function addPityRewardToCollection(
@@ -234,36 +359,6 @@ function deriveRank(unlocked: number): FloristRank {
   return 'Seedling';
 }
 
-function upsertCollection(
-  collection: CollectedSpecies[],
-  harvested: TreeInstance,
-): CollectedSpecies[] {
-  const now = harvested.harvestedAt!;
-  const idx = collection.findIndex((c) => c.speciesId === harvested.speciesId);
-  if (idx >= 0) {
-    const existing = collection[idx]!;
-    const updated: CollectedSpecies = {
-      ...existing,
-      count: existing.count + 1,
-      totalWaterings: existing.totalWaterings + harvested.requiredWaterings,
-      lastHarvestedAt: now,
-    };
-    // Move to front (most recent) and keep rest sorted
-    return [updated, ...collection.slice(0, idx), ...collection.slice(idx + 1)];
-  }
-  // New species — prepend (most recent first)
-  return [
-    {
-      speciesId: harvested.speciesId,
-      rarity: harvested.rarity,
-      count: 1,
-      totalWaterings: harvested.requiredWaterings,
-      firstHarvestedAt: now,
-      lastHarvestedAt: now,
-    },
-    ...collection,
-  ];
-}
 
 export const useGameStore = create<GameStore>((set, get) => ({
   state: createInitialState(),
@@ -361,47 +456,20 @@ export const useGameStore = create<GameStore>((set, get) => ({
         harvestedAt: now,
       };
       const isDuplicate = s.collection.some((c) => c.speciesId === harvested.speciesId);
-      let collection = upsertCollection(s.collection, harvested);
-
-      // ── Dried Leaves (🍂) pity accumulation ──────────────────────
-      let pityPoints = s.pityPoints;
-      let pityPointsGained = 0;
-      let pityReward: { speciesId: number; rarity: Rarity } | undefined;
-
-      if (collection.length < SPECIES.length) {
-        if (!isDuplicate) {
-          // New species from normal planting — reset pity
-          pityPoints = 0;
-        } else {
-          // Duplicate — accumulate dried leaves
-          const gained = PITY_POINTS[harvested.rarity];
-          pityPoints += gained;
-          pityPointsGained = gained;
-
-          // Check threshold — enter roll loop
-          const collectedIds = new Set(collection.map((c) => c.speciesId));
-          for (let attempt = 0; attempt < 20 && pityPoints >= PITY_THRESHOLD; attempt++) {
-            const reward = rollPityReward(collectedIds);
-            if (reward) {
-              collection = addPityRewardToCollection(collection, reward);
-              collectedIds.add(reward.speciesId);
-              pityReward = reward;
-              pityPoints = 0;
-              break;
-            }
-            // Tier fully collected — phantom duplicate, gain points for that tier
-            pityPoints += PITY_POINTS[rollRarity()];
-          }
-        }
-      }
+      const result = applyHarvestToCollection(
+        s.collection, harvested.speciesId, harvested.rarity,
+        harvested.requiredWaterings, s.pityPoints,
+      );
+      const sproutsGained = SPROUT_GAIN[harvested.rarity];
 
       const next: PlayerState = {
         ...s,
         waterDrops: drops - 1,
         lastDropRegenAt: regenAt,
         activeTree: null,
-        collection,
-        pityPoints,
+        collection: result.collection,
+        pityPoints: result.pityPoints,
+        sprouts: s.sprouts + sproutsGained,
         stats: {
           ...s.stats,
           totalWatered: s.stats.totalWatered + 1,
@@ -414,7 +482,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       haptic('harvest');
       gameEventBus.emit({ type: 'water' });
       gameEventBus.emit({ type: 'harvest', rarity: harvested.rarity, isNew: !isDuplicate });
-      return { ok: true, harvested, pityPointsGained, pityReward };
+      return { ok: true, harvested, pityPointsGained: result.pityPointsGained, pityReward: result.pityReward, sproutsGained };
     }
 
     const next: PlayerState = {
@@ -504,6 +572,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         missions,
         claimedPoints: 0,
         claimedMilestones: [],
+        allCompletedClaimed: false,
       },
       updatedAt: Date.now(),
     };
@@ -567,6 +636,98 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set({ state: next });
     scheduleSave(next);
     return { dropsAwarded };
+  },
+
+  refreshMission: (index: number): boolean => {
+    const s = get().state;
+    const { missions } = s.dailyMissions;
+    if (s.sprouts < SPROUT_QUEST_REFRESH_COST) return false;
+    const mission = missions[index];
+    if (!mission || mission.completed) return false;
+
+    // Pick a new mission not already in the current set
+    const usedIds = new Set(missions.map((m) => m.templateId));
+    const available = MISSION_POOL.filter((t) => !usedIds.has(t.id));
+    if (available.length === 0) return false;
+    const picked = available[Math.floor(Math.random() * available.length)]!;
+
+    const updated = [...missions];
+    updated[index] = {
+      templateId: picked.id,
+      type: picked.type,
+      target: picked.target,
+      progress: 0,
+      completed: false,
+    };
+
+    const next: PlayerState = {
+      ...s,
+      sprouts: s.sprouts - SPROUT_QUEST_REFRESH_COST,
+      dailyMissions: { ...s.dailyMissions, missions: updated },
+      updatedAt: Date.now(),
+    };
+    set({ state: next });
+    scheduleSave(next);
+    return true;
+  },
+
+  claimAllCompletedBonus: (): { sproutsAwarded: number } => {
+    const s = get().state;
+    const { missions, allCompletedClaimed } = s.dailyMissions;
+    const allComplete = missions.length === DAILY_MISSION_COUNT
+      && missions.every((m) => m.completed);
+    if (!allComplete || allCompletedClaimed) return { sproutsAwarded: 0 };
+
+    const next: PlayerState = {
+      ...s,
+      sprouts: s.sprouts + SPROUT_ALL_MISSIONS_BONUS,
+      dailyMissions: { ...s.dailyMissions, allCompletedClaimed: true },
+      updatedAt: Date.now(),
+    };
+    set({ state: next });
+    scheduleSave(next);
+    return { sproutsAwarded: SPROUT_ALL_MISSIONS_BONUS };
+  },
+
+  // ── Booster packs ───────────────────────────────────────────────
+
+  openBooster: (tier: BoosterTier): BoosterResult | null => {
+    const s = get().state;
+    const cost = BOOSTER_COST[tier];
+    if (s.sprouts < cost) return null;
+
+    const rarity = rollBoosterRarity(tier);
+    const pool = SPECIES_BY_RARITY[rarity];
+    const species = pool[Math.floor(Math.random() * pool.length)]!;
+    const isNew = !s.collection.some((c) => c.speciesId === species.id);
+
+    const result = applyHarvestToCollection(
+      s.collection, species.id, rarity, 0, s.pityPoints,
+    );
+    const sproutsGained = SPROUT_GAIN[rarity];
+
+    const next: PlayerState = {
+      ...s,
+      sprouts: s.sprouts - cost + sproutsGained,
+      collection: result.collection,
+      pityPoints: result.pityPoints,
+      stats: {
+        ...s.stats,
+        totalHarvested: s.stats.totalHarvested + 1,
+      },
+      updatedAt: Date.now(),
+    };
+    set({ state: next });
+    scheduleSave(next);
+    gameEventBus.emit({ type: 'booster_open', tier, rarity, isNew });
+    return {
+      speciesId: species.id,
+      rarity,
+      isNew,
+      pityPointsGained: result.pityPointsGained,
+      pityReward: result.pityReward,
+      sproutsGained,
+    };
   },
 
   // ── Daily check-in ───────────────────────────────────────────────

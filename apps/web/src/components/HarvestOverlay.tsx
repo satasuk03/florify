@@ -28,6 +28,8 @@ interface Props {
   tree: TreeInstance | null;
   pityPointsGained?: number;
   pityReward?: { speciesId: number; rarity: Rarity };
+  sproutsGained?: number;
+  source?: 'harvest' | 'booster';
   onDismiss: () => void;
 }
 
@@ -64,7 +66,7 @@ interface FlyState {
  *  overlay dismisses the frame the clone lands, not before. */
 const FLY_DURATION_MS = 720;
 
-export function HarvestOverlay({ tree, pityPointsGained, pityReward, onDismiss }: Props) {
+export function HarvestOverlay({ tree, pityPointsGained, pityReward, sproutsGained, source = 'harvest', onDismiss }: Props) {
   const t = useT();
   const lang = useLanguage();
   const displayName = useGameStore((s) => s.state.displayName);
@@ -243,8 +245,19 @@ export function HarvestOverlay({ tree, pityPointsGained, pityReward, onDismiss }
           className="text-xs text-ink-500 max-w-xs animate-fade-up"
           style={{ animationDelay: '440ms' }}
         >
-          {t('harvest.waterings', { count: tree.requiredWaterings })}
+          {source === 'booster'
+            ? t('harvest.fromBooster')
+            : t('harvest.waterings', { count: tree.requiredWaterings })}
         </p>
+
+        {sproutsGained != null && sproutsGained > 0 && (
+          <p
+            className="text-sm text-leaf-600 font-medium animate-fade-up"
+            style={{ animationDelay: '460ms' }}
+          >
+            🌱 +{sproutsGained}
+          </p>
+        )}
 
         {pityPointsGained != null && pityPointsGained > 0 && (
           <p

@@ -126,6 +126,7 @@ export const dict = {
     "guide.driedLeaves.progress": "🍂 {current} / {threshold}",
     "harvest.driedLeavesGained": "🍂 +{points}",
     "harvest.driedLeavesReward": "🍂 ได้สายพันธุ์ใหม่!",
+    "harvest.fromBooster": "เปิดจาก Booster Pack",
     "guide.save.title": "⚠️ การเซฟเกม",
     "guide.save.auto.title": "บันทึกอัตโนมัติ",
     "guide.save.auto.body":
@@ -177,6 +178,15 @@ export const dict = {
     "missions.noClaim": "ทำภารกิจเพื่อรับรางวัล",
     "missions.drops": "{drops} หยด",
     "missions.dropsAwarded": "ได้รับ {drops} หยด!",
+    "missions.refresh": "เปลี่ยนภารกิจ",
+    "missions.refreshConfirmTitle": "เปลี่ยนภารกิจ?",
+    "missions.refreshConfirmBody": "ใช้ {cost} 🌱 เพื่อสุ่มภารกิจใหม่",
+    "missions.refreshCancel": "ยกเลิก",
+    "missions.refreshConfirm": "ใช้ {cost} 🌱",
+    "missions.allComplete": "ทำครบทุกภารกิจ!",
+    "missions.allCompleteBonus": "รับ {sprouts} 🌱",
+    "missions.allCompleteClaimed": "รับแล้ว {sprouts} 🌱",
+    "missions.sproutsAwarded": "ได้รับ {sprouts} 🌱!",
     "missions.water": "รดน้ำ {target} ครั้ง",
     "missions.plant": "ปลูกต้นไม้ {target} ต้น",
     "missions.harvest": "เก็บเกี่ยว {target} ต้น",
@@ -205,6 +215,16 @@ export const dict = {
     "harvest.waterings": "ใช้ {count} หยด · เก็บเข้า Gallery แล้ว",
     "harvest.collect": "เก็บเข้า Gallery",
     "harvest.share": "แชร์",
+
+    // ── Shop ──────────────────────────────────
+    "shop.title": "ร้านค้า",
+    "shop.back": "กลับ",
+    "shop.buy": "ซื้อ",
+    "shop.insufficient": "🌱 ไม่พอ",
+    "shop.odds.common": "ธรรมดา {pct}%",
+    "shop.odds.rare": "หายาก {pct}%",
+    "shop.odds.legendary": "ตำนาน {pct}%",
+    "plot.openShop": "เปิดร้านค้า",
 
     // ── Floripedia (public species page) ───────
     "floripedia.title": "Floripedia",
@@ -334,6 +354,7 @@ export const dict = {
     "guide.driedLeaves.progress": "🍂 {current} / {threshold}",
     "harvest.driedLeavesGained": "🍂 +{points}",
     "harvest.driedLeavesReward": "🍂 New species unlocked!",
+    "harvest.fromBooster": "From Booster Pack",
     "guide.save.title": "⚠️ Saving your game",
     "guide.save.auto.title": "Autosave",
     "guide.save.auto.body":
@@ -386,6 +407,15 @@ export const dict = {
     "missions.noClaim": "Complete missions for rewards",
     "missions.drops": "{drops} drops",
     "missions.dropsAwarded": "Received {drops} drops!",
+    "missions.refresh": "Refresh mission",
+    "missions.refreshConfirmTitle": "Refresh mission?",
+    "missions.refreshConfirmBody": "Spend {cost} 🌱 to get a new random mission",
+    "missions.refreshCancel": "Cancel",
+    "missions.refreshConfirm": "Use {cost} 🌱",
+    "missions.allComplete": "All missions complete!",
+    "missions.allCompleteBonus": "Claim {sprouts} 🌱",
+    "missions.allCompleteClaimed": "{sprouts} 🌱 claimed",
+    "missions.sproutsAwarded": "Received {sprouts} 🌱!",
     "missions.water": "Water {target} times",
     "missions.plant": "Plant {target} trees",
     "missions.harvest": "Harvest {target} trees",
@@ -414,6 +444,16 @@ export const dict = {
     "harvest.waterings": "{count} drops used · Added to Gallery",
     "harvest.collect": "Add to Gallery",
     "harvest.share": "Share",
+
+    // ── Shop ──────────────────────────────────
+    "shop.title": "Shop",
+    "shop.back": "Back",
+    "shop.buy": "Buy",
+    "shop.insufficient": "Not enough 🌱",
+    "shop.odds.common": "Common {pct}%",
+    "shop.odds.rare": "Rare {pct}%",
+    "shop.odds.legendary": "Legendary {pct}%",
+    "plot.openShop": "Open Shop",
 
     // ── Floripedia (public species page) ───────
     "floripedia.title": "Floripedia",

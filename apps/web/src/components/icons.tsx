@@ -241,3 +241,25 @@ export function BackIcon({ size = 22, className }: IconProps) {
     </svg>
   );
 }
+
+export function ShopIcon({ size = 22, className }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.75"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden
+    >
+      {/* Shopping bag */}
+      <path d="M6 2 L3 7 V20 A2 2 0 0 0 5 22 H19 A2 2 0 0 0 21 20 V7 L18 2 Z" />
+      <line x1="3" y1="7" x2="21" y2="7" />
+      <path d="M16 11 A4 4 0 0 1 8 11" />
+    </svg>
+  );
+}
