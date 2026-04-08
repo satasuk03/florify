@@ -12,7 +12,7 @@ import {
   type Stage,
 } from '@/components/StageSelector';
 import { useGameStore } from '@/store/gameStore';
-import { SPECIES, SpeciesCollection } from '@/data/species';
+import { SPECIES, SpeciesCollection, COLLECTION_LABELS } from '@/data/species';
 
 /**
  * Detail view for a single harvested tree. Reads `id` from the parent
@@ -23,11 +23,6 @@ import { SPECIES, SpeciesCollection } from '@/data/species';
  * because Next.js 16 static export forbids `dynamicParams: true`.
  */
 
-const COLLECTION_LABELS: Record<SpeciesCollection, { th: string; en: string }> = {
-  [SpeciesCollection.Original]: { th: 'Original', en: 'Original' },
-  [SpeciesCollection.ChineseGarden]: { th: 'Chinese Garden', en: 'Chinese Garden' },
-  [SpeciesCollection.AbyssalGarden]: { th: 'Abyssal Garden', en: 'Abyssal Garden' },
-};
 
 const COPY = {
   th: {

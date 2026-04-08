@@ -9,26 +9,12 @@ import { FloraImage } from '@/components/FloraImage';
 import { AnimatedNumber } from '@/components/AnimatedNumber';
 import { useGameStore } from '@/store/gameStore';
 import { gameEventBus } from '@/lib/gameEventBus';
-import { SPECIES, SpeciesCollection } from '@/data/species';
+import { SPECIES, SpeciesCollection, ALL_COLLECTIONS, COLLECTION_LABELS } from '@/data/species';
 import type { SpeciesDef } from '@/data/species';
 import type { Rarity } from '@florify/shared';
 import { useT } from '@/i18n/useT';
 
-/* ── Collection display names ───────────────────────────────────── */
-const COLLECTION_LABELS: Record<SpeciesCollection, { th: string; en: string }> = {
-  [SpeciesCollection.Original]: { th: 'Original', en: 'Original' },
-  [SpeciesCollection.ChineseGarden]: { th: 'Chinese Garden', en: 'Chinese Garden' },
-  [SpeciesCollection.AbyssalGarden]: { th: 'Abyssal Garden', en: 'Abyssal Garden' },
-};
-
 const RARITY_ORDER: Rarity[] = ['common', 'rare', 'legendary'];
-
-/* Newest collection first */
-const ALL_COLLECTIONS: SpeciesCollection[] = [
-  SpeciesCollection.AbyssalGarden,
-  SpeciesCollection.ChineseGarden,
-  SpeciesCollection.Original,
-];
 
 /* ── Icons (inline SVGs to avoid extra deps) ────────────────────── */
 function SearchIcon() {
@@ -153,6 +139,15 @@ export function GalleryView() {
       return b.id - a.id;
     });
   }, [search, selectedRarities, selectedCollections, showMode, discoveredSet]);
+
+  /* ── Total species per collection (for progression display) ───── */
+  const collectionTotals = useMemo(() => {
+    const totals = new Map<SpeciesCollection, number>();
+    for (const col of ALL_COLLECTIONS) {
+      totals.set(col, SPECIES.filter((sp) => sp.collection === col).length);
+    }
+    return totals;
+  }, []);
 
   /* ── Group filtered species by collection (newest first) ─────── */
   const groupedByCollection = useMemo(() => {
@@ -407,7 +402,7 @@ export function GalleryView() {
                   <div className="sticky top-0 z-10 flex items-center gap-2 mb-3 py-2 bg-cream-50/90 backdrop-blur-sm -mx-4 px-4">
                     <h2 className="text-sm font-serif text-ink-800">{label.en}</h2>
                     <span className="text-[10px] text-ink-400 tabular-nums">
-                      {countInGroup}/{group.species.length}
+                      {countInGroup}/{collectionTotals.get(group.collection) ?? group.species.length}
                     </span>
                     <div className="flex-1 border-b border-cream-300/60" />
                   </div>

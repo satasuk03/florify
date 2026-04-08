@@ -30,41 +30,53 @@ const PACKS: {
 const TIER_STYLE: Record<
   BoosterTier,
   {
-    gradient: string;
+    packBg: string;
     border: string;
     glow: string;
     accent: string;
     accentLight: string;
     foilStops: [string, string, string];
+    sealStops: [string, string];
     icon: string;
+    buyBg: string;
+    buyBorder: string;
   }
 > = {
   common: {
-    gradient: "from-[#e8dfc8] via-[#f5eedd] to-[#e0d4b8]",
-    border: "border-[#c4b896]",
+    packBg: "from-[#F0E8D4] to-[#FBF5E8]",
+    border: "border-cream-300",
     glow: "0 0 20px rgba(184, 168, 136, 0.3)",
     accent: "#8B7355",
     accentLight: "#B8A888",
     foilStops: ["#F0E8D4", "#FBF5E8", "#E3D7BE"],
+    sealStops: ["#B8A888", "#8B7355"],
     icon: "🌿",
+    buyBg: "rgba(184, 168, 136, 0.07)",
+    buyBorder: "rgba(227, 215, 192, 0.38)",
   },
   rare: {
-    gradient: "from-[#c8dae8] via-[#ddeeff] to-[#b8cfe0]",
-    border: "border-[#96b4c4]",
+    packBg: "from-[#D4E4F0] to-[#E8F2FB]",
+    border: "border-[#96b4c450]",
     glow: "0 0 24px rgba(122, 156, 184, 0.4)",
     accent: "#4A7A9C",
     accentLight: "#7A9CB8",
     foilStops: ["#D4E4F0", "#E8F2FB", "#BED7E3"],
+    sealStops: ["#7A9CB8", "#4A7A9C"],
     icon: "✨",
+    buyBg: "rgba(122, 156, 184, 0.07)",
+    buyBorder: "rgba(150, 180, 196, 0.19)",
   },
   legendary: {
-    gradient: "from-[#e8d4a8] via-[#fff2d4] to-[#d4b878]",
-    border: "border-[#c4a044]",
+    packBg: "from-[#F0DCA8] to-[#FFF5D4]",
+    border: "border-[#D4A24C40]",
     glow: "0 0 32px rgba(212, 162, 76, 0.5)",
     accent: "#9C7A2A",
     accentLight: "#D4A24C",
     foilStops: ["#F0DCA8", "#FFF5D4", "#D4B878"],
+    sealStops: ["#D4A24C", "#9C7A2A"],
     icon: "🌼",
+    buyBg: "rgba(212, 162, 76, 0.07)",
+    buyBorder: "rgba(212, 162, 76, 0.13)",
   },
 };
 
@@ -115,92 +127,29 @@ export function ShopView() {
 
   return (
     <div className="min-h-full h-full overflow-y-auto bg-cream-50 safe-top safe-bottom scrollbar-elegant">
-      {/* ── Sticky banner + balance ─────────────────────────────── */}
-      <div className="sticky top-0 z-20 animate-fade-down">
-        <div className="relative">
-          {/* Back button floating over the banner */}
+      {/* ── Header ─────────────────────────────────────────────── */}
+      <div className="sticky top-0 z-20 bg-cream-50/90 backdrop-blur-md animate-fade-down">
+        <div className="flex items-center px-4 pt-4 pb-2">
           <Link
             href="/"
-            className="absolute top-4 left-4 z-10 w-10 h-10 flex items-center justify-center text-ink-700 bg-cream-50/85 backdrop-blur-sm border border-cream-300 rounded-full shadow-soft-sm transition-all duration-300 ease-out hover:bg-cream-100 hover:-translate-x-0.5"
-            style={{ top: "calc(env(safe-area-inset-top) + 0.5rem)" }}
+            className="w-10 h-10 flex items-center justify-center text-ink-700 bg-cream-50/85 backdrop-blur-sm border border-cream-300 rounded-full shadow-soft-sm transition-all duration-300 ease-out hover:bg-cream-100 hover:-translate-x-0.5"
             aria-label={t("shop.back")}
           >
             <BackIcon />
           </Link>
-
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/assets/shop-banner.webp"
-            alt="Sprout Shop"
-            className="w-full h-56 object-cover object-top"
-            draggable={false}
-          />
+          <h1 className="flex-1 text-center font-serif text-xl font-bold text-ink-900">
+            Sprout Shop
+          </h1>
+          <div className="w-10" />
         </div>
 
-        {/* Shop counter — overlaps bottom of banner */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/assets/shop-counter.webp"
-          alt=""
-          className="relative z-10 w-full h-auto -mt-10"
-          draggable={false}
-          aria-hidden
-        />
-
-        {/* Balance bar */}
-        <div className="relative z-10 -mt-14 pb-3 px-4 flex justify-center">
+        <div className="flex justify-center pb-3">
           <SproutIndicator />
         </div>
       </div>
 
-      {/* ── Booster Pack cards ──────────────────────────────────── */}
-      <div
-        className="relative px-4 py-8 flex flex-col gap-5"
-        style={{
-          background: "linear-gradient(180deg, #C4A87A 0%, #B8975E 100%)",
-        }}
-      >
-        {/* Wood grain texture overlay */}
-        <svg
-          className="absolute inset-0 w-full h-full pointer-events-none opacity-[0.12]"
-          aria-hidden
-          preserveAspectRatio="none"
-        >
-          <pattern
-            id="wood-grain"
-            width="200"
-            height="8"
-            patternUnits="userSpaceOnUse"
-          >
-            <line
-              x1="0"
-              y1="1"
-              x2="200"
-              y2="1.5"
-              stroke="#6B4226"
-              strokeWidth="0.8"
-            />
-            <line
-              x1="0"
-              y1="3.5"
-              x2="200"
-              y2="3"
-              stroke="#5A3518"
-              strokeWidth="0.5"
-            />
-            <line
-              x1="0"
-              y1="6"
-              x2="200"
-              y2="6.5"
-              stroke="#6B4226"
-              strokeWidth="0.6"
-            />
-          </pattern>
-          <rect width="100%" height="100%" fill="url(#wood-grain)" />
-        </svg>
-        {/* Subtle inner shadow at top */}
-        <div className="absolute top-0 left-0 right-0 h-6 bg-gradient-to-b from-black/10 to-transparent pointer-events-none" />
+      {/* ── Seed Packet cards ─────────────────────────────────── */}
+      <div className="px-4 pb-8 pt-2 flex flex-col gap-4">
         {PACKS.map(({ tier, cost, odds }, i) => {
           const style = TIER_STYLE[tier];
           const canAfford = sprouts >= cost;
@@ -214,12 +163,11 @@ export function ShopView() {
               className="group relative w-full text-left animate-fade-up disabled:opacity-60 disabled:cursor-not-allowed"
               style={{ animationDelay: `${120 + i * 100}ms` }}
             >
-              {/* Card */}
               <div
-                className={`relative overflow-hidden rounded-2xl border-2 ${style.border} bg-gradient-to-br ${style.gradient} p-0 transition-all duration-300 group-hover:scale-[1.01] group-active:scale-[0.98]`}
-                style={{ boxShadow: canAfford ? style.glow : undefined }}
+                className={`relative overflow-hidden rounded-2xl border bg-cream-100 ${style.border} transition-all duration-300 group-hover:scale-[1.01] group-active:scale-[0.98]`}
+                style={{ boxShadow: canAfford ? style.glow : "0 1px 2px rgba(75,55,30,0.06)" }}
               >
-                {/* Foil shine sweep */}
+                {/* Foil shine sweep on hover */}
                 <div
                   className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                   style={{
@@ -228,61 +176,36 @@ export function ShopView() {
                   }}
                 />
 
-                {/* Diagonal crimp pattern */}
-                <svg
-                  className="absolute inset-0 w-full h-full pointer-events-none opacity-[0.06]"
-                  aria-hidden
-                >
-                  <pattern
-                    id={`crimp-${tier}`}
-                    width="8"
-                    height="8"
-                    patternUnits="userSpaceOnUse"
-                    patternTransform="rotate(45)"
-                  >
-                    <line
-                      x1="0"
-                      y1="0"
-                      x2="0"
-                      y2="8"
-                      stroke="currentColor"
-                      strokeWidth="1"
-                    />
-                  </pattern>
-                  <rect
-                    width="100%"
-                    height="100%"
-                    fill={`url(#crimp-${tier})`}
-                  />
-                </svg>
-
                 <div className="relative flex items-stretch">
                   {/* Left: Pack visual */}
-                  <div className="flex-shrink-0 w-28 flex items-center justify-center py-6">
+                  <div
+                    className={`flex-shrink-0 w-24 flex items-center justify-center py-5 bg-gradient-to-br ${style.packBg}`}
+                    style={{ borderRight: `1px solid ${style.accentLight}20` }}
+                  >
                     <PackSVG tier={tier} style={style} />
                   </div>
 
                   {/* Right: Info */}
-                  <div className="flex-1 py-5 pr-5">
-                    <div className="flex items-start justify-between">
+                  <div className="flex-1 py-4 pr-4 pl-3">
+                    <div className="flex items-start justify-between mb-0.5">
                       <div>
-                        <h2 className="font-serif text-base font-bold text-ink-800 leading-tight">
+                        <h2 className="font-serif text-[15px] font-bold text-ink-900 leading-tight">
                           {TIER_LABEL[tier]}
                         </h2>
                         <div
-                          className="text-[10px] font-bold uppercase tracking-[0.2em] mt-0.5"
+                          className="text-[9px] font-bold uppercase tracking-[0.15em] mt-0.5"
                           style={{ color: style.accent }}
                         >
-                          Booster Pack
+                          Seed Packet
                         </div>
                       </div>
                       <div
-                        className="flex items-center gap-1.5 rounded-full px-3 py-1.5"
-                        style={{ background: `${style.accentLight}30` }}
+                        className="flex items-center gap-1 rounded-full px-2.5 py-1"
+                        style={{ background: `${style.accentLight}20` }}
                       >
-                        <span className="text-sm">🌱</span>
+                        <span className="text-[11px]">🌱</span>
                         <span
-                          className="font-mono text-base font-bold tabular-nums"
+                          className="font-mono text-sm font-bold tabular-nums"
                           style={{ color: style.accent }}
                         >
                           {cost}
@@ -290,8 +213,13 @@ export function ShopView() {
                       </div>
                     </div>
 
-                    {/* Odds as mini bars */}
-                    <div className="mt-3.5 space-y-1.5">
+                    {/* Tagline */}
+                    <p className="text-[9px] text-ink-300 italic leading-snug mt-1 mb-2.5">
+                      {t(`shop.tagline.${tier}` as Parameters<typeof t>[0])}
+                    </p>
+
+                    {/* Odds bars */}
+                    <div className="space-y-1">
                       <OddsBar
                         label={t("shop.odds.common", { pct: odds[0] })}
                         pct={odds[0]}
@@ -313,13 +241,11 @@ export function ShopView() {
 
                 {/* Bottom buy strip */}
                 <div
-                  className="relative py-2.5 text-center text-xs font-bold uppercase tracking-[0.15em] transition-colors duration-200"
+                  className="relative py-2 text-center text-[11px] font-bold uppercase tracking-[0.1em] transition-colors duration-200"
                   style={{
-                    background: canAfford
-                      ? `${style.accentLight}25`
-                      : "rgba(0,0,0,0.03)",
+                    background: canAfford ? style.buyBg : "rgba(0,0,0,0.03)",
                     color: canAfford ? style.accent : "#9C8F7B",
-                    borderTop: `1px solid ${style.accentLight}40`,
+                    borderTop: `1px solid ${canAfford ? style.buyBorder : "rgba(0,0,0,0.04)"}`,
                   }}
                 >
                   {canAfford ? t("shop.buy") : t("shop.insufficient")}
@@ -358,11 +284,11 @@ function PackSVG({
   style,
 }: {
   tier: BoosterTier;
-  style: typeof TIER_STYLE.common;
+  style: (typeof TIER_STYLE)[BoosterTier];
 }) {
   const id = `pack-${tier}`;
   return (
-    <svg viewBox="0 0 80 110" className="w-16 h-22 drop-shadow-sm" aria-hidden>
+    <svg viewBox="0 0 80 110" className="w-14 h-20 drop-shadow-sm" aria-hidden>
       <defs>
         <linearGradient id={`${id}-foil`} x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stopColor={style.foilStops[0]} />
@@ -370,8 +296,8 @@ function PackSVG({
           <stop offset="100%" stopColor={style.foilStops[2]} />
         </linearGradient>
         <linearGradient id={`${id}-seal`} x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stopColor={style.accentLight} stopOpacity="0.6" />
-          <stop offset="100%" stopColor={style.accent} stopOpacity="0.4" />
+          <stop offset="0%" stopColor={style.sealStops[0]} stopOpacity="0.6" />
+          <stop offset="100%" stopColor={style.sealStops[1]} stopOpacity="0.4" />
         </linearGradient>
       </defs>
 
@@ -384,29 +310,15 @@ function PackSVG({
         rx="4"
         fill={`url(#${id}-foil)`}
         stroke={style.accentLight}
-        strokeWidth="1"
+        strokeWidth="0.8"
       />
 
       {/* Top seal */}
-      <rect
-        x="8"
-        y="12"
-        width="64"
-        height="14"
-        rx="4"
-        fill={`url(#${id}-seal)`}
-      />
+      <rect x="8" y="12" width="64" height="14" rx="4" fill={`url(#${id}-seal)`} />
       <rect x="8" y="22" width="64" height="4" fill={`url(#${id}-seal)`} />
 
       {/* Bottom seal */}
-      <rect
-        x="8"
-        y="84"
-        width="64"
-        height="14"
-        rx="4"
-        fill={`url(#${id}-seal)`}
-      />
+      <rect x="8" y="84" width="64" height="14" rx="4" fill={`url(#${id}-seal)`} />
       <rect x="8" y="84" width="64" height="4" fill={`url(#${id}-seal)`} />
 
       {/* Crimp lines */}
@@ -436,54 +348,23 @@ function PackSVG({
       ))}
 
       {/* Center ornament */}
-      <circle
-        cx="40"
-        cy="55"
-        r="16"
-        fill="none"
-        stroke={style.accentLight}
-        strokeWidth="1"
-        opacity="0.5"
-      />
-      <circle
-        cx="40"
-        cy="55"
-        r="10"
-        fill="none"
-        stroke={style.accentLight}
-        strokeWidth="0.6"
-        opacity="0.3"
-      />
+      <circle cx="40" cy="55" r="14" fill="none" stroke={style.accentLight} strokeWidth="0.8" opacity="0.4" />
 
-      {/* Center icon text */}
-      <text
-        x="40"
-        y="59"
-        textAnchor="middle"
-        fontSize="14"
-        dominantBaseline="middle"
-      >
+      {/* Center icon */}
+      <text x="40" y="59" textAnchor="middle" fontSize="14" dominantBaseline="middle">
         {style.icon}
       </text>
 
       {/* Diagonal gloss */}
-      <rect
-        x="8"
-        y="12"
-        width="64"
-        height="86"
-        rx="4"
-        fill="url(#gloss-sweep)"
-        opacity="0.15"
-      />
       <defs>
-        <linearGradient id="gloss-sweep" x1="0%" y1="0%" x2="100%" y2="100%">
+        <linearGradient id={`${id}-gloss`} x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stopColor="white" stopOpacity="0" />
           <stop offset="40%" stopColor="white" stopOpacity="0.6" />
           <stop offset="60%" stopColor="white" stopOpacity="0" />
           <stop offset="100%" stopColor="white" stopOpacity="0" />
         </linearGradient>
       </defs>
+      <rect x="8" y="12" width="64" height="86" rx="4" fill={`url(#${id}-gloss)`} opacity="0.15" />
     </svg>
   );
 }
@@ -500,13 +381,13 @@ function OddsBar({
 }) {
   return (
     <div className="flex items-center gap-2">
-      <div className="flex-1 h-1.5 rounded-full bg-ink-900/5 overflow-hidden">
+      <div className="flex-1 h-1 rounded-full bg-ink-900/5 overflow-hidden">
         <div
           className="h-full rounded-full"
           style={{ width: `${pct}%`, backgroundColor: color, opacity: 0.7 }}
         />
       </div>
-      <span className="text-[10px] text-ink-500 tabular-nums font-medium w-24 text-right">
+      <span className="text-[9px] text-ink-500 tabular-nums font-medium w-[58px] text-right">
         {label}
       </span>
     </div>

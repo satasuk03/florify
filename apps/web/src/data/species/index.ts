@@ -1,5 +1,6 @@
 import type { Rarity } from "@florify/shared";
 import type { SpeciesDef } from "./types";
+import { SpeciesCollection } from "./types";
 import series0 from "./series-0";
 import series1 from "./series-1";
 import series2 from "./series-2";
@@ -49,4 +50,17 @@ export const SPECIES_BY_RARITY: Record<Rarity, readonly SpeciesDef[]> = {
   common: SPECIES.filter((s) => s.rarity === "common"),
   rare: SPECIES.filter((s) => s.rarity === "rare"),
   legendary: SPECIES.filter((s) => s.rarity === "legendary"),
+};
+
+/* Newest collection first */
+export const ALL_COLLECTIONS: SpeciesCollection[] = [
+  SpeciesCollection.AbyssalGarden,
+  SpeciesCollection.ChineseGarden,
+  SpeciesCollection.Original,
+];
+
+export const COLLECTION_LABELS: Record<SpeciesCollection, { th: string; en: string }> = {
+  [SpeciesCollection.Original]: { th: 'Original', en: 'Original' },
+  [SpeciesCollection.ChineseGarden]: { th: 'Chinese Garden', en: 'Chinese Garden' },
+  [SpeciesCollection.AbyssalGarden]: { th: 'Abyssal Garden', en: 'Abyssal Garden' },
 };

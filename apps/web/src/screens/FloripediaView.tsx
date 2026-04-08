@@ -12,7 +12,7 @@ import {
   STAGE_PROGRESS,
   type Stage,
 } from '@/components/StageSelector';
-import { SPECIES, SpeciesCollection } from '@/data/species';
+import { SPECIES, SpeciesCollection, COLLECTION_LABELS } from '@/data/species';
 import { useT, useLanguage } from '@/i18n/useT';
 import { shareSpecies } from '@/lib/shareSpecies';
 import { gameEventBus } from '@/lib/gameEventBus';
@@ -29,11 +29,6 @@ import { useGameStore } from '@/store/gameStore';
  * Route: `/floripedia/?id={speciesId}` (query-param, single static HTML).
  */
 
-const COLLECTION_LABELS: Record<SpeciesCollection, { th: string; en: string }> = {
-  [SpeciesCollection.Original]: { th: 'Original', en: 'Original' },
-  [SpeciesCollection.ChineseGarden]: { th: 'Chinese Garden', en: 'Chinese Garden' },
-  [SpeciesCollection.AbyssalGarden]: { th: 'Abyssal Garden', en: 'Abyssal Garden' },
-};
 
 const STAGE_LABEL: Record<Lang, (s: Stage) => string> = {
   th: (s) => `ระยะ ${s}`,

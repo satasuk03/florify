@@ -252,6 +252,12 @@ export const dict = {
     "shop.odds.common": "ธรรมดา {pct}%",
     "shop.odds.rare": "หายาก {pct}%",
     "shop.odds.legendary": "ตำนาน {pct}%",
+    "shop.tagline.common":
+      "เมล็ดพันธุ์จากทุ่งหญ้าสามัญ — เริ่มต้นเล็กๆ แต่ทุกต้นมีเรื่องเล่า",
+    "shop.tagline.rare":
+      "รวบรวมจากสวนลับที่หมอกปกคลุม — สายพันธุ์ที่คนส่วนใหญ่ไม่เคยเห็น",
+    "shop.tagline.legendary":
+      "ตำนานเล่าว่ามีอยู่ — เมล็ดจากดินแดนที่เวลาหยุดนิ่ง ไม่มีใครพบสองครั้ง",
     "plot.openShop": "เปิดร้านค้า",
 
     // ── Floripedia (public species page) ───────
@@ -510,6 +516,12 @@ export const dict = {
     "shop.odds.common": "Common {pct}%",
     "shop.odds.rare": "Rare {pct}%",
     "shop.odds.legendary": "Legendary {pct}%",
+    "shop.tagline.common":
+      "Seeds from the common meadows — every sprout has a story to tell",
+    "shop.tagline.rare":
+      "Gathered from mist-veiled gardens — species most have never seen",
+    "shop.tagline.legendary":
+      "Legends say they exist — seeds from a land where time stands still",
     "plot.openShop": "Open Shop",
 
     // ── Floripedia (public species page) ───────

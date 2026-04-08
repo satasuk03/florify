@@ -6,7 +6,7 @@ import { Button } from '@/components/Button';
 import { RarityBadge } from '@/components/RarityBadge';
 import { FloraImage } from '@/components/FloraImage';
 import { HarvestConfetti } from '@/components/HarvestConfetti';
-import { SPECIES, SpeciesCollection } from '@/data/species';
+import { SPECIES, SpeciesCollection, COLLECTION_LABELS } from '@/data/species';
 import { useT, useLanguage } from '@/i18n/useT';
 import { shareSpecies } from '@/lib/shareSpecies';
 import { useGameStore } from '@/store/gameStore';
@@ -39,11 +39,6 @@ const GLOW: Record<Rarity, string> = {
   legendary: 'radial-gradient(closest-side, rgba(212, 162, 76, 0.65), rgba(251, 248, 243, 0) 70%)',
 };
 
-const COLLECTION_LABELS: Record<SpeciesCollection, string> = {
-  [SpeciesCollection.Original]: 'Original',
-  [SpeciesCollection.ChineseGarden]: 'Chinese Garden',
-  [SpeciesCollection.AbyssalGarden]: 'Abyssal Garden',
-};
 
 const HEADLINE_KEY: Record<Rarity, DictKey> = {
   common: 'harvest.headline.common',
@@ -242,7 +237,7 @@ export function HarvestOverlay({ tree, pityPointsGained, pityReward, sproutsGain
             className="text-xs text-ink-400 tracking-wide uppercase animate-fade-up"
             style={{ animationDelay: '350ms' }}
           >
-            {COLLECTION_LABELS[species.collection]}
+            {COLLECTION_LABELS[species.collection].en}
           </p>
         )}
 
