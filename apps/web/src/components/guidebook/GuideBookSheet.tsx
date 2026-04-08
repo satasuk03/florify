@@ -74,6 +74,7 @@ export function GuideBookSheet({ open, onClose }: Props) {
           <ComboSection />
           <FeaturesSection />
           <DriedLeavesSection />
+          <InstallPWASection />
           <SaveSection />
           <DeveloperSection />
         </div>
@@ -358,6 +359,30 @@ function ShopSection() {
         <p className="text-xs text-ink-500 leading-relaxed">
           {t('guide.shop.duplicate')}
         </p>
+      </div>
+    </Accordion>
+  );
+}
+
+function InstallPWASection() {
+  const t = useT();
+  const steps: Array<{ titleKey: 'guide.pwa.ios.title' | 'guide.pwa.android.title' | 'guide.pwa.desktop.title'; bodyKey: 'guide.pwa.ios.body' | 'guide.pwa.android.body' | 'guide.pwa.desktop.body' }> = [
+    { titleKey: 'guide.pwa.ios.title', bodyKey: 'guide.pwa.ios.body' },
+    { titleKey: 'guide.pwa.android.title', bodyKey: 'guide.pwa.android.body' },
+    { titleKey: 'guide.pwa.desktop.title', bodyKey: 'guide.pwa.desktop.body' },
+  ];
+  return (
+    <Accordion icon="📲" title={t('guide.pwa.title')}>
+      <div className="space-y-3">
+        <p className="text-xs text-ink-600 leading-relaxed">
+          {t('guide.pwa.body')}
+        </p>
+        {steps.map((s) => (
+          <div key={s.titleKey}>
+            <div className="text-sm font-medium text-ink-900">{t(s.titleKey)}</div>
+            <div className="text-xs text-ink-600 leading-relaxed mt-0.5 whitespace-pre-line">{t(s.bodyKey)}</div>
+          </div>
+        ))}
       </div>
     </Accordion>
   );

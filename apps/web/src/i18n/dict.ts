@@ -152,6 +152,18 @@ export const dict = {
     "guide.save.backup.title": "สำรอง / กู้คืนด้วยรหัสเซฟ",
     "guide.save.backup.body":
       "ไปที่ตั้งค่า → ข้อมูลบันทึก → คัดลอกรหัส แล้วเก็บไว้ในโน้ตหรือแชท ถ้าอยากย้ายเครื่องก็วางรหัสกลับเข้าไปที่ Import",
+    "guide.pwa.title": "ติดตั้งแอปลงเครื่อง",
+    "guide.pwa.body":
+      "Florify เปิดเล่นจากเบราว์เซอร์ได้เลย แต่ถ้าอยากเปิดเร็วขึ้นแบบแอปเต็มจอ สามารถ \"เพิ่มลงหน้าจอหลัก\" ได้ทั้ง iOS และ Android",
+    "guide.pwa.ios.title": "iPhone / iPad (Safari)",
+    "guide.pwa.ios.body":
+      "1. เปิดเว็บใน Safari\n2. กดปุ่ม Share (กล่องมีลูกศรขึ้น)\n3. เลื่อนลงแล้วกด \"เพิ่มไปที่หน้าจอโฮม\"\n4. กด \"เพิ่ม\" — ไอคอนจะขึ้นที่หน้าจอหลัก",
+    "guide.pwa.android.title": "Android (Chrome)",
+    "guide.pwa.android.body":
+      "1. เปิดเว็บใน Chrome\n2. กดเมนู ⋮ (สามจุดมุมบนขวา)\n3. กด \"เพิ่มไปที่หน้าจอหลัก\" หรือ \"ติดตั้งแอป\"\n4. กดยืนยัน — ไอคอนจะปรากฏที่หน้าจอหลัก",
+    "guide.pwa.desktop.title": "Desktop (Chrome / Edge)",
+    "guide.pwa.desktop.body":
+      "กดไอคอน Install (ในแถบ URL) หรือเมนู → \"Install Florify\"",
     "guide.daily.title": "เช็คอิน & ภารกิจประจำวัน",
     "guide.daily.body":
       "เช็คอินรับ 30 หยด + โบนัสสตรีคสูงสุด +20 · ภารกิจ 5 อัน (10P/อัน) สะสมครบไมล์สโตนได้หยดเพิ่ม · รีเซ็ตทุกเที่ยงคืน",
@@ -396,6 +408,18 @@ export const dict = {
     "guide.save.backup.title": "Back up / restore with a save code",
     "guide.save.backup.body":
       "Open Settings → Save data → copy the code and keep it in a note or chat. To move to another device, paste the code into Import.",
+    "guide.pwa.title": "Install as an app",
+    "guide.pwa.body":
+      "Florify works in the browser, but you can add it to your home screen for a full-screen, app-like experience on any device.",
+    "guide.pwa.ios.title": "iPhone / iPad (Safari)",
+    "guide.pwa.ios.body":
+      "1. Open the site in Safari\n2. Tap the Share button (box with an arrow)\n3. Scroll down and tap \"Add to Home Screen\"\n4. Tap \"Add\" — the icon will appear on your home screen",
+    "guide.pwa.android.title": "Android (Chrome)",
+    "guide.pwa.android.body":
+      "1. Open the site in Chrome\n2. Tap the ⋮ menu (top-right)\n3. Tap \"Add to Home screen\" or \"Install app\"\n4. Confirm — the icon will appear on your home screen",
+    "guide.pwa.desktop.title": "Desktop (Chrome / Edge)",
+    "guide.pwa.desktop.body":
+      "Click the Install icon in the URL bar, or go to Menu → \"Install Florify\"",
     "guide.daily.title": "Check-in & Daily Missions",
     "guide.daily.body":
       "Check in for 30 drops + streak bonus up to +20 · 5 missions (10P each), hit milestones for bonus drops · Resets at midnight",
