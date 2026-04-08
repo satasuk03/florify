@@ -6,6 +6,7 @@
   "scripts": {
     "generate": "tsx src/generate.ts",
     "generate:all": "tsx src/generate.ts --all",
+    "banner": "tsx src/generate-banner.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
