@@ -98,7 +98,9 @@ export function DailyMissionSheet({ open, onClose }: Props) {
               {t("missions.refreshConfirmTitle")}
             </p>
             <p className="text-sm text-ink-500 mb-5">
-              {t("missions.refreshConfirmBody", { cost: SPROUT_QUEST_REFRESH_COST })}
+              {t("missions.refreshConfirmBody", {
+                cost: SPROUT_QUEST_REFRESH_COST,
+              })}
             </p>
             <div className="flex gap-2">
               <button
@@ -113,7 +115,9 @@ export function DailyMissionSheet({ open, onClose }: Props) {
                 onClick={handleConfirmRefresh}
                 className="flex-1 py-2.5 rounded-xl text-sm font-semibold text-cream-50 bg-clay-500 hover:bg-clay-400 active:bg-clay-600 active:scale-[0.98] shadow-soft-md transition-all"
               >
-                {t("missions.refreshConfirm", { cost: SPROUT_QUEST_REFRESH_COST })}
+                {t("missions.refreshConfirm", {
+                  cost: SPROUT_QUEST_REFRESH_COST,
+                })}
               </button>
             </div>
           </div>
@@ -200,7 +204,7 @@ function MilestoneBar() {
           <span className="font-serif text-lg font-bold text-ink-900 tabular-nums">
             {totalPoints}
           </span>
-          <span className="text-xs text-ink-400">/ {maxPoints}P</span>
+          <span className="text-xs text-ink-400">/ {maxPoints}⭐</span>
         </div>
       </div>
 
@@ -405,33 +409,6 @@ function MissionCard({
           />
         </div>
       )}
-
-      {/* Points badge */}
-      <div
-        className={`relative flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-500 ${
-          mission.completed
-            ? "bg-gradient-to-br from-clay-400 to-clay-600 border border-clay-600/40 shadow-[0_2px_8px_rgba(199,130,90,0.35)]"
-            : "bg-clay-500/10 border border-clay-400/25"
-        }`}
-        style={
-          mission.completed
-            ? {
-                animation:
-                  "mission-check-pop 500ms cubic-bezier(0.34, 1.56, 0.64, 1) both",
-                animationDelay: `${400 + index * 80}ms`,
-              }
-            : undefined
-        }
-      >
-        {mission.completed ? (
-          <CheckIcon size={18} className="text-cream-50" />
-        ) : (
-          <span className="text-[11px] font-bold tracking-tight text-clay-600">
-            {MISSION_POINTS_PER}P
-          </span>
-        )}
-      </div>
-
       {/* Description + progress */}
       <div className="relative flex-1 min-w-0">
         <div
@@ -439,7 +416,7 @@ function MissionCard({
             mission.completed ? "text-ink-700" : "text-ink-800"
           }`}
         >
-          {label}
+          10⭐ {label}
         </div>
         <div className="flex items-center gap-2.5 mt-1.5">
           <div className="flex-1 h-1.5 bg-cream-300/50 rounded-full overflow-hidden">
@@ -468,16 +445,27 @@ function MissionCard({
         </div>
       </div>
 
-      {/* Refresh icon */}
-      {!mission.completed && (
+      {/* Points badge / Refresh trigger */}
+      {mission.completed ? (
+        <div
+          className="relative flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-500 bg-gradient-to-br from-clay-400 to-clay-600 border border-clay-600/40 shadow-[0_2px_8px_rgba(199,130,90,0.35)]"
+          style={{
+            animation:
+              "mission-check-pop 500ms cubic-bezier(0.34, 1.56, 0.64, 1) both",
+            animationDelay: `${400 + index * 80}ms`,
+          }}
+        >
+          <CheckIcon size={18} className="text-cream-50" />
+        </div>
+      ) : (
         <button
           type="button"
-          onClick={() => onRequestRefresh(index)}
+          onClick={() => canRefresh && onRequestRefresh(index)}
           disabled={!canRefresh}
-          className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 ${
+          className={`relative flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-500 ${
             canRefresh
-              ? "text-ink-400 hover:text-ink-600 hover:bg-cream-200 active:scale-90"
-              : "text-ink-200 cursor-not-allowed"
+              ? "bg-clay-500/10 border border-clay-400/25 hover:bg-clay-500/20 active:scale-95 cursor-pointer"
+              : "bg-clay-500/10 border border-clay-400/25"
           }`}
           aria-label={t("missions.refresh")}
         >
@@ -490,7 +478,17 @@ function MissionCard({
 
 function RefreshIcon() {
   return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="text-clay-400"
+    >
       <polyline points="23 4 23 10 17 10" />
       <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
     </svg>
@@ -544,7 +542,9 @@ function AllMissionsBonus() {
       >
         {allCompletedClaimed
           ? t("missions.allCompleteClaimed")
-          : t("missions.allCompleteBonus", { sprouts: SPROUT_ALL_MISSIONS_BONUS })}
+          : t("missions.allCompleteBonus", {
+              sprouts: SPROUT_ALL_MISSIONS_BONUS,
+            })}
       </button>
     </div>
   );
