@@ -22,14 +22,22 @@ interface ImagesResponse {
  * If the model name or params drift, this is the single file to edit.
  * See: https://docs.x.ai/developers/model-capabilities/images/generation
  */
-export async function generateImage(prompt: string): Promise<string> {
+export interface GenerateImageOptions {
+  aspectRatio?: '1:1' | '3:2' | '2:3' | '16:9' | '9:16';
+  n?: number;
+}
+
+export async function generateImage(
+  prompt: string,
+  opts?: GenerateImageOptions,
+): Promise<string> {
   const res = (await getClient().post('/images/generations', {
     body: {
       model: 'grok-imagine-image',
       prompt,
-      n: 1,
+      n: opts?.n ?? 1,
       response_format: 'url',
-      aspect_ratio: '9:16',
+      aspect_ratio: opts?.aspectRatio ?? '9:16',
     },
   })) as ImagesResponse;
 

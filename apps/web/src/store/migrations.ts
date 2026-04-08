@@ -15,6 +15,7 @@ export function migrate(state: UnknownState): PlayerState {
   if (s.schemaVersion === 4) s = migrateV4toV5(s);
   if (s.schemaVersion === 5) s = migrateV5toV6(s);
   if (s.schemaVersion === 6) s = migrateV6toV7(s);
+  if (s.schemaVersion === 7) s = migrateV7toV8(s);
   if (s.schemaVersion !== SCHEMA_VERSION) {
     console.warn(`[migrate] unknown schemaVersion ${s.schemaVersion}, falling back to as-is`);
   }
@@ -103,6 +104,17 @@ function migrateV5toV6(s: UnknownState): UnknownState {
       claimedPoints: 0,
       claimedMilestones: [],
     },
+  };
+}
+
+// v7 → v8: add sprout currency and allCompletedClaimed to daily missions.
+function migrateV7toV8(s: UnknownState): UnknownState {
+  const dailyMissions = (s.dailyMissions ?? {}) as Record<string, unknown>;
+  return {
+    ...s,
+    schemaVersion: 8,
+    sprouts: 0,
+    dailyMissions: { ...dailyMissions, allCompletedClaimed: false },
   };
 }
 

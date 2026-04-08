@@ -10,9 +10,11 @@ import {
   FloristCardIcon,
   GuideBookIcon,
   SettingsIcon,
+  ShopIcon,
   WaterDropIcon,
   SproutIcon,
 } from "@/components/icons";
+import { SproutIndicator } from "@/components/SproutIndicator";
 import { FloristCardSheet } from "@/components/florist-card/FloristCardSheet";
 import { GuideBookSheet } from "@/components/guidebook/GuideBookSheet";
 import { SettingsSheet } from "@/components/settings/SettingsSheet";
@@ -89,6 +91,7 @@ export function PlotView() {
   const [pityReward, setPityReward] = useState<
     { speciesId: number; rarity: import("@florify/shared").Rarity } | undefined
   >();
+  const [sproutsGained, setSproutsGained] = useState(0);
   // Monotonic counter keyed onto <WaterSplash> — incrementing it on
   // every successful water tap remounts the component and replays its
   // one-shot droplet animation from the start. 0 means "never tapped",
@@ -140,6 +143,7 @@ export function PlotView() {
       setHarvested(result.harvested);
       setPityPointsGained(result.pityPointsGained ?? 0);
       setPityReward(result.pityReward);
+      setSproutsGained(result.sproutsGained ?? 0);
     }
   };
 
@@ -210,6 +214,22 @@ export function PlotView() {
           Florify
         </div>
       </div>
+      {/* Sprout indicator — positioned between the title and the readout card.
+          Gated on `hydrated` to avoid SSR/client mismatch (sprouts come
+          from localStorage which isn't available during SSR). */}
+      {hydrated && (
+        <div
+          className="absolute left-0 right-0 flex justify-center pointer-events-none animate-fade-in"
+          style={{
+            top: "calc(env(safe-area-inset-top) + 3rem)",
+            animationDelay: "100ms",
+          }}
+        >
+          <div className="pointer-events-auto">
+            <SproutIndicator />
+          </div>
+        </div>
+      )}
       {/* Readout card lives OUTSIDE the animate-fade-down wrapper above.
           That wrapper's keyframes leave `transform: translateY(0)` set via
           `animation-fill-mode: both`, which creates a stacking context and
@@ -222,7 +242,7 @@ export function PlotView() {
         <div
           className="absolute left-0 right-0 flex justify-center pointer-events-none"
           style={{
-            top: "calc(env(safe-area-inset-top) + 3.9rem)",
+            top: "calc(env(safe-area-inset-top) + 5.2rem)",
           }}
         >
           <div
@@ -278,6 +298,9 @@ export function PlotView() {
           </CornerButton>
         </div>
         <MissionCornerButton onClick={() => setShowMissions(true)} />
+        <CornerButton to="/shop" label={t("plot.openShop")} size="primary">
+          <ShopIcon />
+        </CornerButton>
         <LanguageToggle />
       </div>
 
@@ -376,6 +399,7 @@ export function PlotView() {
         tree={harvested}
         pityPointsGained={pityPointsGained}
         pityReward={pityReward}
+        sproutsGained={sproutsGained}
         onDismiss={() => setHarvested(null)}
       />
       {showWelcome && (

@@ -7,6 +7,9 @@ import {
   SCHEMA_VERSION,
   CHECKIN_BASE_DROPS, CHECKIN_STREAK_BONUS_MAX,
   MISSION_MILESTONES, MISSION_MILESTONE_DROPS, MISSION_POINTS_PER, DAILY_MISSION_COUNT,
+  SPROUT_HARVEST_COMMON, SPROUT_HARVEST_RARE, SPROUT_HARVEST_LEGENDARY,
+  SPROUT_QUEST_REFRESH_COST, SPROUT_ALL_MISSIONS_BONUS,
+  BOOSTER_COST_COMMON,
   type TreeInstance, type CollectedSpecies, type PlayerState, type DailyMission,
 } from '@florify/shared';
 import { SPECIES } from '@/data/species';
@@ -857,6 +860,7 @@ describe('visit quest via event bus', () => {
           ],
           claimedPoints: 0,
           claimedMilestones: [],
+          allCompletedClaimed: false,
         },
       },
     }));
@@ -895,6 +899,7 @@ describe('claimMissions', () => {
           missions,
           claimedPoints: 0,
           claimedMilestones: [],
+          allCompletedClaimed: false,
         },
         waterDrops: 10,
         lastDropRegenAt: Date.now(),
@@ -945,6 +950,7 @@ describe('claimMissions', () => {
           ],
           claimedPoints: 0,
           claimedMilestones: [],
+          allCompletedClaimed: false,
         },
       },
     }));
@@ -1127,6 +1133,7 @@ describe('migrate v5 → v6', () => {
       missions: [],
       claimedPoints: 0,
       claimedMilestones: [],
+      allCompletedClaimed: false,
     });
   });
 });
@@ -1154,5 +1161,195 @@ describe('migrate v6 → v7', () => {
     // Existing streak fields preserved
     expect(result.streak.currentStreak).toBe(3);
     expect(result.streak.longestStreak).toBe(5);
+    // v7→v8 also applied
+    expect(result.sprouts).toBe(0);
+    expect(result.dailyMissions.allCompletedClaimed).toBe(false);
+  });
+});
+
+describe('migrate v7 → v8', () => {
+  it('adds sprouts and allCompletedClaimed', () => {
+    const v7State = {
+      schemaVersion: 7,
+      userId: 'test-user',
+      displayName: 'Guest',
+      createdAt: 1000,
+      updatedAt: 2000,
+      waterDrops: 20,
+      lastDropRegenAt: 3000,
+      activeTree: null,
+      collection: [],
+      stats: { totalPlanted: 5, totalWatered: 100, totalHarvested: 5 },
+      streak: { currentStreak: 3, longestStreak: 5, lastCheckinDate: '2026-04-06', lastRewardDate: '2026-04-06' },
+      pityPoints: 42,
+      dailyMissions: { date: '2026-04-06', missions: [], claimedPoints: 20, claimedMilestones: [10, 20] },
+    };
+    const result = migrate(v7State as unknown as { schemaVersion: number } & Record<string, unknown>);
+    expect(result.schemaVersion).toBe(SCHEMA_VERSION);
+    expect(result.sprouts).toBe(0);
+    expect(result.dailyMissions.allCompletedClaimed).toBe(false);
+    // Existing fields preserved
+    expect(result.pityPoints).toBe(42);
+    expect(result.dailyMissions.claimedPoints).toBe(20);
+  });
+});
+
+// ── Sprout currency ────────────────────────────────────────────────
+
+describe('sprout awarding on harvest', () => {
+  beforeEach(resetStore);
+
+  it('awards 1 sprout for common harvest', () => {
+    const tree = mockTree({ rarity: 'common', requiredWaterings: 1, currentWaterings: 0, speciesId: 0 });
+    useGameStore.setState((s) => ({
+      state: {
+        ...s.state,
+        activeTree: tree,
+        waterDrops: 5,
+        lastDropRegenAt: Date.now(),
+        sprouts: 10,
+      },
+    }));
+    const result = useGameStore.getState().waterTree();
+    expect(result.ok).toBe(true);
+    expect(result.sproutsGained).toBe(SPROUT_HARVEST_COMMON);
+    expect(useGameStore.getState().state.sprouts).toBe(10 + SPROUT_HARVEST_COMMON);
+  });
+
+  it('awards 3 sprouts for rare harvest', () => {
+    const tree = mockTree({ rarity: 'rare', requiredWaterings: 1, currentWaterings: 0, speciesId: 1 });
+    useGameStore.setState((s) => ({
+      state: {
+        ...s.state,
+        activeTree: tree,
+        waterDrops: 5,
+        lastDropRegenAt: Date.now(),
+        sprouts: 0,
+      },
+    }));
+    const result = useGameStore.getState().waterTree();
+    expect(result.sproutsGained).toBe(SPROUT_HARVEST_RARE);
+  });
+
+  it('awards 10 sprouts for legendary harvest', () => {
+    const tree = mockTree({ rarity: 'legendary', requiredWaterings: 1, currentWaterings: 0, speciesId: 2 });
+    useGameStore.setState((s) => ({
+      state: {
+        ...s.state,
+        activeTree: tree,
+        waterDrops: 5,
+        lastDropRegenAt: Date.now(),
+        sprouts: 0,
+      },
+    }));
+    const result = useGameStore.getState().waterTree();
+    expect(result.sproutsGained).toBe(SPROUT_HARVEST_LEGENDARY);
+  });
+});
+
+describe('openBooster', () => {
+  beforeEach(resetStore);
+
+  it('returns null if insufficient sprouts', () => {
+    useGameStore.setState((s) => ({
+      state: { ...s.state, sprouts: 50 },
+    }));
+    const result = useGameStore.getState().openBooster('common');
+    expect(result).toBeNull();
+  });
+
+  it('deducts cost and returns a species', () => {
+    useGameStore.setState((s) => ({
+      state: { ...s.state, sprouts: BOOSTER_COST_COMMON + 50 },
+    }));
+    const result = useGameStore.getState().openBooster('common');
+    expect(result).not.toBeNull();
+    expect(result!.speciesId).toBeGreaterThanOrEqual(0);
+    // Sprouts should be: initial - cost + gain
+    const state = useGameStore.getState().state;
+    expect(state.sprouts).toBeLessThanOrEqual(BOOSTER_COST_COMMON + 50);
+  });
+});
+
+describe('refreshMission', () => {
+  beforeEach(resetStore);
+
+  it('replaces an incomplete mission for 10 sprouts', () => {
+    const missions: DailyMission[] = [
+      { templateId: 'water_100', type: 'water', target: 100, progress: 5, completed: false },
+      { templateId: 'plant_10', type: 'plant', target: 10, progress: 0, completed: false },
+    ];
+    useGameStore.setState((s) => ({
+      state: {
+        ...s.state,
+        sprouts: 20,
+        dailyMissions: { date: todayLocalDate(), missions, claimedPoints: 0, claimedMilestones: [], allCompletedClaimed: false },
+      },
+    }));
+    const ok = useGameStore.getState().refreshMission(0);
+    expect(ok).toBe(true);
+    const state = useGameStore.getState().state;
+    expect(state.sprouts).toBe(20 - SPROUT_QUEST_REFRESH_COST);
+    expect(state.dailyMissions.missions[0]!.templateId).not.toBe('water_100');
+    expect(state.dailyMissions.missions[0]!.progress).toBe(0);
+  });
+
+  it('refuses to refresh a completed mission', () => {
+    const missions: DailyMission[] = [
+      { templateId: 'water_100', type: 'water', target: 100, progress: 100, completed: true },
+    ];
+    useGameStore.setState((s) => ({
+      state: {
+        ...s.state,
+        sprouts: 20,
+        dailyMissions: { date: todayLocalDate(), missions, claimedPoints: 0, claimedMilestones: [], allCompletedClaimed: false },
+      },
+    }));
+    const ok = useGameStore.getState().refreshMission(0);
+    expect(ok).toBe(false);
+  });
+});
+
+describe('claimAllCompletedBonus', () => {
+  beforeEach(resetStore);
+
+  it('awards 100 sprouts when all 5 missions complete', () => {
+    const missions: DailyMission[] = Array.from({ length: DAILY_MISSION_COUNT }, (_, i) => ({
+      templateId: `test_${i}`,
+      type: 'water' as const,
+      target: 1,
+      progress: 1,
+      completed: true,
+    }));
+    useGameStore.setState((s) => ({
+      state: {
+        ...s.state,
+        sprouts: 50,
+        dailyMissions: { date: todayLocalDate(), missions, claimedPoints: 0, claimedMilestones: [], allCompletedClaimed: false },
+      },
+    }));
+    const { sproutsAwarded } = useGameStore.getState().claimAllCompletedBonus();
+    expect(sproutsAwarded).toBe(SPROUT_ALL_MISSIONS_BONUS);
+    expect(useGameStore.getState().state.sprouts).toBe(50 + SPROUT_ALL_MISSIONS_BONUS);
+    expect(useGameStore.getState().state.dailyMissions.allCompletedClaimed).toBe(true);
+  });
+
+  it('does not double-claim', () => {
+    const missions: DailyMission[] = Array.from({ length: DAILY_MISSION_COUNT }, (_, i) => ({
+      templateId: `test_${i}`,
+      type: 'water' as const,
+      target: 1,
+      progress: 1,
+      completed: true,
+    }));
+    useGameStore.setState((s) => ({
+      state: {
+        ...s.state,
+        sprouts: 50,
+        dailyMissions: { date: todayLocalDate(), missions, claimedPoints: 0, claimedMilestones: [], allCompletedClaimed: true },
+      },
+    }));
+    const { sproutsAwarded } = useGameStore.getState().claimAllCompletedBonus();
+    expect(sproutsAwarded).toBe(0);
   });
 });

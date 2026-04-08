@@ -5,7 +5,11 @@ import { SPECIES, SPECIES_BY_RARITY } from '@/data/species';
 import { RARITY_ROLL_WEIGHTS } from '@/data/rarityWeights';
 import { useT } from '@/i18n/useT';
 import { useGameStore } from '@/store/gameStore';
-import { PITY_THRESHOLD, PITY_POINTS_COMMON, PITY_POINTS_RARE, PITY_POINTS_LEGENDARY } from '@florify/shared';
+import {
+  PITY_THRESHOLD, PITY_POINTS_COMMON, PITY_POINTS_RARE, PITY_POINTS_LEGENDARY,
+  SPROUT_HARVEST_COMMON, SPROUT_HARVEST_RARE, SPROUT_HARVEST_LEGENDARY,
+  SPROUT_ALL_MISSIONS_BONUS, SPROUT_QUEST_REFRESH_COST,
+} from '@florify/shared';
 import type { Rarity } from '@florify/shared';
 
 interface Props {
@@ -64,6 +68,8 @@ export function GuideBookSheet({ open, onClose }: Props) {
         <div className="px-6 pb-6 pt-2 space-y-1.5">
           <HowToPlaySection />
           <RaritySection />
+          <SproutSection />
+          <ShopSection />
           <DailySection />
           <ComboSection />
           <FeaturesSection />
@@ -279,6 +285,79 @@ function DriedLeavesSection() {
             </div>
           ))}
         </div>
+      </div>
+    </Accordion>
+  );
+}
+
+function SproutSection() {
+  const t = useT();
+  const sprouts = useGameStore((s) => s.state.sprouts);
+  const rates: Array<{ key: Rarity; labelKey: 'guide.rarity.common' | 'guide.rarity.rare' | 'guide.rarity.legendary'; gain: number; dotVar: string }> = [
+    { key: 'common', labelKey: 'guide.rarity.common', gain: SPROUT_HARVEST_COMMON, dotVar: 'var(--color-rarity-common)' },
+    { key: 'rare', labelKey: 'guide.rarity.rare', gain: SPROUT_HARVEST_RARE, dotVar: 'var(--color-rarity-rare)' },
+    { key: 'legendary', labelKey: 'guide.rarity.legendary', gain: SPROUT_HARVEST_LEGENDARY, dotVar: 'var(--color-rarity-legendary)' },
+  ];
+  return (
+    <Accordion icon="🌱" title={t('guide.sprout.title')}>
+      <div className="space-y-3">
+        <p className="text-xs text-ink-600 leading-relaxed">
+          {t('guide.sprout.body')}
+        </p>
+
+        {/* Current balance */}
+        <div className="flex items-center justify-between bg-cream-200/50 rounded-lg px-3 py-2">
+          <span className="text-xs text-ink-500">{t('guide.sprout.balance')}</span>
+          <span className="font-mono text-sm font-bold text-leaf-700 tabular-nums">🌱 {sprouts}</span>
+        </div>
+
+        {/* Harvest rates */}
+        <div>
+          <div className="text-xs font-medium text-ink-700 mb-1.5">{t('guide.sprout.harvestRates')}</div>
+          <div className="space-y-1.5">
+            {rates.map((r) => (
+              <div key={r.key} className="flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: r.dotVar }} aria-hidden />
+                  <span className="text-sm text-ink-900">{t(r.labelKey)}</span>
+                </div>
+                <div className="text-xs text-ink-500 tabular-nums">+{r.gain} 🌱</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Other sources */}
+        <div>
+          <div className="text-xs font-medium text-ink-700 mb-1">{t('guide.sprout.otherSources')}</div>
+          <div className="text-xs text-ink-600 leading-relaxed">
+            {t('guide.sprout.questBonus', { amount: SPROUT_ALL_MISSIONS_BONUS })}
+          </div>
+        </div>
+
+        {/* Quest refresh */}
+        <div>
+          <div className="text-xs font-medium text-ink-700 mb-1">{t('guide.sprout.refreshTitle')}</div>
+          <div className="text-xs text-ink-600 leading-relaxed">
+            {t('guide.sprout.refreshBody', { cost: SPROUT_QUEST_REFRESH_COST })}
+          </div>
+        </div>
+      </div>
+    </Accordion>
+  );
+}
+
+function ShopSection() {
+  const t = useT();
+  return (
+    <Accordion icon="🛍️" title={t('guide.shop.title')}>
+      <div className="space-y-3">
+        <p className="text-xs text-ink-600 leading-relaxed">
+          {t('guide.shop.body')}
+        </p>
+        <p className="text-xs text-ink-500 leading-relaxed">
+          {t('guide.shop.duplicate')}
+        </p>
       </div>
     </Accordion>
   );
