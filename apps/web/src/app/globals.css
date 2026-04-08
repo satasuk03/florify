@@ -548,6 +548,13 @@
   }
 }
 
+/* ── Wave water fill ────────────────────────────── */
+
+@keyframes wave-drift {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
 /* ── Water drops indicator animations ────────────── */
 
 .animate-count-pop {
