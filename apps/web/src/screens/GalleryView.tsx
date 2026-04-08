@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, memo } from 'react';
 import Link from 'next/link';
 import { Card } from '@/components/Card';
 import { RarityBadge } from '@/components/RarityBadge';
@@ -73,9 +73,13 @@ export function GalleryView() {
   }, [hydrated]);
   const totalHarvested = collection.reduce((sum, c) => sum + c.count, 0);
 
-  // Build a set of discovered speciesIds for quick lookup
+  // Build maps for quick lookup — O(1) instead of O(n) per tile
   const discoveredSet = useMemo(
     () => new Set(collection.map((c) => c.speciesId)),
+    [collection],
+  );
+  const collectionMap = useMemo(
+    () => new Map(collection.map((c) => [c.speciesId, c])),
     [collection],
   );
 
@@ -361,24 +365,32 @@ export function GalleryView() {
         <div className="grid grid-cols-3 gap-3">
           {filtered.map((sp, i) => {
             const isFound = discoveredSet.has(sp.id);
-            const entry = isFound
-              ? collection.find((c) => c.speciesId === sp.id)
-              : null;
+            const entry = isFound ? collectionMap.get(sp.id) : undefined;
+            // Only animate the first 12 tiles; the rest appear instantly
+            const animate = i < 12;
 
             return isFound ? (
               <Link
                 key={sp.id}
                 href={{ pathname: '/gallery/detail', query: { speciesId: String(sp.id) } }}
-                className="group block animate-fade-up"
-                style={{ animationDelay: `${Math.min(i, 12) * 40 + 100}ms` }}
+                className={`group block ${animate ? 'animate-fade-up' : ''}`}
+                style={{
+                  animationDelay: animate ? `${i * 40 + 100}ms` : undefined,
+                  contentVisibility: 'auto',
+                  containIntrinsicSize: 'auto 140px',
+                } as React.CSSProperties}
               >
                 <GalleryTile species={sp} count={entry?.count ?? 1} />
               </Link>
             ) : (
               <div
                 key={sp.id}
-                className="block animate-fade-up"
-                style={{ animationDelay: `${Math.min(i, 12) * 40 + 100}ms` }}
+                className={`block ${animate ? 'animate-fade-up' : ''}`}
+                style={{
+                  animationDelay: animate ? `${i * 40 + 100}ms` : undefined,
+                  contentVisibility: 'auto',
+                  containIntrinsicSize: 'auto 140px',
+                } as React.CSSProperties}
               >
                 <LockedTile species={sp} />
               </div>
@@ -391,7 +403,7 @@ export function GalleryView() {
 }
 
 /* ── Discovered tile ────────────────────────────────────────────── */
-function GalleryTile({
+const GalleryTile = memo(function GalleryTile({
   species,
   count,
 }: {
@@ -418,28 +430,16 @@ function GalleryTile({
       <div className="text-xs mt-1 text-ink-700 truncate">{species.name}</div>
     </div>
   );
-}
+});
 
 /* ── Locked / undiscovered tile ─────────────────────────────────── */
-function LockedTile({ species }: { species: SpeciesDef }) {
+const LockedTile = memo(function LockedTile({ species }: { species: SpeciesDef }) {
   return (
     <div>
       <Card className="overflow-hidden aspect-[3/4] relative bg-cream-200/60">
-        {/* Silhouette layer — blurred, desaturated, darkened */}
-        <div className="absolute inset-0 opacity-[0.07]">
-          <FloraImage
-            speciesId={species.id}
-            progress={1}
-            className="w-full h-full object-cover blur-[6px] scale-110"
-          />
-        </div>
-        {/* Mystery overlay with grain texture */}
-        <div
-          className="absolute inset-0 flex flex-col items-center justify-center gap-1.5"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E")`,
-          }}
-        >
+        {/* Mystery overlay — CSS-only, no image load for locked species */}
+        <div className="absolute inset-0 bg-cream-300/30" />
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-1.5">
           <LockIcon />
           <span className="text-[9px] text-ink-300 font-medium">???</span>
         </div>
@@ -450,4 +450,4 @@ function LockedTile({ species }: { species: SpeciesDef }) {
       <div className="text-xs mt-1 text-ink-300 truncate italic">???</div>
     </div>
   );
-}
+});
