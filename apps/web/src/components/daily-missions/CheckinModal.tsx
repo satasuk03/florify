@@ -18,21 +18,11 @@ interface Props {
 export function CheckinModal({ open, onClose }: Props) {
   const t = useT();
 
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    document.addEventListener('keydown', onKey);
-    return () => document.removeEventListener('keydown', onKey);
-  }, [open, onClose]);
-
   if (!open) return null;
 
   return (
     <div
       className="fixed inset-0 z-50 bg-ink-900/50 backdrop-blur-sm flex items-center justify-center animate-overlay-in p-6"
-      onClick={onClose}
       role="dialog"
       aria-modal="true"
       aria-label={t('checkin.title')}

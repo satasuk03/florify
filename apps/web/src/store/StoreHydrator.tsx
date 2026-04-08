@@ -50,6 +50,27 @@ export function StoreHydrator() {
     return () => document.removeEventListener('visibilitychange', onVisible);
   }, [checkinStreak, ensureDailyMissions]);
 
+  // Reset daily state when midnight crosses while tab is open.
+  useEffect(() => {
+    let timer: ReturnType<typeof setTimeout>;
+
+    const scheduleNextMidnight = () => {
+      const now = new Date();
+      const midnight = new Date(now);
+      midnight.setHours(24, 0, 0, 0);
+      const ms = midnight.getTime() - now.getTime() + 500; // +500ms buffer
+
+      timer = setTimeout(() => {
+        checkinStreak();
+        ensureDailyMissions();
+        scheduleNextMidnight(); // re-arm for next day
+      }, ms);
+    };
+
+    scheduleNextMidnight();
+    return () => clearTimeout(timer);
+  }, [checkinStreak, ensureDailyMissions]);
+
   // Flush any pending debounced save before the tab is killed
   useEffect(() => {
     const onBeforeUnload = () => {
