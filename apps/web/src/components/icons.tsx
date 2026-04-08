@@ -256,10 +256,9 @@ export function ShopIcon({ size = 22, className }: IconProps) {
       className={className}
       aria-hidden
     >
-      {/* Shopping bag */}
-      <path d="M6 2 L3 7 V20 A2 2 0 0 0 5 22 H19 A2 2 0 0 0 21 20 V7 L18 2 Z" />
-      <line x1="3" y1="7" x2="21" y2="7" />
-      <path d="M16 11 A4 4 0 0 1 8 11" />
+      <circle cx="9" cy="21" r="1" />
+      <circle cx="20" cy="21" r="1" />
+      <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
     </svg>
   );
 }
