@@ -18,6 +18,7 @@ import { useT } from '@/i18n/useT';
 const COLLECTION_LABELS: Record<SpeciesCollection, { th: string; en: string }> = {
   [SpeciesCollection.Original]: { th: 'Original', en: 'Original' },
   [SpeciesCollection.ChineseGarden]: { th: 'Chinese Garden', en: 'Chinese Garden' },
+  [SpeciesCollection.AbyssalGarden]: { th: 'Abyssal Garden', en: 'Abyssal Garden' },
 };
 
 const RARITY_ORDER: Rarity[] = ['common', 'rare', 'legendary'];

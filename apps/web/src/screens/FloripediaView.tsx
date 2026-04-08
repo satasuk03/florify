@@ -32,6 +32,7 @@ import { useGameStore } from '@/store/gameStore';
 const COLLECTION_LABELS: Record<SpeciesCollection, { th: string; en: string }> = {
   [SpeciesCollection.Original]: { th: 'Original', en: 'Original' },
   [SpeciesCollection.ChineseGarden]: { th: 'Chinese Garden', en: 'Chinese Garden' },
+  [SpeciesCollection.AbyssalGarden]: { th: 'Abyssal Garden', en: 'Abyssal Garden' },
 };
 
 const STAGE_LABEL: Record<Lang, (s: Stage) => string> = {

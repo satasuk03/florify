@@ -3,6 +3,7 @@ import type { Rarity } from "@florify/shared";
 export enum SpeciesCollection {
   Original = "original",
   ChineseGarden = "chinese-garden",
+  AbyssalGarden = "abyssal-garden",
 }
 
 export interface SpeciesDef {
