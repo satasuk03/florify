@@ -209,7 +209,13 @@ export function PlotView() {
           animationDelay: "60ms",
         }}
       >
-        <div className="font-serif text-2xl font-bold text-ink-900 tracking-[0.15em]">
+        <div
+          className="font-serif text-2xl font-bold text-ink-900 tracking-[0.15em]"
+          style={{
+            WebkitTextStroke: "3px var(--color-cream-50)",
+            paintOrder: "stroke fill",
+          }}
+        >
           Florify
         </div>
       </div>
