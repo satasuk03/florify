@@ -1,6 +1,9 @@
 - Acheivements
 - หาต้นไม้ที่ใช่สำหรับคุณ -> Viral Marketing
 
+- Compress images
+- Next Collection: Fungi Kingdom
+
 ## Done
 - Stats -> DriedLeavesGained, SproutsGained, SproutsSpent, BoosterPacksOpened (each tier)
 - Juicy Animation
