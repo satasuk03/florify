@@ -69,7 +69,6 @@ export function GuideBookSheet({ open, onClose }: Props) {
           <HowToPlaySection />
           <RaritySection />
           <SproutSection />
-          <ShopSection />
           <DailySection />
           <ComboSection />
           <FeaturesSection />
@@ -343,22 +342,17 @@ function SproutSection() {
             {t('guide.sprout.refreshBody', { cost: SPROUT_QUEST_REFRESH_COST })}
           </div>
         </div>
-      </div>
-    </Accordion>
-  );
-}
 
-function ShopSection() {
-  const t = useT();
-  return (
-    <Accordion icon="🛍️" title={t('guide.shop.title')}>
-      <div className="space-y-3">
-        <p className="text-xs text-ink-600 leading-relaxed">
-          {t('guide.shop.body')}
-        </p>
-        <p className="text-xs text-ink-500 leading-relaxed">
-          {t('guide.shop.duplicate')}
-        </p>
+        {/* Sprout Shop */}
+        <div>
+          <div className="text-xs font-medium text-ink-700 mb-1">{t('guide.shop.title')}</div>
+          <div className="text-xs text-ink-600 leading-relaxed">
+            {t('guide.shop.body')}
+          </div>
+          <div className="text-xs text-ink-500 leading-relaxed mt-1">
+            {t('guide.shop.duplicate')}
+          </div>
+        </div>
       </div>
     </Accordion>
   );

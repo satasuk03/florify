@@ -4,6 +4,9 @@ import { useEffect } from 'react';
 import { useGameStore } from './gameStore';
 import { flushSave } from './debouncedSave';
 import { initMissionSubscriber } from './missionSubscriber';
+import { initAchievementSubscriber } from './achievementSubscriber';
+import { checkAchievements } from './achievementChecker';
+import { scheduleSave } from './debouncedSave';
 
 /**
  * Root-level hydrator. Mounted once from `app/layout.tsx` so:
@@ -31,6 +34,31 @@ export function StoreHydrator() {
     const cleanup = initMissionSubscriber();
     return cleanup;
   }, []);
+
+  // Initialize achievement event subscriber (once).
+  useEffect(() => {
+    const cleanup = initAchievementSubscriber();
+    return cleanup;
+  }, []);
+
+  // Retroactive achievement unlock — runs once after hydration.
+  const hydrated = useGameStore((s) => s.hydrated);
+  useEffect(() => {
+    if (!hydrated) return;
+    const state = useGameStore.getState().state;
+    const newlyUnlocked = checkAchievements(state);
+    if (newlyUnlocked.length === 0) return;
+
+    const now = new Date().toISOString();
+    const updatedAchievements = { ...state.achievements };
+    for (const def of newlyUnlocked) {
+      updatedAchievements[def.id] = { unlockedAt: now };
+    }
+
+    const next = { ...state, achievements: updatedAchievements, updatedAt: Date.now() };
+    useGameStore.setState({ state: next });
+    scheduleSave(next);
+  }, [hydrated]);
 
   // Initial hydrate on mount.
   useEffect(() => {

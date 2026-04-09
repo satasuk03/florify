@@ -159,7 +159,7 @@ export function HarvestOverlay({ tree, pityPointsGained, pityReward, sproutsGain
         harvestedAt: tree.harvestedAt ?? Date.now(),
       },
     );
-    if (result.kind === 'copied') {
+    if (result.kind === 'copied' || result.kind === 'shared') {
       setToast(t('floripedia.copied'));
       setTimeout(() => setToast(null), 2400);
     }
@@ -290,22 +290,29 @@ export function HarvestOverlay({ tree, pityPointsGained, pityReward, sproutsGain
         )}
 
         <div
-          className="flex flex-col sm:flex-row items-stretch gap-2 mt-2 animate-fade-up"
+          className="flex flex-row items-stretch gap-2 mt-2 animate-fade-up"
           style={{ animationDelay: '620ms' }}
         >
-          <JuicyCollectButton
-            onClick={handleCollect}
-            disabled={collecting}
-            label={t('harvest.collect')}
-          />
+          <div className="flex-1">
+            <JuicyCollectButton
+              onClick={handleCollect}
+              disabled={collecting}
+              label={t('harvest.collect')}
+            />
+          </div>
           <Button
             size="lg"
             variant="secondary"
             onClick={handleShare}
             disabled={collecting}
-            className="min-w-[140px]"
+            className="!px-0 !min-w-0 w-12 h-12 shrink-0 self-center flex items-center justify-center"
+            aria-label={t('harvest.share')}
           >
-            {t('harvest.share')}
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
+              <polyline points="16 6 12 2 8 6" />
+              <line x1="12" y1="2" x2="12" y2="15" />
+            </svg>
           </Button>
         </div>
       </div>

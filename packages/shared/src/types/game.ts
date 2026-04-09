@@ -73,6 +73,40 @@ export interface ShopPurchases {
   legendary: number;
 }
 
+// ── Achievement system ──────────────────────────────────────────────
+export interface AchievementReward {
+  type: 'sprouts';
+  amount: number;
+}
+
+export type AchievementCondition =
+  | { type: 'species_unlocked'; target: number }
+  | { type: 'species_by_rarity'; rarity: Rarity; target: number }
+  | { type: 'species_by_collection'; collection: string; target: number }
+  | { type: 'harvest_total'; target: number }
+  | { type: 'harvest_by_rarity'; rarity: Rarity; target: number }
+  | { type: 'total_watered'; target: number }
+  | { type: 'sprouts_gained'; target: number }
+  | { type: 'sprouts_spent'; target: number }
+  | { type: 'streak'; target: number }
+  | { type: 'combo'; level: 10 | 15 | 20; target: number }
+  | { type: 'seed_packets'; tier: 'total' | 'common' | 'rare' | 'legendary'; target: number }
+  | { type: 'missions_completed'; target: number }
+  | { type: 'all_daily_completed'; target: number };
+
+export interface AchievementDef {
+  id: string;
+  name: string;
+  description: { en: string; th: string };
+  rewards: AchievementReward[];
+  condition: AchievementCondition;
+}
+
+export interface AchievementProgress {
+  unlockedAt: string;   // ISO date
+  claimedAt?: string;   // ISO date — undefined = unclaimed
+}
+
 export interface PlayerStats {
   totalPlanted: number;
   totalWatered: number;
@@ -81,10 +115,15 @@ export interface PlayerStats {
   sproutsGained: number;
   sproutsSpent: number;
   shopPurchases: ShopPurchases;
+  harvestByRarity: { common: number; rare: number; legendary: number };
+  comboCount: { combo10: number; combo15: number; combo20: number };
+  seedPacketsOpened: { total: number; common: number; rare: number; legendary: number };
+  missionsCompleted: number;
+  allDailyMissionsCompleted: number;
 }
 
 export interface PlayerState {
-  schemaVersion: 9;
+  schemaVersion: 10;
   userId: string;              // local nanoid; linked to a cloud account later
   displayName: string;         // user-editable; 'Guest' until renamed
   createdAt: number;
@@ -98,6 +137,7 @@ export interface PlayerState {
   pityPoints: number;            // 0..PITY_THRESHOLD — dried leaves (🍂) accumulated from duplicates
   sprouts: number;               // 🌱 currency — no cap
   dailyMissions: DailyMissionState;
+  achievements: Record<string, AchievementProgress>;
 }
 
 export type Language = 'th' | 'en';

@@ -1,13 +1,13 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import Link from "next/link";
 import { Button } from "@/components/Button";
 import { selectFloristCard, useGameStore } from "@/store/gameStore";
 import { toast } from "@/lib/toast";
 import { encodePassportLink } from "@/lib/passportLink";
 import { copyText } from "@/lib/clipboard";
 import { PassportCard } from "./PassportCard";
+import { AchievementsTab } from "./AchievementsTab";
 import { sharePassport, type ShareResult } from "./sharePassport";
 import { gameEventBus } from "@/lib/gameEventBus";
 
@@ -42,8 +42,16 @@ export function FloristCardSheet({ open, onClose }: Props) {
   const state = useGameStore((s) => s.state);
   const data = useMemo(() => selectFloristCard(state), [state]);
   const [sheet, setSheet] = useState<SheetState>({ phase: "viewing" });
+  const [activeTab, setActiveTab] = useState<"passport" | "achievements">(
+    "passport",
+  );
   const contentRef = useRef<HTMLDivElement>(null);
   const [cardWidth, setCardWidth] = useState(320);
+
+  const unclaimedCount = useMemo(
+    () => Object.values(state.achievements).filter((a) => !a.claimedAt).length,
+    [state.achievements],
+  );
 
   // Reset the sheet to `viewing` whenever the modal transitions from
   // closed → open. Done as a render-time `prevOpen` check rather than
@@ -52,7 +60,10 @@ export function FloristCardSheet({ open, onClose }: Props) {
   const [prevOpen, setPrevOpen] = useState(open);
   if (open !== prevOpen) {
     setPrevOpen(open);
-    if (open) setSheet({ phase: "viewing" });
+    if (open) {
+      setSheet({ phase: "viewing" });
+      setActiveTab("passport");
+    }
   }
 
   // Auto-clear success states back to viewing after 3s
@@ -170,8 +181,34 @@ export function FloristCardSheet({ open, onClose }: Props) {
         className="w-full sm:max-w-md bg-cream-50 rounded-t-3xl sm:rounded-3xl p-6 shadow-soft-lg max-h-[92dvh] overflow-y-auto scrollbar-elegant animate-sheet-up"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="font-serif text-2xl text-ink-900">Florist Card</h2>
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex gap-1 bg-cream-100 rounded-xl p-1">
+            <button
+              onClick={() => setActiveTab("passport")}
+              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                activeTab === "passport"
+                  ? "bg-white text-ink-900 shadow-sm"
+                  : "text-ink-500 hover:text-ink-700"
+              }`}
+            >
+              📘 Passport
+            </button>
+            <button
+              onClick={() => setActiveTab("achievements")}
+              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors relative ${
+                activeTab === "achievements"
+                  ? "bg-white text-ink-900 shadow-sm"
+                  : "text-ink-500 hover:text-ink-700"
+              }`}
+            >
+              🏆 Achievements
+              {unclaimedCount > 0 && (
+                <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[10px] rounded-full flex items-center justify-center">
+                  {unclaimedCount}
+                </span>
+              )}
+            </button>
+          </div>
           <button
             onClick={onClose}
             aria-label="Close"
@@ -181,40 +218,42 @@ export function FloristCardSheet({ open, onClose }: Props) {
           </button>
         </div>
 
-        <div className="flex justify-center mb-5">
-          <PassportCard data={data} maxWidth={cardWidth} />
-        </div>
+        {activeTab === "passport" ? (
+          <>
+            <div className="flex justify-center mb-5">
+              <PassportCard data={data} maxWidth={cardWidth} />
+            </div>
 
-        <div className="flex flex-col gap-2 items-center">
-          <div className="flex gap-3 w-full">
-            <Link href="/gallery" onClick={onClose} className="flex-1">
-              <Button variant="secondary" size="md" className="w-full">
-                ← Floripedia
-              </Button>
-            </Link>
-            <Button
-              size="md"
-              className="flex-1"
-              onClick={handleShare}
-              disabled={sheet.phase === "generating"}
-              aria-label="Share Florist Card to Instagram or Facebook story"
-            >
-              {shareLabel} 🌼
-            </Button>
-          </div>
-          <Button
-            variant="secondary"
-            size="md"
-            className="w-full"
-            onClick={handleCopyLink}
-            aria-label="Copy a shareable link to this passport"
-          >
-            คัดลอกลิงค์พาสปอร์ต 🔗
-          </Button>
-          {hint && (
-            <div className="text-xs text-ink-500 mt-1 text-center">{hint}</div>
-          )}
-        </div>
+            <div className="flex flex-col gap-2 items-center">
+              <div className="flex gap-3 w-full">
+                <Button
+                  size="md"
+                  className="flex-1"
+                  onClick={handleShare}
+                  disabled={sheet.phase === "generating"}
+                  aria-label="Share Florist Card to Instagram or Facebook story"
+                >
+                  {shareLabel} 🌼
+                </Button>
+                <Button
+                  variant="secondary"
+                  size="md"
+                  onClick={handleCopyLink}
+                  aria-label="Copy a shareable link to this passport"
+                >
+                  คัดลอกลิงค์ 🔗
+                </Button>
+              </div>
+              {hint && (
+                <div className="text-xs text-ink-500 mt-1 text-center">
+                  {hint}
+                </div>
+              )}
+            </div>
+          </>
+        ) : (
+          <AchievementsTab scrollRef={contentRef} />
+        )}
       </div>
     </div>
   );

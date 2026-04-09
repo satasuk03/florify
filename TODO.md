@@ -1,11 +1,17 @@
 - Acheivements
 - หาต้นไม้ที่ใช่สำหรับคุณ -> Viral Marketing
 
+- กดค้างแล้วจะรดน้ำ ให้อัตโนมัติ ไม่ต้องกดรัวๆ (300ms?)
+- Customizatble Passport + Collection Progression + ฉายา
+- คำอธิบาย collection
 - Compress images
 - Next Collection: Fungi Kingdom
 
-- อยากให้ Single source of truth เรื่อง Collection
 ## Done
+- เพิ่ม Achievement เกี่ยวกับ Daily Mission
+  - Daily Mission Completion -> ทำภารกิจสำเร็จ x ครั้ง 100, 300, 1000, 5000, 10000, 100000, 1000000
+  - All Daily Mission Completion -> ทำภารกิจประจำวันทั้งหมด x ครั้ง 10, 30, 90, 365, 1000
+- อยากให้ Single source of truth เรื่อง Collection
 - Stats -> DriedLeavesGained, SproutsGained, SproutsSpent, BoosterPacksOpened (each tier)
 - Juicy Animation
 - เพิ่มต้น Liu https://i.pinimg.com/webp/736x/e2/bb/41/e2bb419dbaa5b717f15d849940826725.webp

@@ -7,6 +7,7 @@ import { useGameStore } from '@/store/gameStore';
 import { DEBUG_MODE } from '@/lib/debug';
 import { scheduleSave } from '@/store/debouncedSave';
 import { MAX_WATER_DROPS } from '@florify/shared';
+import { ACHIEVEMENTS } from '@/data/achievements';
 
 const SPROUT_AMOUNTS = [100, 500, 1000, 5000] as const;
 const DROP_AMOUNTS = [10, 25, 50] as const;
@@ -167,7 +168,109 @@ export default function DebugPage() {
             </>
           )}
         </section>
+        {/* Achievements */}
+        <section className="w-full max-w-xs mx-auto space-y-3">
+          <div className="text-xs text-ink-400 uppercase tracking-wider text-center">Achievements</div>
+          <AchievementDebug setLastAction={setLastAction} />
+        </section>
       </div>
     </main>
+  );
+}
+
+function AchievementDebug({ setLastAction }: { setLastAction: (s: string) => void }) {
+  const achievements = useGameStore((s) => s.state.achievements);
+  const [filter, setFilter] = useState('');
+
+  const unlockAll = () => {
+    const s = useGameStore.getState().state;
+    const now = new Date().toISOString();
+    const updated = { ...s.achievements };
+    for (const def of ACHIEVEMENTS) {
+      if (!updated[def.id]) {
+        updated[def.id] = { unlockedAt: now };
+      }
+    }
+    const next = { ...s, achievements: updated, updatedAt: Date.now() };
+    useGameStore.setState({ state: next });
+    scheduleSave(next);
+    setLastAction(`Unlocked all 🏆`);
+  };
+
+  const unlockOne = (id: string) => {
+    const s = useGameStore.getState().state;
+    if (s.achievements[id]) return;
+    const now = new Date().toISOString();
+    const next = {
+      ...s,
+      achievements: { ...s.achievements, [id]: { unlockedAt: now } },
+      updatedAt: Date.now(),
+    };
+    useGameStore.setState({ state: next });
+    scheduleSave(next);
+    setLastAction(`Unlocked ${id} 🏆`);
+  };
+
+  const resetAll = () => {
+    const s = useGameStore.getState().state;
+    const next = { ...s, achievements: {}, updatedAt: Date.now() };
+    useGameStore.setState({ state: next });
+    scheduleSave(next);
+    setLastAction('Reset achievements 🗑️');
+  };
+
+  const unlockedCount = Object.keys(achievements).length;
+  const claimedCount = Object.values(achievements).filter((a) => a.claimedAt).length;
+
+  const filtered = filter
+    ? ACHIEVEMENTS.filter((d) => d.id.includes(filter) || d.name.toLowerCase().includes(filter.toLowerCase()))
+    : ACHIEVEMENTS;
+
+  return (
+    <div className="space-y-3">
+      <div className="text-center text-xs text-ink-500">
+        {unlockedCount}/{ACHIEVEMENTS.length} unlocked · {claimedCount} claimed
+      </div>
+
+      <div className="grid grid-cols-2 gap-2">
+        <Button size="md" onClick={unlockAll} className="w-full">
+          Unlock All
+        </Button>
+        <Button size="md" variant="secondary" onClick={resetAll} className="w-full">
+          Reset All
+        </Button>
+      </div>
+
+      <input
+        type="text"
+        placeholder="Filter achievements..."
+        value={filter}
+        onChange={(e) => setFilter(e.target.value)}
+        className="w-full h-9 px-3 text-sm rounded-lg border border-cream-300 bg-white text-ink-900 placeholder:text-ink-400"
+      />
+
+      <div className="max-h-64 overflow-y-auto space-y-1 scrollbar-elegant">
+        {filtered.map((def) => {
+          const progress = achievements[def.id];
+          const isUnlocked = !!progress;
+          const isClaimed = !!progress?.claimedAt;
+          return (
+            <div key={def.id} className="flex items-center gap-2 text-xs">
+              <span className="flex-1 truncate text-ink-700">
+                {isClaimed ? '✅' : isUnlocked ? '🔓' : '🔒'} {def.name}
+              </span>
+              {!isUnlocked && (
+                <button
+                  onClick={() => unlockOne(def.id)}
+                  className="shrink-0 px-2 py-0.5 rounded bg-clay-500 text-cream-50 hover:bg-clay-400"
+                >
+                  Unlock
+                </button>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
   );
 }

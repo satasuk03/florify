@@ -17,6 +17,7 @@ export function migrate(state: UnknownState): PlayerState {
   if (s.schemaVersion === 6) s = migrateV6toV7(s);
   if (s.schemaVersion === 7) s = migrateV7toV8(s);
   if (s.schemaVersion === 8) s = migrateV8toV9(s);
+  if (s.schemaVersion === 9) s = migrateV9toV10(s);
   if (s.schemaVersion !== SCHEMA_VERSION) {
     console.warn(`[migrate] unknown schemaVersion ${s.schemaVersion}, falling back to as-is`);
   }
@@ -142,5 +143,45 @@ function migrateV6toV7(s: UnknownState): UnknownState {
     ...s,
     schemaVersion: 7,
     streak: { ...streak, lastRewardDate: '' },
+  };
+}
+
+// v9 → v10: add achievement system — new stats fields + achievements map.
+// Backfill harvestByRarity from collection, seedPacketsOpened from shopPurchases.
+function migrateV9toV10(s: UnknownState): UnknownState {
+  const stats = (s.stats ?? {}) as Record<string, unknown>;
+  const shopPurchases = (stats.shopPurchases ?? { common: 0, rare: 0, legendary: 0 }) as {
+    common: number; rare: number; legendary: number;
+  };
+  const collection = (s.collection ?? []) as Array<{ rarity: Rarity; count: number }>;
+
+  // Backfill harvestByRarity by summing collection counts per rarity
+  const harvestByRarity = { common: 0, rare: 0, legendary: 0 };
+  for (const entry of collection) {
+    if (entry.rarity in harvestByRarity) {
+      harvestByRarity[entry.rarity] += entry.count;
+    }
+  }
+
+  // Backfill seedPacketsOpened from shopPurchases (purchases = opens)
+  const seedPacketsOpened = {
+    total: shopPurchases.common + shopPurchases.rare + shopPurchases.legendary,
+    common: shopPurchases.common,
+    rare: shopPurchases.rare,
+    legendary: shopPurchases.legendary,
+  };
+
+  return {
+    ...s,
+    schemaVersion: 10,
+    achievements: {},
+    stats: {
+      ...stats,
+      harvestByRarity,
+      comboCount: { combo10: 0, combo15: 0, combo20: 0 },
+      seedPacketsOpened,
+      missionsCompleted: 0,
+      allDailyMissionsCompleted: 0,
+    },
   };
 }

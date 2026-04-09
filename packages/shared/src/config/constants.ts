@@ -1,4 +1,4 @@
-export const SCHEMA_VERSION = 9 as const;
+export const SCHEMA_VERSION = 10 as const;
 export const CHECKIN_BASE_DROPS = 30;
 export const CHECKIN_STREAK_BONUS_MAX = 20;
 export const MAX_WATER_DROPS = 50;

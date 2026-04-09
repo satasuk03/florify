@@ -62,6 +62,9 @@ export function PlotView() {
   const lastRewardDate = useGameStore((s) => s.state.streak.lastRewardDate);
   const displayName = useGameStore((s) => s.state.displayName);
   const setDisplayName = useGameStore((s) => s.setDisplayName);
+  const hasUnclaimedAchievements = useGameStore((s) =>
+    Object.values(s.state.achievements).some((a) => !a.claimedAt),
+  );
 
   // Show welcome dialogue on first ever visit, or check-in modal after hydration.
   const [checkinShown, setCheckinShown] = useState(false);
@@ -301,13 +304,21 @@ export function PlotView() {
           animationDelay: "200ms",
         }}
       >
-        <CornerButton
-          onClick={() => setShowFlorist(true)}
-          label={t("plot.openFloristCard")}
-          size="primary"
-        >
-          <FloristCardIcon />
-        </CornerButton>
+        <div className="pointer-events-auto relative">
+          <CornerButton
+            onClick={() => setShowFlorist(true)}
+            label={t("plot.openFloristCard")}
+            size="primary"
+          >
+            <FloristCardIcon />
+          </CornerButton>
+          {hasUnclaimedAchievements && (
+            <span
+              className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-clay-500 ring-2 ring-cream-50 animate-pulse"
+              aria-hidden
+            />
+          )}
+        </div>
 
         <CornerButton
           onClick={() => setShowGuideBook(true)}

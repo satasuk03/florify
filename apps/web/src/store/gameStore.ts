@@ -35,6 +35,7 @@ import { DROP_REGEN_MS } from '@/lib/debug';
 import { SPECIES, SPECIES_BY_RARITY } from '@/data/species';
 import { RARITY_ROLL_WEIGHTS } from '@/data/rarityWeights';
 import { BOOSTER_ROLL_WEIGHTS } from '@/data/boosterWeights';
+import { ACHIEVEMENTS_BY_ID } from '@/data/achievements';
 import { mulberry32, randInt, randPick, randSeed } from '@/engine/rng';
 import { saveStore } from './saveStore';
 import { scheduleSave, flushSave } from './debouncedSave';
@@ -161,6 +162,10 @@ export interface GameStore {
   canClaimCheckin: () => boolean;
   checkinDrops: () => { base: number; bonus: number; total: number };
   claimCheckin: () => { dropsAwarded: number; streakBonus: number };
+
+  // Achievements
+  claimAchievement: (id: string) => number;
+  claimAllAchievements: () => number;
 }
 
 export const DISPLAY_NAME_MAX_LENGTH = 24;
@@ -476,6 +481,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
           totalHarvested: s.stats.totalHarvested + 1,
           driedLeavesGained: s.stats.driedLeavesGained + result.pityPointsGained,
           sproutsGained: s.stats.sproutsGained + sproutsGained,
+          harvestByRarity: {
+            ...s.stats.harvestByRarity,
+            [harvested.rarity]: s.stats.harvestByRarity[harvested.rarity] + 1,
+          },
         },
         updatedAt: now,
       };
@@ -586,16 +595,22 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const s = get().state;
     const { missions } = s.dailyMissions;
     let changed = false;
+    let newlyCompleted = 0;
     const updated = missions.map((m) => {
       if (m.type !== type || m.completed) return m;
       const progress = Math.min(m.progress + increment, m.target);
       changed = true;
-      return { ...m, progress, completed: progress >= m.target };
+      const completed = progress >= m.target;
+      if (completed) newlyCompleted++;
+      return { ...m, progress, completed };
     });
     if (!changed) return;
     const next: PlayerState = {
       ...s,
       dailyMissions: { ...s.dailyMissions, missions: updated },
+      stats: newlyCompleted > 0
+        ? { ...s.stats, missionsCompleted: s.stats.missionsCompleted + newlyCompleted }
+        : s.stats,
       updatedAt: Date.now(),
     };
     set({ state: next });
@@ -690,6 +705,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       stats: {
         ...s.stats,
         sproutsGained: s.stats.sproutsGained + SPROUT_ALL_MISSIONS_BONUS,
+        allDailyMissionsCompleted: s.stats.allDailyMissionsCompleted + 1,
       },
       dailyMissions: { ...s.dailyMissions, allCompletedClaimed: true },
       updatedAt: Date.now(),
@@ -730,6 +746,15 @@ export const useGameStore = create<GameStore>((set, get) => ({
         shopPurchases: {
           ...s.stats.shopPurchases,
           [tier]: s.stats.shopPurchases[tier] + 1,
+        },
+        harvestByRarity: {
+          ...s.stats.harvestByRarity,
+          [rarity]: s.stats.harvestByRarity[rarity] + 1,
+        },
+        seedPacketsOpened: {
+          ...s.stats.seedPacketsOpened,
+          total: s.stats.seedPacketsOpened.total + 1,
+          [tier]: s.stats.seedPacketsOpened[tier] + 1,
         },
       },
       updatedAt: Date.now(),
@@ -780,6 +805,65 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set({ state: next });
     scheduleSave(next);
     return { dropsAwarded, streakBonus: bonus };
+  },
+
+  // ── Achievements ────────────────────────────────────────────────────
+
+  claimAchievement: (id): number => {
+    const s = get().state;
+    const entry = s.achievements[id];
+    if (!entry || entry.claimedAt) return 0;
+
+    const def = ACHIEVEMENTS_BY_ID.get(id);
+    if (!def) return 0;
+
+    let sproutsAwarded = 0;
+    for (const reward of def.rewards) {
+      if (reward.type === 'sprouts') sproutsAwarded += reward.amount;
+    }
+
+    const next: PlayerState = {
+      ...s,
+      sprouts: s.sprouts + sproutsAwarded,
+      stats: { ...s.stats, sproutsGained: s.stats.sproutsGained + sproutsAwarded },
+      achievements: {
+        ...s.achievements,
+        [id]: { ...entry, claimedAt: new Date().toISOString() },
+      },
+      updatedAt: Date.now(),
+    };
+    set({ state: next });
+    scheduleSave(next);
+    return sproutsAwarded;
+  },
+
+  claimAllAchievements: (): number => {
+    const s = get().state;
+    let totalSprouts = 0;
+    const updatedAchievements = { ...s.achievements };
+
+    for (const [id, entry] of Object.entries(s.achievements)) {
+      if (entry.claimedAt) continue;
+      const def = ACHIEVEMENTS_BY_ID.get(id);
+      if (!def) continue;
+      for (const reward of def.rewards) {
+        if (reward.type === 'sprouts') totalSprouts += reward.amount;
+      }
+      updatedAchievements[id] = { ...entry, claimedAt: new Date().toISOString() };
+    }
+
+    if (totalSprouts === 0) return 0;
+
+    const next: PlayerState = {
+      ...s,
+      sprouts: s.sprouts + totalSprouts,
+      stats: { ...s.stats, sproutsGained: s.stats.sproutsGained + totalSprouts },
+      achievements: updatedAchievements,
+      updatedAt: Date.now(),
+    };
+    set({ state: next });
+    scheduleSave(next);
+    return totalSprouts;
   },
 }));
 
