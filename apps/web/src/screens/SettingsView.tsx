@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { BackIcon } from '@/components/icons';
-import { AccountSection } from '@/components/settings/sections/AccountSection';
-import { PreferencesSection } from '@/components/settings/sections/PreferencesSection';
-import { SaveDataSection } from '@/components/settings/sections/SaveDataSection';
-import { DangerZoneSection } from '@/components/settings/sections/DangerZoneSection';
+import Link from "next/link";
+import { BackIcon } from "@/components/icons";
+import { AccountSection } from "@/components/settings/sections/AccountSection";
+import { PreferencesSection } from "@/components/settings/sections/PreferencesSection";
+import { SaveDataSection } from "@/components/settings/sections/SaveDataSection";
+import { DangerZoneSection } from "@/components/settings/sections/DangerZoneSection";
 
 /**
  * Full-page settings route at `/settings`. The sections themselves

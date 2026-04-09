@@ -165,7 +165,11 @@ export function ShopView() {
             >
               <div
                 className={`relative overflow-hidden rounded-2xl border bg-cream-100 ${style.border} transition-all duration-300 group-hover:scale-[1.01] group-active:scale-[0.98]`}
-                style={{ boxShadow: canAfford ? style.glow : "0 1px 2px rgba(75,55,30,0.06)" }}
+                style={{
+                  boxShadow: canAfford
+                    ? style.glow
+                    : "0 1px 2px rgba(75,55,30,0.06)",
+                }}
               >
                 {/* Foil shine sweep on hover */}
                 <div
@@ -297,7 +301,11 @@ function PackSVG({
         </linearGradient>
         <linearGradient id={`${id}-seal`} x1="0%" y1="0%" x2="0%" y2="100%">
           <stop offset="0%" stopColor={style.sealStops[0]} stopOpacity="0.6" />
-          <stop offset="100%" stopColor={style.sealStops[1]} stopOpacity="0.4" />
+          <stop
+            offset="100%"
+            stopColor={style.sealStops[1]}
+            stopOpacity="0.4"
+          />
         </linearGradient>
       </defs>
 
@@ -314,11 +322,25 @@ function PackSVG({
       />
 
       {/* Top seal */}
-      <rect x="8" y="12" width="64" height="14" rx="4" fill={`url(#${id}-seal)`} />
+      <rect
+        x="8"
+        y="12"
+        width="64"
+        height="14"
+        rx="4"
+        fill={`url(#${id}-seal)`}
+      />
       <rect x="8" y="22" width="64" height="4" fill={`url(#${id}-seal)`} />
 
       {/* Bottom seal */}
-      <rect x="8" y="84" width="64" height="14" rx="4" fill={`url(#${id}-seal)`} />
+      <rect
+        x="8"
+        y="84"
+        width="64"
+        height="14"
+        rx="4"
+        fill={`url(#${id}-seal)`}
+      />
       <rect x="8" y="84" width="64" height="4" fill={`url(#${id}-seal)`} />
 
       {/* Crimp lines */}
@@ -348,10 +370,24 @@ function PackSVG({
       ))}
 
       {/* Center ornament */}
-      <circle cx="40" cy="55" r="14" fill="none" stroke={style.accentLight} strokeWidth="0.8" opacity="0.4" />
+      <circle
+        cx="40"
+        cy="55"
+        r="14"
+        fill="none"
+        stroke={style.accentLight}
+        strokeWidth="0.8"
+        opacity="0.4"
+      />
 
       {/* Center icon */}
-      <text x="40" y="59" textAnchor="middle" fontSize="14" dominantBaseline="middle">
+      <text
+        x="40"
+        y="59"
+        textAnchor="middle"
+        fontSize="14"
+        dominantBaseline="middle"
+      >
         {style.icon}
       </text>
 
@@ -364,7 +400,15 @@ function PackSVG({
           <stop offset="100%" stopColor="white" stopOpacity="0" />
         </linearGradient>
       </defs>
-      <rect x="8" y="12" width="64" height="86" rx="4" fill={`url(#${id}-gloss)`} opacity="0.15" />
+      <rect
+        x="8"
+        y="12"
+        width="64"
+        height="86"
+        rx="4"
+        fill={`url(#${id}-gloss)`}
+        opacity="0.15"
+      />
     </svg>
   );
 }

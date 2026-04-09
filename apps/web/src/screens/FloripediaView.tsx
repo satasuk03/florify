@@ -1,22 +1,22 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useCallback } from 'react';
-import Link from 'next/link';
-import { Button } from '@/components/Button';
-import { RarityBadge } from '@/components/RarityBadge';
-import { FloraImage } from '@/components/FloraImage';
-import { BackIcon } from '@/components/icons';
-import { LangToggle, type Lang } from '@/components/LangToggle';
+import { useState, useEffect, useCallback } from "react";
+import Link from "next/link";
+import { Button } from "@/components/Button";
+import { RarityBadge } from "@/components/RarityBadge";
+import { FloraImage } from "@/components/FloraImage";
+import { BackIcon } from "@/components/icons";
+import { LangToggle, type Lang } from "@/components/LangToggle";
 import {
   StageSelector,
   STAGE_PROGRESS,
   type Stage,
-} from '@/components/StageSelector';
-import { SPECIES, SpeciesCollection, COLLECTION_LABELS } from '@/data/species';
-import { useT, useLanguage } from '@/i18n/useT';
-import { shareSpecies } from '@/lib/shareSpecies';
-import { gameEventBus } from '@/lib/gameEventBus';
-import { useGameStore } from '@/store/gameStore';
+} from "@/components/StageSelector";
+import { SPECIES, SpeciesCollection, COLLECTION_LABELS } from "@/data/species";
+import { useT, useLanguage } from "@/i18n/useT";
+import { shareSpecies } from "@/lib/shareSpecies";
+import { gameEventBus } from "@/lib/gameEventBus";
+import { useGameStore } from "@/store/gameStore";
 
 /**
  * Floripedia — the public, species-only detail page behind a shared link.
@@ -28,7 +28,6 @@ import { useGameStore } from '@/store/gameStore';
  *
  * Route: `/floripedia/?id={speciesId}` (query-param, single static HTML).
  */
-
 
 const STAGE_LABEL: Record<Lang, (s: Stage) => string> = {
   th: (s) => `ระยะ ${s}`,
@@ -48,7 +47,7 @@ export function FloripediaView({ speciesId, harvester, harvestedAt }: Props) {
 
   useEffect(() => {
     if (!hydrated) return;
-    gameEventBus.emit({ type: 'visit' });
+    gameEventBus.emit({ type: "visit" });
   }, [hydrated]);
   // Local override — lets a visitor read the lore in their preferred
   // language without changing app-wide settings.
@@ -70,30 +69,31 @@ export function FloripediaView({ speciesId, harvester, harvestedAt }: Props) {
           <Link
             href="/"
             className="w-10 h-10 flex items-center justify-center text-ink-700"
-            aria-label={t('floripedia.home')}
+            aria-label={t("floripedia.home")}
           >
             <BackIcon />
           </Link>
         </header>
         <div className="flex-1 flex flex-col items-center justify-center gap-4 text-ink-500">
-          <p>{t('floripedia.notFound')}</p>
+          <p>{t("floripedia.notFound")}</p>
           <Link href="/" className="text-ink-700 underline underline-offset-4">
-            {t('floripedia.home')}
+            {t("floripedia.home")}
           </Link>
         </div>
       </div>
     );
   }
 
-  const description = lang === 'th' ? species.descriptionTH : species.descriptionEN;
+  const description =
+    lang === "th" ? species.descriptionTH : species.descriptionEN;
 
   const handleShare = async () => {
     const result = await shareSpecies(species.id, {
-      title: t('floripedia.shareTitle', { name: species.name }),
-      text: t('floripedia.shareText', { name: species.name }),
+      title: t("floripedia.shareTitle", { name: species.name }),
+      text: t("floripedia.shareText", { name: species.name }),
     });
-    if (result.kind === 'copied') {
-      setToast(t('floripedia.copied'));
+    if (result.kind === "copied") {
+      setToast(t("floripedia.copied"));
       setTimeout(() => setToast(null), 2400);
     }
   };
@@ -104,7 +104,7 @@ export function FloripediaView({ speciesId, harvester, harvestedAt }: Props) {
         <Link
           href="/"
           className="w-10 h-10 flex items-center justify-center text-ink-700 hover:bg-cream-100 rounded-full transition-all duration-300 ease-out hover:-translate-x-0.5"
-          aria-label={t('floripedia.home')}
+          aria-label={t("floripedia.home")}
         >
           <BackIcon />
         </Link>
@@ -139,7 +139,9 @@ export function FloripediaView({ speciesId, harvester, harvestedAt }: Props) {
             role="button"
             tabIndex={0}
             onClick={() => setLightbox(true)}
-            onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && setLightbox(true)}
+            onKeyDown={(e) =>
+              (e.key === "Enter" || e.key === " ") && setLightbox(true)
+            }
             className="relative flex items-center justify-center max-h-[88%] max-w-[82%] h-full w-full cursor-zoom-in"
             aria-label="View fullscreen"
           >
@@ -153,16 +155,20 @@ export function FloripediaView({ speciesId, harvester, harvestedAt }: Props) {
 
           <div
             className="absolute -bottom-1 left-1/2 -translate-x-1/2 animate-fade-up"
-            style={{ animationDelay: '220ms' }}
+            style={{ animationDelay: "220ms" }}
           >
-            <StageSelector stage={stage} onChange={setStage} label={STAGE_LABEL[lang]} />
+            <StageSelector
+              stage={stage}
+              onChange={setStage}
+              label={STAGE_LABEL[lang]}
+            />
           </div>
         </div>
       </div>
 
       <div
         className="mx-4 mb-4 rounded-3xl bg-cream-100/90 backdrop-blur border border-cream-200 shadow-soft-md animate-fade-up"
-        style={{ animationDelay: '160ms' }}
+        style={{ animationDelay: "160ms" }}
       >
         <div className="p-5">
           <div className="flex items-start justify-between gap-3 mb-2">
@@ -182,18 +188,21 @@ export function FloripediaView({ speciesId, harvester, harvestedAt }: Props) {
 
           {harvester && (
             <div className="mt-3 flex items-center gap-2 text-xs text-ink-500">
-              <span>{t('floripedia.harvestedBy', { name: harvester })}</span>
+              <span>{t("floripedia.harvestedBy", { name: harvester })}</span>
               {harvestedAt && (
                 <>
                   <span aria-hidden>·</span>
                   <time dateTime={new Date(harvestedAt).toISOString()}>
-                    {new Date(harvestedAt).toLocaleDateString(lang === 'th' ? 'th-TH' : 'en-US', {
-                      year: 'numeric',
-                      month: 'short',
-                      day: 'numeric',
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    })}
+                    {new Date(harvestedAt).toLocaleDateString(
+                      lang === "th" ? "th-TH" : "en-US",
+                      {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      },
+                    )}
                   </time>
                 </>
               )}
@@ -203,11 +212,11 @@ export function FloripediaView({ speciesId, harvester, harvestedAt }: Props) {
           <div className="mt-4 pt-4 border-t border-cream-300/70 flex justify-end gap-2">
             <Link href="/">
               <Button variant="primary" size="md">
-                {t('floripedia.startPlaying')}
+                {t("floripedia.startPlaying")}
               </Button>
             </Link>
             <Button variant="secondary" size="md" onClick={handleShare}>
-              {t('floripedia.share')}
+              {t("floripedia.share")}
             </Button>
           </div>
         </div>
@@ -217,7 +226,7 @@ export function FloripediaView({ speciesId, harvester, harvestedAt }: Props) {
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm cursor-zoom-out animate-fade-in"
           onClick={closeLightbox}
-          onKeyDown={(e) => e.key === 'Escape' && closeLightbox()}
+          onKeyDown={(e) => e.key === "Escape" && closeLightbox()}
           role="dialog"
           aria-modal
           aria-label="Fullscreen image"
