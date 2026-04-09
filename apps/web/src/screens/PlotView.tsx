@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MAX_WATER_DROPS, type TreeInstance } from "@florify/shared";
 import { PerlinNoise } from "@/components/PerlinNoise";
 import { DropsIndicator } from "@/components/DropsIndicator";
@@ -99,6 +99,7 @@ export function PlotView() {
   // one-shot droplet animation from the start. 0 means "never tapped",
   // which suppresses the initial render.
   const [splashKey, setSplashKey] = useState(0);
+  const cardRef = useRef<HTMLDivElement>(null);
 
   // Plot phase state machine. Drives whether we show the seed packet,
   // the opening animation, or the full flora. `activeTree` is the
@@ -141,6 +142,13 @@ export function PlotView() {
     const result = water();
     if (!result.ok) return;
     setSplashKey((k) => k + 1);
+    // Shake the progress card by removing+re-adding the animation
+    const el = cardRef.current;
+    if (el) {
+      el.style.animation = "none";
+      void el.offsetWidth; // force reflow
+      el.style.animation = "water-shake 400ms ease-out";
+    }
     if (result.harvested) {
       setHarvested(result.harvested);
       setPityPointsGained(result.pityPointsGained ?? 0);
@@ -238,6 +246,7 @@ export function PlotView() {
           }}
         >
           <div
+            ref={cardRef}
             key={tree.id}
             className="flex flex-col items-center gap-1.5 animate-fade-in rounded-2xl bg-cream-50/30 backdrop-blur-md border border-cream-200/60 shadow-soft-sm px-5 py-3"
           >
