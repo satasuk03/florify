@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Fraunces, Sarabun } from "next/font/google";
 import { StoreHydrator } from "@/store/StoreHydrator";
 import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistration";
+import { RecoveryGesture } from "@/components/RecoveryGesture";
 import { ToastContainer } from "@/components/ToastContainer";
 import { MobileFrame } from "@/components/MobileFrame";
 import { SPECIES } from "@/data/species";
@@ -129,6 +130,7 @@ export default function RootLayout({
       <body className="min-h-full bg-cream-50 md:bg-cream-200 text-ink-900">
         <StoreHydrator />
         <ServiceWorkerRegistration />
+        <RecoveryGesture />
         <MobileFrame>{children}</MobileFrame>
         <ToastContainer />
       </body>

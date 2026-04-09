@@ -1,0 +1,244 @@
+<h2>เพิ่มคำอธิบายเท่ๆ — เลือกแบบที่ชอบ</h2>
+<p class="subtitle">ซ้ายคือแบบเดิม (ไม่มีคำอธิบาย) vs ขวาเพิ่ม tagline เท่ๆ ให้แต่ละ tier</p>
+
+<div class="split" style="gap:20px;">
+
+  <!-- LEFT: Without description (current) -->
+  <div class="mockup" onclick="toggleSelect(this)" data-choice="no-desc" style="cursor:pointer;">
+    <div class="mockup-header">แบบเดิม — ไม่มีคำอธิบาย</div>
+    <div class="mockup-body" style="padding:0;">
+      <div style="background:#FBF8F3;padding:16px 12px;font-family:system-ui,-apple-system,sans-serif;">
+
+        <div style="text-align:center;margin-bottom:14px;">
+          <div style="font-family:Georgia,serif;font-size:17px;font-weight:700;color:#2B241B;">Sprout Shop</div>
+          <div style="margin-top:5px;display:inline-flex;align-items:center;gap:4px;background:#FBF8F380;border:1px solid #EEE6D660;border-radius:20px;padding:3px 10px;font-size:11px;color:#4A3F30;">🌱 9</div>
+        </div>
+
+        <!-- Common -->
+        <div style="background:#F6F1E8;border:1px solid #E3D7C0;border-radius:14px;margin-bottom:10px;overflow:hidden;box-shadow:0 1px 2px rgba(75,55,30,0.06);">
+          <div style="display:flex;align-items:stretch;">
+            <div style="width:80px;display:flex;align-items:center;justify-content:center;padding:12px 6px;background:linear-gradient(135deg,#F0E8D4,#FBF5E8);border-right:1px solid #E3D7C040;flex-shrink:0;">
+              <svg viewBox="0 0 80 110" style="width:48px;height:66px;filter:drop-shadow(0 1px 2px rgba(75,55,30,0.08));">
+                <defs><linearGradient id="cf1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F0E8D4"/><stop offset="50%" stop-color="#FBF5E8"/><stop offset="100%" stop-color="#E3D7BE"/></linearGradient><linearGradient id="cs1" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#B8A888" stop-opacity="0.6"/><stop offset="100%" stop-color="#8B7355" stop-opacity="0.4"/></linearGradient></defs>
+                <rect x="8" y="12" width="64" height="86" rx="4" fill="url(#cf1)" stroke="#B8A888" stroke-width="0.8"/>
+                <rect x="8" y="12" width="64" height="14" rx="4" fill="url(#cs1)"/><rect x="8" y="22" width="64" height="4" fill="url(#cs1)"/>
+                <rect x="8" y="84" width="64" height="14" rx="4" fill="url(#cs1)"/><rect x="8" y="84" width="64" height="4" fill="url(#cs1)"/>
+                <circle cx="40" cy="55" r="14" fill="none" stroke="#B8A888" stroke-width="0.8" opacity="0.4"/>
+                <text x="40" y="59" text-anchor="middle" font-size="14" dominant-baseline="middle">🌿</text>
+              </svg>
+            </div>
+            <div style="flex:1;padding:12px 14px 10px;">
+              <div style="display:flex;align-items:start;justify-content:space-between;margin-bottom:4px;">
+                <div>
+                  <div style="font-family:Georgia,serif;font-size:14px;font-weight:700;color:#2B241B;">Common</div>
+                  <div style="font-size:8px;color:#B8A888;text-transform:uppercase;letter-spacing:1.5px;font-weight:700;">Booster Pack</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:3px;background:#B8A88820;border-radius:20px;padding:2px 8px;">
+                  <span style="font-size:10px;">🌱</span>
+                  <span style="font-family:monospace;font-size:12px;font-weight:700;color:#8B7355;">100</span>
+                </div>
+              </div>
+              <div style="margin:8px 0 4px;">
+                <div style="display:flex;align-items:center;gap:5px;margin-bottom:3px;"><div style="flex:1;height:3px;background:#2B241B0D;border-radius:2px;overflow:hidden;"><div style="width:80%;height:100%;background:#B8A888;border-radius:2px;opacity:0.7;"></div></div><span style="font-size:8px;color:#6B5E4B;width:52px;text-align:right;">ธรรมดา 80%</span></div>
+                <div style="display:flex;align-items:center;gap:5px;margin-bottom:3px;"><div style="flex:1;height:3px;background:#2B241B0D;border-radius:2px;overflow:hidden;"><div style="width:15%;height:100%;background:#7A9CB8;border-radius:2px;opacity:0.7;"></div></div><span style="font-size:8px;color:#6B5E4B;width:52px;text-align:right;">หายาก 15%</span></div>
+                <div style="display:flex;align-items:center;gap:5px;"><div style="flex:1;height:3px;background:#2B241B0D;border-radius:2px;overflow:hidden;"><div style="width:5%;height:100%;background:#D4A24C;border-radius:2px;opacity:0.7;"></div></div><span style="font-size:8px;color:#6B5E4B;width:52px;text-align:right;">ตำนาน 5%</span></div>
+              </div>
+            </div>
+          </div>
+          <div style="background:#B8A88812;border-top:1px solid #E3D7C060;text-align:center;padding:6px;font-size:10px;font-weight:700;color:#8B7355;text-transform:uppercase;letter-spacing:1px;">ซื้อ</div>
+        </div>
+
+        <!-- Rare -->
+        <div style="background:#F6F1E8;border:1px solid #96b4c450;border-radius:14px;margin-bottom:10px;overflow:hidden;box-shadow:0 1px 2px rgba(75,55,30,0.06);">
+          <div style="display:flex;align-items:stretch;">
+            <div style="width:80px;display:flex;align-items:center;justify-content:center;padding:12px 6px;background:linear-gradient(135deg,#D4E4F0,#E8F2FB);border-right:1px solid #96b4c420;flex-shrink:0;">
+              <svg viewBox="0 0 80 110" style="width:48px;height:66px;filter:drop-shadow(0 1px 2px rgba(75,55,30,0.08));">
+                <defs><linearGradient id="rf1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#D4E4F0"/><stop offset="50%" stop-color="#E8F2FB"/><stop offset="100%" stop-color="#BED7E3"/></linearGradient><linearGradient id="rs1" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#7A9CB8" stop-opacity="0.6"/><stop offset="100%" stop-color="#4A7A9C" stop-opacity="0.4"/></linearGradient></defs>
+                <rect x="8" y="12" width="64" height="86" rx="4" fill="url(#rf1)" stroke="#7A9CB8" stroke-width="0.8"/>
+                <rect x="8" y="12" width="64" height="14" rx="4" fill="url(#rs1)"/><rect x="8" y="22" width="64" height="4" fill="url(#rs1)"/>
+                <rect x="8" y="84" width="64" height="14" rx="4" fill="url(#rs1)"/><rect x="8" y="84" width="64" height="4" fill="url(#rs1)"/>
+                <circle cx="40" cy="55" r="14" fill="none" stroke="#7A9CB8" stroke-width="0.8" opacity="0.4"/>
+                <text x="40" y="59" text-anchor="middle" font-size="14" dominant-baseline="middle">✨</text>
+              </svg>
+            </div>
+            <div style="flex:1;padding:12px 14px 10px;">
+              <div style="display:flex;align-items:start;justify-content:space-between;margin-bottom:4px;">
+                <div>
+                  <div style="font-family:Georgia,serif;font-size:14px;font-weight:700;color:#2B241B;">Rare</div>
+                  <div style="font-size:8px;color:#7A9CB8;text-transform:uppercase;letter-spacing:1.5px;font-weight:700;">Booster Pack</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:3px;background:#7A9CB820;border-radius:20px;padding:2px 8px;">
+                  <span style="font-size:10px;">🌱</span>
+                  <span style="font-family:monospace;font-size:12px;font-weight:700;color:#4A7A9C;">300</span>
+                </div>
+              </div>
+              <div style="margin:8px 0 4px;">
+                <div style="display:flex;align-items:center;gap:5px;margin-bottom:3px;"><div style="flex:1;height:3px;background:#2B241B0D;border-radius:2px;overflow:hidden;"><div style="width:30%;height:100%;background:#B8A888;border-radius:2px;opacity:0.7;"></div></div><span style="font-size:8px;color:#6B5E4B;width:52px;text-align:right;">ธรรมดา 30%</span></div>
+                <div style="display:flex;align-items:center;gap:5px;margin-bottom:3px;"><div style="flex:1;height:3px;background:#2B241B0D;border-radius:2px;overflow:hidden;"><div style="width:60%;height:100%;background:#7A9CB8;border-radius:2px;opacity:0.7;"></div></div><span style="font-size:8px;color:#6B5E4B;width:52px;text-align:right;">หายาก 60%</span></div>
+                <div style="display:flex;align-items:center;gap:5px;"><div style="flex:1;height:3px;background:#2B241B0D;border-radius:2px;overflow:hidden;"><div style="width:10%;height:100%;background:#D4A24C;border-radius:2px;opacity:0.7;"></div></div><span style="font-size:8px;color:#6B5E4B;width:52px;text-align:right;">ตำนาน 10%</span></div>
+              </div>
+            </div>
+          </div>
+          <div style="background:#7A9CB812;border-top:1px solid #96b4c430;text-align:center;padding:6px;font-size:10px;font-weight:700;color:#4A7A9C;text-transform:uppercase;letter-spacing:1px;">ซื้อ</div>
+        </div>
+
+        <!-- Legendary -->
+        <div style="background:#F6F1E8;border:1px solid #D4A24C40;border-radius:14px;overflow:hidden;box-shadow:0 1px 2px rgba(75,55,30,0.06);opacity:0.6;">
+          <div style="display:flex;align-items:stretch;">
+            <div style="width:80px;display:flex;align-items:center;justify-content:center;padding:12px 6px;background:linear-gradient(135deg,#F0DCA8,#FFF5D4);border-right:1px solid #D4A24C20;flex-shrink:0;">
+              <svg viewBox="0 0 80 110" style="width:48px;height:66px;filter:drop-shadow(0 1px 2px rgba(75,55,30,0.08));">
+                <defs><linearGradient id="lf1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F0DCA8"/><stop offset="50%" stop-color="#FFF5D4"/><stop offset="100%" stop-color="#D4B878"/></linearGradient><linearGradient id="ls1" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#D4A24C" stop-opacity="0.6"/><stop offset="100%" stop-color="#9C7A2A" stop-opacity="0.4"/></linearGradient></defs>
+                <rect x="8" y="12" width="64" height="86" rx="4" fill="url(#lf1)" stroke="#D4A24C" stroke-width="0.8"/>
+                <rect x="8" y="12" width="64" height="14" rx="4" fill="url(#ls1)"/><rect x="8" y="22" width="64" height="4" fill="url(#ls1)"/>
+                <rect x="8" y="84" width="64" height="14" rx="4" fill="url(#ls1)"/><rect x="8" y="84" width="64" height="4" fill="url(#ls1)"/>
+                <circle cx="40" cy="55" r="14" fill="none" stroke="#D4A24C" stroke-width="0.8" opacity="0.4"/>
+                <text x="40" y="59" text-anchor="middle" font-size="14" dominant-baseline="middle">🌼</text>
+              </svg>
+            </div>
+            <div style="flex:1;padding:12px 14px 10px;">
+              <div style="display:flex;align-items:start;justify-content:space-between;margin-bottom:4px;">
+                <div>
+                  <div style="font-family:Georgia,serif;font-size:14px;font-weight:700;color:#2B241B;">Legendary</div>
+                  <div style="font-size:8px;color:#D4A24C;text-transform:uppercase;letter-spacing:1.5px;font-weight:700;">Booster Pack</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:3px;background:#D4A24C20;border-radius:20px;padding:2px 8px;">
+                  <span style="font-size:10px;">🌱</span>
+                  <span style="font-family:monospace;font-size:12px;font-weight:700;color:#9C7A2A;">1000</span>
+                </div>
+              </div>
+              <div style="margin:8px 0 4px;">
+                <div style="display:flex;align-items:center;gap:5px;margin-bottom:3px;"><div style="flex:1;height:3px;background:#2B241B0D;border-radius:2px;overflow:hidden;"><div style="width:5%;height:100%;background:#B8A888;border-radius:2px;opacity:0.7;"></div></div><span style="font-size:8px;color:#6B5E4B;width:52px;text-align:right;">ธรรมดา 5%</span></div>
+                <div style="display:flex;align-items:center;gap:5px;margin-bottom:3px;"><div style="flex:1;height:3px;background:#2B241B0D;border-radius:2px;overflow:hidden;"><div style="width:45%;height:100%;background:#7A9CB8;border-radius:2px;opacity:0.7;"></div></div><span style="font-size:8px;color:#6B5E4B;width:52px;text-align:right;">หายาก 45%</span></div>
+                <div style="display:flex;align-items:center;gap:5px;"><div style="flex:1;height:3px;background:#2B241B0D;border-radius:2px;overflow:hidden;"><div style="width:45%;height:100%;background:#D4A24C;border-radius:2px;opacity:0.7;"></div></div><span style="font-size:8px;color:#6B5E4B;width:52px;text-align:right;">ตำนาน 45%</span></div>
+              </div>
+            </div>
+          </div>
+          <div style="background:#0000000A;border-top:1px solid #D4A24C20;text-align:center;padding:6px;font-size:10px;font-weight:700;color:#9C8F7B;text-transform:uppercase;letter-spacing:1px;">🌱 ไม่พอ</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: With cool description -->
+  <div class="mockup" onclick="toggleSelect(this)" data-choice="with-desc" style="cursor:pointer;">
+    <div class="mockup-header">เพิ่ม tagline — มีคำอธิบายเท่ๆ</div>
+    <div class="mockup-body" style="padding:0;">
+      <div style="background:#FBF8F3;padding:16px 12px;font-family:system-ui,-apple-system,sans-serif;">
+
+        <div style="text-align:center;margin-bottom:14px;">
+          <div style="font-family:Georgia,serif;font-size:17px;font-weight:700;color:#2B241B;">Sprout Shop</div>
+          <div style="margin-top:5px;display:inline-flex;align-items:center;gap:4px;background:#FBF8F380;border:1px solid #EEE6D660;border-radius:20px;padding:3px 10px;font-size:11px;color:#4A3F30;">🌱 9</div>
+        </div>
+
+        <!-- Common with tagline -->
+        <div style="background:#F6F1E8;border:1px solid #E3D7C0;border-radius:14px;margin-bottom:10px;overflow:hidden;box-shadow:0 1px 2px rgba(75,55,30,0.06);">
+          <div style="display:flex;align-items:stretch;">
+            <div style="width:80px;display:flex;align-items:center;justify-content:center;padding:12px 6px;background:linear-gradient(135deg,#F0E8D4,#FBF5E8);border-right:1px solid #E3D7C040;flex-shrink:0;">
+              <svg viewBox="0 0 80 110" style="width:48px;height:66px;filter:drop-shadow(0 1px 2px rgba(75,55,30,0.08));">
+                <defs><linearGradient id="cf2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F0E8D4"/><stop offset="50%" stop-color="#FBF5E8"/><stop offset="100%" stop-color="#E3D7BE"/></linearGradient><linearGradient id="cs2" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#B8A888" stop-opacity="0.6"/><stop offset="100%" stop-color="#8B7355" stop-opacity="0.4"/></linearGradient></defs>
+                <rect x="8" y="12" width="64" height="86" rx="4" fill="url(#cf2)" stroke="#B8A888" stroke-width="0.8"/>
+                <rect x="8" y="12" width="64" height="14" rx="4" fill="url(#cs2)"/><rect x="8" y="22" width="64" height="4" fill="url(#cs2)"/>
+                <rect x="8" y="84" width="64" height="14" rx="4" fill="url(#cs2)"/><rect x="8" y="84" width="64" height="4" fill="url(#cs2)"/>
+                <circle cx="40" cy="55" r="14" fill="none" stroke="#B8A888" stroke-width="0.8" opacity="0.4"/>
+                <text x="40" y="59" text-anchor="middle" font-size="14" dominant-baseline="middle">🌿</text>
+              </svg>
+            </div>
+            <div style="flex:1;padding:12px 14px 10px;">
+              <div style="display:flex;align-items:start;justify-content:space-between;margin-bottom:2px;">
+                <div>
+                  <div style="font-family:Georgia,serif;font-size:14px;font-weight:700;color:#2B241B;">Common</div>
+                  <div style="font-size:8px;color:#B8A888;text-transform:uppercase;letter-spacing:1.5px;font-weight:700;">Booster Pack</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:3px;background:#B8A88820;border-radius:20px;padding:2px 8px;">
+                  <span style="font-size:10px;">🌱</span>
+                  <span style="font-family:monospace;font-size:12px;font-weight:700;color:#8B7355;">100</span>
+                </div>
+              </div>
+              <!-- Tagline -->
+              <div style="font-size:9px;color:#9C8F7B;font-style:italic;margin-bottom:6px;line-height:1.4;">เมล็ดพันธุ์จากทุ่งหญ้าสามัญ — เริ่มต้นเล็กๆ แต่ทุกต้นมีเรื่องเล่า</div>
+              <div style="margin-bottom:2px;">
+                <div style="display:flex;align-items:center;gap:5px;margin-bottom:3px;"><div style="flex:1;height:3px;background:#2B241B0D;border-radius:2px;overflow:hidden;"><div style="width:80%;height:100%;background:#B8A888;border-radius:2px;opacity:0.7;"></div></div><span style="font-size:8px;color:#6B5E4B;width:52px;text-align:right;">ธรรมดา 80%</span></div>
+                <div style="display:flex;align-items:center;gap:5px;margin-bottom:3px;"><div style="flex:1;height:3px;background:#2B241B0D;border-radius:2px;overflow:hidden;"><div style="width:15%;height:100%;background:#7A9CB8;border-radius:2px;opacity:0.7;"></div></div><span style="font-size:8px;color:#6B5E4B;width:52px;text-align:right;">หายาก 15%</span></div>
+                <div style="display:flex;align-items:center;gap:5px;"><div style="flex:1;height:3px;background:#2B241B0D;border-radius:2px;overflow:hidden;"><div style="width:5%;height:100%;background:#D4A24C;border-radius:2px;opacity:0.7;"></div></div><span style="font-size:8px;color:#6B5E4B;width:52px;text-align:right;">ตำนาน 5%</span></div>
+              </div>
+            </div>
+          </div>
+          <div style="background:#B8A88812;border-top:1px solid #E3D7C060;text-align:center;padding:6px;font-size:10px;font-weight:700;color:#8B7355;text-transform:uppercase;letter-spacing:1px;">ซื้อ</div>
+        </div>
+
+        <!-- Rare with tagline -->
+        <div style="background:#F6F1E8;border:1px solid #96b4c450;border-radius:14px;margin-bottom:10px;overflow:hidden;box-shadow:0 1px 2px rgba(75,55,30,0.06);">
+          <div style="display:flex;align-items:stretch;">
+            <div style="width:80px;display:flex;align-items:center;justify-content:center;padding:12px 6px;background:linear-gradient(135deg,#D4E4F0,#E8F2FB);border-right:1px solid #96b4c420;flex-shrink:0;">
+              <svg viewBox="0 0 80 110" style="width:48px;height:66px;filter:drop-shadow(0 1px 2px rgba(75,55,30,0.08));">
+                <defs><linearGradient id="rf2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#D4E4F0"/><stop offset="50%" stop-color="#E8F2FB"/><stop offset="100%" stop-color="#BED7E3"/></linearGradient><linearGradient id="rs2" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#7A9CB8" stop-opacity="0.6"/><stop offset="100%" stop-color="#4A7A9C" stop-opacity="0.4"/></linearGradient></defs>
+                <rect x="8" y="12" width="64" height="86" rx="4" fill="url(#rf2)" stroke="#7A9CB8" stroke-width="0.8"/>
+                <rect x="8" y="12" width="64" height="14" rx="4" fill="url(#rs2)"/><rect x="8" y="22" width="64" height="4" fill="url(#rs2)"/>
+                <rect x="8" y="84" width="64" height="14" rx="4" fill="url(#rs2)"/><rect x="8" y="84" width="64" height="4" fill="url(#rs2)"/>
+                <circle cx="40" cy="55" r="14" fill="none" stroke="#7A9CB8" stroke-width="0.8" opacity="0.4"/>
+                <text x="40" y="59" text-anchor="middle" font-size="14" dominant-baseline="middle">✨</text>
+              </svg>
+            </div>
+            <div style="flex:1;padding:12px 14px 10px;">
+              <div style="display:flex;align-items:start;justify-content:space-between;margin-bottom:2px;">
+                <div>
+                  <div style="font-family:Georgia,serif;font-size:14px;font-weight:700;color:#2B241B;">Rare</div>
+                  <div style="font-size:8px;color:#7A9CB8;text-transform:uppercase;letter-spacing:1.5px;font-weight:700;">Booster Pack</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:3px;background:#7A9CB820;border-radius:20px;padding:2px 8px;">
+                  <span style="font-size:10px;">🌱</span>
+                  <span style="font-family:monospace;font-size:12px;font-weight:700;color:#4A7A9C;">300</span>
+                </div>
+              </div>
+              <div style="font-size:9px;color:#9C8F7B;font-style:italic;margin-bottom:6px;line-height:1.4;">รวบรวมจากสวนลับที่หมอกปกคลุม — สายพันธุ์ที่คนส่วนใหญ่ไม่เคยเห็น</div>
+              <div style="margin-bottom:2px;">
+                <div style="display:flex;align-items:center;gap:5px;margin-bottom:3px;"><div style="flex:1;height:3px;background:#2B241B0D;border-radius:2px;overflow:hidden;"><div style="width:30%;height:100%;background:#B8A888;border-radius:2px;opacity:0.7;"></div></div><span style="font-size:8px;color:#6B5E4B;width:52px;text-align:right;">ธรรมดา 30%</span></div>
+                <div style="display:flex;align-items:center;gap:5px;margin-bottom:3px;"><div style="flex:1;height:3px;background:#2B241B0D;border-radius:2px;overflow:hidden;"><div style="width:60%;height:100%;background:#7A9CB8;border-radius:2px;opacity:0.7;"></div></div><span style="font-size:8px;color:#6B5E4B;width:52px;text-align:right;">หายาก 60%</span></div>
+                <div style="display:flex;align-items:center;gap:5px;"><div style="flex:1;height:3px;background:#2B241B0D;border-radius:2px;overflow:hidden;"><div style="width:10%;height:100%;background:#D4A24C;border-radius:2px;opacity:0.7;"></div></div><span style="font-size:8px;color:#6B5E4B;width:52px;text-align:right;">ตำนาน 10%</span></div>
+              </div>
+            </div>
+          </div>
+          <div style="background:#7A9CB812;border-top:1px solid #96b4c430;text-align:center;padding:6px;font-size:10px;font-weight:700;color:#4A7A9C;text-transform:uppercase;letter-spacing:1px;">ซื้อ</div>
+        </div>
+
+        <!-- Legendary with tagline -->
+        <div style="background:#F6F1E8;border:1px solid #D4A24C40;border-radius:14px;overflow:hidden;box-shadow:0 1px 2px rgba(75,55,30,0.06);opacity:0.6;">
+          <div style="display:flex;align-items:stretch;">
+            <div style="width:80px;display:flex;align-items:center;justify-content:center;padding:12px 6px;background:linear-gradient(135deg,#F0DCA8,#FFF5D4);border-right:1px solid #D4A24C20;flex-shrink:0;">
+              <svg viewBox="0 0 80 110" style="width:48px;height:66px;filter:drop-shadow(0 1px 2px rgba(75,55,30,0.08));">
+                <defs><linearGradient id="lf2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F0DCA8"/><stop offset="50%" stop-color="#FFF5D4"/><stop offset="100%" stop-color="#D4B878"/></linearGradient><linearGradient id="ls2" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#D4A24C" stop-opacity="0.6"/><stop offset="100%" stop-color="#9C7A2A" stop-opacity="0.4"/></linearGradient></defs>
+                <rect x="8" y="12" width="64" height="86" rx="4" fill="url(#lf2)" stroke="#D4A24C" stroke-width="0.8"/>
+                <rect x="8" y="12" width="64" height="14" rx="4" fill="url(#ls2)"/><rect x="8" y="22" width="64" height="4" fill="url(#ls2)"/>
+                <rect x="8" y="84" width="64" height="14" rx="4" fill="url(#ls2)"/><rect x="8" y="84" width="64" height="4" fill="url(#ls2)"/>
+                <circle cx="40" cy="55" r="14" fill="none" stroke="#D4A24C" stroke-width="0.8" opacity="0.4"/>
+                <text x="40" y="59" text-anchor="middle" font-size="14" dominant-baseline="middle">🌼</text>
+              </svg>
+            </div>
+            <div style="flex:1;padding:12px 14px 10px;">
+              <div style="display:flex;align-items:start;justify-content:space-between;margin-bottom:2px;">
+                <div>
+                  <div style="font-family:Georgia,serif;font-size:14px;font-weight:700;color:#2B241B;">Legendary</div>
+                  <div style="font-size:8px;color:#D4A24C;text-transform:uppercase;letter-spacing:1.5px;font-weight:700;">Booster Pack</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:3px;background:#D4A24C20;border-radius:20px;padding:2px 8px;">
+                  <span style="font-size:10px;">🌱</span>
+                  <span style="font-family:monospace;font-size:12px;font-weight:700;color:#9C7A2A;">1000</span>
+                </div>
+              </div>
+              <div style="font-size:9px;color:#9C8F7B;font-style:italic;margin-bottom:6px;line-height:1.4;">ตำนานเล่าว่ามีอยู่ — เมล็ดจากดินแดนที่เวลาหยุดนิ่ง ไม่มีใครพบสองครั้ง</div>
+              <div style="margin-bottom:2px;">
+                <div style="display:flex;align-items:center;gap:5px;margin-bottom:3px;"><div style="flex:1;height:3px;background:#2B241B0D;border-radius:2px;overflow:hidden;"><div style="width:5%;height:100%;background:#B8A888;border-radius:2px;opacity:0.7;"></div></div><span style="font-size:8px;color:#6B5E4B;width:52px;text-align:right;">ธรรมดา 5%</span></div>
+                <div style="display:flex;align-items:center;gap:5px;margin-bottom:3px;"><div style="flex:1;height:3px;background:#2B241B0D;border-radius:2px;overflow:hidden;"><div style="width:45%;height:100%;background:#7A9CB8;border-radius:2px;opacity:0.7;"></div></div><span style="font-size:8px;color:#6B5E4B;width:52px;text-align:right;">หายาก 45%</span></div>
+                <div style="display:flex;align-items:center;gap:5px;"><div style="flex:1;height:3px;background:#2B241B0D;border-radius:2px;overflow:hidden;"><div style="width:45%;height:100%;background:#D4A24C;border-radius:2px;opacity:0.7;"></div></div><span style="font-size:8px;color:#6B5E4B;width:52px;text-align:right;">ตำนาน 45%</span></div>
+              </div>
+            </div>
+          </div>
+          <div style="background:#0000000A;border-top:1px solid #D4A24C20;text-align:center;padding:6px;font-size:10px;font-weight:700;color:#9C8F7B;text-transform:uppercase;letter-spacing:1px;">🌱 ไม่พอ</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
