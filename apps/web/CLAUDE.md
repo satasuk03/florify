@@ -54,6 +54,13 @@ Bilingual support is **client-side only** — no library, no locale routes, no S
 - `scheduleDropsNotification` / `cancelDropsNotification` — fires when drops regenerate.
 - Only works while tab is open. Re-armed on `visibilitychange`.
 
+# PWA Cache & Service Worker
+
+- **SW file:** `public/sw.js` — manually managed (no Workbox).
+- **Cache names:** `florify-v{N}`, `florify-static-v{N}`, `florify-flora-v{N}` — bump N to force full cache refresh.
+- **If PWA freezes after deploy:** bump all 3 cache version numbers in `sw.js`, commit & deploy. The activate handler deletes old caches automatically. localStorage (save data) is unaffected.
+- **Why it happens:** iOS PWA (WKWebView) can be slow to update the SW, causing stale JS to be served from cache-first static assets.
+
 # Testing
 
 - Unit: `pnpm test` (vitest) — `tests/unit/gameStore.test.ts` covers plant, water, drops, regen, harvest, streak, migration.

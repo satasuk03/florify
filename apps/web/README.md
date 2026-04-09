@@ -29,8 +29,26 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+## Troubleshooting: PWA frozen / unresponsive on mobile
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The PWA may freeze after a new deploy because the Service Worker serves stale JS from cache that doesn't match the new build.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Fix: Bump SW cache version
+
+1. Open `public/sw.js`
+2. Increment the version number on all 3 cache names, e.g. `v2` → `v3`:
+   ```js
+   const CACHE_NAME = "florify-v3";
+   const STATIC_CACHE = "florify-static-v3";
+   const FLORA_CACHE = "florify-flora-v3";
+   ```
+3. Commit & deploy — the new SW's activate handler will delete all old caches
+4. Force quit and reopen the PWA — it will fetch everything fresh
+
+**Player save data is safe.** localStorage is separate from the cache and is not affected.
+
+### Why this happens
+
+- iOS PWA runs in a standalone WKWebView that is slower to update the Service Worker than a regular browser
+- Static assets (`/_next/static/`) use a cache-first strategy — if old hashed files are still in cache, they get served instead of the new ones
+- Bumping the cache name forces the activate handler to purge all old caches, so every request goes to the network

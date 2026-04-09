@@ -8,7 +8,7 @@ import type { Rarity } from "@florify/shared";
  * Must sum to 1.0.
  */
 export const RARITY_ROLL_WEIGHTS: Record<Rarity, number> = {
-  common: 0.82,
-  rare: 0.15,
-  legendary: 0.03,
+  common: 0.925,
+  rare: 0.06,
+  legendary: 0.015,
 };
