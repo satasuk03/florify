@@ -749,6 +749,229 @@ const series: readonly SpeciesDef[] = [
       "สิ่งมีชีวิตหลายเซลล์ที่ทราบกันว่าอยู่ลึกที่สุดในมหาสมุทร อะบิสซอลเซราฟก่อตัวเป็นโครงสร้างหกแขนสมมาตรที่ชวนให้นึกถึงสัญลักษณ์ทูตสวรรค์อย่างเหลือเชื่อ แม้ไม่มีแสงแดดเคยส่องถึง แต่ละแขนเต้นเป็นคลื่นช้าของแสงเรืองม่วงทอง และอาณานิคมที่บานเต็มที่คือสิ่งที่ใกล้เคียงกับมหาวิหารมากที่สุดที่ทะเลลึกจะมีได้",
     collection: SpeciesCollection.AbyssalGarden,
   },
+  // ── Abyssal Garden — Batch 4 (Shallow Reef) ──────────────────
+  {
+    id: 367,
+    folder: "tidehymn",
+    name: "Tide Hymn",
+    rarity: "common",
+    descriptionEN:
+      "The Tide Hymn is a colonial hydroid that strings itself between seagrass blades like a garland of tiny bells, each polyp a pale ivory cup that trembles at the slightest swell. Together they create a continuous shimmer across the reef meadow, translating the pulse of the ocean into something that reads, unmistakably, like music.",
+    descriptionTH:
+      "ไทด์ฮิมน์เป็นไฮดรอยด์อาณานิคมที่ร้อยตัวเองระหว่างใบหญ้าทะเลดุจพวงมาลัยแห่งระฆังเล็กๆ แต่ละโพลิปเป็นถ้วยสีงาช้างซีดที่สั่นไหวเมื่อคลื่นแผ่วผ่าน รวมกันแล้วพวกมันสร้างประกายต่อเนื่องทั่วทุ่งหญ้าทะเล แปลจังหวะเต้นของมหาสมุทรให้กลายเป็นสิ่งที่ฟังดูเหมือนเสียงดนตรีอย่างปฏิเสธไม่ได้",
+    collection: SpeciesCollection.AbyssalGarden,
+  },
+  {
+    id: 368,
+    folder: "coralplume",
+    name: "Coral Plume",
+    rarity: "common",
+    descriptionEN:
+      "A gorgonian coral whose flexible axis rises nearly half a metre before erupting into dense, feathery side branches arrayed like the plumage of some improbable tropical bird. Its polyps are a vivid saffron-yellow, each one a tiny sun that never sets even as the reef around it dims toward night.",
+    descriptionTH:
+      "ปะการังกอร์โกเนียนที่แกนยืดหยุ่นสูงเกือบครึ่งเมตรก่อนจะแตกออกเป็นกิ่งข้างหนาแน่นคล้ายขนนกนกเมืองร้อนสุดเพ้อฝัน โพลิปสีเหลืองเจ็ดเฉดสดใสของมันแต่ละดอกเป็นดวงอาทิตย์จิ๋วที่ไม่มีวันตก แม้แนวปะการังรอบข้างจะมืดลงสู่ค่ำคืน",
+    collection: SpeciesCollection.AbyssalGarden,
+  },
+  {
+    id: 369,
+    folder: "blushwreath",
+    name: "Blush Wreath",
+    rarity: "common",
+    descriptionEN:
+      "An encrusting red alga that colonizes dead coral substrate in near-perfect rings, growing outward from a central point and leaving a pale ghost of older tissue at its heart. Viewed from above, a single mature specimen resembles a wreath laid on the reef floor — soft pink at the edges, fading to dusty rose at the centre.",
+    descriptionTH:
+      "สาหร่ายแดงที่เกาะผิวปะการังตายในวงกลมเกือบสมบูรณ์แบบ ขยายออกจากจุดศูนย์กลางและทิ้งซากเนื้อเยื่อเก่าสีจางไว้ที่ใจกลาง มองจากด้านบน ตัวที่โตเต็มที่จะดูเหมือนพวงหรีดวางบนพื้นปะการัง ขอบสีชมพูอ่อน จางลงเป็นชมพูหม่นที่แกนกลาง",
+    collection: SpeciesCollection.AbyssalGarden,
+  },
+  {
+    id: 370,
+    folder: "sunkencup",
+    name: "Sunken Cup",
+    rarity: "common",
+    descriptionEN:
+      "A solitary cup coral no wider than a thumb, whose single polyp opens into a vivid disc of electric turquoise rimmed with translucent white tentacles. It grows in the open, unafraid, on the reef's most exposed faces — a small flourish of colour in the plainest place the ocean has to offer.",
+    descriptionTH:
+      "ปะการังถ้วยเดี่ยวกว้างแค่นิ้วหัวแม่มือ โพลิปเดียวของมันเปิดออกเป็นแผ่นสีเขียวครามไฟฟ้าสดใสมีขอบหนวดโปร่งแสงสีขาว มันเติบโตโดดๆ ไม่หวาดกลัวบนหน้าผาที่โล่งที่สุดของแนวปะการัง แสงจุดสีเล็กๆ บนพื้นที่เรียบง่ายที่สุดที่ทะเลมีให้",
+    collection: SpeciesCollection.AbyssalGarden,
+  },
+  {
+    id: 371,
+    folder: "reefmantle",
+    name: "Reef Mantle",
+    rarity: "common",
+    descriptionEN:
+      "An encrusting sponge that drapes over reef rubble in smooth, rounded lobes of warm terracotta and burnt sienna, its surface dimpled with exhaling oscula like the pores of fired clay. Beneath its bulk, the reef structure it colonizes is protected from erosion — the mantle gives nothing away, but holds everything together.",
+    descriptionTH:
+      "ฟองน้ำเกาะพื้นที่คลุมเศษซากปะการังเป็นกลีบกลมเรียบสีดินเผาอุ่นๆ และสีน้ำตาลไหม้ พื้นผิวมีรูหายใจออสคิวลาเป็นรอยบุ๋มดุจรูขุมขนของดินเผา ใต้มวลกายนั้น โครงสร้างปะการังที่มันอาศัยได้รับการปกป้องจากการกัดเซาะ มันไม่โอ้อวดสิ่งใด แต่ยึดทุกอย่างให้อยู่กัน",
+    collection: SpeciesCollection.AbyssalGarden,
+  },
+  {
+    id: 372,
+    folder: "gildedfrond",
+    name: "Gilded Frond",
+    rarity: "rare",
+    descriptionEN:
+      "The Gilded Frond is a large-bladed kelp of extraordinary iridescence, its tissue so densely packed with light-scattering structures that it cycles through green, gold, and burnished copper as the angle of sunlight shifts above. At full size it towers over the reef floor like a flame of hammered metal that refuses to bend in the current.",
+    descriptionTH:
+      "กิลเดดฟรอนด์เป็นสาหร่ายใบกว้างที่มีประกายสีรุ้งอย่างผิดปกติ เนื้อเยื่อที่แน่นไปด้วยโครงสร้างกระจายแสงเปลี่ยนไปมาระหว่างสีเขียว ทอง และทองแดงขัดเงาตามมุมของแสงแดดที่เปลี่ยนแปลงเบื้องบน เมื่อโตเต็มที่มันสูงตระหง่านเหนือพื้นปะการังดุจเปลวไฟของโลหะตีขึ้นรูปที่ปฏิเสธจะโค้งงอตามกระแสน้ำ",
+    collection: SpeciesCollection.AbyssalGarden,
+  },
+  {
+    id: 373,
+    folder: "crownhydroid",
+    name: "Crown Hydroid",
+    rarity: "rare",
+    descriptionEN:
+      "The Crown Hydroid builds elaborate tiered colonies that ascend in stacked rings of feeding polyps, the uppermost whorl opening wide like the crown of a sundew. When fully extended, each polyp threads its tentacles outward in a radial spray of hair-thin white filaments — the reef's most patient and precise predator.",
+    descriptionTH:
+      "คราวน์ไฮดรอยด์สร้างอาณานิคมหลายชั้นที่ขึ้นไปเป็นวงซ้อนของโพลิปจับอาหาร วงที่สูงสุดเปิดกว้างดุจยอดของต้นซันดิว เมื่อยืดออกเต็มที่ แต่ละโพลิปกางหนวดออกเป็นรัศมีของเส้นใยขาวบางราวเส้นผม — นักล่าที่อดทนและแม่นยำที่สุดในแนวปะการัง",
+    collection: SpeciesCollection.AbyssalGarden,
+  },
+  // ── Abyssal Garden — Batch 4 (Twilight Zone) ─────────────────
+  {
+    id: 374,
+    folder: "duskveil",
+    name: "Dusk Veil",
+    rarity: "common",
+    descriptionEN:
+      "A soft bryozoan that builds its colony as a translucent sheet hanging free from overhangs like a curtain of frosted glass. In the failing light of the twilight zone, the colony catches whatever photons remain and re-emits them as a faint, diffuse glow — less a living creature than an argument that the dark is not yet absolute.",
+    descriptionTH:
+      "บรัยโอโซอันนุ่มที่สร้างอาณานิคมเป็นแผ่นโปร่งแสงห้อยจากชายหินดุจม่านกระจกขุ่น ในแสงที่สลายตัวของเขตสนธยา อาณานิคมดักจับโฟตอนที่เหลืออยู่และแผ่กระจายออกมาเป็นแสงเรืองจางๆ มันไม่ใช่แค่สิ่งมีชีวิต — มันคือข้อโต้แย้งว่าความมืดยังไม่มาถึงขีดสุด",
+    collection: SpeciesCollection.AbyssalGarden,
+  },
+  {
+    id: 375,
+    folder: "pewterbloom",
+    name: "Pewter Bloom",
+    rarity: "common",
+    descriptionEN:
+      "The Pewter Bloom is a colonial polyp organism whose massed cups open in formations of dull silver-grey, their interior lines just faintly luminescent — barely enough to notice, precisely enough to count. A whole field of them in the twilight zone looks like an overcast sky seen from underwater, grey on grey on grey.",
+    descriptionTH:
+      "พิวเตอร์บลูมเป็นสิ่งมีชีวิตโพลิปอาณานิคมที่ถ้วยของมันเปิดออกเป็นหมู่ในสีเงินอมเทาหม่น เส้นภายในเรืองแสงจางๆ แค่พอสังเกตเห็น พอดีกับที่จะนับ ทุ่งทั้งหมดของพวกมันในเขตสนธยาดูเหมือนท้องฟ้าครึ้มที่มองจากใต้น้ำ เทาบนเทาบนเทา",
+    collection: SpeciesCollection.AbyssalGarden,
+  },
+  {
+    id: 376,
+    folder: "shroudkelp",
+    name: "Shroud Kelp",
+    rarity: "common",
+    descriptionEN:
+      "A solitary kelp that grows in the deepest reaches of the twilight zone, its single blade as wide as a hand and nearly black, edged with a faint phosphorescent seam that traces its margin in the dark like the hem of a garment. It does not sway — it simply hangs, as if the current itself is unwilling to disturb it.",
+    descriptionTH:
+      "สาหร่ายเดี่ยวที่เติบโตในส่วนลึกสุดของเขตสนธยา ใบเดียวกว้างเท่าฝ่ามือและดำเกือบสนิท มีตะเข็บเรืองแสงจางๆ ที่ขอบวาดเส้นขอบไว้ในความมืดดุจชายผ้า มันไม่โอนเอน มันเพียงห้อยอยู่ ราวกับกระแสน้ำเองไม่ยอมรบกวนมัน",
+    collection: SpeciesCollection.AbyssalGarden,
+  },
+  {
+    id: 377,
+    folder: "murkcrinoid",
+    name: "Murk Crinoid",
+    rarity: "common",
+    descriptionEN:
+      "A feather star that has adapted to twilight depths, anchoring itself on submerged ledges and spreading its muted violet arms wide to net drifting particles from the mid-water column. Its arms divide twice, then divide again, becoming a fractal lattice that ends in pinhead-sized tube feet too small to see without magnification.",
+    descriptionTH:
+      "ดาวขนนกที่ปรับตัวให้อยู่ในความลึกสนธยา ยึดตัวเองบนขอบหินใต้น้ำและกางแขนสีม่วงหม่นออกกว้างเพื่อดักอนุภาคที่ล่องลอยจากแนวน้ำกลาง แขนของมันแตกสองครั้งแล้วแตกอีก กลายเป็นโครงตาข่ายเฟรกทัลที่ลงท้ายด้วยเท้าท่อขนาดหัวหมุดเล็กเกินกว่าจะเห็นโดยไม่มีแว่นขยาย",
+    collection: SpeciesCollection.AbyssalGarden,
+  },
+  {
+    id: 378,
+    folder: "paleseapen",
+    name: "Pale Sea Pen",
+    rarity: "common",
+    descriptionEN:
+      "A solitary sea pen that anchors its fleshy peduncle in soft twilight-zone sediment, then raises a single flattened rachis clothed in polyps of pale ash-white. It retracts completely into the sediment at the slightest disturbance, taking with it the only vertical structure for metres in every direction.",
+    descriptionTH:
+      "ปากกาทะเลเดี่ยวที่ฝังก้านเนื้อลงในตะกอนนุ่มของเขตสนธยา แล้วตั้งแกนกลางแบนเดียวที่ห่อหุ้มด้วยโพลิปสีขาวเถ้าซีด มันหดตัวลงในตะกอนสนิทเมื่อมีสิ่งรบกวนแม้เพียงเล็กน้อย พาสิ่งก่อสร้างแนวตั้งชิ้นเดียวในรัศมีหลายเมตรไปด้วย",
+    collection: SpeciesCollection.AbyssalGarden,
+  },
+  {
+    id: 379,
+    folder: "fossilwrack",
+    name: "Fossil Wrack",
+    rarity: "rare",
+    descriptionEN:
+      "A xenophyophore — among the largest single-celled organisms on earth — the Fossil Wrack builds a sprawling agglutinated test of sediment particles and mineral grains across the twilight seafloor. Its branching form uncannily mimics the fossils of ancient seaweeds, though it is neither plant nor animal, and older than either category.",
+    descriptionTH:
+      "ซีนอฟีโอฟอร์ — หนึ่งในสิ่งมีชีวิตเซลล์เดียวที่ใหญ่ที่สุดในโลก — ฟอสซิลแร็คสร้างเปลือกอากกลูตินเนตที่ขยายไปทั่วพื้นทะเลสนธยาจากอนุภาคตะกอนและเม็ดแร่ รูปแบบกิ่งก้านของมันเลียนแบบซากฟอสซิลของสาหร่ายทะเลโบราณอย่างน่าพิศวง แม้มันจะไม่ใช่ทั้งพืชและสัตว์ และเก่าแก่กว่าทั้งสองประเภท",
+    collection: SpeciesCollection.AbyssalGarden,
+  },
+  {
+    id: 380,
+    folder: "trancehydroid",
+    name: "Trance Hydroid",
+    rarity: "legendary",
+    descriptionEN:
+      "The Trance Hydroid constructs towering colonial spires more than two meters tall in the deep twilight zone, each spire a single polished axis bearing whorls of gonozooids and dactylozooids that spiral upward with the geometric precision of a nautilus shell. At night — or what passes for night at this depth — a slow azure bioluminescence travels upward from base to tip in a continuous wave, and for a long moment the whole structure appears to breathe.",
+    descriptionTH:
+      "ทรานซ์ไฮดรอยด์สร้างยอดหอคอยอาณานิคมสูงกว่าสองเมตรในเขตสนธยาลึก แต่ละยอดเป็นแกนขัดเงาเดี่ยวที่รองรับวงของโกโนซอยด์และแดกทิโลซอยด์เวียนขึ้นไปด้วยความแม่นยำทางเรขาคณิตของเปลือกนอติลุส ยามค่ำคืน — หรือสิ่งที่นับเป็นค่ำคืนที่ความลึกนี้ — แสงเรืองสีฟ้าช้าๆ เดินทางขึ้นจากฐานถึงปลายเป็นคลื่นต่อเนื่อง และชั่วขณะยาวนานทั้งโครงสร้างดูเหมือนกำลังหายใจ",
+    collection: SpeciesCollection.AbyssalGarden,
+  },
+  // ── Abyssal Garden — Batch 4 (Abyss) ─────────────────────────
+  {
+    id: 381,
+    folder: "cindersponge",
+    name: "Cinder Sponge",
+    rarity: "common",
+    descriptionEN:
+      "A glass sponge of the deep abyss, its skeleton woven from silica spicules into an open lattice that is simultaneously rigid and lacelike. Its surface is a dark charcoal grey, almost sooty, but the interior of its body glows faintly with bacterial bioluminescence harboured in its canal system — the look of embers cooling in a fire that went out long ago.",
+    descriptionTH:
+      "ฟองน้ำแก้วแห่งก้นเหวลึก โครงกระดูกถักสปิคูลซิลิกาเป็นโครงตาข่ายเปิดที่แข็งแกร่งและคล้ายลูกไม้ในเวลาเดียวกัน พื้นผิวเป็นสีเทาถ่านเกือบดำราวควัน แต่ภายในร่างกายเรืองแสงจางๆ ด้วยแสงเรืองของแบคทีเรียที่อาศัยในระบบท่อ — ดุจถ่านที่กำลังดับลงจากไฟที่ดับไปนานแล้ว",
+    collection: SpeciesCollection.AbyssalGarden,
+  },
+  {
+    id: 382,
+    folder: "riftgarden",
+    name: "Rift Garden",
+    rarity: "common",
+    descriptionEN:
+      "A chemosynthetic mat organism that colonizes bare basalt along abyssal spreading rifts, laying down a continuous living carpet of white and pale yellow filaments wherever warm mineral water seeps through the rock. From above, a full colony resembles hoarfrost on dark stone — delicate, improbable, and older than any gardener who might tend it.",
+    descriptionTH:
+      "สิ่งมีชีวิตแผ่นเคมีสังเคราะห์ที่ตั้งรกรากบนหินบะซอลต์โล่งตามรอยแยกใต้ทะเลที่กำลังขยาย วางพรมมีชีวิตต่อเนื่องของเส้นใยขาวและเหลืองอ่อนทุกที่ที่น้ำแร่อุ่นซึมผ่านหิน มองจากด้านบน อาณานิคมเต็มที่ดูเหมือนน้ำค้างแข็งบนหินดำ บอบบาง เป็นไปไม่ได้ และเก่าแก่กว่านักจัดสวนคนใดที่อาจดูแลมัน",
+    collection: SpeciesCollection.AbyssalGarden,
+  },
+  {
+    id: 383,
+    folder: "stalklantern",
+    name: "Stalk Lantern",
+    rarity: "common",
+    descriptionEN:
+      "A stalked sea lily of the abyss, its calcite column rising from abyssal sediment and terminating in a crown of long, combed arms. Unlike its shallow-water relatives, the Stalk Lantern has given up pigment entirely, the arms translucent as clouded glass, and each pinnule tip generates a cold, steady point of blue-white light — a candelabra assembled from patience and calcium.",
+    descriptionTH:
+      "ลิลลี่ทะเลมีก้านแห่งก้นเหว เสาแคลไซต์ผุดขึ้นจากตะกอนก้นเหวและลงท้ายด้วยมงกุฎแขนยาวที่หวี ต่างจากญาติในน้ำตื้น สตอล์คแลนเทิร์นสละสีสันโดยสิ้นเชิง แขนโปร่งใสดุจแก้วขุ่น และปลายพินนิวล์แต่ละจุดผลิตแสงสีขาวอมน้ำเงินจุดเย็นๆ นิ่งๆ — เชิงเทียนที่ประกอบขึ้นจากความอดทนและแคลเซียม",
+    collection: SpeciesCollection.AbyssalGarden,
+  },
+  {
+    id: 384,
+    folder: "bonelichen",
+    name: "Bone Lichen",
+    rarity: "rare",
+    descriptionEN:
+      "A lichen-analog organism that colonizes exposed whale bones on the abyssal floor, its pale grey-green thallus pressing close to the surface of ancient calcium, filling each pore and groove with living tissue. Where the Ossuary Fern decorates a whale fall, the Bone Lichen becomes it — indistinguishable from the structure it has consumed, except in patches where it produces clusters of minute amber spore cups.",
+    descriptionTH:
+      "สิ่งมีชีวิตคล้ายไลเคนที่ตั้งรกรากบนกระดูกวาฬที่เปิดโล่งบนพื้นก้นเหว ธัลลัสสีเขียวอมเทาซีดแนบสนิทกับพื้นผิวแคลเซียมโบราณ เติมทุกรูขุมขนและร่องด้วยเนื้อเยื่อมีชีวิต ในขณะที่ออสชัวรีเฟิร์นประดับซากวาฬ โบนไลเคนกลายเป็นซากวาฬนั้นเอง แยกไม่ออกจากโครงสร้างที่มันบริโภค ยกเว้นบริเวณที่มันผลิตกระจุกถ้วยสปอร์สีอำพันจิ๋ว",
+    collection: SpeciesCollection.AbyssalGarden,
+  },
+  {
+    id: 385,
+    folder: "trenchseraph",
+    name: "Trench Seraph",
+    rarity: "rare",
+    descriptionEN:
+      "A stalked xenophyophore of extraordinary size that anchors a single thick stalk into hadal sediment and unfurls a branching crown of agglutinated chambers at its apex. Its silhouette against the faint thermal glow of deep-ocean vents resembles nothing so much as a figure with arms outstretched — patient, enormous, ancient beyond reckoning.",
+    descriptionTH:
+      "ซีนอฟีโอฟอร์มีก้านขนาดใหญ่ผิดปกติที่ยึดก้านหนาเส้นเดียวลงในตะกอนโซนฮาดัล แล้วคลี่มงกุฎกิ่งก้านของห้องอากกลูตินเนตที่ยอด เงาของมันต้านแสงความร้อนจางๆ ของปล่องน้ำลึกมีลักษณะที่ไม่อาจเปรียบเทียบได้กับสิ่งอื่นนอกจากร่างที่กางแขนออก ใจเย็น ยิ่งใหญ่ เก่าแก่เกินกว่าจะนับ",
+    collection: SpeciesCollection.AbyssalGarden,
+  },
+  {
+    id: 386,
+    folder: "voidlotus",
+    name: "Void Lotus",
+    rarity: "legendary",
+    descriptionEN:
+      "The Void Lotus has never been photographed alive. Known only from fragments recovered in sediment cores, it appears to produce a symmetrical, multi-petaled bloom structure in absolute darkness, using a biochemistry found nowhere else in nature. The petals are black with a faint violet iridescence visible only at certain angles — the color of an eye opening in the dark for the first time, finding the dark beautiful.",
+    descriptionTH:
+      "ว้อยด์โลตัสไม่เคยถูกถ่ายภาพขณะมีชีวิต รู้จักเพียงจากชิ้นส่วนที่กู้คืนจากแกนตะกอน มันดูเหมือนจะผลิตโครงสร้างดอกหลายกลีบสมมาตรในความมืดสนิท ใช้ชีวเคมีที่ไม่พบที่ใดอื่นในธรรมชาติ กลีบดอกเป็นสีดำพร้อมประกายสีรุ้งม่วงอ่อนที่มองเห็นได้เฉพาะบางมุม สีของดวงตาที่เปิดขึ้นในความมืดเป็นครั้งแรก และพบว่าความมืดนั้นงดงาม",
+    collection: SpeciesCollection.AbyssalGarden,
+  },
 ];
 
 export default series;
