@@ -6,7 +6,6 @@ import { CheckIcon } from "@/components/icons";
 import { useGameStore } from "@/store/gameStore";
 import { useT } from "@/i18n/useT";
 import { toast } from "@/lib/toast";
-import { haptic } from "@/lib/haptics";
 import {
   DAILY_MISSION_COUNT,
   MISSION_MILESTONES,
@@ -45,7 +44,7 @@ export function DailyMissionSheet({ open, onClose }: Props) {
 
   const handleConfirmRefresh = () => {
     if (confirmIndex !== null && refreshMission(confirmIndex)) {
-      haptic("tap");
+
     }
     setConfirmIndex(null);
   };
@@ -584,7 +583,7 @@ function AllMissionsBonus() {
   const handleClaim = () => {
     const { sproutsAwarded } = claimAllCompletedBonus();
     if (sproutsAwarded > 0) {
-      haptic("harvest");
+
       toast(t("missions.sproutsAwarded", { sprouts: sproutsAwarded }));
     }
   };
@@ -665,7 +664,7 @@ function ClaimButton() {
       claimed = true;
     }
     if (claimed) {
-      haptic("harvest");
+
       setBurstKey((k) => k + 1);
     }
   }, [claimMissions, claimAllCompletedBonus, t]);

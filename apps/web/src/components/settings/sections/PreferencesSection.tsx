@@ -1,54 +1,17 @@
 'use client';
 
-import { useSyncExternalStore } from 'react';
-import type { Settings } from '@florify/shared';
+import type { Language } from '@florify/shared';
 import { Card } from '@/components/Card';
-import { Toggle } from '@/components/Toggle';
-import { loadSettings, saveSettings, subscribeSettings } from '@/store/settingsStore';
-import { toast } from '@/lib/toast';
-import { requestNotificationPermission } from '@/lib/notifications';
-import { useT } from '@/i18n/useT';
-
-type ToggleKey = 'sound' | 'haptics' | 'notifications';
-
-interface ToggleRow {
-  key: ToggleKey;
-  label: string;
-  hint?: string;
-}
-
-// Stable server snapshot for useSyncExternalStore — must live outside
-// the component so its reference doesn't churn between renders.
-const getServerSnapshot = (): Settings | null => null;
+import { loadSettings, saveSettings } from '@/store/settingsStore';
+import { useT, useLanguage } from '@/i18n/useT';
 
 export function PreferencesSection() {
   const t = useT();
-  const settings = useSyncExternalStore(subscribeSettings, loadSettings, getServerSnapshot);
+  const language = useLanguage();
 
-  const rows: ToggleRow[] = [
-    { key: 'sound', label: t('settings.sound'), hint: t('settings.soundHint') },
-    { key: 'haptics', label: t('settings.haptics'), hint: t('settings.hapticsHint') },
-    {
-      key: 'notifications',
-      label: t('settings.notifications'),
-      hint: t('settings.notificationsHint'),
-    },
-  ];
-
-  const updateToggle = async (key: ToggleKey, value: boolean) => {
-    if (!settings) return;
-    if (key === 'notifications' && value) {
-      const granted = await requestNotificationPermission();
-      if (!granted) {
-        toast(t('settings.notificationsDenied'));
-        return;
-      }
-    }
-    const next: Settings = { ...settings, [key]: value };
-    saveSettings(next);
+  const setLanguage = (lang: Language) => {
+    saveSettings({ ...loadSettings(), language: lang });
   };
-
-  if (!settings) return null;
 
   return (
     <section>
@@ -56,22 +19,27 @@ export function PreferencesSection() {
         {t('settings.preferences')}
       </h2>
       <div className="space-y-3">
-        {rows.map((row) => (
-          <Card
-            key={row.key}
-            className="p-4 flex items-center justify-between gap-4"
-          >
-            <div className="flex-1 min-w-0">
-              <div className="text-base text-ink-900">{row.label}</div>
-              {row.hint && <div className="text-xs text-ink-500 mt-0.5">{row.hint}</div>}
-            </div>
-            <Toggle
-              checked={settings[row.key]}
-              onChange={(v) => updateToggle(row.key, v)}
-              label={row.label}
-            />
-          </Card>
-        ))}
+        <Card className="p-4 flex items-center justify-between gap-4">
+          <div className="flex-1 min-w-0">
+            <div className="text-base text-ink-900">{t('settings.language')}</div>
+            <div className="text-xs text-ink-500 mt-0.5">{t('settings.languageHint')}</div>
+          </div>
+          <div className="flex rounded-full bg-cream-200 p-0.5">
+            {(['th', 'en'] as const).map((lang) => (
+              <button
+                key={lang}
+                onClick={() => setLanguage(lang)}
+                className={`px-4 py-1.5 rounded-full text-xs font-semibold uppercase transition-all duration-200 ${
+                  language === lang
+                    ? 'bg-cream-50 text-ink-900 shadow-sm'
+                    : 'text-ink-500 hover:text-ink-700'
+                }`}
+              >
+                {lang === 'th' ? 'TH' : 'EN'}
+              </button>
+            ))}
+          </div>
+        </Card>
       </div>
     </section>
   );

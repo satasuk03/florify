@@ -41,7 +41,6 @@ import { saveStore } from './saveStore';
 import { scheduleSave, flushSave } from './debouncedSave';
 import { createInitialState } from './initialState';
 import { isYesterday, todayLocalDate } from '@/lib/time';
-import { haptic } from '@/lib/haptics';
 import { gameEventBus } from '@/lib/gameEventBus';
 import { pickDailyMissions } from '@/lib/missionPicker';
 
@@ -435,7 +434,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     };
     set({ state: next });
     scheduleSave(next);
-    haptic('tap');
+
     gameEventBus.emit({ type: 'plant' });
     return tree;
   },
@@ -490,7 +489,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       };
       set({ state: next });
       scheduleSave(next);
-      haptic('harvest');
+  
       gameEventBus.emit({ type: 'water' });
       gameEventBus.emit({ type: 'harvest', rarity: harvested.rarity, isNew: !isDuplicate });
       return { ok: true, harvested, pityPointsGained: result.pityPointsGained, pityReward: result.pityReward, sproutsGained };
@@ -506,7 +505,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     };
     set({ state: next });
     scheduleSave(next);
-    haptic('water');
+
     gameEventBus.emit({ type: 'water' });
     return { ok: true };
   },

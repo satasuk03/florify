@@ -143,9 +143,6 @@ export interface PlayerState {
 export type Language = 'th' | 'en';
 
 export interface Settings {
-  sound: boolean;
-  haptics: boolean;
-  notifications: boolean;      // in-tab Notification API opt-in
   language: Language;
   hasSeenWelcome: boolean;
 }

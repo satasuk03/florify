@@ -22,7 +22,6 @@ import { CheckinModal } from "@/components/daily-missions/CheckinModal";
 import { HarvestOverlay } from "@/components/HarvestOverlay";
 import { SeedPacket } from "@/components/SeedPacket";
 import { WaterSplash } from "@/components/WaterSplash";
-import { LanguageToggle } from "@/components/LanguageToggle";
 import { WelcomeDialogue } from "@/components/welcome/WelcomeDialogue";
 import {
   ActionButton,
@@ -302,7 +301,6 @@ export function PlotView() {
         <CornerButton to="/shop" label={t("plot.openShop")} size="primary">
           <ShopIcon />
         </CornerButton>
-        <LanguageToggle />
       </div>
 
       {/* ─── TOP-RIGHT: Florist Card + Guide Book + Settings ── */}
