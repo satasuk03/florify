@@ -331,6 +331,106 @@ const OVERRIDES: Record<string, [string, string, string]> = {
     'A young eternal moss growing slowly across abyssal floor, deep teal coloration with dark gold margins, several white bioluminescent nodes glowing with cold steady starlight-like quality, profound age implied in unhurried growth, dark abyssal ocean background filling the entire image edge to edge, painterly botanical illustration style, vertical composition',
     'A mature eternal moss in legendary full expanse, vast carpet of deep otherworldly teal across the abyssal floor with dark gold margins, scattered white bioluminescent nodes glowing cold and eternal as stars, the sheer age and scale of the organism conveying deep geological time, one patch of an immeasurable whole, dark abyssal ocean background filling the entire image edge to edge, elegant botanical illustration style, vertical composition',
   ],
+  siltribbon: [
+    'A single tiny blade of silt ribbon seagrass, pale green and translucent, just a few centimeters tall rooted in fine white sand, soft dappled light above, deep blue ocean background with soft light rays filtering from above filling the entire image edge to edge, botanical illustration style, vertical composition',
+    'A small cluster of narrow silt ribbon seagrass blades, erect and slightly swaying, sage-green with delicate midribs catching golden light, deep blue ocean background with soft light rays filtering from above filling the entire image edge to edge, painterly botanical illustration style, vertical composition',
+    'A sweeping curtain of silt ribbon seagrass, tall cascading blades in sage-green and fleeting gold where shafts of sunlight pierce through, roots anchored in white sand below, deep blue ocean background with soft light rays filtering from above filling the entire image edge to edge, elegant botanical illustration style, vertical composition',
+  ],
+  flamepolyp: [
+    'A tiny patch of flame polyps on a fragment of reef rock, scarlet and amber tentacles barely extended, backlit by pale sunlight, deep blue ocean background with soft light rays filtering from above filling the entire image edge to edge, botanical illustration style, vertical composition',
+    'A fist-sized colony of flame polyps on reef rock, vivid red-orange tentacles fanned wide, rippling like tongues of fire in gentle current, deep blue ocean background with soft light rays filtering from above filling the entire image edge to edge, painterly botanical illustration style, vertical composition',
+    'A blazing colony of flame polyps covering an entire reef wall face, dense scarlet and amber tentacles extending outward en masse, luminous against the deep blue, deep blue ocean background with soft light rays filtering from above filling the entire image edge to edge, elegant botanical illustration style, vertical composition',
+  ],
+  frothalga: [
+    'A small cloud of pale green froth algae cells loosely drifting in crystal-clear shallow water, catching sunlight, deep blue ocean background with soft light rays filtering from above filling the entire image edge to edge, botanical illustration style, vertical composition',
+    'A fluffy mass of froth algae, soft lime-green, dotted with tiny rising oxygen bubbles, anchored loosely in warm shallow reef water, deep blue ocean background with soft light rays filtering from above filling the entire image edge to edge, painterly botanical illustration style, vertical composition',
+    'A dramatic billowing cloud of froth algae filling the water column, pale green and white with streams of oxygen bubbles spiraling upward in sunlight shafts, deep blue ocean background with soft light rays filtering from above filling the entire image edge to edge, elegant botanical illustration style, vertical composition',
+  ],
+  stonelace: [
+    'A thin crust of stone lace coralline alga just beginning to spread on a fragment of dead reef rubble, soft pink and mauve mineral tones, deep blue ocean background with soft light rays filtering from above filling the entire image edge to edge, botanical illustration style, vertical composition',
+    'Stone lace encrusting a larger reef substrate piece, pink-mauve patterns following every curve and groove of the rock, delicate mineral texture, deep blue ocean background with soft light rays filtering from above filling the entire image edge to edge, painterly botanical illustration style, vertical composition',
+    'A fully colonized reef boulder draped entirely in stone lace, every surface a tapestry of calcified pink mauve and cream, otherworldly in its completeness, deep blue ocean background with soft light rays filtering from above filling the entire image edge to edge, elegant botanical illustration style, vertical composition',
+  ],
+  lacesponge: [
+    'A small frilled disc of lace sponge, creamy white with an open lacework texture, perched on shallow reef rock, deep blue ocean background with soft light rays filtering from above filling the entire image edge to edge, botanical illustration style, vertical composition',
+    'A growing sheet of lace sponge spreading horizontally, geometric openwork of creamy white tubes, light playing through its gaps, deep blue ocean background with soft light rays filtering from above filling the entire image edge to edge, painterly botanical illustration style, vertical composition',
+    'A dramatic flat colony of lace sponge fully expanded, a wide intricate mesh of creamy ivory tubes, sunlight casting complex shadow-patterns through its open lattice onto the reef below, deep blue ocean background with soft light rays filtering from above filling the entire image edge to edge, elegant botanical illustration style, vertical composition',
+  ],
+  coralwisp: [
+    'A single tiny spiral filament of coral wisp, barely a centimeter tall, pale gold, rising delicately from a shallow reef surface in dappled sunlight, deep blue ocean background with soft light rays filtering from above filling the entire image edge to edge, botanical illustration style, vertical composition',
+    'A slender spiraling coral wisp filament, mid-height, pale gold catching light, its perfect helix form making it look almost artificial, anchored on pale reef rock, deep blue ocean background with soft light rays filtering from above filling the entire image edge to edge, painterly botanical illustration style, vertical composition',
+    'A fully mature coral wisp, its single half-meter helix of pale gold rising dramatically from the reef floor, impossibly thin, spiraling upward like a living question mark in bright sunlight, deep blue ocean background with soft light rays filtering from above filling the entire image edge to edge, elegant botanical illustration style, vertical composition',
+  ],
+  glasswort: [
+    'A single tiny glassy succulent-like stem of glass wort, pale sea-green and translucent with silica sheen, emerging from shallow sandy substrate, deep blue ocean background with soft light rays filtering from above filling the entire image edge to edge, botanical illustration style, vertical composition',
+    'A small cluster of glass wort stems, plump and crystalline in appearance, sea-green with faint refraction shimmer, compact in sunlit shallow water, deep blue ocean background with soft light rays filtering from above filling the entire image edge to edge, painterly botanical illustration style, vertical composition',
+    'A mature glass wort plant, its swollen glassy stems forming a tight succulent cluster, some stems almost invisible due to their transparency except for faint refraction lines, catching sunlight, deep blue ocean background with soft light rays filtering from above filling the entire image edge to edge, elegant botanical illustration style, vertical composition',
+  ],
+  duskfringe: [
+    'A small frond of dusk fringe alga, dusty rose with a darker lavender edge, lone and delicate in dim water, dark blue-purple ocean background with faint distant light filling the entire image edge to edge, botanical illustration style, vertical composition',
+    'Several dusk fringe fronds hanging in loose curtain formation, dusty rose and muted lavender with darker outlined edges, swaying gently in slow current, dark blue-purple ocean background with faint distant light filling the entire image edge to edge, painterly botanical illustration style, vertical composition',
+    'A full curtain of dusk fringe, long cascading fronds in dusty rose and lavender with meticulously darker-edged margins, draped beautifully against the dim blue twilight, dark blue-purple ocean background with faint distant light filling the entire image edge to edge, elegant botanical illustration style, vertical composition',
+  ],
+  emberroot: [
+    'A tiny cluster of dark orange-red fronds of ember root just breaking through dark sediment, sparse and small, glowing warmly against the cold dark, dark blue-purple ocean background with faint distant light filling the entire image edge to edge, botanical illustration style, vertical composition',
+    'A small clump of ember root fronds, dark orange-red, warm-colored and vivid against the cool twilight depths, the sediment surface hinting at rhizomes below, dark blue-purple ocean background with faint distant light filling the entire image edge to edge, painterly botanical illustration style, vertical composition',
+    'A mature ember root colony, a dramatic spread of dark orange-red fronds rising from a wide sediment field, anomalously warm and fiery against the cold blue-purple twilight, with hints of hidden rhizome runners, dark blue-purple ocean background with faint distant light filling the entire image edge to edge, elegant botanical illustration style, vertical composition',
+  ],
+  hazewrack: [
+    'A tiny brown rosette of haze wrack on dim rock, with just a few microscopic particles drifting around it in the dim water, dark blue-purple ocean background with faint distant light filling the entire image edge to edge, botanical illustration style, vertical composition',
+    'A small haze wrack rosette releasing a faint cloud of reproductive spores, the particles glowing faintly as they drift upward in the sparse light, dark blue-purple ocean background with faint distant light filling the entire image edge to edge, painterly botanical illustration style, vertical composition',
+    'A mature haze wrack plant surrounded by a dramatic billowing cloud of bioluminescent reproductive particles, the tiny brown rosette at the base almost hidden beneath the luminous haze it has released, dark blue-purple ocean background with faint distant light filling the entire image edge to edge, elegant botanical illustration style, vertical composition',
+  ],
+  paletendril: [
+    'A tiny pale-grey holdfast on a stone with one or two very thin pale filaments just beginning to drift upward, ghostly in the dim water, dark blue-purple ocean background with faint distant light filling the entire image edge to edge, botanical illustration style, vertical composition',
+    'A pale tendril plant with several long pale grey wandering filaments drifting freely in the water column above a single holdfast, each filament untangled and separate, dark blue-purple ocean background with faint distant light filling the entire image edge to edge, painterly botanical illustration style, vertical composition',
+    'A mature pale tendril, its many long grey filaments spreading through the water in an elegant non-tangled array, each one reaching in a different direction from the small anchoring holdfast below, ghostly and ethereal, dark blue-purple ocean background with faint distant light filling the entire image edge to edge, elegant botanical illustration style, vertical composition',
+  ],
+  waxcoral: [
+    'A small smooth dome of wax coral, cream-colored with a waxy sheen, sitting quietly on dim twilight rock, its surface almost featureless, dark blue-purple ocean background with faint distant light filling the entire image edge to edge, botanical illustration style, vertical composition',
+    'A growing mound of wax coral, smooth and cream-amber with a candlewax gloss, faint amber undulations across its surface suggesting hidden internal structure, dark blue-purple ocean background with faint distant light filling the entire image edge to edge, painterly botanical illustration style, vertical composition',
+    'A large mature wax coral colony, a dramatic rounded formation of cream and amber with a luminous waxy gloss, the surface so smooth it seems sculpted rather than grown, in dim blue-purple twilight, dark blue-purple ocean background with faint distant light filling the entire image edge to edge, elegant botanical illustration style, vertical composition',
+  ],
+  threadgarden: [
+    'A single small tube worm of threadworm garden, its tiny feathery plume fanned open, cream and pale violet, rising from dark sediment, dark blue-purple ocean background with faint distant light filling the entire image edge to edge, botanical illustration style, vertical composition',
+    'A small cluster of threadworm garden tube worms, their feathery plumes in cream ivory and pale violet fanned wide, a miniature meadow of waving crowns, dark blue-purple ocean background with faint distant light filling the entire image edge to edge, painterly botanical illustration style, vertical composition',
+    'A dense spectacular forest of threadworm garden tube worms, dozens of cream and pale violet feathery plumes all fanned open simultaneously, forming a mesmerizing meadow in the twilight gloom, dark blue-purple ocean background with faint distant light filling the entire image edge to edge, elegant botanical illustration style, vertical composition',
+  ],
+  smokefern: [
+    'A single tiny smoke fern frond, pale grey-green with edges so fine they appear to dissolve into the water, alone on dark sediment, dark blue-purple ocean background with faint distant light filling the entire image edge to edge, botanical illustration style, vertical composition',
+    'A small isolated clump of smoke fern, grey-green fronds so finely divided their edges blur into the surrounding water like smoke, quietly luminous, dark blue-purple ocean background with faint distant light filling the entire image edge to edge, painterly botanical illustration style, vertical composition',
+    'A mature clump of smoke fern, its mass of ultra-fine grey-green fronds creating a soft-edged cloud-like form, each frond edge dissolving into the surrounding twilight water, beautiful and ephemeral, dark blue-purple ocean background with faint distant light filling the entire image edge to edge, elegant botanical illustration style, vertical composition',
+  ],
+  ventlily: [
+    'A single tiny upturned trumpet-shaped frond of vent lily near a hydrothermal vent, rust-brown and ochre, mineral deposits beginning to form on its surface in total darkness, dark abyssal ocean background filling the entire image edge to edge, botanical illustration style, vertical composition',
+    'A small cluster of vent lily fronds, their upturned trumpet shapes catching faint vent glow, rust-brown and ochre coloring, with visible mineral glaze building on surfaces, dark abyssal ocean background filling the entire image edge to edge, painterly botanical illustration style, vertical composition',
+    'A dramatic colony of vent lily trumpets clustered around a hydrothermal vent, their rust-brown and ochre fronds oriented upward in a ring, covered in intricate natural mineral glaze, glowing faintly from the vent light below, dark abyssal ocean background filling the entire image edge to edge, elegant botanical illustration style, vertical composition',
+  ],
+  brinebloom: [
+    'A tiny ring of brine bloom mat at the edge of a miniature brine pool, dark teal and silver-white banding, in complete abyssal darkness, dark abyssal ocean background filling the entire image edge to edge, botanical illustration style, vertical composition',
+    'A growing brine bloom colony forming concentric teal and silver-white rings at the brine-seawater interface of a small abyssal brine pool, dark abyssal ocean background filling the entire image edge to edge, painterly botanical illustration style, vertical composition',
+    'A stunning mature brine bloom colony, perfect concentric rings of dark teal and luminous silver-white spreading outward from the edge of an abyssal brine pool, creating the illusion of a shoreline in the deepest dark, dark abyssal ocean background filling the entire image edge to edge, elegant botanical illustration style, vertical composition',
+  ],
+  ossuaryfern: [
+    'A single pale white frond of ossuary fern emerging from a small whale bone fragment on the abyssal floor, delicate against the absolute darkness, dark abyssal ocean background filling the entire image edge to edge, botanical illustration style, vertical composition',
+    'Several ossuary fern fronds threading through the ribs and gaps of a partially visible whale skeleton section, pale white against aged bone, eerily beautiful, dark abyssal ocean background filling the entire image edge to edge, painterly botanical illustration style, vertical composition',
+    'A fully colonized whale fall skeleton section draped in pale white ossuary fern fronds, the intricate plant-life filling every gap of ancient bone, transforming a grave into a garden in the total dark, dark abyssal ocean background filling the entire image edge to edge, elegant botanical illustration style, vertical composition',
+  ],
+  voidtendril: [
+    'A tiny black filament of void tendril barely visible against the abyssal dark, just a suggestion of form rising from sediment, dark abyssal ocean background filling the entire image edge to edge, botanical illustration style, vertical composition',
+    'A void tendril filament rising from dark sediment, black and nearly invisible, tapering to near-nothingness at its tip, its presence only known by the subtle displacement of particles around it, dark abyssal ocean background filling the entire image edge to edge, painterly botanical illustration style, vertical composition',
+    'A mature void tendril, a single dramatic black filament rising tall from the abyssal floor, perfectly straight, narrowing to invisibility at its top, rendered in near-total darkness with only the faintest hint of its form against the surrounding void, dark abyssal ocean background filling the entire image edge to edge, elegant botanical illustration style, vertical composition',
+  ],
+  meridiancoral: [
+    'The very beginning of a meridian coral wall, just a thin vertical strip of bioluminescent skeleton, cold blue-white glow, rising precisely from dark abyssal sediment, dark abyssal ocean background filling the entire image edge to edge, botanical illustration style, vertical composition',
+    'A growing meridian coral wall, a tall thin vertical plane of bioluminescent coral skeleton, glowing cold blue-white, oriented vertically like a living fence between thermal columns, dark abyssal ocean background filling the entire image edge to edge, painterly botanical illustration style, vertical composition',
+    'A fully mature meridian coral, a dramatic glowing wall of bioluminescent skeleton rising straight up from the abyssal floor in a perfect vertical plane, cold blue-white light illuminating the absolute darkness around it, vast and solitary, dark abyssal ocean background filling the entire image edge to edge, elegant botanical illustration style, vertical composition',
+  ],
+  abyssalseraph: [
+    'A single tiny six-branched abyssal seraph organism, miniature and symmetrical, faintly pulsing with violet-gold bioluminescence, alone on the abyssal floor, dark abyssal ocean background filling the entire image edge to edge, botanical illustration style, vertical composition',
+    'A small cluster of abyssal seraph structures, their six-branched symmetrical forms glowing with slow violet-gold pulses, otherworldly and cathedral-like even in miniature, dark abyssal ocean background filling the entire image edge to edge, painterly botanical illustration style, vertical composition',
+    'A full colony of abyssal seraph in bloom, multiple large six-branched symmetrical forms rising from the abyssal floor, all pulsing in slow synchronized waves of violet-gold bioluminescence, magnificent and awe-inspiring in the total dark, like a cathedral of living light, dark abyssal ocean background filling the entire image edge to edge, elegant botanical illustration style, vertical composition',
+  ],
   lianhua: [
     'A young anime child girl around 6 years old with big gentle eyes, slim petite body, long dark hair in a simple low ponytail with a small pink flower clip, wearing a plain simple pale green cotton Chinese rural peasant dress with no embroidery, the child kneeling beside a shallow water dish with a small pink lotus bud emerging from the water, one hand reaching curiously toward the bud, soft pale green and pale pink watercolor washes spreading gently across the background like wet paint bleeding on paper, pink lotus buds and green lotus leaves rendered in loose watercolor in the background, Chinese ink wash guofeng watercolor painting style with visible brushstrokes and soft color washes, soft pale green and pale pink and white palette, cream background, no text no letters no writing, botanical illustration style, vertical composition',
     'A cute slender anime child girl with big gentle eyes and round young face, thin petite small body, long dark hair in simple twin buns with a small pink lotus bud hairpin, wearing a flowing oversized pale jade-green and white layered Chinese Hanfu robe with wide sleeves too long for her small arms, the small child holding a pink lotus bud close to her chest with both hands, large deep-green lotus leaves with visible veins arching overhead, pink lotus flowers and buds and green lotus leaves and stems surrounding her, soft pale green and pale pink watercolor washes spreading gently across the background like wet paint bleeding on paper, Chinese ink wash guofeng watercolor painting style with visible bold brushstrokes and soft color washes, deep green pink and white palette, cream background, no text no letters no writing, botanical illustration style, vertical composition',
@@ -365,6 +465,9 @@ async function main(): Promise<void> {
     'coralwhisper', 'tidalglass', 'crownpolyp', 'seablossom', 'pearlwrack', 'coralcrown', 'mossyarch', 'saltbraid',
     'inkbloom', 'murmurkelp', 'ashcoral', 'silkwhip', 'coldlace', 'blindroot', 'vesperfrond',
     'ventshrub', 'gloomcap', 'pressurebloom', 'crystalgarden', 'eternalmoss',
+    'siltribbon', 'flamepolyp', 'frothalga', 'stonelace', 'lacesponge', 'coralwisp', 'glasswort',
+    'duskfringe', 'emberroot', 'hazewrack', 'paletendril', 'waxcoral', 'threadgarden', 'smokefern',
+    'ventlily', 'brinebloom', 'ossuaryfern', 'voidtendril', 'meridiancoral', 'abyssalseraph',
   ] as const;
   for (const name of USER_ADDED) {
     if (OVERRIDES[name]) {

@@ -323,7 +323,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "The Tidal Glass is a sea grass of extraordinary clarity, its blades so translucent that light passes straight through, casting faint prismatic shadows on the sand below. It grows in restless meadows, never still, bending with each passing swell in choreographies too coordinated to be random.",
     descriptionTH:
-      "หญ้าทิดัลกลาสมีความใสอย่างเหลือเชื่อ ใบของมันโปร่งแสงจนแสงลอดผ่านตรงๆ ทิ้งเงาปริซึมจางๆ บนทรายด้านล่าง มันเติบโตเป็นทุ่งหญ้าที่ไม่เคยหยุดนิ่ง โอนเอียงตามคลื่นแต่ละลูกในท่วงท่าที่ประสานกันเกินกว่าจะบังเอิญ",
+      "หญ้าทิดัลกลาสใสจนน่าประหลาดใจ — ใบของมันโปร่งแสงจนแสงลอดผ่านตรงๆ ทิ้งเงาปริซึมจางๆ บนทรายด้านล่าง มันเติบโตเป็นทุ่งหญ้าที่ไม่เคยหยุดนิ่ง โอนเอียงตามคลื่นแต่ละลูกในท่วงท่าที่ประสานกันเกินกว่าจะบังเอิญ",
     collection: SpeciesCollection.AbyssalGarden,
   },
   {
@@ -401,7 +401,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "In the first hours of permanent dusk, the Ink Bloom spreads across submerged stone like spilled indigo — its tissue a deep, saturated blue-black that seems to absorb what little light remains rather than reflect it. Its surface is finely textured, as if pressed from velvet.",
     descriptionTH:
-      "ในยามโพล้เพล้ถาวรแห่งเขตสนธยา อิงค์บลูมแผ่ขยายบนหินใต้น้ำดุจครามที่ถูกเทลง เนื้อเยื่อสีน้ำเงินดำอิ่มตัวดูเหมือนดูดซับแสงที่เหลืออยู่เพียงน้อยนิดมากกว่าสะท้อนออก พื้นผิวละเอียดราวกับกำมะหยี่",
+      "ในชั่วโมงแรกของสนธยาอันไม่มีวันสิ้นสุด อิงค์บลูมแผ่ขยายบนหินใต้น้ำดุจครามที่ถูกเทลง เนื้อเยื่อสีน้ำเงินดำอิ่มตัวดูเหมือนดูดซับแสงที่เหลืออยู่เพียงน้อยนิดมากกว่าสะท้อนออก พื้นผิวละเอียดราวกับกำมะหยี่",
     collection: SpeciesCollection.AbyssalGarden,
   },
   {
@@ -412,7 +412,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "An uncommonly long kelp that grows in isolated single stipes descending from the twilight zone toward the abyss, too far from the sun to photosynthesize but subsisting on dissolved matter and bacterial symbiosis. Its dark olive ribbon sways ceaselessly — alone, unhurried, philosophic in its solitude.",
     descriptionTH:
-      "สาหร่ายที่ยาวผิดปกติ เติบโตเป็นก้านเดี่ยวโดดเดี่ยวที่ห้อยลงจากเขตสนธยาสู่ขอบเหว ห่างไกลดวงอาทิตย์เกินกว่าจะสังเคราะห์แสง แต่ดำรงชีวิตด้วยสารที่ละลายอยู่และความสัมพันธ์กับแบคทีเรีย ริบบิ้นสีมะกอกเข้มไหวสั่นไม่หยุดหย่อน เพียวเดียว ไม่รีบร้อน",
+      "สาหร่ายที่ยาวผิดปกติ เติบโตเป็นก้านเดี่ยวโดดเดี่ยวที่ห้อยลงจากเขตสนธยาสู่ขอบเหว ห่างไกลดวงอาทิตย์เกินกว่าจะสังเคราะห์แสง แต่ดำรงชีวิตด้วยสารที่ละลายอยู่และความสัมพันธ์กับแบคทีเรีย ริบบิ้นสีมะกอกเข้มพลิ้วไหวไม่หยุดหย่อน เดียวดาย ไม่รีบร้อน",
     collection: SpeciesCollection.AbyssalGarden,
   },
   {
@@ -434,7 +434,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "The Silk Whip is the twilight zone's most ethereal inhabitant — a sea whip coral whose single unbranched stalk rises more than a meter from the sediment, ending in a plume of feeding polyps fine as embroidery thread. The few specimens ever recovered dissolve upon reaching the surface, as if belonging entirely to the dark.",
     descriptionTH:
-      "ซิลค์วิปคือผู้อยู่อาศัยที่เหนือจริงที่สุดในเขตสนธยา เป็นปะการังแส้ทะเลก้านเดียวยาวกว่าหนึ่งเมตรจากตะกอน ลงท้ายด้วยพู่โพลิปจับอาหารละเอียดราวด้ายปัก ตัวอย่างน้อยนิดที่เคยถูกนำขึ้นมาจะละลายเมื่อถึงผิวน้ำ ราวกับเป็นของความมืดโดยสมบูรณ์",
+      "ซิลค์วิปคือผู้อยู่อาศัยที่เหนือโลกที่สุดในเขตสนธยา เป็นปะการังแส้ทะเลก้านเดียวยาวกว่าหนึ่งเมตรจากตะกอน ลงท้ายด้วยพู่โพลิปจับอาหารละเอียดราวด้ายปัก ตัวอย่างเพียงน้อยนิดที่เคยถูกนำขึ้นมาจะละลายเมื่อถึงผิวน้ำ ราวกับเป็นสิ่งที่เกิดมาเพื่อความมืดเท่านั้น",
     collection: SpeciesCollection.AbyssalGarden,
   },
   {
@@ -467,7 +467,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Named for the evening hour when religious orders ring their bells, the Vesper Frond is a fern-like alga that times its spore release to deep-water current cycles. Its fronds are a muted dusty violet — the color of twilight itself — carrying faint lines of bioluminescence that pulse at what the species designates as dusk.",
     descriptionTH:
-      'ตั้งชื่อตามชั่วโมงเย็นที่นักบวชตีระฆัง เวสเปอร์ฟรอนด์เป็นสาหร่ายคล้ายเฟิร์นที่กำหนดเวลาปล่อยสปอร์ตามวัฏจักรกระแสน้ำลึก ใบของมันเป็นสีม่วงหม่นมัว สีของยามสนธยา พร้อมเส้นเรืองแสงจางๆ ที่กะพริบตามที่มันกำหนดว่าเป็น "พลบค่ำ" โดยไม่สนว่ามีแสงอยู่ด้านบนหรือไม่',
+      'ตั้งชื่อตามยามสวดมนต์เย็นที่นักบวชตีระฆัง เวสเปอร์ฟรอนด์เป็นสาหร่ายคล้ายเฟิร์นที่กำหนดเวลาปล่อยสปอร์ตามวัฏจักรกระแสน้ำลึก ใบของมันเป็นสีม่วงหม่นมัว สีของยามสนธยา พร้อมเส้นเรืองแสงจางๆ ที่กะพริบตามที่มันกำหนดว่าเป็น "พลบค่ำ" โดยไม่คำนึงว่าจะมีแสงอยู่เบื้องบนหรือไม่',
     collection: SpeciesCollection.AbyssalGarden,
   },
   // ── Abyssal Garden — Batch 2 (Abyss) ─────────────────────────
@@ -479,7 +479,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "The Vent Shrub is a chemosynthetic bush that colonizes the edges of hydrothermal vents, where boiling mineral water meets the near-freezing abyss. Its compact, multi-branched form bristles with rigid mineral-encrusted stems of dark bronze and iron-grey — the colors of the earth's interior made visible.",
     descriptionTH:
-      "เวนต์ชรับเป็นพุ่มไม้เคมีสังเคราะห์ที่ตั้งรกรากบริเวณขอบปล่องน้ำร้อนใต้ทะเล ที่ซึ่งน้ำแร่เดือดพบกับก้นเหวใกล้จุดเยือกแข็ง รูปทรงกะทัดรัดหลายกิ่งแข็งทื่อเต็มไปด้วยก้านเคลือบแร่ธาตุสีบรอนซ์เข้มและเทาเหล็ก สีของภายในโลกที่ถูกทำให้มองเห็นได้",
+      "เวนต์ชรับเป็นพุ่มไม้เคมีสังเคราะห์ที่ตั้งรกรากบริเวณขอบปล่องน้ำร้อนใต้ทะเล ที่ซึ่งน้ำแร่เดือดพบกับน้ำเย็นยะเยือกของก้นเหว รูปทรงกะทัดรัดหลายกิ่งแข็งทื่อเต็มไปด้วยก้านเคลือบแร่ธาตุสีบรอนซ์เข้มและเทาเหล็ก สีของภายในโลกที่ถูกทำให้มองเห็นได้",
     collection: SpeciesCollection.AbyssalGarden,
   },
   {
@@ -523,7 +523,230 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "The oldest living organism yet catalogued in the abyss, believed to exist as a single continuous colony spanning several kilometers of abyssal plain. Its surface is a deep, otherworldly teal that shifts to dark gold at the margins, scattered with nodes of pure white bioluminescence, cold as starlight, steady as time itself.",
     descriptionTH:
-      "สิ่งมีชีวิตที่เก่าแก่ที่สุดที่เคยบันทึกไว้ในก้นเหว เชื่อกันว่าดำรงอยู่เป็นอาณานิคมต่อเนื่องเดี่ยวที่ครอบคลุมหลายกิโลเมตรของที่ราบก้นเหว พื้นผิวเป็นสีเขียวครามลึกที่เหนือโลก เปลี่ยนเป็นทองเข้มที่ขอบ กระจัดกระจายด้วยปุ่มเรืองแสงขาวบริสุทธิ์ เย็นดุจแสงดาว มั่นคงดุจกาลเวลา",
+      "สิ่งมีชีวิตที่เก่าแก่ที่สุดที่เคยบันทึกไว้ในก้นเหว เชื่อกันว่าดำรงอยู่เป็นอาณานิคมเดี่ยวอันไม่ขาดสายที่ครอบคลุมหลายกิโลเมตรของที่ราบก้นเหว พื้นผิวเป็นสีเขียวครามลึกที่เหนือโลก เปลี่ยนเป็นทองเข้มที่ขอบ โปรยด้วยปุ่มเรืองแสงขาวบริสุทธิ์ เย็นดุจแสงดาว มั่นคงดุจกาลเวลา",
+    collection: SpeciesCollection.AbyssalGarden,
+  },
+  // ── Abyssal Garden — Batch 3 (Shallow Reef) ──────────────────
+  {
+    id: 347,
+    folder: "siltribbon",
+    name: "Silt Ribbon",
+    rarity: "common",
+    descriptionEN:
+      "The Silt Ribbon is a narrow, blade-like seagrass that grows in great sweeping curtains over sandy reef slopes, each frond a single unbroken line from root to tip. Where shoaling light passes through a dense stand, the blades turn briefly gold before the current shifts.",
+    descriptionTH:
+      "ซิลต์ริบบิ้นเป็นหญ้าทะเลใบเรียวคล้ายใบมีด เติบโตเป็นม่านกวาดกว้างปกคลุมไหล่ทรายปะการัง แต่ละใบเป็นเส้นตรงไม่ขาดตั้งแต่รากถึงปลาย ยามแสงตื้นส่องผ่านกอหนาทึบ ใบจะเปลี่ยนเป็นสีทองชั่วครู่ก่อนที่กระแสน้ำจะเปลี่ยนทิศ",
+    collection: SpeciesCollection.AbyssalGarden,
+  },
+  {
+    id: 348,
+    folder: "flamepolyp",
+    name: "Flame Polyp",
+    rarity: "common",
+    descriptionEN:
+      "The Flame Polyp colonizes the uppermost faces of reef walls, each tiny individual extending scarlet and amber feeding tentacles that, in aggregate, make the stone appear to be on fire. At night the colony retracts entirely, leaving behind bare skeleton that by morning blazes again.",
+    descriptionTH:
+      "เฟลมโพลิปตั้งรกรากบนหน้าผาปะการังส่วนบนสุด แต่ละตัวเล็กๆ ยืดหนวดสีแดงและอำพันออกมา รวมกันแล้วทำให้หินดูราวกับกำลังลุกไหม้ ยามค่ำคืนอาณานิคมหดตัวจนสนิท ทิ้งไว้แต่โครงกระดูกโล่งๆ ที่รุ่งเช้าจะลุกโชติช่วงอีกครั้ง",
+    collection: SpeciesCollection.AbyssalGarden,
+  },
+  {
+    id: 349,
+    folder: "frothalga",
+    name: "Froth Algae",
+    rarity: "common",
+    descriptionEN:
+      "Froth Algae forms loose, cloud-like masses in shallow tide pools and reef edges, its tiny round cells aggregating into pale green foam. It exhales a continuous mist of oxygen bubbles that rise like champagne through the sunlit water column above.",
+    descriptionTH:
+      "ฟรอทแอลจีก่อตัวเป็นกลุ่มหลวมๆ คล้ายเมฆในแอ่งน้ำขึ้นลงและขอบปะการัง เซลล์กลมเล็กๆ รวมตัวกันเป็นฟองสีเขียวอ่อน มันพ่นละอองฟองออกซิเจนอย่างต่อเนื่องที่ลอยขึ้นดุจแชมเปญผ่านแนวน้ำที่แสงแดดส่องถึง",
+    collection: SpeciesCollection.AbyssalGarden,
+  },
+  {
+    id: 350,
+    folder: "stonelace",
+    name: "Stone Lace",
+    rarity: "common",
+    descriptionEN:
+      "Stone Lace is a coralline alga that encrusts dead reef substrate in thin sheets of calcified pink and mauve, following every contour of the rock it colonizes. It is the reef's patient plasterer, filling the gaps between living organisms with pale mineral color, turning ruin into garden.",
+    descriptionTH:
+      "สโตนเลซเป็นสาหร่ายหินปูนที่เคลือบพื้นผิวปะการังตายแล้วด้วยแผ่นบางๆ สีชมพูและม่วงอมแดง ตามทุกรอยโค้งเว้าของหินที่มันปกคลุม มันคือช่างฉาบปูนผู้อดทนของแนวปะการัง เติมช่องว่างระหว่างสิ่งมีชีวิตด้วยสีแร่ธาตุอ่อนๆ เปลี่ยนซากปรักหักพังให้เป็นสวน",
+    collection: SpeciesCollection.AbyssalGarden,
+  },
+  {
+    id: 351,
+    folder: "lacesponge",
+    name: "Lace Sponge",
+    rarity: "common",
+    descriptionEN:
+      "The Lace Sponge grows as a flat, open-structured sheet of interconnected tubes, its body more space than matter. Sunlight passes through its creamy-white skeleton in shifting geometric patterns, and the water it filters in a single day could fill a bathtub — without urgency, without pause.",
+    descriptionTH:
+      "ฟองน้ำลายลูกไม้เติบโตเป็นแผ่นแบนโครงสร้างเปิดของท่อเชื่อมต่อกัน ร่างกายมีช่องว่างมากกว่าสสาร แสงแดดส่องผ่านโครงกระดูกสีขาวครีมเป็นลวดลายเรขาคณิตที่เปลี่ยนแปลงอยู่เสมอ น้ำที่มันกรองในหนึ่งวันเติมอ่างอาบน้ำได้ — โดยไม่เร่งรีบ ไม่หยุดพัก",
+    collection: SpeciesCollection.AbyssalGarden,
+  },
+  {
+    id: 352,
+    folder: "coralwisp",
+    name: "Coral Wisp",
+    rarity: "rare",
+    descriptionEN:
+      "The Coral Wisp grows in single, impossibly thin filaments that spiral upward for nearly half a meter without branching, each colony a lone helix of pale gold rising from the reef floor like a question mark posed to the water above.",
+    descriptionTH:
+      "คอรัลวิสป์เติบโตเป็นเส้นใยเดี่ยวบางอย่างเหลือเชื่อ บิดเป็นเกลียวขึ้นไปเกือบครึ่งเมตรโดยไม่แตกกิ่ง แต่ละอาณานิคมเป็นเกลียวเดี่ยวสีทองอ่อนที่ผุดขึ้นจากพื้นปะการังดุจเครื่องหมายคำถามที่ตั้งไว้สำหรับผืนน้ำเบื้องบน",
+    collection: SpeciesCollection.AbyssalGarden,
+  },
+  {
+    id: 353,
+    folder: "glasswort",
+    name: "Glass Wort",
+    rarity: "common",
+    descriptionEN:
+      "Glass Wort is a succulent-like seaplant that stores silica in its swollen, glassy stems, giving them the appearance of sea-green crystal. The leaves are nearly invisible in water; only faint refraction lines betray their presence, like the edge of a windowpane submerged in a tide pool.",
+    descriptionTH:
+      "กลาสเวิร์ตเป็นพืชทะเลคล้ายอวบน้ำที่สะสมซิลิกาในลำต้นอวบอิ่มใสดุจแก้ว ทำให้ดูเหมือนคริสตัลสีเขียวทะเล ใบของมันแทบมองไม่เห็นในน้ำ มีแต่เส้นการหักเหแสงจางๆ บอกถึงการมีอยู่ ดุจขอบกระจกที่จมอยู่ในบ่อน้ำขึ้นลง",
+    collection: SpeciesCollection.AbyssalGarden,
+  },
+  // ── Abyssal Garden — Batch 3 (Twilight Zone) ─────────────────
+  {
+    id: 354,
+    folder: "duskfringe",
+    name: "Dusk Fringe",
+    rarity: "common",
+    descriptionEN:
+      "At the border where reef sunlight surrenders to the twilight zone, the Dusk Fringe grows in long, curtain-like formations of dusty rose and muted lavender. Each frond is edged in a slightly darker color, as if outlined by a careful hand against the failing light.",
+    descriptionTH:
+      "ที่ขอบซึ่งแสงแดดยอมจำนนต่อเขตสนธยา ดัสค์ฟรินจ์เติบโตเป็นม่านยาวสีชมพูขุ่นและลาเวนเดอร์หม่น แต่ละใบมีขอบสีเข้มกว่าเล็กน้อย ราวกับมีมือระมัดระวังวาดเส้นขอบไว้ต้านแสงที่จะดับ",
+    collection: SpeciesCollection.AbyssalGarden,
+  },
+  {
+    id: 355,
+    folder: "emberroot",
+    name: "Ember Root",
+    rarity: "common",
+    descriptionEN:
+      "The Ember Root is a rhizome-forming plant of the deep twilight, its underground runners spreading invisibly through sediment while only sparse dark orange-red fronds appear above. The color is anomalous for this depth — too warm, too alive — as if the roots have tapped into some buried fire far below.",
+    descriptionTH:
+      "เอมเบอร์รูทเป็นพืชสร้างเหง้าแห่งเขตสนธยาลึก รากใต้ดินแผ่ขยายล่องหนผ่านตะกอน ในขณะที่มีเพียงกระจุกใบสีส้มแดงเข้มเบาบางโผล่พ้นพื้น สีสันนั้นผิดปกติสำหรับความลึกขนาดนี้ อบอุ่นเกินไป มีชีวิตเกินไป ราวกับรากแตะถึงไฟที่ฝังอยู่ลึกลงไป",
+    collection: SpeciesCollection.AbyssalGarden,
+  },
+  {
+    id: 356,
+    folder: "hazewrack",
+    name: "Haze Wrack",
+    rarity: "common",
+    descriptionEN:
+      "Haze Wrack is a mid-water alga that releases a perpetual fine mist of microscopic reproductive cells, each tiny particle catching the scarce light of the twilight zone like floating dust in a cathedral. The plant itself is secondary to its cloud.",
+    descriptionTH:
+      "เฮซแร็คเป็นสาหร่ายกลางน้ำที่ปล่อยละอองเซลล์สืบพันธุ์จุลภาคอย่างต่อเนื่อง อนุภาคเล็กๆ แต่ละตัวจับแสงอันหายากของเขตสนธยาดุจฝุ่นลอยในมหาวิหาร ตัวพืชเองเป็นรอง — เป็นแค่ดอกจุดเล็กสีน้ำตาลที่ฐานของสิ่งที่สวยงามกว่ามาก",
+    collection: SpeciesCollection.AbyssalGarden,
+  },
+  {
+    id: 357,
+    folder: "paletendril",
+    name: "Pale Tendril",
+    rarity: "common",
+    descriptionEN:
+      "The Pale Tendril anchors a single pale-grey holdfast to submerged stone, then sends up long, wandering filaments that drift through the water column as if searching. They never tangle, never knot, each one finding its own space in the dim water as if aware of the others.",
+    descriptionTH:
+      "เพลเทนดริลยึดรากสีเทาอ่อนเพียงจุดเดียวบนหินใต้น้ำ แล้วส่งเส้นใยยาวพเนจรลอยขึ้นมาราวกับกำลังค้นหาบางสิ่ง พวกมันไม่เคยพันกัน ไม่เคยเป็นปม แต่ละเส้นหาพื้นที่ของตัวเองในน้ำมืดสลัวราวกับรับรู้ถึงกันและกัน",
+    collection: SpeciesCollection.AbyssalGarden,
+  },
+  {
+    id: 358,
+    folder: "waxcoral",
+    name: "Wax Coral",
+    rarity: "rare",
+    descriptionEN:
+      "The Wax Coral forms smooth, rounded mounds in the twilight zone whose surface has the texture and sheen of cooled candlewax — cream-colored, with faint amber undulations that catch even the dimmest light. Polyp openings are barely visible, so perfectly flush they seem like pores in a living stone.",
+    descriptionTH:
+      "แว็กซ์คอรัลก่อตัวเป็นเนินกลมเรียบในเขตสนธยา พื้นผิวมีเนื้อสัมผัสและประกายของไขเทียนที่เย็นตัวแล้ว สีครีมพร้อมคลื่นอำพันอ่อนๆ ที่สะท้อนแม้แสงริบหรี่ที่สุด รูเปิดโพลิปแทบมองไม่เห็น ราบเรียบจนดูเหมือนรูขุมขนในหินมีชีวิต",
+    collection: SpeciesCollection.AbyssalGarden,
+  },
+  {
+    id: 359,
+    folder: "threadgarden",
+    name: "Threadworm Garden",
+    rarity: "rare",
+    descriptionEN:
+      "Where sediment settles thick in the twilight zone, the Threadworm Garden raises dense forests of chemosynthetic tube worms whose feathery crown plumes fan wide in shades of cream, ivory, and pale violet. Each worm is a sovereign column, yet together they form a meadow of uncanny stillness.",
+    descriptionTH:
+      "ในที่ที่ตะกอนสะสมหนาในเขตสนธยา เธรดเวิร์มการ์เดนชูป่าหนาแน่นของหนอนท่อเคมีสังเคราะห์ที่มีพู่มงกุฎขนนกกางกว้างในเฉดสีครีม งาช้าง และม่วงอ่อน หนอนแต่ละตัวเป็นเสาเอกราช แต่รวมกันกลายเป็นทุ่งหญ้าแห่งความสงบที่น่าพิศวง",
+    collection: SpeciesCollection.AbyssalGarden,
+  },
+  {
+    id: 360,
+    folder: "smokefern",
+    name: "Smoke Fern",
+    rarity: "common",
+    descriptionEN:
+      "The Smoke Fern is named for its fronds, which are so finely divided they appear to dissolve at their edges rather than end — a fringe of grey-green that becomes haze rather than boundary. Each clump is its own soft explosion frozen at the moment of dispersal.",
+    descriptionTH:
+      "สโมกเฟิร์นได้ชื่อจากใบที่แตกแขนงละเอียดจนดูเหมือนละลายที่ขอบแทนที่จะสิ้นสุด เป็นริมสีเขียวอมเทาที่กลายเป็นหมอกมากกว่าเส้นขอบ แต่ละกอเป็นการระเบิดอ่อนที่แข็งค้างในขณะกระจายตัว",
+    collection: SpeciesCollection.AbyssalGarden,
+  },
+  // ── Abyssal Garden — Batch 3 (Abyss) ─────────────────────────
+  {
+    id: 361,
+    folder: "ventlily",
+    name: "Vent Lily",
+    rarity: "common",
+    descriptionEN:
+      "The Vent Lily grows in clusters around hydrothermal vents, its upturned trumpet-shaped fronds channeling superheated mineral water through its body as a lily might channel rain. Its fronds are the color of old iron — rust-brown and ochre — marked with mineral deposits that build into an intricate natural glaze.",
+    descriptionTH:
+      "เวนต์ลิลลี่เติบโตเป็นกระจุกรอบปล่องน้ำร้อนใต้ทะเล ใบทรงแตรคว่ำขึ้นนำน้ำแร่ร้อนจัดผ่านร่างกายดังที่ดอกลิลลี่อาจนำสายฝน ใบของมันเป็นสีเหล็กเก่า — สนิมน้ำตาลและเหลืองดิน — ประดับด้วยตะกอนแร่ที่ค่อยๆ สะสมเป็นเคลือบธรรมชาติอันซับซ้อน",
+    collection: SpeciesCollection.AbyssalGarden,
+  },
+  {
+    id: 362,
+    folder: "brinebloom",
+    name: "Brine Bloom",
+    rarity: "common",
+    descriptionEN:
+      "Brine pools — hypersaline lakes on the abyssal floor — host the Brine Bloom, a halophilic mat organism that forms concentric rings of dark teal and silver-white where brine meets open seawater. It is a living shoreline in a place where no shore should exist.",
+    descriptionTH:
+      "บ่อน้ำเกลือ — ทะเลสาบเกลือเข้มข้นที่ขังบนพื้นก้นเหวดุจผืนน้ำนิ่งที่เป็นไปไม่ได้ — เป็นบ้านของไบรน์บลูม สิ่งมีชีวิตแผ่นรักเกลือที่ก่อตัวเป็นวงแหวนซ้อนกันสีเขียวครามเข้มและขาวเงิน ณ จุดที่น้ำเกลือพบกับทะเลเปิด มันคือแนวชายฝั่งมีชีวิตในที่ที่ไม่ควรมีชายฝั่ง",
+    collection: SpeciesCollection.AbyssalGarden,
+  },
+  {
+    id: 363,
+    folder: "ossuaryfern",
+    name: "Ossuary Fern",
+    rarity: "rare",
+    descriptionEN:
+      "The Ossuary Fern colonizes the bones of whale falls, threading pale white fronds through the gaps of ancient skeletons. It is not a parasite but a companion, deriving energy from the slow sulfurous decomposition below while adorning the dead with something that looks, from a distance, like resurrection.",
+    descriptionTH:
+      "ออสชัวรีเฟิร์นตั้งรกรากบนกระดูกซากวาฬที่จมลงพื้นทะเล สอดใบสีขาวซีดผ่านช่องว่างของโครงกระดูกโบราณ มันไม่ใช่ปรสิตแต่เป็นเพื่อนร่วมทาง ดึงพลังงานจากการสลายตัวช้าๆ ของกำมะถันเบื้องล่าง พร้อมประดับผู้ล่วงลับด้วยสิ่งที่มองจากระยะไกลแล้วดูเหมือนการฟื้นคืนชีพ",
+    collection: SpeciesCollection.AbyssalGarden,
+  },
+  {
+    id: 364,
+    folder: "voidtendril",
+    name: "Void Tendril",
+    rarity: "common",
+    descriptionEN:
+      "The Void Tendril sends up a single black filament from abyssal sediment that narrows to invisibility at its tip. It produces no light and reflects none, removing itself from perception so thoroughly that researchers have bumped into specimens without seeing them. Life reduced to a line; a line reduced to nothing.",
+    descriptionTH:
+      "วอยด์เทนดริลส่งเส้นใยสีดำเส้นเดียวขึ้นจากตะกอนก้นเหว แคบลงจนมองไม่เห็นที่ปลาย มันไม่ผลิตแสงและไม่สะท้อนแสง ลบตัวเองจากการรับรู้อย่างสมบูรณ์จนนักวิจัยเคยชนตัวอย่างโดยไม่เห็น ชีวิตที่ถูกลดทอนเป็นเส้น เส้นที่ถูกลดทอนเป็นความว่างเปล่า",
+    collection: SpeciesCollection.AbyssalGarden,
+  },
+  {
+    id: 365,
+    folder: "meridiancoral",
+    name: "Meridian Coral",
+    rarity: "legendary",
+    descriptionEN:
+      "The Meridian Coral grows only at the exact base of hydrothermal plume columns, building a wall of bioluminescent skeleton precisely one organism thick, extending upward like a living fence between two worlds. Scientists have mapped fewer than a dozen; each one is oriented true north.",
+    descriptionTH:
+      "เมอริเดียนคอรัลเติบโตเฉพาะที่ฐานของเสาน้ำร้อนปล่องใต้ทะเลเท่านั้น สร้างกำแพงโครงกระดูกเรืองแสงหนาเพียงหนึ่งสิ่งมีชีวิต ทอดยาวขึ้นไปดุจรั้วมีชีวิตระหว่างสองโลก นักวิทยาศาสตร์ทำแผนที่ได้น้อยกว่าหนึ่งโหล และทุกตัวหันหน้าไปทางทิศเหนือแท้",
+    collection: SpeciesCollection.AbyssalGarden,
+  },
+  {
+    id: 366,
+    folder: "abyssalseraph",
+    name: "Abyssal Seraph",
+    rarity: "legendary",
+    descriptionEN:
+      "The deepest known multicellular organism in the ocean, the Abyssal Seraph forms symmetrical six-branched structures impossibly reminiscent of angelic iconography — though no sunlight has ever reached it. Each branch pulses with a slow wave of violet-gold bioluminescence, and a full colony in bloom is the closest thing the deep has to a cathedral.",
+    descriptionTH:
+      "สิ่งมีชีวิตหลายเซลล์ที่ทราบกันว่าอยู่ลึกที่สุดในมหาสมุทร อะบิสซอลเซราฟก่อตัวเป็นโครงสร้างหกแขนสมมาตรที่ชวนให้นึกถึงสัญลักษณ์ทูตสวรรค์อย่างเหลือเชื่อ แม้ไม่มีแสงแดดเคยส่องถึง แต่ละแขนเต้นเป็นคลื่นช้าของแสงเรืองม่วงทอง และอาณานิคมที่บานเต็มที่คือสิ่งที่ใกล้เคียงกับมหาวิหารมากที่สุดที่ทะเลลึกจะมีได้",
     collection: SpeciesCollection.AbyssalGarden,
   },
 ];
