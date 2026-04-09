@@ -2,62 +2,36 @@
 
 ---
 
-## 1. Crossbreeding (ผสมพันธุ์)
-
-เลือกสายพันธุ์ที่เก็บได้แล้ว 2 ชนิดมาผสมกัน ได้ต้นไม้ลูกผสม (hybrid) ที่หาไม่ได้จากการปลูกปกติ เช่น Sunleaf + Moonleaf = Eclipseleaf ผู้เล่นต้องทดลองผสมคู่ต่าง ๆ เอง เหมือนระบบ crafting แบบ discovery
-
 ## 2. Season & Event (ฤดูกาล)
 
 ระบบฤดูกาลหมุนเวียนตามเวลาจริง (เช่น ทุก 2 สัปดาห์) แต่ละฤดูมี limited-edition species ที่ดรอปเฉพาะช่วงนั้น พร้อม theme สีพื้นหลังและ banner ที่เปลี่ยนไป ใช้ `new Date()` เช็คช่วงเวลา hardcode season schedule ใน code
 
-## 4. Achievement & Quest (ภารกิจ)
+## 3. ระบบ Sprout farm
 
-ภารกิจรายวัน/รายสัปดาห์ เช่น "รดน้ำ 10 ครั้งวันนี้", "เก็บเกี่ยวต้นไม้ Rare 1 ต้น" พร้อม Achievement ถาวร เช่น "สะสม Common ครบ 100", "เก็บ Legendary ตัวแรก" ให้รางวัลเป็น bonus water drops หรือ cosmetic badges บน Florist Card
+ผลิต Sprout 100 sprouts/24hr ต้องมาเคลมเรื่อยๆ Max ที่ 100 ถ้าไม่เคลม
 
-## 6. Weather (สภาพอากาศ)
+## 5. Merge (รวมร่าง)
 
-สุ่มสภาพอากาศเปลี่ยนทุกวัน (แดด, ฝน, พายุ, หมอก) โดยใช้ date-based seed — ทุกคนเจอสภาพอากาศเดียวกันในวันเดียวกัน แต่ละสภาพอากาศมีผลต่อเกม:
+merge flora ซ้ำเพื่ออัพเกรด level ของ species นั้น ยิ่ง level สูงยิ่งดูมีอะไร เอาไปโชว์ใน Terrarium ได้ ทำให้ duplicate ไม่เสียเปล่าและมี progression per species
 
-- วันฝนตก → drop regen เร็วขึ้น 2x
-- วันแดดจัด → ต้นไม้โตเร็วขึ้น (รดน้ำ 1 ครั้งนับเป็น 2)
-- วันพายุ → drop rate ของ rare เพิ่มขึ้น
+## 6. Terrarium (ตู้จัดสวน)
 
-## 7. Compost & Fertilizer (ปุ๋ย)
+เลือก flora จาก collection มาจัดวางใน terrarium เป็น diorama ส่วนตัว โชว์ flora ที่ merge level สูงๆ ได้ แชร์เป็นรูปได้เหมือน Florist Card เป็น creative expression feature
+LV จะแบบมีเลขบอก กับสีขอบ,
+rarity ก็ส่งผล
 
-เก็บเกี่ยวต้นไม้ได้ "ใบไม้แห้ง" ตามความ rarity (common = 1, rare = 3, legendary = 10) สะสมแล้วแปลงเป็นปุ๋ยชนิดต่าง ๆ:
+## 7. Badge
 
-- Speed Fertilizer — ลดจำนวนน้ำที่ต้องรด
-- Lucky Fertilizer — เพิ่ม rare drop rate ต้นถัดไป
-- Golden Fertilizer — การันตี rare ขึ้นไป
+สะสม badge ตาม achievement ที่ทำได้ ไว้ตกแต่ง passport
 
-## 8. Flora Journal (สมุดบันทึก)
+## Passport Customization
 
-สมุดบันทึกอัตโนมัติที่จดทุก milestone สำคัญพร้อม timestamp เช่น "12 มี.ค. — เก็บ Legendary ตัวแรก: Cinderleaf", "25 มี.ค. — สะสมครบ 100 สายพันธุ์" ผู้เล่นเปิดอ่านย้อนหลังได้เหมือนไดอารี่ แชร์เป็นรูปได้เหมือน Florist Card
+- Show title จาก achievement ที่ทำได้
+- Show profile image (ต้นไม้ + Level)
+- Show badge
 
-## 11. Daily Login & Streak Bonus (รางวัลเข้าเกมรายวัน)
+ให้ user เลือก
 
-ระบบรางวัลสำหรับการเข้าเกมทุกวัน (ต่อยอดจาก streak ที่มีอยู่แล้ว):
+## New Rarity
 
-- **Daily Login Reward** — เข้าเกมแต่ละวันได้ bonus water drops (เช่น วันละ 3-5 drops)
-- **Streak Milestone Bonus** — เข้าติดต่อกันครบจำนวนวันที่กำหนดได้รางวัลพิเศษ:
-  - 7 วัน → bonus drops จำนวนมาก
-  - 14 วัน → Lucky Fertilizer (ถ้ามีระบบปุ๋ย)
-  - 30 วัน → การันตี rare species ครั้งถัดไป
-  - 100 วัน → cosmetic badge พิเศษบน Florist Card
-- **Streak Calendar UI** — ปฏิทินแสดงวันที่เข้าเกม เห็นภาพรวม streak ชัดเจน
-
-# New currency sprout 🌱
-- ได้เวลาเก็บเกี่ยวต้นไม้ โชว์ตอน Harvest Overlay
-common: 1, rare: 3, legendary: 10
-
-### Quest
-- ไว้ใช้ refresh quest -> 10 🌱 per 1 quest
-
-### Shop
-มีขายอะไรบ้าง?
-- 1 water drops = 1 🌱
-- Common Booster Pack 100 🌱 (common 80%, rare 15%, legendary 5%)
-- Rare Booster Pack 300 🌱 (common 30%, rare 60%, legendary 10%)
-- Legendary Booster Pack 1000 🌱 (common 5%, rare 45%, legendary 45%)
-
-Booster pack เวลาสุ่มก็ใช้ harvest overlay เหมือนเดิมก็ได้ แล้วก็ได้ใบไม้แห้งอะไรตามปกติถ้าซ้ำ
+Eternal - นิรันดร์
