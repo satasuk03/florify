@@ -190,8 +190,8 @@ export function GalleryView() {
 
   return (
     <div ref={scrollRef} onScroll={onScroll} className="relative min-h-full h-full overflow-y-auto bg-cream-50 safe-top safe-bottom px-4 pb-24 scrollbar-elegant">
-      {/* ── Header ──────────────────────────────────────────────── */}
-      <header className="flex items-center justify-between py-4 animate-fade-down">
+      {/* ── Header (sticky) ─────────────────────────────────────── */}
+      <header className="sticky top-0 z-20 flex items-center justify-between py-3 bg-cream-50/90 backdrop-blur-sm -mx-4 px-4 animate-fade-down">
         <Link
           href="/"
           className="w-10 h-10 flex items-center justify-center text-ink-700 hover:bg-cream-100 rounded-full transition-all duration-300 ease-out hover:-translate-x-0.5"
@@ -399,7 +399,7 @@ export function GalleryView() {
               <section key={group.collection}>
                 {/* Section header — hide if only one collection visible */}
                 {groupedByCollection.length > 1 && (
-                  <div className="sticky top-0 z-10 flex items-center gap-2 mb-3 py-2 bg-cream-50/90 backdrop-blur-sm -mx-4 px-4">
+                  <div className="sticky top-[52px] z-10 flex items-center gap-2 mb-3 py-2 bg-cream-50/90 backdrop-blur-sm -mx-4 px-4">
                     <h2 className="text-sm font-serif text-ink-800">{label.en}</h2>
                     <span className="text-[10px] text-ink-400 tabular-nums">
                       {countInGroup}/{collectionTotals.get(group.collection) ?? group.species.length}

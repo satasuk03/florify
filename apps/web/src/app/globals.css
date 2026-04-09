@@ -46,9 +46,9 @@
   --shadow-glow-rare:      0 0 32px rgba(122, 156, 184, 0.5);
   --shadow-glow-legendary: 0 0 48px rgba(212, 162, 76, 0.6);
 
-  /* Typography — next/font injects --font-sarabun / --font-fraunces via layout.tsx */
-  --font-sans: var(--font-sarabun), system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-serif: var(--font-fraunces), ui-serif, Georgia, serif;
+  /* Typography — next/font injects CSS variables via layout.tsx */
+  --font-sans: var(--font-plex-thai), system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-serif: var(--font-fraunces), var(--font-noto-serif-thai), ui-serif, Georgia, serif;
 }
 
 /* ─── Base layer ───────────────────────────────────────────────── */

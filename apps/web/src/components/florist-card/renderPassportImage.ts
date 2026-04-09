@@ -186,12 +186,12 @@ function drawCorner(ctx: CanvasRenderingContext2D, op: Extract<DrawOp, { type: '
 function canvasFontFamily(family: 'serif' | 'sans' | 'mono'): string {
   // Next/font exposes the computed font via CSS variables. Canvas 2D
   // can't read CSS variables directly — we fall back to explicit names
-  // that match what Fraunces/Sarabun load under.
+  // that match what the Google Fonts load under.
   switch (family) {
     case 'serif':
-      return "'Fraunces', ui-serif, Georgia, serif";
+      return "'Fraunces', 'Noto Serif Thai', ui-serif, Georgia, serif";
     case 'sans':
-      return "'Sarabun', system-ui, sans-serif";
+      return "'IBM Plex Sans Thai Looped', system-ui, sans-serif";
     case 'mono':
       return "ui-monospace, 'SF Mono', Menlo, monospace";
   }

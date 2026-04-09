@@ -1,5 +1,9 @@
 import type { Metadata, Viewport } from "next";
-import { Fraunces, Sarabun } from "next/font/google";
+import {
+  Fraunces,
+  IBM_Plex_Sans_Thai_Looped,
+  Noto_Serif_Thai,
+} from "next/font/google";
 import { StoreHydrator } from "@/store/StoreHydrator";
 import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistration";
 import { RecoveryGesture } from "@/components/RecoveryGesture";
@@ -8,11 +12,18 @@ import { MobileFrame } from "@/components/MobileFrame";
 import { SPECIES } from "@/data/species";
 import "./globals.css";
 
-const sarabun = Sarabun({
+const plexThaiLooped = IBM_Plex_Sans_Thai_Looped({
   subsets: ["latin", "thai"],
   weight: ["400", "500", "600", "700"],
   display: "swap",
-  variable: "--font-sarabun",
+  variable: "--font-plex-thai",
+});
+
+const notoSerifThai = Noto_Serif_Thai({
+  subsets: ["thai"],
+  weight: ["500", "600", "700"],
+  display: "swap",
+  variable: "--font-noto-serif-thai",
 });
 
 const fraunces = Fraunces({
@@ -125,7 +136,7 @@ export default function RootLayout({
   return (
     <html
       lang="th"
-      className={`${sarabun.variable} ${fraunces.variable} h-full antialiased`}
+      className={`${plexThaiLooped.variable} ${notoSerifThai.variable} ${fraunces.variable} h-full antialiased`}
     >
       <body className="min-h-full bg-cream-50 md:bg-cream-200 text-ink-900">
         <StoreHydrator />

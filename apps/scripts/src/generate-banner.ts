@@ -103,7 +103,7 @@ Options:
   const buf = Buffer.from(await res.arrayBuffer());
 
   await mkdir(dirname(opts.output), { recursive: true });
-  await sharp(buf).webp({ quality: 90 }).toFile(opts.output);
+  await sharp(buf).webp({ quality: 75 }).toFile(opts.output);
 
   console.log(`Saved: ${opts.output}`);
 }
