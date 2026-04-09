@@ -8,16 +8,23 @@
  * Confetti uses warm orange / yellow / red palette and tumbles as it
  * flies outward, giving a celebratory feel on rapid watering combos.
  *
- * Keyed on `tapKey` by the parent so each tap remounts everything
- * and replays the animations from scratch.
+ * Layers accumulate: each tap adds a new confetti layer while previous
+ * layers keep playing. Each layer self-destructs after its animation
+ * finishes. Only the combo number replaces on each tap.
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface Props {
   combo: number;
-  /** Monotonic key — parent increments on each tap to force remount. */
+  /** Monotonic key — parent increments on each tap. */
   tapKey: number;
+}
+
+interface Layer {
+  id: number;
+  combo: number;
+  seed: number;
 }
 
 const PALETTE = [
@@ -60,67 +67,37 @@ function shapeStyle(shape: Shape, size: number) {
   }
 }
 
-const SELF_DESTRUCT_MS = 1100;
+/** How long a single confetti layer lives before self-destructing. */
+const LAYER_TTL_MS = 1100;
 
-export function ComboBurst({ combo, tapKey }: Props) {
-  const [alive, setAlive] = useState(true);
+// ── Single confetti layer (self-destructs) ─────────────────────
+
+function ConfettiLayer({ combo, seed, onDone }: { combo: number; seed: number; onDone: () => void }) {
   useEffect(() => {
-    const id = setTimeout(() => setAlive(false), SELF_DESTRUCT_MS);
+    const id = setTimeout(onDone, LAYER_TTL_MS);
     return () => clearTimeout(id);
-  }, []);
-  if (!alive || combo < 2) return null;
+  }, [onDone]);
 
-  const rand = seededRandom(tapKey * 7 + combo);
+  const rand = seededRandom(seed);
   const pick = <T,>(arr: readonly T[]) => arr[Math.floor(rand() * arr.length)]!;
 
-  // Scale particle count with combo: 4 at combo 2, up to 18 at high combos
   const particleCount = Math.min(4 + Math.floor((combo - 2) * 1.1), 18);
-
-  // Sparkle count at higher combos
   const sparkleCount = combo >= 6 ? Math.min(Math.floor((combo - 4) * 0.8), 8) : 0;
-
-  // 5 tiers: 1-3 / 4-7 / 8-11 / 12-15 / 16+
-  const fontSize = combo >= 16 ? 64 : combo >= 12 ? 56 : combo >= 8 ? 48 : combo >= 4 ? 40 : 32;
-  const numColor = combo >= 16 ? '#d03020' : combo >= 12 ? '#d84020' : combo >= 8 ? '#e07030' : combo >= 4 ? '#c08050' : '#b09070';
-
-  // Particles scatter wider at higher combos
   const scatter = Math.min(60 + combo * 9, 200);
-
-  // Random spawn spread — particles start from different spots, not one center
   const spawnSpread = 40;
 
   return (
-    <div
-      aria-hidden
-      className="absolute left-1/2 -translate-x-1/2 pointer-events-none z-50 overflow-visible"
-      style={{ bottom: '100%', marginBottom: '12px', width: '300px', height: '180px' }}
-    >
-      {/* Combo number */}
-      <span
-        key={`num-${tapKey}`}
-        className="absolute left-1/2 -translate-x-1/2 font-serif font-bold tabular-nums select-none"
-        style={{
-          fontSize: `${fontSize}px`,
-          color: numColor,
-          textShadow: '0 1px 4px rgba(180,100,50,0.3)',
-          animation: 'combo-num-pop 550ms cubic-bezier(.22,.68,.36,1.15) both',
-        }}
-      >
-        {combo}x
-      </span>
-
-      {/* Confetti particles — warm-colored shapes tumbling outward */}
+    <>
       {Array.from({ length: particleCount }, (_, i) => {
         const angle = rand() * Math.PI * 2;
         const dist = scatter * (0.45 + rand() * 0.55);
         const dx = Math.cos(angle) * dist;
-        const dy = Math.sin(angle) * dist - 30; // bias upward
+        const dy = Math.sin(angle) * dist - 30;
         const size = 9 + rand() * (combo >= 12 ? 10 : combo >= 6 ? 7 : 5);
-        const delay = rand() * 180; // wider stagger
+        const delay = rand() * 180;
         const color = pick(PALETTE);
         const shape = pick(SHAPES);
         const rot = (rand() - 0.5) * 720;
-        // Random spawn offset so particles don't all originate from center
         const ox = (rand() - 0.5) * spawnSpread;
         const oy = (rand() - 0.5) * spawnSpread * 0.6;
 
@@ -131,7 +108,7 @@ export function ComboBurst({ combo, tapKey }: Props) {
             style={{
               ...shapeStyle(shape, size),
               background: color,
-              boxShadow: `0 1px 3px rgba(0,0,0,0.15), inset 0 1px 1px rgba(255,255,255,0.3)`,
+              boxShadow: '0 1px 3px rgba(0,0,0,0.15), inset 0 1px 1px rgba(255,255,255,0.3)',
               ['--cox' as string]: `${ox}px`,
               ['--coy' as string]: `${oy}px`,
               ['--cdx' as string]: `${dx}px`,
@@ -143,7 +120,6 @@ export function ComboBurst({ combo, tapKey }: Props) {
         );
       })}
 
-      {/* Tiny sparkle dots at high combos */}
       {Array.from({ length: sparkleCount }, (_, i) => {
         const angle = rand() * Math.PI * 2;
         const dist = scatter * 0.7 * (0.3 + rand() * 0.7);
@@ -171,6 +147,64 @@ export function ComboBurst({ combo, tapKey }: Props) {
           />
         );
       })}
+    </>
+  );
+}
+
+// ── Main component: accumulates layers, only number replaces ───
+
+export function ComboBurst({ combo, tapKey }: Props) {
+  const [layers, setLayers] = useState<Layer[]>([]);
+  const prevTapKey = useRef(-1);
+
+  // Each new tapKey adds a layer
+  useEffect(() => {
+    if (tapKey !== prevTapKey.current && combo >= 2) {
+      prevTapKey.current = tapKey;
+      setLayers((prev) => [...prev, { id: tapKey, combo, seed: tapKey * 7 + combo }]);
+    }
+  }, [tapKey, combo]);
+
+  const removeLayer = (id: number) =>
+    setLayers((prev) => prev.filter((l) => l.id !== id));
+
+  if (combo < 2 && layers.length === 0) return null;
+
+  // Number styling — always shows latest combo
+  const fontSize = combo >= 16 ? 64 : combo >= 12 ? 56 : combo >= 8 ? 48 : combo >= 4 ? 40 : 32;
+  const numColor = combo >= 16 ? '#d03020' : combo >= 12 ? '#d84020' : combo >= 8 ? '#e07030' : combo >= 4 ? '#c08050' : '#b09070';
+
+  return (
+    <div
+      aria-hidden
+      className="absolute left-1/2 -translate-x-1/2 pointer-events-none z-50 overflow-visible"
+      style={{ bottom: '100%', marginBottom: '12px', width: '300px', height: '180px' }}
+    >
+      {/* Combo number — replaces each tap */}
+      {combo >= 2 && (
+        <span
+          key={`num-${tapKey}`}
+          className="absolute left-1/2 -translate-x-1/2 font-serif font-bold tabular-nums select-none"
+          style={{
+            fontSize: `${fontSize}px`,
+            color: numColor,
+            textShadow: '0 1px 4px rgba(180,100,50,0.3)',
+            animation: 'combo-num-pop 550ms cubic-bezier(.22,.68,.36,1.15) both',
+          }}
+        >
+          {combo}x
+        </span>
+      )}
+
+      {/* Confetti layers — each tap adds one, each self-destructs */}
+      {layers.map((l) => (
+        <ConfettiLayer
+          key={l.id}
+          combo={l.combo}
+          seed={l.seed}
+          onDone={() => removeLayer(l.id)}
+        />
+      ))}
     </div>
   );
 }
