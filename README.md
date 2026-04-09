@@ -1,43 +1,119 @@
 # Florify
 
-Mobile-first web game: plant, water, and collect flora.
+**เกมปลูกต้นไม้สุดชิล เล่นผ่านเบราว์เซอร์ได้เลย ไม่ต้องโหลดแอป**
 
-Play online: <https://florify.zeze.app/>
+เล่นฟรีที่ https://florify.zeze.app/
 
-## Structure
+---
 
-This is a pnpm monorepo.
+## เล่นยังไง?
+
+วนลูปง่าย ๆ 3 ขั้นตอน:
+
+1. **ปลูก** — สุ่มต้นไม้มา 1 ต้น (มีให้สะสมกว่า 300 สายพันธุ์)
+2. **รดน้ำ** — ใช้หยดน้ำรดจนต้นไม้โตเต็มที่ ผ่าน 3 ระยะ (กล้า → เติบโต → โตเต็มวัย)
+3. **เก็บเกี่ยว** — เก็บเข้าคอลเลกชัน แล้วปลูกต้นใหม่ได้เลย
+
+ต้นไม้ทุกต้นเป็น **3D** หมุนดูรอบได้ ซูมได้ และไม่มีต้นไหนเหมือนกันเลย
+
+---
+
+## ระบบในเกม
+
+### หยดน้ำ
+- เก็บได้สูงสุด 50 หยด
+- ฟื้นฟูอัตโนมัติ 1 หยดทุก 2 นาที
+- รดน้ำ 1 ครั้ง ใช้ 1 หยด
+- ต้นไม้แต่ละต้นต้องการ 12-25 หยด
+
+### ระดับความหายาก
+| ระดับ | โอกาสดรอป | จำนวนสายพันธุ์ |
+|-------|-----------|---------------|
+| **Common** | 80% | 200 |
+| **Rare** | 16% | 80 |
+| **Legendary** | 4% | 22+ |
+
+### คอลเลกชัน
+- **Original** — 300 สายพันธุ์หลัก
+- **Chinese Garden** — คอลเลกชันพิเศษ
+- **Abyssal Garden** — คอลเลกชันพิเศษ
+- (เพิ่มเรื่อย ๆ ในอนาคต)
+
+---
+
+## ฟีเจอร์เด่น
+
+### Floripedia — สารานุกรมพรรณไม้
+ค้นหาและเรียกดูสายพันธุ์ทั้งหมดได้ แต่ละชนิดมี **เรื่องเล่าเป็นบทกวี** ทั้งภาษาไทยและอังกฤษ กรองตามความหายาก, คอลเลกชัน, หรือสถานะที่ปลดล็อกแล้ว/ยังไม่ได้
+
+### ภารกิจประจำวัน
+วันละ 5 ภารกิจ เช่น รดน้ำ X ครั้ง, เก็บเกี่ยวต้นไม้ Rare, ทำ Combo ถึง 15 — ทำครบรับ **เมล็ด (Sprouts)** เป็นรางวัล
+
+### ความสำเร็จ (Achievements)
+ปลดล็อกตามเป้าหมายต่าง ๆ เช่น สะสมครบ 150 สายพันธุ์, เก็บเกี่ยว 1,000 ครั้ง, Streak 30 วัน — แต่ละอันให้เมล็ดเป็นรางวัล
+
+### Streak — เข้าเกมต่อเนื่อง
+เช็คอินทุกวันเพื่อรักษา Streak และรับโบนัสหยดน้ำ
+
+### Combo — เก็บเกี่ยวต่อเนื่อง
+เก็บเกี่ยวติดต่อกันเพื่อสะสม Combo รับรางวัลพิเศษ
+
+### ร้านค้า — Booster Pack
+ใช้เมล็ดซื้อ Booster Pack 3 ระดับ เพิ่มโอกาสได้สายพันธุ์ Rare และ Legendary
+
+### Pity System
+สะสมดรอปซ้ำเป็น **ใบไม้แห้ง** — ถึงเกณฑ์แล้วการันตีได้สายพันธุ์ใหม่ ไม่ต้องกลัวดวงไม่ดี
+
+### Florist Card — บัตรนักจัดสวน
+บัตรส่วนตัวแสดงแร็งค์, จำนวนสายพันธุ์, Streak, จำนวนเก็บเกี่ยว — **แชร์เป็นรูปไปโซเชียลได้เลย**
+
+---
+
+## ระดับแร็งค์
+
+| แร็งค์ | สายพันธุ์ที่สะสม |
+|--------|-----------------|
+| Seedling | 0 – 20 |
+| Apprentice | 21 – 60 |
+| Gardener | 61 – 120 |
+| Master | 121 – 240 |
+| Legend | 241 – 305 |
+
+---
+
+## รองรับ 2 ภาษา
+
+สลับไทย/อังกฤษได้ทันทีในเกม ทั้ง UI และเรื่องเล่าของต้นไม้ทุกชนิด
+
+---
+
+## เล่นได้บนอะไร?
+
+- เล่นผ่าน **เบราว์เซอร์** ได้เลย ไม่ต้องโหลด ไม่ต้องสมัคร
+- ออกแบบมาสำหรับ **มือถือเป็นหลัก** แต่เล่นบน Desktop ได้
+- **ฟรี 100%** ไม่มีโฆษณา ไม่มี in-app purchase
+
+---
+
+## สำหรับนักพัฒนา
 
 ```
 florify/
 ├── apps/
-│   ├── web/          # Next.js 16 game (the Florify client)
-│   └── scripts/      # Offline tooling (e.g. xAI flora image generation)
+│   ├── web/          # ตัวเกมหลัก (Next.js)
+│   └── scripts/      # เครื่องมือสร้างรูปต้นไม้
 ├── packages/
-│   └── shared/       # Shared TS types + constants (reused by future backend)
-└── designs/          # Design docs (steps 00–11)
+│   └── shared/       # Type และค่าคงที่ที่ใช้ร่วมกัน
+└── designs/          # เอกสารออกแบบ
 ```
-
-A future `apps/api` (Cloudflare Workers + D1) will be added for cloud sync — see `designs/10-cloud-sync.md`.
-
-## Getting started
-
-Requires Node.js 20+ and pnpm 9+.
 
 ```bash
 pnpm install
-pnpm dev          # starts apps/web on http://localhost:3000
+pnpm dev              # เปิดเกมที่ http://localhost:3000
+pnpm build            # build ทุก workspace
+pnpm typecheck        # ตรวจ type
+pnpm lint             # ตรวจ lint
+pnpm test             # รัน test
 ```
 
-Other scripts:
-
-```bash
-pnpm build        # build every workspace
-pnpm typecheck    # type-check every workspace
-pnpm lint         # lint every workspace
-pnpm test         # run tests in every workspace
-```
-
-## Docs
-
-Implementation is staged across `designs/01-project-setup.md` → `designs/11-florist-card.md`. Start with `designs/00-overview.md`.
+ต้องการ Node.js 20+ และ pnpm 9+
