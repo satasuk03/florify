@@ -45,6 +45,9 @@ export async function shareSpecies(
   try {
     const url = buildSpeciesUrl(speciesId, harvest);
 
+    // Always copy the link to clipboard
+    await copyText(url);
+
     if (canShareUrl()) {
       try {
         await navigator.share({ url, title: copy.title, text: copy.text });
@@ -53,7 +56,7 @@ export async function shareSpecies(
         if (err instanceof DOMException && err.name === 'AbortError') {
           return { kind: 'cancelled' };
         }
-        // Any other share failure → fall through to clipboard.
+        // Any other share failure → fall through to clipboard result.
       }
     }
 

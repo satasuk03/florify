@@ -43,14 +43,8 @@ export function FloristCardIcon({ size = 22, className }: IconProps) {
       className={className}
       aria-hidden
     >
-      <rect x="4" y="3" width="16" height="18" rx="2" />
-      <circle cx="12" cy="10" r="1.6" />
-      <path d="M12 6.5 A2.2 2.2 0 0 1 14.2 8.7" />
-      <path d="M12 6.5 A2.2 2.2 0 0 0 9.8 8.7" />
-      <path d="M15.5 10 A2.2 2.2 0 0 1 13.3 12.2" />
-      <path d="M8.5 10 A2.2 2.2 0 0 0 10.7 12.2" />
-      <path d="M8 16 H16" />
-      <path d="M8 18.5 H13" />
+      <circle cx="12" cy="8" r="4" />
+      <path d="M20 21a8 8 0 0 0-16 0" />
     </svg>
   );
 }
