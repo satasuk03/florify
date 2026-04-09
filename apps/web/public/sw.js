@@ -1,14 +1,13 @@
-// Florify Service Worker v1
-const CACHE_NAME = "florify-v1";
-const STATIC_CACHE = "florify-static-v1";
-const FLORA_CACHE = "florify-flora-v1";
+// Florify Service Worker v2
+const CACHE_NAME = "florify-v2";
+const STATIC_CACHE = "florify-static-v2";
+const FLORA_CACHE = "florify-flora-v2";
 
 const APP_SHELL = [
   "/",
   "/gallery/",
   "/floripedia/",
   "/settings/",
-  "/recovery/",
   "/manifest.webmanifest",
   "/icons/icon-192.png",
   "/icons/icon-512.png",
