@@ -84,7 +84,9 @@ function ConfettiLayer({ combo, seed, onDone }: { combo: number; seed: number; o
   const particleCount = Math.min(4 + Math.floor((combo - 2) * 1.1), 18);
   const sparkleCount = combo >= 6 ? Math.min(Math.floor((combo - 4) * 0.8), 8) : 0;
   const scatter = Math.min(60 + combo * 9, 200);
-  const spawnSpread = 40;
+  // Spawn area — not too tight, not too wide
+  const spawnX = Math.min(30 + combo * 2, 55);
+  const spawnY = Math.min(30 + combo * 2, 55);
 
   return (
     <>
@@ -98,8 +100,8 @@ function ConfettiLayer({ combo, seed, onDone }: { combo: number; seed: number; o
         const color = pick(PALETTE);
         const shape = pick(SHAPES);
         const rot = (rand() - 0.5) * 720;
-        const ox = (rand() - 0.5) * spawnSpread;
-        const oy = (rand() - 0.5) * spawnSpread * 0.6;
+        const ox = (rand() - 0.5) * spawnX;
+        const oy = (rand() - 0.5) * spawnY;
 
         return (
           <span
@@ -126,8 +128,8 @@ function ConfettiLayer({ combo, seed, onDone }: { combo: number; seed: number; o
         const dx = Math.cos(angle) * dist;
         const dy = Math.sin(angle) * dist - 20;
         const delay = rand() * 200;
-        const ox = (rand() - 0.5) * spawnSpread * 0.6;
-        const oy = (rand() - 0.5) * spawnSpread * 0.4;
+        const ox = (rand() - 0.5) * spawnX * 0.7;
+        const oy = (rand() - 0.5) * spawnY * 0.6;
 
         return (
           <span
@@ -188,7 +190,12 @@ export function ComboBurst({ combo, tapKey }: Props) {
           style={{
             fontSize: `${fontSize}px`,
             color: numColor,
-            textShadow: '0 1px 4px rgba(180,100,50,0.3)',
+            textShadow: `
+              -1px -1px 0 rgba(251,248,243,0.35),
+               1px -1px 0 rgba(251,248,243,0.35),
+              -1px  1px 0 rgba(251,248,243,0.35),
+               1px  1px 0 rgba(251,248,243,0.35),
+               0    2px 4px rgba(180,100,50,0.3)`,
             animation: 'combo-num-pop 550ms cubic-bezier(.22,.68,.36,1.15) both',
           }}
         >
