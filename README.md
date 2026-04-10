@@ -10,7 +10,7 @@ Play free at https://florify.zeze.app/
 
 A simple 3-step loop:
 
-1. **Plant** — Get a random tree (400+ species to collect)
+1. **Plant** — Get a random tree (405 species to collect)
 2. **Water** — Spend water drops to grow it through 3 stages (seedling → young → mature)
 3. **Harvest** — Add it to your collection and plant the next one
 
@@ -29,9 +29,9 @@ Every tree is rendered in **3D** — spin it around, zoom in, and no two trees a
 ### Rarity Tiers
 | Tier | Drop Rate | Species Count |
 |------|-----------|---------------|
-| **Common** | 80% | 265 |
-| **Rare** | 16% | 107 |
-| **Legendary** | 4% | 33 |
+| **Common** | 90% | 265 |
+| **Rare** | 7% | 107 |
+| **Legendary** | 3% | 33 |
 
 ### Collections
 - **Original** — The main species pool
@@ -63,6 +63,9 @@ Spend Sprouts on 3 tiers of Booster Packs for better odds at Rare and Legendary 
 
 ### Pity System
 Duplicate harvests earn **Dried Leaves** — hit the threshold and you're guaranteed a new species. No more bad luck streaks.
+
+### Idle Factory — Auto Rewards
+An idle reward machine that fills up over **24 hours** even while the game is closed. Tap **Claim** once to grab both **Sprouts** 🌱 and **Water Drops** 💧 in a single press. Two independent upgrade tracks (Sprout & Water) — level each one up to **Lv 11** to boost yield per cycle.
 
 ### Florist Card — Your Gardener Passport
 A personal card showing your rank, species count, Streak, and harvest total — **export it as an image and share on social media.**
