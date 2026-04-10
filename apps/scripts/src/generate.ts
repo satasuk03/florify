@@ -110,7 +110,7 @@ async function runTask(
     const url = await generateImage(task.prompt);
     const buf = await downloadToBuffer(url);
     await mkdir(dirname(task.outputPath), { recursive: true });
-    await sharp(buf).webp({ quality: 90 }).toFile(task.outputPath);
+    await sharp(buf).webp({ quality: 75 }).toFile(task.outputPath);
   };
 
   try {

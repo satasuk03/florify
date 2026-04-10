@@ -7,6 +7,6 @@ import type { BoosterTier, Rarity } from '@florify/shared';
  */
 export const BOOSTER_ROLL_WEIGHTS: Record<BoosterTier, Record<Rarity, number>> = {
   common:    { common: 0.80, rare: 0.15, legendary: 0.05 },
-  rare:      { common: 0.30, rare: 0.60, legendary: 0.10 },
-  legendary: { common: 0.05, rare: 0.45, legendary: 0.45 },
+  rare:      { common: 0.00, rare: 0.68, legendary: 0.32 },
+  legendary: { common: 0.00, rare: 0.30, legendary: 0.70 },
 };

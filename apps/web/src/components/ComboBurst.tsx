@@ -1,21 +1,46 @@
 'use client';
 
 /**
- * Combo counter burst — pops a number + scattering droplet particles
+ * Combo counter burst — pops a number + scattering confetti particles
  * above the water button on rapid taps. Intensity scales with the
  * combo count: more particles, bigger number, wilder scatter.
  *
- * Keyed on `tapKey` by the parent so each tap remounts everything
- * and replays the animations from scratch.
+ * Confetti uses warm orange / yellow / red palette and tumbles as it
+ * flies outward, giving a celebratory feel on rapid watering combos.
+ *
+ * Layers accumulate: each tap adds a new confetti layer while previous
+ * layers keep playing. Each layer self-destructs after its animation
+ * finishes. Only the combo number replaces on each tap.
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface Props {
   combo: number;
-  /** Monotonic key — parent increments on each tap to force remount. */
+  /** Monotonic key — parent increments on each tap. */
   tapKey: number;
 }
+
+interface Layer {
+  id: number;
+  combo: number;
+  seed: number;
+}
+
+const PALETTE = [
+  '#E8590C', // deep orange
+  '#F76707', // orange
+  '#FF922B', // light orange
+  '#FCC419', // yellow
+  '#FFD43B', // light yellow
+  '#E03131', // red
+  '#F03E3E', // light red
+  '#D9480F', // burnt orange
+];
+
+/** Confetti shape variants for visual variety */
+const SHAPES = ['rect', 'square', 'circle', 'strip'] as const;
+type Shape = (typeof SHAPES)[number];
 
 /** Seeded pseudo-random so particles are stable across strict-mode
  *  double-renders. Uses a simple mulberry32 PRNG. */
@@ -29,73 +54,164 @@ function seededRandom(seed: number) {
   };
 }
 
-const SELF_DESTRUCT_MS = 900;
+function shapeStyle(shape: Shape, size: number) {
+  switch (shape) {
+    case 'rect':
+      return { width: `${size}px`, height: `${size * 0.55}px`, borderRadius: '2px' };
+    case 'square':
+      return { width: `${size * 0.7}px`, height: `${size * 0.7}px`, borderRadius: '2px' };
+    case 'circle':
+      return { width: `${size * 0.65}px`, height: `${size * 0.65}px`, borderRadius: '50%' };
+    case 'strip':
+      return { width: `${size * 1.1}px`, height: `${size * 0.3}px`, borderRadius: '1px' };
+  }
+}
+
+/** How long a single confetti layer lives before self-destructing. */
+const LAYER_TTL_MS = 1100;
+
+// ── Single confetti layer (self-destructs) ─────────────────────
+
+function ConfettiLayer({ combo, seed, onDone }: { combo: number; seed: number; onDone: () => void }) {
+  useEffect(() => {
+    const id = setTimeout(onDone, LAYER_TTL_MS);
+    return () => clearTimeout(id);
+  }, [onDone]);
+
+  const rand = seededRandom(seed);
+  const pick = <T,>(arr: readonly T[]) => arr[Math.floor(rand() * arr.length)]!;
+
+  const particleCount = Math.min(4 + Math.floor((combo - 2) * 1.1), 18);
+  const sparkleCount = combo >= 6 ? Math.min(Math.floor((combo - 4) * 0.8), 8) : 0;
+  const scatter = Math.min(60 + combo * 9, 200);
+  // Spawn area — not too tight, not too wide
+  const spawnX = Math.min(30 + combo * 2, 55);
+  const spawnY = Math.min(30 + combo * 2, 55);
+
+  return (
+    <>
+      {Array.from({ length: particleCount }, (_, i) => {
+        const angle = rand() * Math.PI * 2;
+        const dist = scatter * (0.45 + rand() * 0.55);
+        const dx = Math.cos(angle) * dist;
+        const dy = Math.sin(angle) * dist - 30;
+        const size = 9 + rand() * (combo >= 12 ? 10 : combo >= 6 ? 7 : 5);
+        const delay = rand() * 180;
+        const color = pick(PALETTE);
+        const shape = pick(SHAPES);
+        const rot = (rand() - 0.5) * 720;
+        const ox = (rand() - 0.5) * spawnX;
+        const oy = (rand() - 0.5) * spawnY;
+
+        return (
+          <span
+            key={i}
+            className="absolute left-1/2 top-0"
+            style={{
+              ...shapeStyle(shape, size),
+              background: color,
+              boxShadow: '0 1px 3px rgba(0,0,0,0.15), inset 0 1px 1px rgba(255,255,255,0.3)',
+              ['--cox' as string]: `${ox}px`,
+              ['--coy' as string]: `${oy}px`,
+              ['--cdx' as string]: `${dx}px`,
+              ['--cdy' as string]: `${dy}px`,
+              ['--crot' as string]: `${rot}deg`,
+              animation: `combo-confetti-fly 750ms cubic-bezier(.2,.7,.3,1) ${delay}ms both`,
+            }}
+          />
+        );
+      })}
+
+      {Array.from({ length: sparkleCount }, (_, i) => {
+        const angle = rand() * Math.PI * 2;
+        const dist = scatter * 0.7 * (0.3 + rand() * 0.7);
+        const dx = Math.cos(angle) * dist;
+        const dy = Math.sin(angle) * dist - 20;
+        const delay = rand() * 200;
+        const ox = (rand() - 0.5) * spawnX * 0.7;
+        const oy = (rand() - 0.5) * spawnY * 0.6;
+
+        return (
+          <span
+            key={`sp-${i}`}
+            className="absolute left-1/2 top-0 rounded-full"
+            style={{
+              width: '5px',
+              height: '5px',
+              background: 'radial-gradient(circle, #FCC419 0%, #FCC41900 70%)',
+              ['--cox' as string]: `${ox}px`,
+              ['--coy' as string]: `${oy}px`,
+              ['--cdx' as string]: `${dx}px`,
+              ['--cdy' as string]: `${dy}px`,
+              ['--crot' as string]: '0deg',
+              animation: `combo-confetti-fly 600ms ease-out ${delay}ms both`,
+            }}
+          />
+        );
+      })}
+    </>
+  );
+}
+
+// ── Main component: accumulates layers, only number replaces ───
 
 export function ComboBurst({ combo, tapKey }: Props) {
-  const [alive, setAlive] = useState(true);
+  const [layers, setLayers] = useState<Layer[]>([]);
+  const prevTapKey = useRef(-1);
+
+  // Each new tapKey adds a layer
   useEffect(() => {
-    const id = setTimeout(() => setAlive(false), SELF_DESTRUCT_MS);
-    return () => clearTimeout(id);
-  }, []);
-  if (!alive || combo < 2) return null;
+    if (tapKey !== prevTapKey.current && combo >= 2) {
+      prevTapKey.current = tapKey;
+      setLayers((prev) => [...prev, { id: tapKey, combo, seed: tapKey * 7 + combo }]);
+    }
+  }, [tapKey, combo]);
 
-  const rand = seededRandom(tapKey * 7 + combo);
+  const removeLayer = (id: number) =>
+    setLayers((prev) => prev.filter((l) => l.id !== id));
 
-  // Scale particle count with combo: 3 at combo 2, up to 14 at high combos
-  const particleCount = Math.min(3 + Math.floor((combo - 2) * 0.9), 14);
+  if (combo < 2 && layers.length === 0) return null;
 
-  // 5 tiers: 1-3 / 4-7 / 8-11 / 12-15 / 16+
+  // Number styling — always shows latest combo
   const fontSize = combo >= 16 ? 64 : combo >= 12 ? 56 : combo >= 8 ? 48 : combo >= 4 ? 40 : 32;
   const numColor = combo >= 16 ? '#d03020' : combo >= 12 ? '#d84020' : combo >= 8 ? '#e07030' : combo >= 4 ? '#c08050' : '#b09070';
-
-  // Particles scatter wider at higher combos
-  const scatter = Math.min(55 + combo * 8, 180);
 
   return (
     <div
       aria-hidden
       className="absolute left-1/2 -translate-x-1/2 pointer-events-none z-50 overflow-visible"
-      style={{ bottom: '100%', marginBottom: '12px', width: '280px', height: '160px' }}
+      style={{ bottom: '100%', marginBottom: '12px', width: '300px', height: '180px' }}
     >
-      {/* Combo number */}
-      <span
-        key={`num-${tapKey}`}
-        className="absolute left-1/2 -translate-x-1/2 font-serif font-bold tabular-nums select-none"
-        style={{
-          fontSize: `${fontSize}px`,
-          color: numColor,
-          textShadow: '0 1px 4px rgba(180,100,50,0.3)',
-          animation: 'combo-num-pop 550ms cubic-bezier(.22,.68,.36,1.15) both',
-        }}
-      >
-        {combo}x
-      </span>
+      {/* Combo number — replaces each tap */}
+      {combo >= 2 && (
+        <span
+          key={`num-${tapKey}`}
+          className="absolute left-1/2 -translate-x-1/2 font-serif font-bold tabular-nums select-none"
+          style={{
+            fontSize: `${fontSize}px`,
+            color: numColor,
+            textShadow: `
+              -1px -1px 0 rgba(251,248,243,0.35),
+               1px -1px 0 rgba(251,248,243,0.35),
+              -1px  1px 0 rgba(251,248,243,0.35),
+               1px  1px 0 rgba(251,248,243,0.35),
+               0    2px 4px rgba(180,100,50,0.3)`,
+            animation: 'combo-num-pop 550ms cubic-bezier(.22,.68,.36,1.15) both',
+          }}
+        >
+          {combo}x
+        </span>
+      )}
 
-      {/* Scatter particles — tiny water drops flying outward */}
-      {Array.from({ length: particleCount }, (_, i) => {
-        const angle = rand() * Math.PI * 2;
-        const dist = scatter * (0.5 + rand() * 0.5);
-        const dx = Math.cos(angle) * dist;
-        const dy = Math.sin(angle) * dist - 20; // bias upward
-        const size = 8 + rand() * (combo >= 16 ? 16 : combo >= 12 ? 14 : combo >= 8 ? 12 : combo >= 4 ? 9 : 6);
-        const delay = rand() * 80;
-
-        return (
-          <span
-            key={i}
-            className="absolute left-1/2 top-0 rounded-full"
-            style={{
-              width: `${size}px`,
-              height: `${size}px`,
-              background: `radial-gradient(circle at 35% 35%, rgba(140,200,240,0.8), rgba(80,160,220,0.5))`,
-              boxShadow: '0 1px 3px rgba(30,80,120,0.2), inset 0 1px 1px rgba(255,255,255,0.5)',
-              ['--cdx' as string]: `${dx}px`,
-              ['--cdy' as string]: `${dy}px`,
-              animation: `combo-particle-fly 500ms cubic-bezier(.22,.68,.36,1) ${delay}ms both`,
-            }}
-          />
-        );
-      })}
+      {/* Confetti layers — each tap adds one, each self-destructs */}
+      {layers.map((l) => (
+        <ConfettiLayer
+          key={l.id}
+          combo={l.combo}
+          seed={l.seed}
+          onDone={() => removeLayer(l.id)}
+        />
+      ))}
     </div>
   );
 }

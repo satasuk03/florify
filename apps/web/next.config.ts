@@ -1,7 +1,13 @@
 import type { NextConfig } from 'next';
 import path from 'node:path';
 
+// Build ID: short timestamp so users can verify PWA updated (shown in /recovery)
+const buildId = new Date().toISOString().slice(0, 16).replace('T', ' ');
+
 const nextConfig: NextConfig = {
+  env: {
+    NEXT_PUBLIC_BUILD_ID: buildId,
+  },
   // Static export → Cloudflare Pages friendly (no SSR; 3D canvas renders client-side only)
   output: 'export',
 

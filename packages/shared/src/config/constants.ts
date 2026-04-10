@@ -18,6 +18,6 @@ export const SPROUT_ALL_MISSIONS_BONUS = 100;
 export const SPROUT_QUEST_REFRESH_COST = 10;
 export const BOOSTER_COST_COMMON = 100;
 export const BOOSTER_COST_RARE = 300;
-export const BOOSTER_COST_LEGENDARY = 1000;
+export const BOOSTER_COST_LEGENDARY = 450;
 export const STORAGE_KEY = 'florify:v1:player';
 export const SETTINGS_KEY = 'florify:v1:settings';

@@ -6,7 +6,6 @@ import { CheckIcon } from '@/components/icons';
 import { useGameStore } from '@/store/gameStore';
 import { useT } from '@/i18n/useT';
 import { toast } from '@/lib/toast';
-import { haptic } from '@/lib/haptics';
 import { CHECKIN_BASE_DROPS, CHECKIN_STREAK_BONUS_MAX } from '@florify/shared';
 import { ClaimBurst } from './ClaimBurst';
 
@@ -208,7 +207,7 @@ function ClaimSection({ onClose }: { onClose: () => void }) {
   const handleClaim = useCallback(() => {
     const { dropsAwarded } = claimCheckin();
     if (dropsAwarded > 0) {
-      haptic('harvest');
+
       setBurstKey((k) => k + 1);
       toast(t('missions.dropsAwarded', { drops: dropsAwarded }));
       setTimeout(onClose, 800);

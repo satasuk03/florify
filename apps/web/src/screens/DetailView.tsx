@@ -1,18 +1,18 @@
-'use client';
+"use client";
 
-import { useState, useCallback } from 'react';
-import Link from 'next/link';
-import { RarityBadge } from '@/components/RarityBadge';
-import { BackIcon } from '@/components/icons';
-import { FloraImage } from '@/components/FloraImage';
-import { LangToggle, type Lang } from '@/components/LangToggle';
+import { useState, useCallback } from "react";
+import Link from "next/link";
+import { RarityBadge } from "@/components/RarityBadge";
+import { BackIcon } from "@/components/icons";
+import { FloraImage } from "@/components/FloraImage";
+import { LangToggle, type Lang } from "@/components/LangToggle";
 import {
   StageSelector,
   STAGE_PROGRESS,
   type Stage,
-} from '@/components/StageSelector';
-import { useGameStore } from '@/store/gameStore';
-import { SPECIES, SpeciesCollection, COLLECTION_LABELS } from '@/data/species';
+} from "@/components/StageSelector";
+import { useGameStore } from "@/store/gameStore";
+import { SPECIES, SpeciesCollection, COLLECTION_LABELS } from "@/data/species";
 
 /**
  * Detail view for a single harvested tree. Reads `id` from the parent
@@ -23,34 +23,33 @@ import { SPECIES, SpeciesCollection, COLLECTION_LABELS } from '@/data/species';
  * because Next.js 16 static export forbids `dynamicParams: true`.
  */
 
-
 const COPY = {
   th: {
-    notFound: 'ไม่พบต้นไม้',
-    count: 'ปลูกแล้ว',
-    countUnit: 'ต้น',
-    waterings: 'รดน้ำรวม',
-    waterUnit: 'หยด',
-    firstHarvested: 'ได้รับครั้งแรก',
-    lastHarvested: 'ได้รับล่าสุด',
-    locale: 'th-TH' as const,
+    notFound: "ไม่พบต้นไม้",
+    count: "ปลูกแล้ว",
+    countUnit: "ต้น",
+    waterings: "รดน้ำรวม",
+    waterUnit: "หยด",
+    firstHarvested: "ได้รับครั้งแรก",
+    lastHarvested: "ได้รับล่าสุด",
+    locale: "th-TH" as const,
     stageLabel: (n: Stage) => `ระยะ ${n}`,
   },
   en: {
-    notFound: 'Tree not found',
-    count: 'Harvested',
-    countUnit: 'times',
-    waterings: 'Total waterings',
-    waterUnit: 'drops',
-    firstHarvested: 'First obtained',
-    lastHarvested: 'Last obtained',
-    locale: 'en-US' as const,
+    notFound: "Tree not found",
+    count: "Harvested",
+    countUnit: "times",
+    waterings: "Total waterings",
+    waterUnit: "drops",
+    firstHarvested: "First obtained",
+    lastHarvested: "Last obtained",
+    locale: "en-US" as const,
     stageLabel: (n: Stage) => `Stage ${n}`,
   },
 };
 
 export function DetailView({ speciesId }: { speciesId: number | null }) {
-  const [lang, setLang] = useState<Lang>('th');
+  const [lang, setLang] = useState<Lang>("th");
   const [stage, setStage] = useState<Stage>(3);
   const [lightbox, setLightbox] = useState(false);
   const t = COPY[lang];
@@ -58,7 +57,9 @@ export function DetailView({ speciesId }: { speciesId: number | null }) {
   const closeLightbox = useCallback(() => setLightbox(false), []);
 
   const entry = useGameStore((s) =>
-    speciesId != null ? s.state.collection.find((c) => c.speciesId === speciesId) ?? null : null,
+    speciesId != null
+      ? (s.state.collection.find((c) => c.speciesId === speciesId) ?? null)
+      : null,
   );
 
   if (!entry) {
@@ -81,7 +82,8 @@ export function DetailView({ speciesId }: { speciesId: number | null }) {
   }
 
   const species = SPECIES[entry.speciesId];
-  const description = lang === 'th' ? species?.descriptionTH : species?.descriptionEN;
+  const description =
+    lang === "th" ? species?.descriptionTH : species?.descriptionEN;
 
   return (
     <div className="h-full bg-cream-50 flex flex-col safe-top safe-bottom overflow-hidden">
@@ -95,7 +97,11 @@ export function DetailView({ speciesId }: { speciesId: number | null }) {
         </Link>
         <div className="flex items-center gap-2">
           <span className="text-xs bg-cream-200/80 text-ink-600 px-2.5 py-0.5 rounded-full">
-            {COLLECTION_LABELS[species?.collection ?? SpeciesCollection.Original][lang]}
+            {
+              COLLECTION_LABELS[
+                species?.collection ?? SpeciesCollection.Original
+              ][lang]
+            }
           </span>
           <RarityBadge rarity={entry.rarity} />
         </div>
@@ -126,7 +132,9 @@ export function DetailView({ speciesId }: { speciesId: number | null }) {
             role="button"
             tabIndex={0}
             onClick={() => setLightbox(true)}
-            onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && setLightbox(true)}
+            onKeyDown={(e) =>
+              (e.key === "Enter" || e.key === " ") && setLightbox(true)
+            }
             className="relative flex items-center justify-center max-h-[88%] max-w-[82%] h-full w-full cursor-zoom-in"
             aria-label="View fullscreen"
           >
@@ -139,20 +147,27 @@ export function DetailView({ speciesId }: { speciesId: number | null }) {
           </div>
 
           {/* Stage selector floats over the bottom edge of the frame. */}
-          <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 animate-fade-up" style={{ animationDelay: '220ms' }}>
-            <StageSelector stage={stage} onChange={setStage} label={t.stageLabel} />
+          <div
+            className="absolute -bottom-1 left-1/2 -translate-x-1/2 animate-fade-up"
+            style={{ animationDelay: "220ms" }}
+          >
+            <StageSelector
+              stage={stage}
+              onChange={setStage}
+              label={t.stageLabel}
+            />
           </div>
         </div>
       </div>
 
       <div
         className="mx-4 mb-4 rounded-3xl bg-cream-100/90 backdrop-blur border border-cream-200 shadow-soft-md animate-fade-up"
-        style={{ animationDelay: '160ms' }}
+        style={{ animationDelay: "160ms" }}
       >
         <div className="p-5">
           <div className="flex items-start justify-between gap-3 mb-2">
             <h2 className="text-2xl font-serif text-ink-900 leading-tight">
-              {species?.name ?? 'Unknown'}
+              {species?.name ?? "Unknown"}
             </h2>
             <LangToggle lang={lang} onChange={setLang} />
           </div>
@@ -195,7 +210,7 @@ export function DetailView({ speciesId }: { speciesId: number | null }) {
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm cursor-zoom-out animate-fade-in"
           onClick={closeLightbox}
-          onKeyDown={(e) => e.key === 'Escape' && closeLightbox()}
+          onKeyDown={(e) => e.key === "Escape" && closeLightbox()}
           role="dialog"
           aria-modal
           aria-label="Fullscreen image"

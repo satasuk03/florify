@@ -163,23 +163,22 @@ export function ActionButton({
     : {};
 
   return (
-    <div
-      className="relative"
-      style={
-        tapping
-          ? {
-              ...vars,
-              animation: `water-btn-squish ${tier.duration}ms cubic-bezier(.22,.68,.36,1.2) both${tier.shake ? `, water-btn-shake 280ms ease-out ${tier.duration}ms both` : ""}`,
-            }
-          : undefined
-      }
-      key={tapping}
-    >
-      {/* Combo burst — number + particles above the button */}
-      {tapping > 0 && (
-        <ComboBurst key={`combo-${tapping}`} combo={combo} tapKey={tapping} />
-      )}
+    <div className="relative">
+      {/* Combo burst — lives outside the keyed div so layers persist across taps */}
+      <ComboBurst combo={combo} tapKey={tapping} />
 
+      <div
+        className="relative"
+        style={
+          tapping
+            ? {
+                ...vars,
+                animation: `water-btn-squish ${tier.duration}ms cubic-bezier(.22,.68,.36,1.2) both${tier.shake ? `, water-btn-shake 280ms ease-out ${tier.duration}ms both` : ""}`,
+              }
+            : undefined
+        }
+        key={tapping}
+      >
       {/* Warm clay halo */}
       <div
         aria-hidden
@@ -242,6 +241,7 @@ export function ActionButton({
           />
         )}
       </Button>
+      </div>
     </div>
   );
 }

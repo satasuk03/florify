@@ -18,7 +18,6 @@ export const dict = {
     "plot.openFloristCard": "เปิดการ์ดนักจัดดอกไม้",
     "plot.openSettings": "เปิดตั้งค่า",
     "plot.openGuideBook": "เปิดคู่มือ",
-    "plot.switchLanguage": "เปลี่ยนภาษา",
 
     // ── Gallery ────────────────────────────────
     "gallery.title": "Floripedia",
@@ -52,14 +51,8 @@ export const dict = {
       "ชื่อนี้จะโชว์บน Florist Card ของคุณ (สูงสุด {max} ตัวอักษร)",
 
     "settings.preferences": "การตั้งค่า",
-    "settings.sound": "เสียง",
-    "settings.soundHint": "เปิดเสียงเอฟเฟกต์ในเกม (เร็วๆ นี้)",
-    "settings.haptics": "Haptics (สั่น)",
-    "settings.hapticsHint": "Android รองรับ · iOS ไม่รองรับ",
-    "settings.notifications": "แจ้งเตือนรดน้ำ",
-    "settings.notificationsHint": "ทำงานเฉพาะตอน tab เปิดอยู่ (ไม่ใช่ PWA)",
-    "settings.notificationsDenied":
-      "ไม่ได้รับอนุญาต — ลองเปิดใน browser settings",
+"settings.language": "ภาษา",
+    "settings.languageHint": "สลับระหว่างไทยและอังกฤษ",
 
     "settings.saveData": "ข้อมูลบันทึก",
     "settings.saveDataHint":
@@ -280,7 +273,6 @@ export const dict = {
     "plot.openFloristCard": "Open Florist Card",
     "plot.openSettings": "Open Settings",
     "plot.openGuideBook": "Open Guide Book",
-    "plot.switchLanguage": "Switch language",
 
     // ── Gallery ────────────────────────────────
     "gallery.title": "Floripedia",
@@ -313,14 +305,8 @@ export const dict = {
     "settings.nameHint": "Shown on your Florist Card (max {max} characters)",
 
     "settings.preferences": "Preferences",
-    "settings.sound": "Sound",
-    "settings.soundHint": "In-game sound effects (coming soon)",
-    "settings.haptics": "Haptics",
-    "settings.hapticsHint": "Supported on Android · not on iOS",
-    "settings.notifications": "Drop reminders",
-    "settings.notificationsHint": "Only fires while the tab is open (not PWA)",
-    "settings.notificationsDenied":
-      "Permission denied — enable in browser settings",
+"settings.language": "Language",
+    "settings.languageHint": "Switch between Thai and English",
 
     "settings.saveData": "Save data",
     "settings.saveDataHint":

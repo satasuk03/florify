@@ -46,9 +46,9 @@
   --shadow-glow-rare:      0 0 32px rgba(122, 156, 184, 0.5);
   --shadow-glow-legendary: 0 0 48px rgba(212, 162, 76, 0.6);
 
-  /* Typography — next/font injects --font-sarabun / --font-fraunces via layout.tsx */
-  --font-sans: var(--font-sarabun), system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-serif: var(--font-fraunces), ui-serif, Georgia, serif;
+  /* Typography — next/font injects CSS variables via layout.tsx */
+  --font-sans: var(--font-plex-thai), system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-serif: var(--font-fraunces), var(--font-noto-serif-thai), ui-serif, Georgia, serif;
 }
 
 /* ─── Base layer ───────────────────────────────────────────────── */
@@ -852,20 +852,29 @@
   }
 }
 
-@keyframes combo-particle-fly {
+@keyframes combo-confetti-fly {
   0% {
-    transform: translate(-50%, 0) scale(0.4);
+    transform: translate(
+      calc(-50% + var(--cox, 0px)),
+      var(--coy, 0px)
+    ) scale(0.3) rotate(0deg);
     opacity: 0;
   }
-  18% {
+  12% {
     opacity: 1;
-    transform: translate(-50%, 0) scale(1);
+    transform: translate(
+      calc(-50% + var(--cox, 0px)),
+      var(--coy, 0px)
+    ) scale(1.1) rotate(0deg);
+  }
+  70% {
+    opacity: 0.85;
   }
   100% {
     transform: translate(
       calc(-50% + var(--cdx, 0px)),
-      var(--cdy, -30px)
-    ) scale(0.2);
+      calc(var(--cdy, -30px) + 18px)
+    ) scale(0.35) rotate(var(--crot, 0deg));
     opacity: 0;
   }
 }
@@ -874,5 +883,15 @@
   0%, 100% { transform: rotate(0deg); }
   25% { transform: rotate(-4deg) scale(1.02); }
   75% { transform: rotate(4deg) scale(1.02); }
+}
+
+/* ── Gentle water-shake for flora & progress bar ───────────── */
+
+@keyframes water-shake {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  15% { transform: translate(-3px, 2px) scale(0.96, 1.04); }
+  35% { transform: translate(3px, -2px) scale(1.04, 0.97); }
+  55% { transform: translate(-2px, 1px) scale(0.98, 1.02); }
+  75% { transform: translate(1.5px, -0.5px) scale(1.01, 0.99); }
 }
 
