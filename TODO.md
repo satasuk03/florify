@@ -1,7 +1,6 @@
-- Acheivements
+
 - หาต้นไม้ที่ใช่สำหรับคุณ -> Viral Marketing
 
-- กดค้างแล้วจะรดน้ำ ให้อัตโนมัติ ไม่ต้องกดรัวๆ (300ms?)
 - Customizatble Passport + Collection Progression + ฉายา
 - คำอธิบาย collection
 - Compress images
@@ -9,6 +8,7 @@
 
 - เครื่องผลิต Sprout กับ น้ำ
 ## Done
+- Acheivements
 - เพิ่ม Achievement เกี่ยวกับ Daily Mission
   - Daily Mission Completion -> ทำภารกิจสำเร็จ x ครั้ง 100, 300, 1000, 5000, 10000, 100000, 1000000
   - All Daily Mission Completion -> ทำภารกิจประจำวันทั้งหมด x ครั้ง 10, 30, 90, 365, 1000
