@@ -429,6 +429,15 @@ function AchievementRow({
           <p className="text-xs text-ink-400 truncate">
             {def.description[lang]}
           </p>
+          {isUnlocked && progress && (
+            <p className="text-[10px] text-ink-300 mt-0.5">
+              {lang === "th" ? "ปลดล็อคเมื่อ " : "Unlocked "}
+              {new Date(progress.unlockedAt).toLocaleDateString(
+                lang === "th" ? "th-TH" : "en-US",
+                { year: "numeric", month: "short", day: "numeric" },
+              )}
+            </p>
+          )}
         </div>
         <div className="flex-shrink-0">
           {isClaimed ? (
