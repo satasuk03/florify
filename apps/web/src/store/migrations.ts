@@ -18,6 +18,7 @@ export function migrate(state: UnknownState): PlayerState {
   if (s.schemaVersion === 7) s = migrateV7toV8(s);
   if (s.schemaVersion === 8) s = migrateV8toV9(s);
   if (s.schemaVersion === 9) s = migrateV9toV10(s);
+  if (s.schemaVersion === 10) s = migrateV10toV11(s);
   if (s.schemaVersion !== SCHEMA_VERSION) {
     console.warn(`[migrate] unknown schemaVersion ${s.schemaVersion}, falling back to as-is`);
   }
@@ -182,6 +183,21 @@ function migrateV9toV10(s: UnknownState): UnknownState {
       seedPacketsOpened,
       missionsCompleted: 0,
       allDailyMissionsCompleted: 0,
+    },
+  };
+}
+
+// v10 → v11: add producer (idle reward machine). Existing players get
+// level 1 on both tracks and a fresh claim window — they don't retro-get
+// pre-filled rewards for time they weren't playing with the feature.
+function migrateV10toV11(s: UnknownState): UnknownState {
+  return {
+    ...s,
+    schemaVersion: 11,
+    producer: {
+      sproutLevel: 1,
+      waterLevel: 1,
+      lastClaimAt: Date.now(),
     },
   };
 }

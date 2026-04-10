@@ -34,5 +34,10 @@ export function createInitialState(): PlayerState {
       allCompletedClaimed: false,
     },
     achievements: {},
+    producer: {
+      sproutLevel: 1,
+      waterLevel: 1,
+      lastClaimAt: now,
+    },
   };
 }

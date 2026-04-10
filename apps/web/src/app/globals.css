@@ -594,6 +594,47 @@
   animation: drop-bounce 400ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
+.animate-claim-press {
+  animation: claim-press 500ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes claim-press {
+  0% { transform: scale(1); }
+  14% { transform: scale(0.94) translateY(2px); }
+  32% { transform: scale(1.05) translateY(-1px); }
+  52% { transform: scale(0.98); }
+  72% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+/* Ambient "factory working" puff — small emoji rises and fades out.
+   Reads --dx/--dy/--rot set inline per particle. Used by the
+   ProducerSheet ring to signal that production is active. */
+.animate-factory-puff {
+  animation: factory-puff var(--puff-duration, 1800ms) ease-out both;
+  will-change: transform, opacity;
+}
+
+@keyframes factory-puff {
+  0% {
+    transform: translate(0, 0) rotate(0) scale(0.4);
+    opacity: 0;
+  }
+  18% {
+    opacity: 0.95;
+    transform: translate(
+        calc(var(--dx, 0px) * 0.2),
+        calc(var(--dy, 0px) * 0.15)
+      )
+      rotate(calc(var(--rot, 0deg) * 0.25)) scale(1);
+  }
+  100% {
+    transform: translate(var(--dx, 0px), var(--dy, 0px))
+      rotate(var(--rot, 0deg)) scale(0.75);
+    opacity: 0;
+  }
+}
+
 @keyframes count-pop {
   0% {
     transform: scale(1);

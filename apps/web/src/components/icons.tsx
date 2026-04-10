@@ -236,6 +236,32 @@ export function BackIcon({ size = 22, className }: IconProps) {
   );
 }
 
+export function ProducerIcon({ size = 22, className }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.75"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden
+    >
+      {/* Greenhouse outline — peaked roof over a square base */}
+      <path d="M4 20 V11 L12 4 L20 11 V20 Z" />
+      {/* Floor line */}
+      <path d="M4 20 H20" />
+      {/* Tiny sprout inside */}
+      <path d="M12 19 V15" />
+      <path d="M12 16 C 10 16 9 14.5 9 13 C 10.8 13 12 14.2 12 16 Z" />
+      <path d="M12 15 C 14 15 15 13.5 15 12 C 13.2 12 12 13.2 12 15 Z" />
+    </svg>
+  );
+}
+
 export function ShopIcon({ size = 22, className }: IconProps) {
   return (
     <svg

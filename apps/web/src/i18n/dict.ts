@@ -253,6 +253,22 @@ export const dict = {
     "shop.tagline.legendary":
       "มีแต่ในตำนาน — เมล็ดจากดินแดนที่แม้แต่กาลเวลาก็ไปไม่ถึง",
     "plot.openShop": "เปิดร้านค้า",
+    "plot.openProducer": "เปิดโรงผลิต",
+
+    // ── Producer (idle reward machine) ───────────
+    "producer.title": "โรงผลิต",
+    "producer.subtitle": "สะสมอัตโนมัติทุก 24 ชั่วโมง",
+    "producer.close": "ปิด",
+    "producer.full": "เต็มแล้ว",
+    "producer.filling": "กำลังสะสม",
+    "producer.claim": "รับรางวัล",
+    "producer.nothingReady": "ยังไม่มีของให้รับ",
+    "producer.readyToClaim": "พร้อมรับแล้ว",
+    "producer.nextFullIn": "เต็มอีก {time}",
+    "producer.upgradesTitle": "อัพเกรด",
+    "producer.sproutTrack": "กำลังการผลิตต้นอ่อน",
+    "producer.waterTrack": "กำลังการผลิตน้ำ",
+    "producer.maxed": "สูงสุด",
 
     // ── Floripedia (public species page) ───────
     "floripedia.title": "Floripedia",
@@ -511,6 +527,22 @@ export const dict = {
     "shop.tagline.legendary":
       "Legends say they exist — seeds from a land where time stands still",
     "plot.openShop": "Open Shop",
+    "plot.openProducer": "Open Producer",
+
+    // ── Producer (idle reward machine) ───────────
+    "producer.title": "Producer",
+    "producer.subtitle": "Accumulates rewards every 24h",
+    "producer.close": "Close",
+    "producer.full": "Full",
+    "producer.filling": "Filling",
+    "producer.claim": "Claim",
+    "producer.nothingReady": "Nothing to claim yet",
+    "producer.readyToClaim": "Ready to claim",
+    "producer.nextFullIn": "Full in {time}",
+    "producer.upgradesTitle": "Upgrades",
+    "producer.sproutTrack": "Sprout Production",
+    "producer.waterTrack": "Water Production",
+    "producer.maxed": "Maxed",
 
     // ── Floripedia (public species page) ───────
     "floripedia.title": "Floripedia",

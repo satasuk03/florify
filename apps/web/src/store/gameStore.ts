@@ -19,11 +19,17 @@ import {
   PITY_POINTS_LEGENDARY,
   PITY_POINTS_RARE,
   PITY_THRESHOLD,
+  PRODUCER_MAX_LEVEL,
+  PRODUCER_PERIOD_MS,
   SPROUT_ALL_MISSIONS_BONUS,
   SPROUT_HARVEST_COMMON,
   SPROUT_HARVEST_LEGENDARY,
   SPROUT_HARVEST_RARE,
+  SPROUT_PRODUCER_UPGRADE_COST,
+  SPROUT_PRODUCER_YIELD,
   SPROUT_QUEST_REFRESH_COST,
+  WATER_PRODUCER_UPGRADE_COST,
+  WATER_PRODUCER_YIELD,
   type BoosterTier,
   type CollectedSpecies,
   type MissionType,
@@ -118,6 +124,38 @@ export function computeDrops(state: PlayerState): { drops: number; regenAt: numb
   return { drops, regenAt };
 }
 
+// ── Producer accumulation ────────────────────────────────────────────
+// Pure function mirroring `computeDrops`: derives current ready-to-claim
+// counts from `lastClaimAt` + elapsed time. Both tracks fill at the same
+// rate because cap === yield for every level, so a single elapsed ratio
+// represents both — the UI exploits this with one shared gauge.
+export interface ProducerComputed {
+  sproutReady: number;       // whole sprouts ready to claim
+  waterReady: number;        // whole waters ready to claim
+  elapsedRatio: number;      // 0..1, clamped
+  isFull: boolean;           // elapsedRatio >= 1
+  sproutYield: number;       // current cap/yield for sprout track
+  waterYield: number;        // current cap/yield for water track
+  nextFullAt: number | null; // epoch ms when ratio will hit 1, null if already full
+}
+
+export function computeProducer(state: PlayerState): ProducerComputed {
+  const p = state.producer;
+  const sproutYield = SPROUT_PRODUCER_YIELD[p.sproutLevel - 1] ?? SPROUT_PRODUCER_YIELD[0]!;
+  const waterYield = WATER_PRODUCER_YIELD[p.waterLevel - 1] ?? WATER_PRODUCER_YIELD[0]!;
+  const elapsed = Math.max(0, Date.now() - p.lastClaimAt);
+  const ratio = Math.min(1, elapsed / PRODUCER_PERIOD_MS);
+  return {
+    sproutReady: Math.floor(sproutYield * ratio),
+    waterReady: Math.floor(waterYield * ratio),
+    elapsedRatio: ratio,
+    isFull: ratio >= 1,
+    sproutYield,
+    waterYield,
+    nextFullAt: ratio >= 1 ? null : p.lastClaimAt + PRODUCER_PERIOD_MS,
+  };
+}
+
 export interface BoosterResult {
   speciesId: number;
   rarity: Rarity;
@@ -166,6 +204,11 @@ export interface GameStore {
   // Achievements
   claimAchievement: (id: string) => number;
   claimAllAchievements: () => number;
+
+  // Producer (idle reward machine)
+  producerState: () => ProducerComputed;
+  claimProducer: () => { sprouts: number; waters: number };
+  upgradeProducer: (track: 'sprout' | 'water') => { ok: boolean; cost?: number };
 }
 
 export const DISPLAY_NAME_MAX_LENGTH = 24;
@@ -864,6 +907,81 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set({ state: next });
     scheduleSave(next);
     return totalSprouts;
+  },
+
+  // ── Producer (idle reward machine) ──────────────────────────────────
+
+  producerState: () => computeProducer(get().state),
+
+  claimProducer: (): { sprouts: number; waters: number } => {
+    const s = get().state;
+    const ready = computeProducer(s);
+    if (ready.sproutReady === 0 && ready.waterReady === 0) {
+      return { sprouts: 0, waters: 0 };
+    }
+    // Water claim is allowed to push drops above MAX_WATER_DROPS — the
+    // existing computeDrops has a short-circuit at line 108 that handles
+    // the overflow bucket correctly (regen pauses until drops drop below cap).
+    const { drops: currentDrops, regenAt } = computeDrops(s);
+    const now = Date.now();
+    const next: PlayerState = {
+      ...s,
+      sprouts: s.sprouts + ready.sproutReady,
+      waterDrops: currentDrops + ready.waterReady,
+      lastDropRegenAt: regenAt,
+      stats: {
+        ...s.stats,
+        sproutsGained: s.stats.sproutsGained + ready.sproutReady,
+      },
+      producer: { ...s.producer, lastClaimAt: now },
+      updatedAt: now,
+    };
+    set({ state: next });
+    scheduleSave(next);
+    return { sprouts: ready.sproutReady, waters: ready.waterReady };
+  },
+
+  upgradeProducer: (track: 'sprout' | 'water'): { ok: boolean; cost?: number } => {
+    const s = get().state;
+    const currentLevel = track === 'sprout' ? s.producer.sproutLevel : s.producer.waterLevel;
+    if (currentLevel >= PRODUCER_MAX_LEVEL) return { ok: false };
+
+    const nextLevel = currentLevel + 1;
+    const cost = (track === 'sprout' ? SPROUT_PRODUCER_UPGRADE_COST : WATER_PRODUCER_UPGRADE_COST)[nextLevel - 1];
+    if (cost === undefined) return { ok: false };
+    if (s.sprouts < cost) return { ok: false, cost };
+
+    // Claim-first semantics: if there are pending rewards when the player
+    // upgrades, grant them at the old yield so they don't evaporate when
+    // lastClaimAt resets. Simpler than trying to preserve a partial window
+    // across two different yield values.
+    const ready = computeProducer(s);
+    const { drops: currentDrops, regenAt } = computeDrops(s);
+    const now = Date.now();
+
+    const nextProducer = {
+      ...s.producer,
+      sproutLevel: track === 'sprout' ? nextLevel : s.producer.sproutLevel,
+      waterLevel: track === 'water' ? nextLevel : s.producer.waterLevel,
+      lastClaimAt: now,
+    };
+
+    const next: PlayerState = {
+      ...s,
+      sprouts: s.sprouts + ready.sproutReady - cost,
+      waterDrops: currentDrops + ready.waterReady,
+      lastDropRegenAt: regenAt,
+      stats: {
+        ...s.stats,
+        sproutsGained: s.stats.sproutsGained + ready.sproutReady,
+        sproutsSpent: s.stats.sproutsSpent + cost,
+      },
+      producer: nextProducer,
+      updatedAt: now,
+    };
+    set({ state: next });
+    scheduleSave(next);
+    return { ok: true, cost };
   },
 }));
 

@@ -122,8 +122,14 @@ export interface PlayerStats {
   allDailyMissionsCompleted: number;
 }
 
+export interface ProducerState {
+  sproutLevel: number;         // 1..PRODUCER_MAX_LEVEL
+  waterLevel: number;          // 1..PRODUCER_MAX_LEVEL
+  lastClaimAt: number;         // epoch ms — start of current accumulation window
+}
+
 export interface PlayerState {
-  schemaVersion: 10;
+  schemaVersion: 11;
   userId: string;              // local nanoid; linked to a cloud account later
   displayName: string;         // user-editable; 'Guest' until renamed
   createdAt: number;
@@ -138,6 +144,7 @@ export interface PlayerState {
   sprouts: number;               // 🌱 currency — no cap
   dailyMissions: DailyMissionState;
   achievements: Record<string, AchievementProgress>;
+  producer: ProducerState;       // idle reward machine — accumulates over 24h, claimed manually
 }
 
 export type Language = 'th' | 'en';

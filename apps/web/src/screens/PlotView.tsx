@@ -18,6 +18,7 @@ import { FloristCardSheet } from "@/components/florist-card/FloristCardSheet";
 import { GuideBookSheet } from "@/components/guidebook/GuideBookSheet";
 import { SettingsSheet } from "@/components/settings/SettingsSheet";
 import { DailyMissionSheet } from "@/components/daily-missions/DailyMissionSheet";
+import { ProducerSheet } from "@/components/producer";
 import { CheckinModal } from "@/components/daily-missions/CheckinModal";
 import { HarvestOverlay } from "@/components/HarvestOverlay";
 import { SeedPacket } from "@/components/SeedPacket";
@@ -26,6 +27,7 @@ import { WelcomeDialogue } from "@/components/welcome/WelcomeDialogue";
 import {
   ActionButton,
   MissionCornerButton,
+  ProducerButton,
   HandheldFlora,
 } from "@/components/plot-view";
 import { useGameStore } from "@/store/gameStore";
@@ -55,6 +57,7 @@ export function PlotView() {
   const [showGuideBook, setShowGuideBook] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [showMissions, setShowMissions] = useState(false);
+  const [showProducer, setShowProducer] = useState(false);
   const [showCheckin, setShowCheckin] = useState(false);
   const [showWelcome, setShowWelcome] = useState(false);
   const hydrated = useGameStore((s) => s.hydrated);
@@ -303,6 +306,7 @@ export function PlotView() {
         <CornerButton to="/shop" label={t("plot.openShop")} size="primary">
           <ShopIcon />
         </CornerButton>
+        <ProducerButton onClick={() => setShowProducer(true)} />
       </div>
 
       {/* ─── TOP-RIGHT: Florist Card + Guide Book + Settings ── */}
@@ -387,6 +391,10 @@ export function PlotView() {
       <DailyMissionSheet
         open={showMissions}
         onClose={() => setShowMissions(false)}
+      />
+      <ProducerSheet
+        open={showProducer}
+        onClose={() => setShowProducer(false)}
       />
       <FloristCardSheet
         open={showFlorist}

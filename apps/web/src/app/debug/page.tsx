@@ -6,7 +6,13 @@ import { Button } from '@/components/Button';
 import { useGameStore } from '@/store/gameStore';
 import { DEBUG_MODE } from '@/lib/debug';
 import { scheduleSave } from '@/store/debouncedSave';
-import { MAX_WATER_DROPS } from '@florify/shared';
+import {
+  MAX_WATER_DROPS,
+  PRODUCER_MAX_LEVEL,
+  PRODUCER_PERIOD_MS,
+  SPROUT_PRODUCER_YIELD,
+  WATER_PRODUCER_YIELD,
+} from '@florify/shared';
 import { ACHIEVEMENTS } from '@/data/achievements';
 
 const SPROUT_AMOUNTS = [100, 500, 1000, 5000] as const;
@@ -168,6 +174,12 @@ export default function DebugPage() {
             </>
           )}
         </section>
+        {/* Producer */}
+        <section className="w-full max-w-xs mx-auto space-y-3">
+          <div className="text-xs text-ink-400 uppercase tracking-wider text-center">Producer</div>
+          <ProducerDebug setLastAction={setLastAction} />
+        </section>
+
         {/* Achievements */}
         <section className="w-full max-w-xs mx-auto space-y-3">
           <div className="text-xs text-ink-400 uppercase tracking-wider text-center">Achievements</div>
@@ -175,6 +187,106 @@ export default function DebugPage() {
         </section>
       </div>
     </main>
+  );
+}
+
+function ProducerDebug({ setLastAction }: { setLastAction: (s: string) => void }) {
+  const producer = useGameStore((s) => s.state.producer);
+
+  const setFillRatio = (ratio: number) => {
+    const s = useGameStore.getState().state;
+    const now = Date.now();
+    // Reduce lastClaimAt backwards so elapsed time = ratio * PRODUCER_PERIOD_MS.
+    const lastClaimAt = now - Math.floor(ratio * PRODUCER_PERIOD_MS);
+    const next = {
+      ...s,
+      producer: { ...s.producer, lastClaimAt },
+      updatedAt: now,
+    };
+    useGameStore.setState({ state: next });
+    scheduleSave(next);
+    setLastAction(`Producer → ${Math.round(ratio * 100)}%`);
+  };
+
+  const bumpLevel = (track: 'sprout' | 'water', delta: number) => {
+    const s = useGameStore.getState().state;
+    const key = track === 'sprout' ? 'sproutLevel' : 'waterLevel';
+    const current = s.producer[key];
+    const nextLevel = Math.min(PRODUCER_MAX_LEVEL, Math.max(1, current + delta));
+    if (nextLevel === current) return;
+    const next = {
+      ...s,
+      producer: { ...s.producer, [key]: nextLevel },
+      updatedAt: Date.now(),
+    };
+    useGameStore.setState({ state: next });
+    scheduleSave(next);
+    setLastAction(`${track} Lv ${current} → ${nextLevel}`);
+  };
+
+  const sproutYield = SPROUT_PRODUCER_YIELD[producer.sproutLevel - 1];
+  const waterYield = WATER_PRODUCER_YIELD[producer.waterLevel - 1];
+
+  return (
+    <div className="space-y-3">
+      {/* Fill ratio buttons */}
+      <div className="text-[10px] text-ink-400 text-center uppercase tracking-wider">Fill</div>
+      <div className="grid grid-cols-5 gap-1.5">
+        {[0, 0.25, 0.5, 0.75, 1].map((r) => (
+          <Button
+            key={r}
+            size="md"
+            variant="secondary"
+            onClick={() => setFillRatio(r)}
+            className="!min-w-0 !px-0 text-xs"
+          >
+            {Math.round(r * 100)}%
+          </Button>
+        ))}
+      </div>
+
+      {/* Sprout track */}
+      <div className="flex items-center gap-2">
+        <div className="flex-1 text-xs text-ink-700 tabular-nums">
+          🌱 Lv {producer.sproutLevel}/{PRODUCER_MAX_LEVEL} · {sproutYield}/24h
+        </div>
+        <button
+          onClick={() => bumpLevel('sprout', -1)}
+          disabled={producer.sproutLevel <= 1}
+          className="h-8 w-8 rounded bg-cream-200 text-ink-700 hover:bg-cream-300 disabled:opacity-40"
+        >
+          −
+        </button>
+        <button
+          onClick={() => bumpLevel('sprout', 1)}
+          disabled={producer.sproutLevel >= PRODUCER_MAX_LEVEL}
+          className="h-8 w-8 rounded bg-clay-500 text-cream-50 hover:bg-clay-400 disabled:opacity-40"
+        >
+          +
+        </button>
+      </div>
+
+      {/* Water track */}
+      <div className="flex items-center gap-2">
+        <div className="flex-1 text-xs text-ink-700 tabular-nums">
+          💧 Lv {producer.waterLevel}/{PRODUCER_MAX_LEVEL} · {waterYield}/24h
+        </div>
+        <button
+          onClick={() => bumpLevel('water', -1)}
+          disabled={producer.waterLevel <= 1}
+          className="h-8 w-8 rounded bg-cream-200 text-ink-700 hover:bg-cream-300 disabled:opacity-40"
+        >
+          −
+        </button>
+        <button
+          onClick={() => bumpLevel('water', 1)}
+          disabled={producer.waterLevel >= PRODUCER_MAX_LEVEL}
+          className="h-8 w-8 rounded bg-clay-500 text-cream-50 hover:bg-clay-400 disabled:opacity-40"
+        >
+          +
+        </button>
+      </div>
+    </div>
   );
 }
 
