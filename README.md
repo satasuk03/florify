@@ -1,78 +1,78 @@
 # Florify
 
-**เกมปลูกต้นไม้สุดชิล เล่นผ่านเบราว์เซอร์ได้เลย หรือติดตั้งเป็นแอปบนมือถือก็ได้**
+**A chill tree-planting game you can play right in your browser — or install as an app on your phone.**
 
-เล่นฟรีที่ https://florify.zeze.app/
-
----
-
-## เล่นยังไง?
-
-วนลูปง่าย ๆ 3 ขั้นตอน:
-
-1. **ปลูก** — สุ่มต้นไม้มา 1 ต้น (มีให้สะสมกว่า 400 สายพันธุ์)
-2. **รดน้ำ** — ใช้หยดน้ำรดจนต้นไม้โตเต็มที่ ผ่าน 3 ระยะ (กล้า → เติบโต → โตเต็มวัย)
-3. **เก็บเกี่ยว** — เก็บเข้าคอลเลกชัน แล้วปลูกต้นใหม่ได้เลย
-
-ต้นไม้ทุกต้นเป็น **3D** หมุนดูรอบได้ ซูมได้ และไม่มีต้นไหนเหมือนกันเลย
+Play free at https://florify.zeze.app/
 
 ---
 
-## ระบบในเกม
+## How to Play
 
-### หยดน้ำ
-- เก็บได้สูงสุด 50 หยด
-- ฟื้นฟูอัตโนมัติ 1 หยดทุก 2 นาที
-- รดน้ำ 1 ครั้ง ใช้ 1 หยด
-- ต้นไม้แต่ละต้นต้องการ 12-25 หยด
+A simple 3-step loop:
 
-### ระดับความหายาก
-| ระดับ | โอกาสดรอป | จำนวนสายพันธุ์ |
-|-------|-----------|---------------|
+1. **Plant** — Get a random tree (400+ species to collect)
+2. **Water** — Spend water drops to grow it through 3 stages (seedling → young → mature)
+3. **Harvest** — Add it to your collection and plant the next one
+
+Every tree is rendered in **3D** — spin it around, zoom in, and no two trees are ever the same.
+
+---
+
+## Game Systems
+
+### Water Drops
+- Max capacity: 50 drops
+- Auto-regenerates 1 drop every 2 minutes
+- Each tap costs 1 drop
+- Each tree needs 12–25 drops to fully grow
+
+### Rarity Tiers
+| Tier | Drop Rate | Species Count |
+|------|-----------|---------------|
 | **Common** | 80% | 265 |
 | **Rare** | 16% | 107 |
 | **Legendary** | 4% | 33 |
 
-### คอลเลกชัน
-- **Original** — สายพันธุ์หลัก
-- **Chinese Garden** — คอลเลกชันพิเศษ
-- **Abyssal Garden** — คอลเลกชันพิเศษ
-- (เพิ่มเรื่อย ๆ ในอนาคต)
+### Collections
+- **Original** — The main species pool
+- **Chinese Garden** — Special collection
+- **Abyssal Garden** — Special collection
+- More collections coming in the future
 
 ---
 
-## ฟีเจอร์เด่น
+## Features
 
-### Floripedia — สารานุกรมพรรณไม้
-ค้นหาและเรียกดูสายพันธุ์ทั้งหมดได้ แต่ละชนิดมี **เรื่องเล่าเป็นบทกวี** ทั้งภาษาไทยและอังกฤษ กรองตามความหายาก, คอลเลกชัน, หรือสถานะที่ปลดล็อกแล้ว/ยังไม่ได้
+### Floripedia — Species Encyclopedia
+Browse and search all species. Each one has its own **poetic lore** written in both Thai and English. Filter by rarity, collection, or unlock status.
 
-### ภารกิจประจำวัน
-วันละ 5 ภารกิจ เช่น รดน้ำ X ครั้ง, เก็บเกี่ยวต้นไม้ Rare, ทำ Combo ถึง 15 — ทำครบรับ **เมล็ด (Sprouts)** เป็นรางวัล
+### Daily Missions
+5 missions per day — water X times, harvest a Rare tree, reach Combo 15, and more. Complete them to earn **Sprouts** as rewards.
 
-### ความสำเร็จ (Achievements)
-ปลดล็อกตามเป้าหมายต่าง ๆ เช่น สะสมครบ 150 สายพันธุ์, เก็บเกี่ยว 1,000 ครั้ง, Streak 30 วัน — แต่ละอันให้เมล็ดเป็นรางวัล
+### Achievements
+Unlock milestones like collecting 150 species, harvesting 1,000 times, or maintaining a 30-day Streak — each one rewards Sprouts.
 
-### Streak — เข้าเกมต่อเนื่อง
-เช็คอินทุกวันเพื่อรักษา Streak และรับโบนัสหยดน้ำ
+### Streak — Daily Check-in
+Log in every day to keep your Streak alive and earn bonus water drops.
 
-### Combo — เก็บเกี่ยวต่อเนื่อง
-เก็บเกี่ยวติดต่อกันเพื่อสะสม Combo รับรางวัลพิเศษ
+### Combo — Consecutive Harvests
+Harvest trees back-to-back to build your Combo counter and earn bonus rewards.
 
-### ร้านค้า — Booster Pack
-ใช้เมล็ดซื้อ Booster Pack 3 ระดับ เพิ่มโอกาสได้สายพันธุ์ Rare และ Legendary
+### Shop — Booster Packs
+Spend Sprouts on 3 tiers of Booster Packs for better odds at Rare and Legendary species.
 
 ### Pity System
-สะสมดรอปซ้ำเป็น **ใบไม้แห้ง** — ถึงเกณฑ์แล้วการันตีได้สายพันธุ์ใหม่ ไม่ต้องกลัวดวงไม่ดี
+Duplicate harvests earn **Dried Leaves** — hit the threshold and you're guaranteed a new species. No more bad luck streaks.
 
-### Florist Card — บัตรนักจัดสวน
-บัตรส่วนตัวแสดงแร็งค์, จำนวนสายพันธุ์, Streak, จำนวนเก็บเกี่ยว — **แชร์เป็นรูปไปโซเชียลได้เลย**
+### Florist Card — Your Gardener Passport
+A personal card showing your rank, species count, Streak, and harvest total — **export it as an image and share on social media.**
 
 ---
 
-## ระดับแร็งค์
+## Ranks
 
-| แร็งค์ | สายพันธุ์ที่สะสม |
-|--------|-----------------|
+| Rank | Species Collected |
+|------|-------------------|
 | Seedling | 0 – 19 |
 | Apprentice | 20 – 74 |
 | Gardener | 75 – 149 |
@@ -81,40 +81,40 @@
 
 ---
 
-## รองรับ 2 ภาษา
+## Bilingual
 
-สลับไทย/อังกฤษได้ทันทีในเกม ทั้ง UI และเรื่องเล่าของต้นไม้ทุกชนิด
-
----
-
-## เล่นได้บนอะไร?
-
-- เล่นผ่าน **เบราว์เซอร์** ได้เลย ไม่ต้องสมัคร
-- **ติดตั้งเป็นแอป (PWA)** ได้บนมือถือ — เล่นแบบเต็มจอ เหมือนแอปจริง
-- ออกแบบมาสำหรับ **มือถือเป็นหลัก** แต่เล่นบน Desktop ได้
-- **ฟรี 100%** ไม่มีโฆษณา ไม่มี in-app purchase
+Switch between Thai and English anytime — both the UI and all species lore are fully translated.
 
 ---
 
-## สำหรับนักพัฒนา
+## Play Anywhere
+
+- Play in your **browser** instantly — no sign-up required
+- **Install as an app (PWA)** on mobile — fullscreen, feels like a native app
+- Designed **mobile-first**, but works on desktop too
+- **100% free** — no ads, no in-app purchases
+
+---
+
+## For Developers
 
 ```
 florify/
 ├── apps/
-│   ├── web/          # ตัวเกมหลัก (Next.js)
-│   └── scripts/      # เครื่องมือสร้างรูปต้นไม้
+│   ├── web/          # The main game (Next.js)
+│   └── scripts/      # Flora image generation tools
 ├── packages/
-│   └── shared/       # Type และค่าคงที่ที่ใช้ร่วมกัน
-└── designs/          # เอกสารออกแบบ
+│   └── shared/       # Shared types & constants
+└── designs/          # Design docs
 ```
 
 ```bash
 pnpm install
-pnpm dev              # เปิดเกมที่ http://localhost:3000
-pnpm build            # build ทุก workspace
-pnpm typecheck        # ตรวจ type
-pnpm lint             # ตรวจ lint
-pnpm test             # รัน test
+pnpm dev              # Start the game at http://localhost:3000
+pnpm build            # Build all workspaces
+pnpm typecheck        # Type-check all workspaces
+pnpm lint             # Lint all workspaces
+pnpm test             # Run tests
 ```
 
-ต้องการ Node.js 20+ และ pnpm 9+
+Requires Node.js 20+ and pnpm 9+.
