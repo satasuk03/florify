@@ -26,6 +26,7 @@ import type { DictKey } from '@/i18n/dict';
 
 interface Props {
   tree: TreeInstance | null;
+  isNew?: boolean;
   pityPointsGained?: number;
   pityReward?: { speciesId: number; rarity: Rarity };
   sproutsGained?: number;
@@ -67,7 +68,7 @@ interface FlyState {
  *  overlay dismisses the frame the clone lands, not before. */
 const FLY_DURATION_MS = 720;
 
-export function HarvestOverlay({ tree, pityPointsGained, pityReward, sproutsGained, source = 'harvest', onDismiss }: Props) {
+export function HarvestOverlay({ tree, isNew = false, pityPointsGained, pityReward, sproutsGained, source = 'harvest', onDismiss }: Props) {
   const t = useT();
   const lang = useLanguage();
   const displayName = useGameStore((s) => s.state.displayName);
@@ -225,6 +226,17 @@ export function HarvestOverlay({ tree, pityPointsGained, pityReward, sproutsGain
         >
           {headline}
         </h2>
+        {isNew && (
+          <div
+            className="animate-fade-up flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-clay-500 to-[#D4A24C] text-cream-50 text-xs font-bold tracking-[0.2em] uppercase shadow-sm ring-1 ring-[#D4A24C]/40"
+            style={{ animationDelay: '290ms' }}
+            aria-label={t('harvest.unlocked')}
+          >
+            <span aria-hidden="true">★</span>
+            <span>{t('harvest.unlocked')}</span>
+            <span aria-hidden="true">★</span>
+          </div>
+        )}
         <p
           className="font-serif text-2xl text-ink-700 animate-fade-up"
           style={{ animationDelay: '320ms' }}

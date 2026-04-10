@@ -57,6 +57,7 @@ import { pickDailyMissions } from '@/lib/missionPicker';
 export interface WaterResult {
   ok: boolean;
   harvested?: TreeInstance;
+  isNew?: boolean;
   pityPointsGained?: number;
   pityReward?: { speciesId: number; rarity: Rarity };
   sproutsGained?: number;
@@ -492,7 +493,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   
       gameEventBus.emit({ type: 'water' });
       gameEventBus.emit({ type: 'harvest', rarity: harvested.rarity, isNew: !isDuplicate });
-      return { ok: true, harvested, pityPointsGained: result.pityPointsGained, pityReward: result.pityReward, sproutsGained };
+      return { ok: true, harvested, isNew: !isDuplicate, pityPointsGained: result.pityPointsGained, pityReward: result.pityReward, sproutsGained };
     }
 
     const next: PlayerState = {

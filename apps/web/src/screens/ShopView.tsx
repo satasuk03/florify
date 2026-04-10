@@ -272,6 +272,7 @@ export function ShopView() {
       {/* ── Harvest result overlay ──────────────────────────────── */}
       <HarvestOverlay
         tree={harvestTree}
+        isNew={boosterResult?.isNew ?? false}
         pityPointsGained={boosterResult?.pityPointsGained}
         pityReward={boosterResult?.pityReward}
         sproutsGained={boosterResult?.sproutsGained}

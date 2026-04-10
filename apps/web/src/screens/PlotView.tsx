@@ -88,6 +88,7 @@ export function PlotView() {
     }
   };
   const [harvested, setHarvested] = useState<TreeInstance | null>(null);
+  const [harvestedIsNew, setHarvestedIsNew] = useState(false);
   const [pityPointsGained, setPityPointsGained] = useState(0);
   const [pityReward, setPityReward] = useState<
     { speciesId: number; rarity: import("@florify/shared").Rarity } | undefined
@@ -150,6 +151,7 @@ export function PlotView() {
     }
     if (result.harvested) {
       setHarvested(result.harvested);
+      setHarvestedIsNew(result.isNew ?? false);
       setPityPointsGained(result.pityPointsGained ?? 0);
       setPityReward(result.pityReward);
       setSproutsGained(result.sproutsGained ?? 0);
@@ -404,10 +406,14 @@ export function PlotView() {
       />
       <HarvestOverlay
         tree={harvested}
+        isNew={harvestedIsNew}
         pityPointsGained={pityPointsGained}
         pityReward={pityReward}
         sproutsGained={sproutsGained}
-        onDismiss={() => setHarvested(null)}
+        onDismiss={() => {
+          setHarvested(null);
+          setHarvestedIsNew(false);
+        }}
       />
       {showWelcome && (
         <WelcomeDialogue
