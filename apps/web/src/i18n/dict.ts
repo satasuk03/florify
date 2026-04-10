@@ -163,6 +163,13 @@ export const dict = {
     "guide.combo.title": "ระบบ Combo",
     "guide.combo.body":
       "กดรดน้ำติดๆ กันภายใน 1.5 วินาที จะเริ่มนับ Combo — ภารกิจบางอันจะท้าให้ทำ Combo ถึง x10, x15 หรือ x20",
+    "guide.producer.title": "โรงผลิต (Idle Factory)",
+    "guide.producer.body":
+      "เครื่องสะสมรางวัลอัตโนมัติ — เติมเต็มภายใน 24 ชั่วโมง แล้วกดรับทีเดียวได้ทั้งต้นอ่อน 🌱 และหยดน้ำ 💧 ไม่ต้องเปิดเกมค้างไว้ก็สะสมให้ตลอด",
+    "guide.producer.tracks":
+      "มี 2 สายอัพเกรดแยกกัน: สายต้นอ่อนและสายน้ำ ทั้งสองสายเติมพร้อมกันในหลอดเดียว อัพเกรดได้สูงสุด 11 ระดับเพื่อเพิ่มผลผลิตต่อรอบ",
+    "guide.producer.tip":
+      "เคล็ดลับ: แวะมากดรับทุก 24 ชั่วโมงเพื่อไม่ให้เสียรอบสะสม — ถ้ากดอัพเกรดตอนที่ยังมีของค้างอยู่ เกมจะรับให้อัตโนมัติก่อนรีเซ็ตรอบใหม่",
     "guide.developer.title": "พัฒนาโดย",
     "guide.developer.body": "เกมนี้สร้างโดย Zeze — ดูผลงานอื่นๆ ได้ที่",
     "guide.developer.linkLabel": "zeze.app/portfolio",
@@ -435,6 +442,13 @@ export const dict = {
     "guide.combo.title": "Combo System",
     "guide.combo.body":
       "Tap rapidly within 1.5 seconds to build a Combo — some missions challenge you to reach x10, x15, or x20.",
+    "guide.producer.title": "Idle Factory",
+    "guide.producer.body":
+      "An automatic reward machine that fills up over 24 hours. Tap Claim once to grab both sprouts 🌱 and water drops 💧 in a single go — it keeps accumulating even when the game is closed.",
+    "guide.producer.tracks":
+      "Two independent upgrade tracks — Sprout and Water — share one gauge and fill at the same pace. Upgrade each track up to level 11 to increase yield per cycle.",
+    "guide.producer.tip":
+      "Tip: swing by every 24 hours so you don't waste a cycle. If you upgrade while rewards are still pending, the game auto-claims them before resetting the window.",
     "guide.developer.title": "Made by",
     "guide.developer.body": "Built by Zeze — see other projects at",
     "guide.developer.linkLabel": "zeze.app/portfolio",

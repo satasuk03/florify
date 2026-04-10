@@ -71,6 +71,7 @@ export function GuideBookSheet({ open, onClose }: Props) {
           <SproutSection />
           <DailySection />
           <ComboSection />
+          <ProducerSection />
           <FeaturesSection />
           <DriedLeavesSection />
           <InstallPWASection />
@@ -219,6 +220,25 @@ function ComboSection() {
       <p className="text-xs text-ink-600 leading-relaxed">
         {t('guide.combo.body')}
       </p>
+    </Accordion>
+  );
+}
+
+function ProducerSection() {
+  const t = useT();
+  return (
+    <Accordion icon="🏭" title={t('guide.producer.title')}>
+      <div className="space-y-2.5">
+        <p className="text-xs text-ink-600 leading-relaxed">
+          {t('guide.producer.body')}
+        </p>
+        <p className="text-xs text-ink-600 leading-relaxed">
+          {t('guide.producer.tracks')}
+        </p>
+        <p className="text-xs text-ink-500 leading-relaxed">
+          {t('guide.producer.tip')}
+        </p>
+      </div>
     </Accordion>
   );
 }
