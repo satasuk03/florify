@@ -67,6 +67,9 @@ function evaluateCondition(cond: AchievementCondition, state: PlayerState): bool
     case 'all_daily_completed':
       return (state.stats.allDailyMissionsCompleted ?? 0) >= cond.target;
 
+    case 'secret':
+      return false;
+
     default:
       return false;
   }
@@ -110,6 +113,8 @@ export function getConditionProgress(cond: AchievementCondition, state: PlayerSt
       return state.stats.missionsCompleted ?? 0;
     case 'all_daily_completed':
       return state.stats.allDailyMissionsCompleted ?? 0;
+    case 'secret':
+      return 0;
     default:
       return 0;
   }

@@ -46,6 +46,10 @@ export function AchievementsTab({ scrollRef }: AchievementsTabProps) {
   );
 
   const totalUnlocked = Object.keys(state.achievements).length;
+  const unlockedSecrets = useMemo(
+    () => ACHIEVEMENTS.filter((d) => d.secret && state.achievements[d.id]),
+    [state.achievements],
+  );
 
   // Claim reward overlay
   const [claimReward, setClaimReward] = useState<{
@@ -153,7 +157,7 @@ export function AchievementsTab({ scrollRef }: AchievementsTabProps) {
         })()}
 
       {CATEGORIES.map((cat, catIdx) => {
-        const defs = ACHIEVEMENTS.filter(cat.filter);
+        const defs = ACHIEVEMENTS.filter((d) => !d.secret && cat.filter(d));
         const catDelay = 100 + catIdx * 60;
         return (
           <div
@@ -183,6 +187,37 @@ export function AchievementsTab({ scrollRef }: AchievementsTabProps) {
           </div>
         );
       })}
+
+      {unlockedSecrets.length > 0 &&
+        (() => {
+          const catDelay = 100 + CATEGORIES.length * 60;
+          return (
+            <div
+              className="animate-fade-up"
+              style={{ animationDelay: `${catDelay}ms` }}
+            >
+              <h3 className="text-sm font-semibold text-ink-700 mb-2">
+                🤫 Secrets
+              </h3>
+              <div className="space-y-2">
+                {unlockedSecrets.map((def) => {
+                  const delay = catDelay + 40 + rowIndex++ * 20;
+                  return (
+                    <AchievementRow
+                      key={def.id}
+                      def={def}
+                      progress={state.achievements[def.id]}
+                      state={state}
+                      lang={lang}
+                      onClaim={() => handleClaim(def.id)}
+                      delay={Math.min(delay, 800)}
+                    />
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })()}
 
       {showScrollTop && (
         <button
@@ -392,7 +427,7 @@ function AchievementRow({
     onClaim();
   }, [onClaim]);
   const currentValue = getProgress(def.condition, state) ?? 0;
-  const target = def.condition.target ?? 1;
+  const target = "target" in def.condition ? def.condition.target : 1;
   const pct = Math.min(100, Math.round((currentValue / target) * 100));
 
   const sproutReward = def.rewards.reduce(
@@ -429,6 +464,11 @@ function AchievementRow({
           <p className="text-xs text-ink-400 truncate">
             {def.description[lang]}
           </p>
+          {isUnlocked && def.flavor && (
+            <p className="text-[11px] italic text-clay-400/80 mt-0.5">
+              &ldquo;{def.flavor[lang]}&rdquo;
+            </p>
+          )}
           {isUnlocked && progress && (
             <p className="text-[10px] text-ink-300 mt-0.5">
               {lang === "th" ? "ปลดล็อคเมื่อ " : "Unlocked "}
@@ -465,7 +505,7 @@ function AchievementRow({
           )}
         </div>
       </div>
-      {!isClaimed && (
+      {!isClaimed && def.condition.type !== "secret" && (
         <div className="mt-2">
           <div className="h-1.5 bg-cream-200 rounded-full overflow-hidden">
             <div

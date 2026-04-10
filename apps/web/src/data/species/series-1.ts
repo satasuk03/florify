@@ -21,7 +21,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Each frond unfurls with a little sigh that sounds almost like a word. Keepers of quiet libraries use them to fill the space where conversation would have been, and nobody notices the difference.",
     descriptionTH:
-      "ใบทุกใบคลี่ตัวพร้อมเสียงถอนหายใจเบา ๆ ที่ฟังเกือบเป็นถ้อยคำ ผู้ดูแลห้องสมุดเงียบสงบใช้มันเติมที่ว่างซึ่งบทสนทนาควรจะอยู่ และไม่มีใครสังเกตเห็นความต่างเลย",
+      "ใบทุกใบคลี่ตัวพร้อมเสียงถอนหายใจเบาๆ ที่ฟังเกือบเป็นถ้อยคำ ผู้ดูแลห้องสมุดเงียบสงบใช้มันเติมที่ว่างซึ่งบทสนทนาควรจะอยู่ และไม่มีใครสังเกตเห็นความต่างเลย",
     collection: SpeciesCollection.Original,
   },
   {
@@ -32,7 +32,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Opens only for those who have lost something they will not name out loud. The flower does not ask for the name, and that is considered its deepest kindness.",
     descriptionTH:
-      "บานให้เฉพาะผู้ที่สูญเสียบางสิ่งซึ่งเจ้าตัวไม่อยากเอ่ยออกมาดัง ๆ ดอกไม้ไม่เคยถามถึงชื่อของสิ่งนั้น และนั่นถือเป็นความเมตตาที่ลึกที่สุดของมัน",
+      "บานให้เฉพาะผู้ที่สูญเสียบางสิ่งซึ่งเจ้าตัวไม่อยากเอ่ยออกมาดังๆ ดอกไม้ไม่เคยถามถึงชื่อของสิ่งนั้น และนั่นถือเป็นความเมตตาที่ลึกที่สุดของมัน",
     collection: SpeciesCollection.Original,
   },
   {
@@ -76,7 +76,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Preserves sounds inside itself the way amber preserves insects: a fern grown in a schoolhouse still gives off faint recitations thirty years after the school has closed. Teachers who could not afford tombstones chose this fern instead.",
     descriptionTH:
-      "กักเก็บเสียงไว้ในตัวเหมือนที่อำพันเก็บแมลง เฟิร์นที่โตในโรงเรียนยังส่งเสียงท่องบทเรียนจาง ๆ ออกมาแม้โรงเรียนจะปิดไปสามสิบปี ครูที่ไม่มีทุนจะซื้อศิลาหน้าหลุมศพเลือกใช้เฟิร์นต้นนี้แทน",
+      "กักเก็บเสียงไว้ในตัวเหมือนที่อำพันเก็บแมลง เฟิร์นที่โตในโรงเรียนยังส่งเสียงท่องบทเรียนจางๆ ออกมาแม้โรงเรียนจะปิดไปสามสิบปี ครูที่ไม่มีทุนจะซื้อศิลาหน้าหลุมศพเลือกใช้เฟิร์นต้นนี้แทน",
     collection: SpeciesCollection.Original,
   },
   {
@@ -87,7 +87,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Opens a little more each year of its life and never quite closes again, so by its seventh year it is all bloom and no bud. Grandmothers count years by it, and lie only upward.",
     descriptionTH:
-      "บานเพิ่มขึ้นทีละนิดในทุกปีที่มันมีชีวิต และไม่เคยหุบกลับเต็มที่ จนถึงปีที่เจ็ดมันทั้งดอกก็บานเต็มไม่มีตูม ย่า ๆ นับปีของตนจากมัน และโกหกได้เพียงทางเดียว — คือให้น้อยกว่าความจริง",
+      "บานเพิ่มขึ้นทีละนิดในทุกปีที่มันมีชีวิต และไม่เคยหุบกลับเต็มที่ จนถึงปีที่เจ็ดมันทั้งดอกก็บานเต็มไม่มีตูม ย่าๆ นับปีของตนจากมัน และโกหกได้เพียงทางเดียว — คือให้น้อยกว่าความจริง",
     collection: SpeciesCollection.Original,
   },
   {
@@ -98,7 +98,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Honey-coloured and faintly sticky, as if time itself has been spilled on it. Folded into a handkerchief, it keeps the grief of an old farewell fresh enough to still mean something.",
     descriptionTH:
-      "สีน้ำผึ้งและเหนียวเล็กน้อยราวกับเวลาถูกหยดลงบนมัน พับไว้ในผ้าเช็ดหน้า มันช่วยให้ความโศกจากการลาจากเก่า ๆ สดใหม่พอที่จะยังมีความหมายอยู่",
+      "สีน้ำผึ้งและเหนียวเล็กน้อยราวกับเวลาถูกหยดลงบนมัน พับไว้ในผ้าเช็ดหน้า มันช่วยให้ความโศกจากการลาจากเก่าๆ สดใหม่พอที่จะยังมีความหมายอยู่",
     collection: SpeciesCollection.Original,
   },
   {
@@ -109,7 +109,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Grows on old stumps that once held a house that was loved. Scraped into a small tin and kept on a new mantelpiece, it tells the new house how to be a home.",
     descriptionTH:
-      "งอกบนตอไม้เก่าของบ้านที่เคยมีคนรัก ขูดใส่กระป๋องเล็กวางไว้บนหิ้งของบ้านใหม่ มันจะสอนบ้านใหม่ให้รู้จักเป็นบ้านจริง ๆ",
+      "งอกบนตอไม้เก่าของบ้านที่เคยมีคนรัก ขูดใส่กระป๋องเล็กวางไว้บนหิ้งของบ้านใหม่ มันจะสอนบ้านใหม่ให้รู้จักเป็นบ้านจริงๆ",
     collection: SpeciesCollection.Original,
   },
   {
@@ -120,7 +120,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Smooth as water and cool as a promise kept on time. Rinsed in any bowl, it makes the water taste faintly of an ocean the drinker has never visited but somehow misses.",
     descriptionTH:
-      "ลื่นเรียบเท่าน้ำและเย็นเท่าสัญญาที่รักษาตรงเวลา ล้างในชามใด ๆ มันจะทำให้น้ำมีรสของมหาสมุทรที่ผู้ดื่มไม่เคยไปเยือนแต่กลับคิดถึง",
+      "ลื่นเรียบเท่าน้ำและเย็นเท่าสัญญาที่รักษาตรงเวลา ล้างในชามใดๆ มันจะทำให้น้ำมีรสของมหาสมุทรที่ผู้ดื่มไม่เคยไปเยือนแต่กลับคิดถึง",
     collection: SpeciesCollection.Original,
   },
   {
@@ -131,7 +131,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Grows in quiet bathrooms and loud kitchens alike, always picking the spot where the household does its honest crying. Nobody asks where the pearlfern came from because everyone already knows.",
     descriptionTH:
-      "เจริญงอกงามได้ทั้งในห้องน้ำเงียบ ๆ และในครัวที่จอแจ โดยจะเลือกจุดที่คนในบ้านร้องไห้ด้วยความจริงใจเสมอ ไม่มีใครถามว่ามันมาได้อย่างไร เพราะทุกคนรู้อยู่แล้ว",
+      "เจริญงอกงามได้ทั้งในห้องน้ำเงียบๆ และในครัวที่จอแจ โดยจะเลือกจุดที่คนในบ้านร้องไห้ด้วยความจริงใจเสมอ ไม่มีใครถามว่ามันมาได้อย่างไร เพราะทุกคนรู้อยู่แล้ว",
     collection: SpeciesCollection.Original,
   },
   {
@@ -164,7 +164,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Grows on stones at the waterline of any river that has ever drowned and forgiven someone. Rub it between your fingers and you will smell exactly the right amount of regret.",
     descriptionTH:
-      "งอกบนหินที่ริมน้ำของแม่น้ำที่เคยจมและเคยให้อภัยใครบางคน ถูมันเบา ๆ ระหว่างนิ้วมือ เจ้าจะได้กลิ่นของความเสียดายในปริมาณที่พอดีเป๊ะ",
+      "งอกบนหินที่ริมน้ำของแม่น้ำที่เคยจมและเคยให้อภัยใครบางคน ถูมันเบาๆ ระหว่างนิ้วมือ เจ้าจะได้กลิ่นของความเสียดายในปริมาณที่พอดีเป๊ะ",
     collection: SpeciesCollection.Original,
   },
   {
@@ -186,7 +186,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Its fronds shine like polished glass and cut just as cleanly if handled without respect. Hermits on mountain paths grow them as a silent test of whether a visitor is the grasping sort.",
     descriptionTH:
-      "ใบของมันเงาดั่งแก้วขัดมัน และบาดคมพอ ๆ กันหากจับโดยไร้ความเคารพ ฤๅษีบนเส้นทางภูเขาปลูกมันไว้เป็นการทดสอบเงียบ ๆ ว่าผู้มาเยือนเป็นคนชนิดที่ชอบคว้าหรือไม่",
+      "ใบของมันเงาดั่งแก้วขัดมัน และบาดคมพอๆ กันหากจับโดยไร้ความเคารพ ฤๅษีบนเส้นทางภูเขาปลูกมันไว้เป็นการทดสอบเงียบๆ ว่าผู้มาเยือนเป็นคนชนิดที่ชอบคว้าหรือไม่",
     collection: SpeciesCollection.Original,
   },
   {
@@ -241,7 +241,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Its fronds give off a faint metallic hum when anyone is being particularly patient in the room. Mothers of toddlers buy one as self-defense, or at least as comfort.",
     descriptionTH:
-      "ใบของมันส่งเสียงฮัมโลหะแผ่ว ๆ เมื่อมีคนในห้องกำลังอดทนอย่างยิ่งยวด แม่ที่มีลูกเล็กซื้อมันมาเลี้ยงเพื่อเป็นเครื่องมือป้องกันตัว หรืออย่างน้อยก็เป็นเครื่องปลอบใจ",
+      "ใบของมันส่งเสียงฮัมโลหะแผ่วๆ เมื่อมีคนในห้องกำลังอดทนอย่างยิ่งยวด แม่ที่มีลูกเล็กซื้อมันมาเลี้ยงเพื่อเป็นเครื่องมือป้องกันตัว หรืออย่างน้อยก็เป็นเครื่องปลอบใจ",
     collection: SpeciesCollection.Original,
   },
   {
@@ -252,7 +252,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Opens once, makes a sound like a small coin dropped on a wooden floor, and stays open for exactly the life of a promise. Goldsmiths use them in their workshops as the most honest hourglass ever made.",
     descriptionTH:
-      "บานเพียงครั้งเดียว ส่งเสียงคล้ายเหรียญเล็ก ๆ หล่นบนพื้นไม้ และเปิดอยู่นานเท่าอายุของสัญญาสักข้อ ช่างทองใช้มันในห้องทำงานเป็นนาฬิกาทรายที่ซื่อตรงที่สุดที่เคยมีมา",
+      "บานเพียงครั้งเดียว ส่งเสียงคล้ายเหรียญเล็กๆ หล่นบนพื้นไม้ และเปิดอยู่นานเท่าอายุของสัญญาสักข้อ ช่างทองใช้มันในห้องทำงานเป็นนาฬิกาทรายที่ซื่อตรงที่สุดที่เคยมีมา",
     collection: SpeciesCollection.Original,
   },
   {
@@ -285,7 +285,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Transparent as a windowpane, and anything seen through it looks a little more the way it really is. Judges used to consult one in private before sentencing, and nobody made rules against it because nobody wanted them to stop.",
     descriptionTH:
-      "ใสดั่งบานกระจก และสิ่งใดก็ตามที่ถูกมองผ่านมัน จะดูใกล้เคียงกับความจริงของมันมากขึ้นอีกนิด สมัยก่อนผู้พิพากษาจะส่องดูเงียบ ๆ ก่อนตัดสิน และไม่มีใครออกกฎห้าม เพราะไม่มีใครอยากให้พวกเขาเลิก",
+      "ใสดั่งบานกระจก และสิ่งใดก็ตามที่ถูกมองผ่านมัน จะดูใกล้เคียงกับความจริงของมันมากขึ้นอีกนิด สมัยก่อนผู้พิพากษาจะส่องดูเงียบๆ ก่อนตัดสิน และไม่มีใครออกกฎห้าม เพราะไม่มีใครอยากให้พวกเขาเลิก",
     collection: SpeciesCollection.Original,
   },
   {
@@ -296,7 +296,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Rings softly when struck, each frond a different note, so a mature plant is its own small orchestra of tuning forks. Composers keep one beside them during the last stage of writing a song.",
     descriptionTH:
-      "ส่งเสียงกังวานเบา ๆ เมื่อถูกเคาะ ใบแต่ละใบเป็นโน้ตคนละเสียง ต้นที่โตเต็มที่จึงเป็นวงดนตรีเล็ก ๆ ของส้อมเสียงในตัวเอง นักประพันธ์เพลงวางมันไว้ข้างตัวในช่วงสุดท้ายของการแต่งเพลงแต่ละเพลง",
+      "ส่งเสียงกังวานเบาๆ เมื่อถูกเคาะ ใบแต่ละใบเป็นโน้ตคนละเสียง ต้นที่โตเต็มที่จึงเป็นวงดนตรีเล็กๆ ของส้อมเสียงในตัวเอง นักประพันธ์เพลงวางมันไว้ข้างตัวในช่วงสุดท้ายของการแต่งเพลงแต่ละเพลง",
     collection: SpeciesCollection.Original,
   },
   {
@@ -329,7 +329,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Covers stones in small clear beads that catch the first light of any morning and the last of any evening equally. Travelling scribes press a patch into their journals as a guard against lies.",
     descriptionTH:
-      "ปกคลุมก้อนหินด้วยเม็ดใสเล็ก ๆ ที่กักแสงเช้าแรกของเช้าวันใด ๆ และแสงสุดท้ายของค่ำวันใด ๆ ได้เท่ากัน นักบันทึกพเนจรอัดมันไว้ในสมุดจดของตนเป็นเครื่องป้องกันคำโกหก",
+      "ปกคลุมก้อนหินด้วยเม็ดใสเล็กๆ ที่กักแสงเช้าแรกของเช้าวันใดๆ และแสงสุดท้ายของค่ำวันใดๆ ได้เท่ากัน นักบันทึกพเนจรอัดมันไว้ในสมุดจดของตนเป็นเครื่องป้องกันคำโกหก",
     collection: SpeciesCollection.Original,
   },
   {
@@ -351,7 +351,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Its fronds are fuzzed with the same short hairs as a cat's ear, and cats treat the fern as a distant cousin they still owe respect. Households with both animals and ferns are, statistically, quieter.",
     descriptionTH:
-      "ใบของมันมีขนเล็กสั้นเหมือนขนหูแมว และแมวปฏิบัติกับเฟิร์นต้นนี้ราวกับเป็นญาติห่าง ๆ ที่ยังต้องให้ความเคารพ บ้านที่มีทั้งแมวและเฟิร์น ในทางสถิติแล้วเงียบกว่าบ้านทั่วไป",
+      "ใบของมันมีขนเล็กสั้นเหมือนขนหูแมว และแมวปฏิบัติกับเฟิร์นต้นนี้ราวกับเป็นญาติห่างๆ ที่ยังต้องให้ความเคารพ บ้านที่มีทั้งแมวและเฟิร์น ในทางสถิติแล้วเงียบกว่าบ้านทั่วไป",
     collection: SpeciesCollection.Original,
   },
   {
@@ -362,7 +362,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Opens into a flower that presses itself, gently, against any hand laid alongside it. Bed-ridden elders keep one on the blanket and claim it has the manners of an excellent nurse.",
     descriptionTH:
-      "บานเป็นดอกที่ค่อย ๆ เอนเข้าหาฝ่ามือใด ๆ ที่วางเคียง คนชราที่ติดเตียงจะวางไว้บนผ้าห่มและอ้างว่ามันมีมารยาทเหมือนพยาบาลที่เก่งที่สุด",
+      "บานเป็นดอกที่ค่อยๆ เอนเข้าหาฝ่ามือใดๆ ที่วางเคียง คนชราที่ติดเตียงจะวางไว้บนผ้าห่มและอ้างว่ามันมีมารยาทเหมือนพยาบาลที่เก่งที่สุด",
     collection: SpeciesCollection.Original,
   },
   {
@@ -406,7 +406,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Its fronds unfurl in perfect spirals so smooth that dyers keep a frond as a calibration piece. No silkfern has ever been observed to be measurably irregular, and the fact troubles a few honest botanists.",
     descriptionTH:
-      "ใบของมันคลี่ตัวเป็นเกลียวสมบูรณ์แบบจนช่างย้อมใช้มันเป็นชิ้นมาตรฐานสำหรับปรับเทียบสี ยังไม่เคยมีเฟิร์นไหมต้นใดถูกบันทึกว่ามีรูปทรงผิดปกติได้อย่างวัดได้ — ความจริงข้อนี้กวนใจนักพฤกษศาสตร์ซื่อ ๆ อยู่ไม่น้อย",
+      "ใบของมันคลี่ตัวเป็นเกลียวสมบูรณ์แบบจนช่างย้อมใช้มันเป็นชิ้นมาตรฐานสำหรับปรับเทียบสี ยังไม่เคยมีเฟิร์นไหมต้นใดถูกบันทึกว่ามีรูปทรงผิดปกติได้อย่างวัดได้ — ความจริงข้อนี้กวนใจนักพฤกษศาสตร์ซื่อๆ อยู่ไม่น้อย",
     collection: SpeciesCollection.Original,
   },
   {
@@ -494,7 +494,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Glows dim in any room where a long, quiet anger has been set down at last. The glow fades as the anger cools, and no one has ever wished it back.",
     descriptionTH:
-      "เรืองแสงริบหรี่ในห้องใดก็ตามที่ความโกรธอันยาวนานและเงียบงันถูกวางลงในที่สุด แสงจะค่อย ๆ จางลงขณะที่ความโกรธเย็นลง และยังไม่เคยมีใครปรารถนาให้มันกลับคืนมา",
+      "เรืองแสงริบหรี่ในห้องใดก็ตามที่ความโกรธอันยาวนานและเงียบงันถูกวางลงในที่สุด แสงจะค่อยๆ จางลงขณะที่ความโกรธเย็นลง และยังไม่เคยมีใครปรารถนาให้มันกลับคืนมา",
     collection: SpeciesCollection.Original,
   },
   {
@@ -505,7 +505,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Stays frozen no matter the weather, as if winter refused to let this one leaf go. Laid on a feverish forehead it draws the heat out slowly and politely, with many small apologies.",
     descriptionTH:
-      "คงเย็นเยือกไม่ว่าสภาพอากาศจะเป็นอย่างไร ราวกับฤดูหนาวปฏิเสธที่จะปล่อยใบนี้ใบเดียวไป วางลงบนหน้าผากของผู้เป็นไข้ มันจะดูดความร้อนออกอย่างช้า ๆ และสุภาพ พร้อมคำขอโทษเล็ก ๆ หลายคำ",
+      "คงเย็นเยือกไม่ว่าสภาพอากาศจะเป็นอย่างไร ราวกับฤดูหนาวปฏิเสธที่จะปล่อยใบนี้ใบเดียวไป วางลงบนหน้าผากของผู้เป็นไข้ มันจะดูดความร้อนออกอย่างช้าๆ และสุภาพ พร้อมคำขอโทษเล็กๆ หลายคำ",
     collection: SpeciesCollection.Original,
   },
   {
@@ -560,7 +560,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Pale grey as old paper and dusted with something that looks like the memory of smoke. Pressed into a letter, it makes sure the letter survives any house fire long enough to be read.",
     descriptionTH:
-      "สีเทาซีดดั่งกระดาษเก่า และมีฝุ่นบาง ๆ ที่ดูเหมือนความทรงจำของควัน อัดลงในจดหมาย มันทำให้จดหมายรอดจากไฟไหม้บ้านได้นานพอจะถูกอ่าน",
+      "สีเทาซีดดั่งกระดาษเก่า และมีฝุ่นบางๆ ที่ดูเหมือนความทรงจำของควัน อัดลงในจดหมาย มันทำให้จดหมายรอดจากไฟไหม้บ้านได้นานพอจะถูกอ่าน",
     collection: SpeciesCollection.Original,
   },
   {
@@ -593,7 +593,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Light as the flake that rises from a dying fire and just as reluctant to land. Caught between the lips and let go on the next breath, it whispers one thing you needed to say to someone who is gone.",
     descriptionTH:
-      "เบาเท่าเถ้าที่ลอยขึ้นจากกองไฟมอดดับ และไม่อยากลงพื้นพอ ๆ กัน อมไว้ระหว่างริมฝีปากและปล่อยออกไปในลมหายใจครั้งถัดไป มันจะกระซิบสิ่งหนึ่งที่เจ้าต้องการบอกคนซึ่งจากไปแล้ว",
+      "เบาเท่าเถ้าที่ลอยขึ้นจากกองไฟมอดดับ และไม่อยากลงพื้นพอๆ กัน อมไว้ระหว่างริมฝีปากและปล่อยออกไปในลมหายใจครั้งถัดไป มันจะกระซิบสิ่งหนึ่งที่เจ้าต้องการบอกคนซึ่งจากไปแล้ว",
     collection: SpeciesCollection.Original,
   },
   {
@@ -615,7 +615,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "White, puffed, and a little slow to respond when pushed, like a polite cloud that has learned manners. Children blow on it and pretend the wind that follows is their own.",
     descriptionTH:
-      "ขาว ฟู และตอบสนองช้านิด ๆ เมื่อถูกผลัก ดั่งเมฆที่ได้เรียนมารยาทเมืองหลวงมาแล้ว เด็ก ๆ จะเป่ามัน และทำเป็นว่าลมที่ตามมาเป็นของตัว",
+      "ขาว ฟู และตอบสนองช้านิดๆ เมื่อถูกผลัก ดั่งเมฆที่ได้เรียนมารยาทเมืองหลวงมาแล้ว เด็กๆ จะเป่ามัน และทำเป็นว่าลมที่ตามมาเป็นของตัว",
     collection: SpeciesCollection.Original,
   },
   {
@@ -637,7 +637,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Opens in shapes that recall the things children see in the sky, and the grown-ups around them are briefly reminded how to see such things too. One flower can unmake a whole afternoon's bad mood.",
     descriptionTH:
-      "บานเป็นรูปทรงที่ชวนให้นึกถึงสิ่งที่เด็กมองเห็นในท้องฟ้า และผู้ใหญ่รอบ ๆ จะถูกเตือนใจชั่วครู่ว่าเคยมองเห็นแบบเดียวกันได้อย่างไร ดอกเดียวสามารถคลี่คลายอารมณ์เสียของบ่ายทั้งบ่ายได้",
+      "บานเป็นรูปทรงที่ชวนให้นึกถึงสิ่งที่เด็กมองเห็นในท้องฟ้า และผู้ใหญ่รอบๆ จะถูกเตือนใจชั่วครู่ว่าเคยมองเห็นแบบเดียวกันได้อย่างไร ดอกเดียวสามารถคลี่คลายอารมณ์เสียของบ่ายทั้งบ่ายได้",
     collection: SpeciesCollection.Original,
   },
   {
@@ -648,7 +648,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Weighs exactly as much as you feel like it should, a feat nobody has managed to measure honestly. Folded into a pocket on a heavy day, it lightens the walk by about one step in every fifty.",
     descriptionTH:
-      "หนักเท่าที่เจ้ารู้สึกว่ามันควรหนัก ซึ่งยังไม่มีใครวัดออกมาได้อย่างซื่อสัตย์ พับเก็บในกระเป๋าในวันหนัก ๆ มันทำให้ก้าวเดินเบาลงประมาณหนึ่งก้าวในทุกห้าสิบก้าว",
+      "หนักเท่าที่เจ้ารู้สึกว่ามันควรหนัก ซึ่งยังไม่มีใครวัดออกมาได้อย่างซื่อสัตย์ พับเก็บในกระเป๋าในวันหนักๆ มันทำให้ก้าวเดินเบาลงประมาณหนึ่งก้าวในทุกห้าสิบก้าว",
     collection: SpeciesCollection.Original,
   },
   {
@@ -670,7 +670,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Stays faintly damp even in drought years, as if it remembers a storm none of the other plants in the garden can. Pressed into a letter sent during a dry summer, it makes the ink run exactly as much as the writer wanted to weep.",
     descriptionTH:
-      "คงชื้นจาง ๆ แม้ในปีที่แห้งแล้ง ราวกับจดจำพายุซึ่งต้นไม้อื่นในสวนจำไม่ได้ อัดลงในจดหมายที่ส่งไปในฤดูร้อนที่แห้ง มันทำให้หมึกเลอะเท่ากับที่ผู้เขียนอยากจะร้องไห้พอดี",
+      "คงชื้นจางๆ แม้ในปีที่แห้งแล้ง ราวกับจดจำพายุซึ่งต้นไม้อื่นในสวนจำไม่ได้ อัดลงในจดหมายที่ส่งไปในฤดูร้อนที่แห้ง มันทำให้หมึกเลอะเท่ากับที่ผู้เขียนอยากจะร้องไห้พอดี",
     collection: SpeciesCollection.Original,
   },
   {
@@ -681,7 +681,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Its fronds tick quietly, like drops on a tin roof, even when the sky is dry. Travellers who cannot sleep without rain keep one near the bed and swear by it more than by any lullaby.",
     descriptionTH:
-      "ใบของมันเคาะเสียงเบา ๆ เหมือนหยดน้ำบนหลังคาสังกะสี แม้ฟ้าจะแห้ง นักเดินทางที่นอนไม่หลับหากไม่มีเสียงฝนจะวางมันไว้ใกล้เตียง และเชื่อในมันยิ่งกว่าเพลงกล่อมใด ๆ",
+      "ใบของมันเคาะเสียงเบาๆ เหมือนหยดน้ำบนหลังคาสังกะสี แม้ฟ้าจะแห้ง นักเดินทางที่นอนไม่หลับหากไม่มีเสียงฝนจะวางมันไว้ใกล้เตียง และเชื่อในมันยิ่งกว่าเพลงกล่อมใดๆ",
     collection: SpeciesCollection.Original,
   },
   {
@@ -692,7 +692,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Opens only in real rain, never in watering-cans — it can tell. Farmers watch a rainbloom in the window the way captains watch a barometer, and are wrong together.",
     descriptionTH:
-      "บานเฉพาะในฝนจริง ไม่เคยบานในน้ำจากบัวรดน้ำ — มันรู้ ชาวนาเฝ้ามองดอกฝนที่หน้าต่างราวกับนายเรือเฝ้ามองบารอมิเตอร์ และพลาดไปพร้อม ๆ กัน",
+      "บานเฉพาะในฝนจริง ไม่เคยบานในน้ำจากบัวรดน้ำ — มันรู้ ชาวนาเฝ้ามองดอกฝนที่หน้าต่างราวกับนายเรือเฝ้ามองบารอมิเตอร์ และพลาดไปพร้อมๆ กัน",
     collection: SpeciesCollection.Original,
   },
   {
@@ -725,7 +725,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Trembles at the least breath, including the breath of nearby arguments. In council chambers a potted windleaf is taken as an impartial witness, and its testimony has swayed decisions.",
     descriptionTH:
-      "สั่นไหวทันทีที่มีลมหายใจพัดผ่าน รวมถึงลมหายใจของการโต้เถียงที่อยู่ใกล้ ๆ ในห้องประชุมสภา ใบลมในกระถางถือเป็นพยานที่เป็นกลาง และคำให้การของมันเคยเปลี่ยนการตัดสินใจมาแล้ว",
+      "สั่นไหวทันทีที่มีลมหายใจพัดผ่าน รวมถึงลมหายใจของการโต้เถียงที่อยู่ใกล้ๆ ในห้องประชุมสภา ใบลมในกระถางถือเป็นพยานที่เป็นกลาง และคำให้การของมันเคยเปลี่ยนการตัดสินใจมาแล้ว",
     collection: SpeciesCollection.Original,
   },
   {
@@ -736,7 +736,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Its fronds always point toward the direction the next traveller will leave the house. Busy households buy one as a rough schedule; quiet ones buy one as a small melancholy.",
     descriptionTH:
-      "ใบของมันชี้ไปทางที่นักเดินทางคนต่อไปจะออกจากบ้านเสมอ ครอบครัวที่วุ่นวายจะซื้อมันมาเป็นตารางแบบคร่าว ๆ ส่วนครอบครัวที่เงียบเหงาจะซื้อมาเป็นความเศร้าเล็ก ๆ",
+      "ใบของมันชี้ไปทางที่นักเดินทางคนต่อไปจะออกจากบ้านเสมอ ครอบครัวที่วุ่นวายจะซื้อมันมาเป็นตารางแบบคร่าวๆ ส่วนครอบครัวที่เงียบเหงาจะซื้อมาเป็นความเศร้าเล็กๆ",
     collection: SpeciesCollection.Original,
   },
   {
@@ -758,7 +758,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Lifts itself on the slightest draft and lands wherever its journey teaches a small lesson. Children press one to their cheek before making a wish, and the wish travels with the petal.",
     descriptionTH:
-      "ลอยขึ้นเพียงลมพัดเบา ๆ และลงจอดในจุดที่การเดินทางของมันจะสอนบทเรียนเล็ก ๆ สักบท เด็ก ๆ จะแนบมันกับแก้มก่อนอธิษฐาน แล้วคำอธิษฐานก็จะเดินทางไปกับกลีบ",
+      "ลอยขึ้นเพียงลมพัดเบาๆ และลงจอดในจุดที่การเดินทางของมันจะสอนบทเรียนเล็กๆ สักบท เด็กๆ จะแนบมันกับแก้มก่อนอธิษฐาน แล้วคำอธิษฐานก็จะเดินทางไปกับกลีบ",
     collection: SpeciesCollection.Original,
   },
   {
@@ -802,7 +802,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Opens with the faint sound of a laugh that used to belong in the room. Houses that have grown quiet hang one by the kitchen to coax the old laughter into visiting again.",
     descriptionTH:
-      "บานพร้อมเสียงหัวเราะแผ่ว ๆ ที่เคยดังอยู่ในห้องนั้นเมื่อก่อน บ้านที่กลายเป็นบ้านเงียบจะแขวนมันไว้ในครัว เพื่อชักชวนให้เสียงหัวเราะเก่ากลับมาเยี่ยมอีกครั้ง",
+      "บานพร้อมเสียงหัวเราะแผ่วๆ ที่เคยดังอยู่ในห้องนั้นเมื่อก่อน บ้านที่กลายเป็นบ้านเงียบจะแขวนมันไว้ในครัว เพื่อชักชวนให้เสียงหัวเราะเก่ากลับมาเยี่ยมอีกครั้ง",
     collection: SpeciesCollection.Original,
   },
   {
@@ -813,7 +813,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Brushed against the ear, it plays back a fragment of something once said to you out of love, even if you have forgotten it until the moment. Whose love is a matter the petal does not disclose.",
     descriptionTH:
-      "ปัดเบา ๆ ที่ใบหู มันจะเล่นเสียงเศษหนึ่งของสิ่งที่เคยถูกเอ่ยให้เจ้าฟังด้วยความรัก แม้เจ้าจะหลงลืมไปจนถึงชั่วขณะนั้น ความรักของใคร — มันไม่ยอมบอก",
+      "ปัดเบาๆ ที่ใบหู มันจะเล่นเสียงเศษหนึ่งของสิ่งที่เคยถูกเอ่ยให้เจ้าฟังด้วยความรัก แม้เจ้าจะหลงลืมไปจนถึงชั่วขณะนั้น ความรักของใคร — มันไม่ยอมบอก",
     collection: SpeciesCollection.Original,
   },
   {
@@ -835,7 +835,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Translucent as a windowpane left open for a draft that never quite arrives. Placed on the pillow of someone who cannot stop thinking of the dead, it gently changes the thinking into remembering.",
     descriptionTH:
-      "โปร่งแสงดั่งบานหน้าต่างที่เปิดรอลมซึ่งไม่เคยมาจริง วางบนหมอนของผู้ที่หยุดคิดถึงคนตายไม่ได้ มันจะค่อย ๆ เปลี่ยนความคิดนั้นให้กลายเป็นการระลึก",
+      "โปร่งแสงดั่งบานหน้าต่างที่เปิดรอลมซึ่งไม่เคยมาจริง วางบนหมอนของผู้ที่หยุดคิดถึงคนตายไม่ได้ มันจะค่อยๆ เปลี่ยนความคิดนั้นให้กลายเป็นการระลึก",
     collection: SpeciesCollection.Original,
   },
   {
@@ -857,7 +857,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Opens in the exact shape of a flower you remember someone loving, even if you never met the someone. Florists have made quiet careers on that trick alone.",
     descriptionTH:
-      "บานเป็นรูปทรงของดอกไม้ที่เจ้าจำได้ว่าเคยมีใครบางคนรัก แม้เจ้าจะไม่เคยพบคนคนนั้น ร้านดอกไม้เคยทำมาหากินด้วยกลอุบายเพียงข้อเดียวนี้อย่างเงียบ ๆ",
+      "บานเป็นรูปทรงของดอกไม้ที่เจ้าจำได้ว่าเคยมีใครบางคนรัก แม้เจ้าจะไม่เคยพบคนคนนั้น ร้านดอกไม้เคยทำมาหากินด้วยกลอุบายเพียงข้อเดียวนี้อย่างเงียบๆ",
     collection: SpeciesCollection.Original,
   },
   {
@@ -934,7 +934,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Never stays in one place if tended with earnest hands — it migrates to where mischief is needed next. Leave it alone and it settles, softly amused, as an observer of chaos.",
     descriptionTH:
-      "ไม่เคยอยู่ที่เดียวหากถูกแนบเนียมด้วยมือที่ใจจริง — มันเคลื่อนไปตรงที่ต้องการปีติแรมพลิก ปล่อยให้อยู่เฉย ๆ มันจะตั้งตัวลง หัวเราะเบา ๆ เป็นผู้สังเกตการณ์แห่งความวุ่นวาย",
+      "ไม่เคยอยู่ที่เดียวหากถูกแนบเนียมด้วยมือที่ใจจริง — มันเคลื่อนไปตรงที่ต้องการปีติแรมพลิก ปล่อยให้อยู่เฉยๆ มันจะตั้งตัวลง หัวเราะเบาๆ เป็นผู้สังเกตการณ์แห่งความวุ่นวาย",
     collection: SpeciesCollection.Original,
   },
   {
@@ -967,7 +967,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Opens into a light so gentle that the lost have been known to follow it for miles, emerging relieved in a place they did not intend. Some say it is mercy; some say it is distraction.",
     descriptionTH:
-      "บานเป็นแสงอ่อน ๆ จนคนหลงทางจะตามมันไปได้หลายไมล์ โผล่ออกมาในสถานที่ไม่ตั้งใจ บางคนว่ามันคือเมตตา บางคนว่ามันคือการเบี่ยงเบนความสนใจ",
+      "บานเป็นแสงอ่อนๆ จนคนหลงทางจะตามมันไปได้หลายไมล์ โผล่ออกมาในสถานที่ไม่ตั้งใจ บางคนว่ามันคือเมตตา บางคนว่ามันคือการเบี่ยงเบนความสนใจ",
     collection: SpeciesCollection.Original,
   },
   {
@@ -978,7 +978,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Trails a light as it falls, rewriting the story of the moment it was plucked. Caught mid-air, a wisppetal becomes a small lie that only affects the catcher, and only for one night.",
     descriptionTH:
-      "ทำให้แสงตามไปขณะร่วง เขียนเรื่องราวของชั่วขณะที่ถูกเด็ด ถูกจับกลางอากาศ มันกลายเป็นความเท็จเล็ก ๆ ที่เกี่ยวกับผู้จับเท่านั้น และเพียงคืนเดียว",
+      "ทำให้แสงตามไปขณะร่วง เขียนเรื่องราวของชั่วขณะที่ถูกเด็ด ถูกจับกลางอากาศ มันกลายเป็นความเท็จเล็กๆ ที่เกี่ยวกับผู้จับเท่านั้น และเพียงคืนเดียว",
     collection: SpeciesCollection.Original,
   },
   {
@@ -1000,7 +1000,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Edged with small sharp points that protect more than they wound, like a careful answer to a rude question. Placed on a windowsill it gently reminds burglars that easier houses exist elsewhere.",
     descriptionTH:
-      "ขอบแหลมเล็ก ๆ ที่ปกป้องมากกว่าบาด ราวกับคำตอบที่ดีต่อคำถามหยาบคาย วางบนขอบหน้าต่าง มันจะเตือนโจรอย่างนุ่มนวลว่ามีบ้านที่ง่ายกว่าอยู่ที่อื่น",
+      "ขอบแหลมเล็กๆ ที่ปกป้องมากกว่าบาด ราวกับคำตอบที่ดีต่อคำถามหยาบคาย วางบนขอบหน้าต่าง มันจะเตือนโจรอย่างนุ่มนวลว่ามีบ้านที่ง่ายกว่าอยู่ที่อื่น",
     collection: SpeciesCollection.Original,
   },
   {
@@ -1011,7 +1011,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Its fronds defend a small space around itself so thoroughly that even insects learn to respect the boundary. Grown in a library, it keeps the books from being disturbed by anything less than genuine interest.",
     descriptionTH:
-      "ใบของมันปกป้องพื้นที่เล็ก ๆ รอบตัวจนแม้แต่แมลงก็เรียนรู้ที่จะเคารพขอบเขต ปลูกในห้องสมุด มันจะรักษาหนังสือให้ไม่ถูกรบกวนเว้นแต่มีจริง ๆ ที่สนใจ",
+      "ใบของมันปกป้องพื้นที่เล็กๆ รอบตัวจนแม้แต่แมลงก็เรียนรู้ที่จะเคารพขอบเขต ปลูกในห้องสมุด มันจะรักษาหนังสือให้ไม่ถูกรบกวนเว้นแต่มีจริงๆ ที่สนใจ",
     collection: SpeciesCollection.Original,
   },
   {
@@ -1022,7 +1022,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Opens with petals that cut anyone rude enough to try to pick it, bloodlessly. Placed on a desk it teaches visitors which questions are worth asking.",
     descriptionTH:
-      "บานด้วยกลีบที่บาดใครใจเสื้อพอจะลองเด็ด โดยไม่มีเลือดไหล วางบนโต๊ะ มันจะสอนผู้มาเยี่ยมว่าคำถามไหนคุ้มค่าที่ถามจริง ๆ",
+      "บานด้วยกลีบที่บาดใครใจเสื้อพอจะลองเด็ด โดยไม่มีเลือดไหล วางบนโต๊ะ มันจะสอนผู้มาเยี่ยมว่าคำถามไหนคุ้มค่าที่ถามจริงๆ",
     collection: SpeciesCollection.Original,
   },
   {
@@ -1066,7 +1066,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Its fronds tangle with each other so completely that no single strand can be straightened, but together they are strong. Gardeners say the fern teaches what marriage is, for those willing to watch.",
     descriptionTH:
-      "ใบของมันพันกันจนไม่สามารถแกะออกเดี่ยว ๆ ได้ แต่รวมกันแล้วแข็งแรง ชาวสวนเล่ากันว่าเฟิร์นสอนว่าการแต่งงานคืออะไร สำหรับผู้ที่อดทนพอจะเฝ้าดู",
+      "ใบของมันพันกันจนไม่สามารถแกะออกเดี่ยวๆ ได้ แต่รวมกันแล้วแข็งแรง ชาวสวนเล่ากันว่าเฟิร์นสอนว่าการแต่งงานคืออะไร สำหรับผู้ที่อดทนพอจะเฝ้าดู",
     collection: SpeciesCollection.Original,
   },
   {
@@ -1088,7 +1088,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Wrapped in smaller thorns that protect it from every angle, and you have to want it very badly to unwrap it. Given freely, it becomes a promise that someone believed you were worth the difficulty.",
     descriptionTH:
-      "ห่อด้วยหนามเล็ก ๆ ที่ปกป้องจากทุกมุม เจ้าต้องต้องการมันมากจริง ๆ ถึงจะค่อย ๆ แกะ มอบให้อย่างไม่บังคับ มันกลายเป็นสัญญาว่าใครบางคนเชื่อว่าเจ้าคุ้มค่ากับความยากลำบาก",
+      "ห่อด้วยหนามเล็กๆ ที่ปกป้องจากทุกมุม เจ้าต้องต้องการมันมากจริงๆ ถึงจะค่อยๆ แกะ มอบให้อย่างไม่บังคับ มันกลายเป็นสัญญาว่าใครบางคนเชื่อว่าเจ้าคุ้มค่ากับความยากลำบาก",
     collection: SpeciesCollection.Original,
   },
   {

@@ -1,7 +1,8 @@
-import type { GameEvent } from '@florify/shared';
+import type { AchievementDef, GameEvent } from '@florify/shared';
 import { gameEventBus } from '@/lib/gameEventBus';
 import { useGameStore } from './gameStore';
 import { checkAchievements } from './achievementChecker';
+import { ACHIEVEMENTS_BY_ID } from '@/data/achievements';
 import { toast } from '@/lib/toast';
 
 /**
@@ -32,7 +33,22 @@ function handleEvent(event: GameEvent) {
     }
   }
 
-  const newlyUnlocked = checkAchievements(state);
+  // Secret achievements — unlocked by the event itself, not by state conditions.
+  const secretUnlocks: AchievementDef[] = [];
+  if (event.type === 'water') {
+    const d = new Date();
+    const h = d.getHours();
+    const m = d.getMinutes();
+    const tryUnlock = (id: string) => {
+      if (state.achievements[id]) return;
+      const def = ACHIEVEMENTS_BY_ID.get(id);
+      if (def) secretUnlocks.push(def);
+    };
+    if (h === 12 && m === 0) tryUnlock('secret_high_noon');
+    if (h === 0 && m === 0) tryUnlock('secret_midnight_mass');
+  }
+
+  const newlyUnlocked = [...secretUnlocks, ...checkAchievements(state)];
 
   if (newlyUnlocked.length > 0) {
     const now = new Date().toISOString();

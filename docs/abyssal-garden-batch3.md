@@ -52,7 +52,7 @@ S3: Mature dramatic fan reaching 10cm wide with full elaborate ember fringe, dee
 
 47. Prism Kelp | Twilight | Common | abyssal_garden/twilight
 EN: A tall kelp variety with semi-translucent fronds that refract what little light reaches the twilight zone into subtle rainbow effects. The blade-like leaves are pale green with iridescent edging. Grows in upright clusters creating forest-like structures.
-TH: สาหร่ายที่มีใบเหมือนปริซึมแสง สีเขียวอ่อนมีขอบรุ้งสวย เมื่อแสงสลับไปมา ใบเล็ก ๆ จึงเปล่งประกายเหมือนแร่พลอย
+TH: สาหร่ายที่มีใบเหมือนปริซึมแสง สีเขียวอ่อนมีขอบรุ้งสวย เมื่อแสงสลับไปมา ใบเล็กๆ จึงเปล่งประกายเหมือนแร่พลอย
 S1: Single young kelp blade 3cm tall, barely transparent, pale green coloring starting, botanical illustration style, vertical composition
 S2: Developing kelp plant 8cm tall with 3-4 fronds showing increasing transparency and faint iridescent edges, botanical illustration style, vertical composition
 S3: Mature dramatic kelp reaching 14cm tall with full translucent fronds displaying clear iridescent rainbow edging, forest-like composition, botanical illustration style, vertical composition

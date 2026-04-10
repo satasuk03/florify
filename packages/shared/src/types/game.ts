@@ -92,14 +92,17 @@ export type AchievementCondition =
   | { type: 'combo'; level: 10 | 15 | 20; target: number }
   | { type: 'seed_packets'; tier: 'total' | 'common' | 'rare' | 'legendary'; target: number }
   | { type: 'missions_completed'; target: number }
-  | { type: 'all_daily_completed'; target: number };
+  | { type: 'all_daily_completed'; target: number }
+  | { type: 'secret' };
 
 export interface AchievementDef {
   id: string;
   name: string;
   description: { en: string; th: string };
+  flavor?: { en: string; th: string };
   rewards: AchievementReward[];
   condition: AchievementCondition;
+  secret?: boolean;
 }
 
 export interface AchievementProgress {

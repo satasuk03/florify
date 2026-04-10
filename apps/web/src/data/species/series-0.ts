@@ -21,7 +21,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Unfurls one new frond each dawn and lets yesterday's quietly yellow and fall, a tidy little ritual of moving on. Gardeners say a house with a sunfern in it never dwells on yesterday's quarrels for long.",
     descriptionTH:
-      "คลี่ใบใหม่หนึ่งใบทุกเช้า และปล่อยให้ใบของเมื่อวานค่อย ๆ เหลืองร่วงลง ราวกับพิธีกรรมเล็ก ๆ แห่งการก้าวต่อ ชาวสวนเล่ากันว่าบ้านใดมีเฟิร์นสุริยันอยู่ ความข้องใจของเมื่อวานจะไม่ค้างอยู่ในบ้านนั้นนาน",
+      "คลี่ใบใหม่หนึ่งใบทุกเช้า และปล่อยให้ใบของเมื่อวานค่อยๆ เหลืองร่วงลง ราวกับพิธีกรรมเล็กๆ แห่งการก้าวต่อ ชาวสวนเล่ากันว่าบ้านใดมีเฟิร์นสุริยันอยู่ ความข้องใจของเมื่อวานจะไม่ค้างอยู่ในบ้านนั้นนาน",
     collection: SpeciesCollection.Original,
   },
   {
@@ -43,7 +43,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Children press them into old books to keep the dark out of the page, and mostly it works. Unfolded again after a winter, a sunpetal still smells faintly of the morning it was picked.",
     descriptionTH:
-      "เด็ก ๆ ชอบเอาไปอัดไว้ในสมุดเก่าเพื่อกันความมืดเล็ดลอดเข้าสู่หน้ากระดาษ และส่วนใหญ่ก็ได้ผล คลี่ออกมาอีกครั้งหลังผ่านฤดูหนาวไปแล้ว กลีบสุริยันยังหอมจาง ๆ เป็นกลิ่นของเช้าวันที่ถูกเด็ดมา",
+      "เด็กๆ ชอบเอาไปอัดไว้ในสมุดเก่าเพื่อกันความมืดเล็ดลอดเข้าสู่หน้ากระดาษ และส่วนใหญ่ก็ได้ผล คลี่ออกมาอีกครั้งหลังผ่านฤดูหนาวไปแล้ว กลีบสุริยันยังหอมจางๆ เป็นกลิ่นของเช้าวันที่ถูกเด็ดมา",
     collection: SpeciesCollection.Original,
   },
   {
@@ -65,7 +65,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Its underside silvers only when someone nearby is lying. Midwives used to tuck one beneath a birthing-bed so the room would hold only truth while the child's name was chosen.",
     descriptionTH:
-      "ด้านใต้ของใบจะเงาเป็นสีเงินเฉพาะเมื่อมีคนใกล้ ๆ กำลังโกหก นางผดุงครรภ์สมัยก่อนจะซุกไว้ใต้เตียงคลอด ให้ในห้องนั้นมีแต่ความจริงในเวลาที่ชื่อของทารกถูกเลือก",
+      "ด้านใต้ของใบจะเงาเป็นสีเงินเฉพาะเมื่อมีคนใกล้ๆ กำลังโกหก นางผดุงครรภ์สมัยก่อนจะซุกไว้ใต้เตียงคลอด ให้ในห้องนั้นมีแต่ความจริงในเวลาที่ชื่อของทารกถูกเลือก",
     collection: SpeciesCollection.Original,
   },
   {
@@ -76,7 +76,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "It only unfurls by moonlight, and folds up so fast when you light a lantern that foragers nicknamed it 'the shy cousin'. One frond steeped in cold water is said to trade you an hour of dreamless sleep.",
     descriptionTH:
-      "คลี่ตัวเฉพาะใต้แสงจันทร์ และหุบเร็วจนนักเก็บสมุนไพรเรียกมันเล่น ๆ ว่า 'ลูกพี่ลูกน้องขี้อาย' หากจุดตะเกียงเข้าใกล้ ใบหนึ่งใบแช่น้ำเย็นว่ากันว่าแลกได้กับการหลับไร้ฝันหนึ่งชั่วโมงพอดี",
+      "คลี่ตัวเฉพาะใต้แสงจันทร์ และหุบเร็วจนนักเก็บสมุนไพรเรียกมันเล่นๆ ว่า 'ลูกพี่ลูกน้องขี้อาย' หากจุดตะเกียงเข้าใกล้ ใบหนึ่งใบแช่น้ำเย็นว่ากันว่าแลกได้กับการหลับไร้ฝันหนึ่งชั่วโมงพอดี",
     collection: SpeciesCollection.Original,
   },
   {
@@ -98,7 +98,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Each petal is said to be a single good dream that lost its way to a sleeper. Carry one in your pocket and tonight you may dream someone else's happy ending.",
     descriptionTH:
-      "ว่ากันว่ากลีบแต่ละกลีบคือความฝันดี ๆ หนึ่งฝันที่หลงทางระหว่างเดินไปหาผู้หลับใหล พกไว้ในกระเป๋าสักกลีบ คืนนี้เจ้าอาจได้ฝันตอนจบอันเป็นสุขของใครสักคน",
+      "ว่ากันว่ากลีบแต่ละกลีบคือความฝันดีๆ หนึ่งฝันที่หลงทางระหว่างเดินไปหาผู้หลับใหล พกไว้ในกระเป๋าสักกลีบ คืนนี้เจ้าอาจได้ฝันตอนจบอันเป็นสุขของใครสักคน",
     collection: SpeciesCollection.Original,
   },
   {
@@ -120,7 +120,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Every vein maps a real constellation, though the constellation shifts as the leaf ages. Children who memorize a starleaf at seven grow up unable to get lost on any clear night.",
     descriptionTH:
-      "เส้นใบทุกเส้นคือแผนที่ของกลุ่มดาวจริง ทว่ากลุ่มดาวนั้นจะค่อย ๆ เปลี่ยนไปตามอายุของใบ เด็กที่จดจำใบดาราได้ตอนอายุเจ็ดขวบ จะโตขึ้นโดยไม่เคยหลงในคืนฟ้าใส",
+      "เส้นใบทุกเส้นคือแผนที่ของกลุ่มดาวจริง ทว่ากลุ่มดาวนั้นจะค่อยๆ เปลี่ยนไปตามอายุของใบ เด็กที่จดจำใบดาราได้ตอนอายุเจ็ดขวบ จะโตขึ้นโดยไม่เคยหลงในคืนฟ้าใส",
     collection: SpeciesCollection.Original,
   },
   {
@@ -131,7 +131,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Glints faintly when wishes are made within earshot, brightest for the foolish ones. Hermits grow a row along their doorways as an unkind but honest porch-light.",
     descriptionTH:
-      "ส่องประกายจาง ๆ เมื่อมีการขอพรในระยะที่ได้ยิน และสว่างที่สุดเมื่อเป็นคำอธิษฐานโง่เขลา นักบวชสันโดษปลูกมันเรียงเป็นแถวหน้าประตู ใช้เป็นไฟต้อนรับที่ไม่เกรงใจแต่ซื่อสัตย์",
+      "ส่องประกายจางๆ เมื่อมีการขอพรในระยะที่ได้ยิน และสว่างที่สุดเมื่อเป็นคำอธิษฐานโง่เขลา นักบวชสันโดษปลูกมันเรียงเป็นแถวหน้าประตู ใช้เป็นไฟต้อนรับที่ไม่เกรงใจแต่ซื่อสัตย์",
     collection: SpeciesCollection.Original,
   },
   {
@@ -142,7 +142,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Its seven petals open one by one across seven nights, matching the phases of a small private moon only it can see. Pick it on the seventh night and any wish you speak into the bloom stays spoken for a year.",
     descriptionTH:
-      "กลีบทั้งเจ็ดจะค่อย ๆ บานทีละกลีบตลอดเจ็ดคืน ตรงกับข้างขึ้นข้างแรมของจันทร์น้อยส่วนตัวที่มีเพียงมันเห็น เด็ดมันในคืนที่เจ็ดและคำอธิษฐานใดที่เจ้ากระซิบลงในดอก จะยังถูกเอ่ยไว้นานหนึ่งปี",
+      "กลีบทั้งเจ็ดจะค่อยๆ บานทีละกลีบตลอดเจ็ดคืน ตรงกับข้างขึ้นข้างแรมของจันทร์น้อยส่วนตัวที่มีเพียงมันเห็น เด็ดมันในคืนที่เจ็ดและคำอธิษฐานใดที่เจ้ากระซิบลงในดอก จะยังถูกเอ่ยไว้นานหนึ่งปี",
     collection: SpeciesCollection.Original,
   },
   {
@@ -164,7 +164,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Grows in tiny pinpricks across damp stone like a miniature night sky. Astronomers have been caught charting patches of it instead of the real thing on cloudy weeks, and no one has complained about their maps.",
     descriptionTH:
-      "งอกเป็นจุดเล็ก ๆ บนหินชื้นราวกับท้องฟ้ายามราตรีจำลอง นักดูดาวเคยถูกจับได้ว่าแอบจดแผนที่จากกอของมันแทนของจริงในสัปดาห์ที่ฟ้ามืดครึ้ม และไม่มีใครท้วงแผนที่เหล่านั้นเลยสักราย",
+      "งอกเป็นจุดเล็กๆ บนหินชื้นราวกับท้องฟ้ายามราตรีจำลอง นักดูดาวเคยถูกจับได้ว่าแอบจดแผนที่จากกอของมันแทนของจริงในสัปดาห์ที่ฟ้ามืดครึ้ม และไม่มีใครท้วงแผนที่เหล่านั้นเลยสักราย",
     collection: SpeciesCollection.Original,
   },
   {
@@ -208,7 +208,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Glows gold for the first hour after sunrise, then turns plain cream for the rest of the day as if catching its breath. Alchemists save the gold phase in tiny sealed jars and sell it, dishonestly, as bottled morning.",
     descriptionTH:
-      "เรืองเป็นสีทองในหนึ่งชั่วโมงแรกหลังดวงอาทิตย์ขึ้น จากนั้นก็ค่อย ๆ จางเป็นสีครีมธรรมดาไปตลอดวัน ราวกับกำลังพักหายใจ นักเล่นแร่แปรธาตุเก็บช่วงเวลาทองคำนี้ใส่ขวดเล็ก ๆ แล้วขาย—อย่างไม่สุจริตนัก—ในนาม 'ยามเช้าบรรจุขวด'",
+      "เรืองเป็นสีทองในหนึ่งชั่วโมงแรกหลังดวงอาทิตย์ขึ้น จากนั้นก็ค่อยๆ จางเป็นสีครีมธรรมดาไปตลอดวัน ราวกับกำลังพักหายใจ นักเล่นแร่แปรธาตุเก็บช่วงเวลาทองคำนี้ใส่ขวดเล็กๆ แล้วขาย—อย่างไม่สุจริตนัก—ในนาม 'ยามเช้าบรรจุขวด'",
     collection: SpeciesCollection.Original,
   },
   {
@@ -219,7 +219,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Only grows where an old sorrow was finally let go of at sunrise. Cartographers who specialize in healing trails follow patches of it instead of roads.",
     descriptionTH:
-      "งอกเฉพาะจุดที่ความเศร้าเก่า ๆ ถูกปล่อยวางไปในยามอรุณรุ่ง นักทำแผนที่ที่ชำนาญเส้นทางเยียวยาใจเดินตามกอของมันแทนที่จะเดินตามถนน",
+      "งอกเฉพาะจุดที่ความเศร้าเก่าๆ ถูกปล่อยวางไปในยามอรุณรุ่ง นักทำแผนที่ที่ชำนาญเส้นทางเยียวยาใจเดินตามกอของมันแทนที่จะเดินตามถนน",
     collection: SpeciesCollection.Original,
   },
   {
@@ -241,7 +241,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Closes fronds one by one as the light drains from the sky, like fingers curling around a cooling cup. The last frond to close is the one that remembers the day best, and a mourner who sleeps beside it will dream kindly.",
     descriptionTH:
-      "หุบใบทีละใบขณะที่แสงระบายออกจากท้องฟ้า ราวกับนิ้วมือที่ค่อย ๆ กำรอบถ้วยซึ่งเย็นลง ใบใบสุดท้ายที่หุบคือใบที่จดจำวันนั้นได้ดีที่สุด และผู้โศกเศร้าที่หลับข้างมันจะได้ฝันอย่างอ่อนโยน",
+      "หุบใบทีละใบขณะที่แสงระบายออกจากท้องฟ้า ราวกับนิ้วมือที่ค่อยๆ กำรอบถ้วยซึ่งเย็นลง ใบใบสุดท้ายที่หุบคือใบที่จดจำวันนั้นได้ดีที่สุด และผู้โศกเศร้าที่หลับข้างมันจะได้ฝันอย่างอ่อนโยน",
     collection: SpeciesCollection.Original,
   },
   {
@@ -252,7 +252,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Only opens during the seven minutes when the sky is neither day nor night, a window it seems to find on its own. People born during that same window feel the flower tug at them, gently, whenever it blooms.",
     descriptionTH:
-      "บานเฉพาะในเจ็ดนาทีที่ฟ้าไม่ใช่ทั้งกลางวันและกลางคืน ช่วงเวลาที่มันดูเหมือนจะรู้จักหาเองได้ ผู้ที่เกิดในช่วงเวลาเดียวกันนั้นจะรู้สึกว่ามันเรียกหาอย่างแผ่ว ๆ ทุกครั้งที่บาน",
+      "บานเฉพาะในเจ็ดนาทีที่ฟ้าไม่ใช่ทั้งกลางวันและกลางคืน ช่วงเวลาที่มันดูเหมือนจะรู้จักหาเองได้ ผู้ที่เกิดในช่วงเวลาเดียวกันนั้นจะรู้สึกว่ามันเรียกหาอย่างแผ่วๆ ทุกครั้งที่บาน",
     collection: SpeciesCollection.Original,
   },
   {
@@ -274,7 +274,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Takes on the exact shade of regret at the hour the regret first happened, though it keeps the secret to itself. Pressed between fingers, it smells quietly of unsent letters.",
     descriptionTH:
-      "ซึมสีเข้มเป็นเงาของความเสียดายในชั่วโมงที่ความเสียดายนั้นเกิดขึ้น ทว่ามันเก็บความลับไว้กับตัวเสมอ ถูกบี้เบา ๆ ระหว่างนิ้วมือ กลิ่นของมันจะชวนให้นึกถึงจดหมายที่ไม่เคยถูกส่ง",
+      "ซึมสีเข้มเป็นเงาของความเสียดายในชั่วโมงที่ความเสียดายนั้นเกิดขึ้น ทว่ามันเก็บความลับไว้กับตัวเสมอ ถูกบี้เบาๆ ระหว่างนิ้วมือ กลิ่นของมันจะชวนให้นึกถึงจดหมายที่ไม่เคยถูกส่ง",
     collection: SpeciesCollection.Original,
   },
   {
@@ -285,7 +285,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Black as deep water and cool to the touch even in summer. Laid on a fevered forehead it draws the heat out in slow sips, and the leaf itself turns a little warmer for hours afterwards.",
     descriptionTH:
-      "ดำสนิทดั่งน้ำลึก และสัมผัสเย็นยะเยือกแม้ในฤดูร้อน วางลงบนหน้าผากของผู้มีไข้ มันจะค่อย ๆ ดูดความร้อนออกทีละน้อย และตัวใบเองจะอุ่นขึ้นเล็กน้อยไปอีกหลายชั่วโมงหลังจากนั้น",
+      "ดำสนิทดั่งน้ำลึก และสัมผัสเย็นยะเยือกแม้ในฤดูร้อน วางลงบนหน้าผากของผู้มีไข้ มันจะค่อยๆ ดูดความร้อนออกทีละน้อย และตัวใบเองจะอุ่นขึ้นเล็กน้อยไปอีกหลายชั่วโมงหลังจากนั้น",
     collection: SpeciesCollection.Original,
   },
   {
@@ -329,7 +329,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "So dark green it looks black, and it swallows footfalls so completely that children practice sneaking on it for the hide-and-seek tournaments of summer. Adults who step on it too often lose the habit of announcing themselves in other rooms.",
     descriptionTH:
-      "เขียวเข้มจนดูดำ และกลืนเสียงฝีเท้าจนมิด เด็ก ๆ มักซ้อมย่องบนมันเพื่อแข่งซ่อนหาช่วงฤดูร้อน ผู้ใหญ่ที่เหยียบมันบ่อยเกินไปมักเผลอเลิกนิสัยที่จะประกาศตัวเวลาเข้าห้องอื่น",
+      "เขียวเข้มจนดูดำ และกลืนเสียงฝีเท้าจนมิด เด็กๆ มักซ้อมย่องบนมันเพื่อแข่งซ่อนหาช่วงฤดูร้อน ผู้ใหญ่ที่เหยียบมันบ่อยเกินไปมักเผลอเลิกนิสัยที่จะประกาศตัวเวลาเข้าห้องอื่น",
     collection: SpeciesCollection.Original,
   },
   {
@@ -428,7 +428,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Falls off the flower not downwards but sideways, drifting into whichever direction holds the next wanderer. Catch one on your sleeve and you have been adopted by a road you have not yet walked.",
     descriptionTH:
-      "กลีบร่วงจากดอกไม่ใช่ลงเบื้องล่าง แต่ล่องไปข้าง ๆ สู่ทิศที่นักเดินทางคนต่อไปอยู่ ได้มาติดที่ชายเสื้อสักกลีบหนึ่ง หมายความว่าเจ้าถูกรับเป็นลูกบุญธรรมโดยถนนที่ยังไม่ได้เดิน",
+      "กลีบร่วงจากดอกไม่ใช่ลงเบื้องล่าง แต่ล่องไปข้างๆ สู่ทิศที่นักเดินทางคนต่อไปอยู่ ได้มาติดที่ชายเสื้อสักกลีบหนึ่ง หมายความว่าเจ้าถูกรับเป็นลูกบุญธรรมโดยถนนที่ยังไม่ได้เดิน",
     collection: SpeciesCollection.Original,
   },
   {
@@ -450,7 +450,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Crackles faintly when held against a coming weather change, like a letter arriving early. Farmers used to nail a stormleaf to the barn door as an honest forecast that outlasted any almanac.",
     descriptionTH:
-      "ดังกรอบแกรบแผ่ว ๆ เมื่อถืออยู่ใกล้การเปลี่ยนแปลงของสภาพอากาศที่กำลังมา เหมือนจดหมายที่มาถึงก่อนเวลา ชาวนาสมัยก่อนจะตอกใบพายุไว้ที่ประตูยุ้งฉาง ใช้เป็นคำพยากรณ์ตรง ๆ ที่แม่นกว่าปฏิทินใดเล่มใด",
+      "ดังกรอบแกรบแผ่วๆ เมื่อถืออยู่ใกล้การเปลี่ยนแปลงของสภาพอากาศที่กำลังมา เหมือนจดหมายที่มาถึงก่อนเวลา ชาวนาสมัยก่อนจะตอกใบพายุไว้ที่ประตูยุ้งฉาง ใช้เป็นคำพยากรณ์ตรงๆ ที่แม่นกว่าปฏิทินใดเล่มใด",
     collection: SpeciesCollection.Original,
   },
   {
@@ -461,7 +461,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Each frond uncoils with a small flash of static, not enough to hurt but enough to notice. Kept in a workshop, it keeps tempers a hair's breadth from snapping into proper lightning.",
     descriptionTH:
-      "ใบทุกใบคลี่ตัวพร้อมประกายไฟฟ้าสถิตเล็ก ๆ ไม่มากพอจะเจ็บแต่มากพอจะรู้สึกได้ เก็บไว้ในห้องทำงานช่าง มันจะกันอารมณ์ร้าย ๆ ไม่ให้ลั่นกลายเป็นฟ้าผ่าจริง ๆ",
+      "ใบทุกใบคลี่ตัวพร้อมประกายไฟฟ้าสถิตเล็กๆ ไม่มากพอจะเจ็บแต่มากพอจะรู้สึกได้ เก็บไว้ในห้องทำงานช่าง มันจะกันอารมณ์ร้ายๆ ไม่ให้ลั่นกลายเป็นฟ้าผ่าจริงๆ",
     collection: SpeciesCollection.Original,
   },
   {
@@ -483,7 +483,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Each petal is the exact shade the sky took on a moment before lightning struck somewhere important. Pressed to the ear, an old stormpetal still carries a rumble that may or may not be yours.",
     descriptionTH:
-      "กลีบแต่ละกลีบคือสีท้องฟ้าในชั่วขณะก่อนที่สายฟ้าจะฟาดลงบนสถานที่สำคัญแห่งใดแห่งหนึ่ง แนบแน่นกับหู กลีบพายุเก่า ๆ ยังส่งเสียงคำรามแผ่ว ๆ ออกมา — เสียงซึ่งอาจเป็นของเจ้าหรือไม่ก็ได้",
+      "กลีบแต่ละกลีบคือสีท้องฟ้าในชั่วขณะก่อนที่สายฟ้าจะฟาดลงบนสถานที่สำคัญแห่งใดแห่งหนึ่ง แนบแน่นกับหู กลีบพายุเก่าๆ ยังส่งเสียงคำรามแผ่วๆ ออกมา — เสียงซึ่งอาจเป็นของเจ้าหรือไม่ก็ได้",
     collection: SpeciesCollection.Original,
   },
   {
@@ -538,7 +538,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Damp to the touch no matter how long it has been picked, faintly salty, and always a little restless. Slipped into a lover's collar at the docks, it promises that they will think of you twice a day.",
     descriptionTH:
-      "สัมผัสชื้นเสมอไม่ว่าถูกเด็ดมานานเท่าใด มีรสเค็มจาง ๆ และกระสับกระส่ายอยู่ในที สอดไว้ที่คอเสื้อของคนรักยามส่งเรือ มันให้คำมั่นว่าคนคนนั้นจะนึกถึงเจ้าวันละสองครั้ง",
+      "สัมผัสชื้นเสมอไม่ว่าถูกเด็ดมานานเท่าใด มีรสเค็มจางๆ และกระสับกระส่ายอยู่ในที สอดไว้ที่คอเสื้อของคนรักยามส่งเรือ มันให้คำมั่นว่าคนคนนั้นจะนึกถึงเจ้าวันละสองครั้ง",
     collection: SpeciesCollection.Original,
   },
   {
@@ -571,7 +571,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Glows faint orange along its spine when someone nearby is telling a story worth hearing. A dim emberfern in a tavern is considered the politest possible hint to wrap it up.",
     descriptionTH:
-      "เรืองสีส้มจาง ๆ ตามแนวกลางใบเมื่อมีคนใกล้ ๆ กำลังเล่าเรื่องที่น่าฟัง เฟิร์นถ่านอันสลัวในโรงเตี๊ยมถือเป็นคำใบ้ที่สุภาพที่สุดว่าถึงเวลาจบเรื่องได้แล้ว",
+      "เรืองสีส้มจางๆ ตามแนวกลางใบเมื่อมีคนใกล้ๆ กำลังเล่าเรื่องที่น่าฟัง เฟิร์นถ่านอันสลัวในโรงเตี๊ยมถือเป็นคำใบ้ที่สุภาพที่สุดว่าถึงเวลาจบเรื่องได้แล้ว",
     collection: SpeciesCollection.Original,
   },
   {
@@ -582,7 +582,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Opens in the shape of a small cupped hand holding a single coal you can almost but not quite feel. Grieving parents used to keep one lit by the doorway on winter nights, in case.",
     descriptionTH:
-      "บานเป็นรูปมือเล็ก ๆ ที่โอบถ่านหนึ่งก้อน — ถ่านที่เจ้าเกือบจะสัมผัสได้แต่ไม่ถึง พ่อแม่ที่สูญเสียลูกจะวางดอกนี้ไว้ให้ติดไฟอยู่ที่ประตูในค่ำคืนฤดูหนาว เผื่อเอาไว้",
+      "บานเป็นรูปมือเล็กๆ ที่โอบถ่านหนึ่งก้อน — ถ่านที่เจ้าเกือบจะสัมผัสได้แต่ไม่ถึง พ่อแม่ที่สูญเสียลูกจะวางดอกนี้ไว้ให้ติดไฟอยู่ที่ประตูในค่ำคืนฤดูหนาว เผื่อเอาไว้",
     collection: SpeciesCollection.Original,
   },
   {
@@ -615,7 +615,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "The veins hold thin rimes of ice all year round, even in summer, and snap with a sound like a tiny bell. Apothecaries grind it into winter-lung tinctures for people who can no longer be cold and cannot admit why.",
     descriptionTH:
-      "เส้นใบมีน้ำแข็งบาง ๆ เกาะอยู่ตลอดปี แม้ในฤดูร้อน และหักออกพร้อมเสียงเหมือนกระดิ่งเล็ก ๆ หมอสมุนไพรบดมันเป็นยาสำหรับปอดฤดูหนาว มอบให้ผู้ที่ทนหนาวไม่ได้อีกต่อไป และไม่อาจยอมรับว่าเพราะเหตุใด",
+      "เส้นใบมีน้ำแข็งบางๆ เกาะอยู่ตลอดปี แม้ในฤดูร้อน และหักออกพร้อมเสียงเหมือนกระดิ่งเล็กๆ หมอสมุนไพรบดมันเป็นยาสำหรับปอดฤดูหนาว มอบให้ผู้ที่ทนหนาวไม่ได้อีกต่อไป และไม่อาจยอมรับว่าเพราะเหตุใด",
     collection: SpeciesCollection.Original,
   },
   {
@@ -648,7 +648,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Cold as a swallow of well-water, and it keeps everything near it honest in the way true cold does. Slipped onto a tongue, it silences a lie half-spoken and leaves behind a taste of clean winter air.",
     descriptionTH:
-      "เย็นเท่ากับน้ำบาดาลที่ดื่มอึกเดียว และทำให้ทุกสิ่งรอบข้างตรงไปตรงมาในแบบที่ความเย็นแท้ ๆ เท่านั้นทำได้ วางลงบนลิ้น มันจะทำให้คำโกหกที่เอ่ยได้ครึ่งหนึ่งเงียบลง และทิ้งรสของอากาศฤดูหนาวอันบริสุทธิ์ไว้แทน",
+      "เย็นเท่ากับน้ำบาดาลที่ดื่มอึกเดียว และทำให้ทุกสิ่งรอบข้างตรงไปตรงมาในแบบที่ความเย็นแท้ๆ เท่านั้นทำได้ วางลงบนลิ้น มันจะทำให้คำโกหกที่เอ่ยได้ครึ่งหนึ่งเงียบลง และทิ้งรสของอากาศฤดูหนาวอันบริสุทธิ์ไว้แทน",
     collection: SpeciesCollection.Original,
   },
   {
@@ -692,7 +692,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Opens with a gentle light that rises and falls like slow breathing. Watching it for long enough calms a racing heart and, occasionally, a running nose.",
     descriptionTH:
-      "บานพร้อมแสงอ่อน ๆ ที่ขึ้นลงราวกับลมหายใจเชื่องช้า เฝ้ามองมันนานพอจะทำให้หัวใจที่เต้นระส่ำระสายสงบลง และบางครั้งก็ทำให้อาการน้ำมูกไหลสงบลงด้วย",
+      "บานพร้อมแสงอ่อนๆ ที่ขึ้นลงราวกับลมหายใจเชื่องช้า เฝ้ามองมันนานพอจะทำให้หัวใจที่เต้นระส่ำระสายสงบลง และบางครั้งก็ทำให้อาการน้ำมูกไหลสงบลงด้วย",
     collection: SpeciesCollection.Original,
   },
   {
@@ -703,7 +703,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Each petal stores a little of the day's sunlight and gives it back just before you need to blow out your candle. Children pin them to their collars to ward off the dark, and mostly the dark is polite about it.",
     descriptionTH:
-      "กลีบแต่ละกลีบเก็บแสงอาทิตย์ของวันไว้นิดหน่อย และคืนให้เราในช่วงก่อนที่จะเป่าเทียนนอน เด็ก ๆ จะติดมันไว้ที่คอเสื้อเพื่อกันความมืด และโดยมากความมืดก็สุภาพกับมันเสียด้วย",
+      "กลีบแต่ละกลีบเก็บแสงอาทิตย์ของวันไว้นิดหน่อย และคืนให้เราในช่วงก่อนที่จะเป่าเทียนนอน เด็กๆ จะติดมันไว้ที่คอเสื้อเพื่อกันความมืด และโดยมากความมืดก็สุภาพกับมันเสียด้วย",
     collection: SpeciesCollection.Original,
   },
   {
@@ -714,7 +714,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Lines the walls of caves that have been kind to lost travelers, and darkens, quietly, in ones that have not. Spelunkers learn to read the light the way sailors read the sky.",
     descriptionTH:
-      "ขึ้นเป็นแพตามผนังถ้ำที่เคยมีน้ำใจกับผู้หลงทาง และมืดลงเงียบ ๆ ในถ้ำที่ไม่เคยมี นักสำรวจถ้ำเรียนรู้ที่จะอ่านแสงของมันในแบบที่นักเดินเรืออ่านท้องฟ้า",
+      "ขึ้นเป็นแพตามผนังถ้ำที่เคยมีน้ำใจกับผู้หลงทาง และมืดลงเงียบๆ ในถ้ำที่ไม่เคยมี นักสำรวจถ้ำเรียนรู้ที่จะอ่านแสงของมันในแบบที่นักเดินเรืออ่านท้องฟ้า",
     collection: SpeciesCollection.Original,
   },
   {
@@ -758,7 +758,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Darker than any ink, and it will not make a mark — as if the page it touches is already part of what it remembers. Pressed to a wound it takes the pain away, but also takes the memory of how the wound was earned.",
     descriptionTH:
-      "ดำยิ่งกว่าหมึกใด ๆ และเขียนไม่ติดเลย ราวกับว่าหน้ากระดาษที่มันแตะเป็นส่วนหนึ่งของสิ่งที่มันจดจำไว้แล้ว แนบกับบาดแผล มันจะพรากความเจ็บไป — พร้อมกับความทรงจำว่าบาดแผลนั้นเกิดขึ้นได้อย่างไร",
+      "ดำยิ่งกว่าหมึกใดๆ และเขียนไม่ติดเลย ราวกับว่าหน้ากระดาษที่มันแตะเป็นส่วนหนึ่งของสิ่งที่มันจดจำไว้แล้ว แนบกับบาดแผล มันจะพรากความเจ็บไป — พร้อมกับความทรงจำว่าบาดแผลนั้นเกิดขึ้นได้อย่างไร",
     collection: SpeciesCollection.Original,
   },
   {
@@ -802,7 +802,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Its petals ring, faintly, like wind-chimes when someone speaks the truth in its presence. In the old courts a silverbloom was kept in a pot behind the judge's chair, and it saved more innocents than any advocate.",
     descriptionTH:
-      "กลีบของมันส่งเสียงกังวานแผ่ว ๆ คล้ายกระดิ่งลมเมื่อมีคนพูดความจริงใกล้ ๆ ในศาลยุคเก่า ดอกเงินจะถูกปลูกไว้ในกระถางหลังเก้าอี้ผู้พิพากษา และมันช่วยชีวิตคนบริสุทธิ์ได้มากกว่าทนายคนใด",
+      "กลีบของมันส่งเสียงกังวานแผ่วๆ คล้ายกระดิ่งลมเมื่อมีคนพูดความจริงใกล้ๆ ในศาลยุคเก่า ดอกเงินจะถูกปลูกไว้ในกระถางหลังเก้าอี้ผู้พิพากษา และมันช่วยชีวิตคนบริสุทธิ์ได้มากกว่าทนายคนใด",
     collection: SpeciesCollection.Original,
   },
   {
@@ -835,7 +835,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Heavier than a leaf has any right to be, and warm in the way gold never quite is. Pressed between the pages of a ledger, it inclines the numbers to be a little gentler to whoever is reading them.",
     descriptionTH:
-      "หนักกว่าใบไม้ใด ๆ ควรจะเป็น และอุ่นในแบบที่ทองคำไม่เคยอุ่นจริง ๆ อัดไว้ระหว่างหน้าของสมุดบัญชี มันจะทำให้ตัวเลขอ่อนโยนต่อผู้ที่กำลังอ่านมันขึ้นอีกนิดหน่อย",
+      "หนักกว่าใบไม้ใดๆ ควรจะเป็น และอุ่นในแบบที่ทองคำไม่เคยอุ่นจริงๆ อัดไว้ระหว่างหน้าของสมุดบัญชี มันจะทำให้ตัวเลขอ่อนโยนต่อผู้ที่กำลังอ่านมันขึ้นอีกนิดหน่อย",
     collection: SpeciesCollection.Original,
   },
   {
@@ -846,7 +846,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Its fronds shed flakes so fine that dust-motes in a sunbeam keep mistaking them for relatives. Old accountants bottle the flakes, label them 'hope', and give them as wedding gifts.",
     descriptionTH:
-      "ใบของมันผลัดเกล็ดละเอียดจนละอองฝุ่นในลำแสงแดดเข้าใจผิดคิดว่าเป็นญาติอยู่เนือง ๆ นักบัญชีเฒ่าจะเก็บเกล็ดเหล่านั้นใส่ขวดเล็ก ติดป้ายว่า 'ความหวัง' และให้เป็นของขวัญแต่งงาน",
+      "ใบของมันผลัดเกล็ดละเอียดจนละอองฝุ่นในลำแสงแดดเข้าใจผิดคิดว่าเป็นญาติอยู่เนืองๆ นักบัญชีเฒ่าจะเก็บเกล็ดเหล่านั้นใส่ขวดเล็ก ติดป้ายว่า 'ความหวัง' และให้เป็นของขวัญแต่งงาน",
     collection: SpeciesCollection.Original,
   },
   {
@@ -857,7 +857,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Said to be coaxed into flowering only by the songs of people who have never been rich. In the villages it was once considered a reliable way to tell which children were telling the truth about their families.",
     descriptionTH:
-      "ว่ากันว่ามันจะยอมออกดอกเฉพาะจากเสียงเพลงของคนที่ไม่เคยร่ำรวย ในหมู่บ้านเก่า ๆ มันเคยเป็นวิธีที่น่าเชื่อถือในการบอกว่าเด็กคนไหนพูดความจริงเกี่ยวกับฐานะของครอบครัว",
+      "ว่ากันว่ามันจะยอมออกดอกเฉพาะจากเสียงเพลงของคนที่ไม่เคยร่ำรวย ในหมู่บ้านเก่าๆ มันเคยเป็นวิธีที่น่าเชื่อถือในการบอกว่าเด็กคนไหนพูดความจริงเกี่ยวกับฐานะของครอบครัว",
     collection: SpeciesCollection.Original,
   },
   {
@@ -956,7 +956,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Its scent is the one that comes through an open window in a house where someone is just finishing their last book of the night. Scholars keep one for company and then, slowly, for companionship.",
     descriptionTH:
-      "กลิ่นของมันคือกลิ่นที่ลอยผ่านหน้าต่างเปิดในบ้านที่มีใครบางคนกำลังอ่านหนังสือเล่มสุดท้ายของค่ำคืนจบ นักอ่านจะเก็บมันไว้เพื่อเป็นเพื่อน และค่อย ๆ กลายเป็นคู่ชีวิต",
+      "กลิ่นของมันคือกลิ่นที่ลอยผ่านหน้าต่างเปิดในบ้านที่มีใครบางคนกำลังอ่านหนังสือเล่มสุดท้ายของค่ำคืนจบ นักอ่านจะเก็บมันไว้เพื่อเป็นเพื่อน และค่อยๆ กลายเป็นคู่ชีวิต",
     collection: SpeciesCollection.Original,
   },
   {
@@ -978,7 +978,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Bruises easily, and each bruise becomes a slightly darker violet until the whole petal is the colour of a very good evening. Pressed into letters, it helps the reader hear the tone you meant.",
     descriptionTH:
-      "ช้ำง่ายมาก และแต่ละรอยช้ำจะกลายเป็นสีม่วงเข้มขึ้นทีละน้อย จนทั้งกลีบเป็นสีของค่ำคืนที่ดีเยี่ยม อัดไว้ในจดหมาย มันช่วยให้ผู้อ่านได้ยินน้ำเสียงที่เจ้าตั้งใจสื่อจริง ๆ",
+      "ช้ำง่ายมาก และแต่ละรอยช้ำจะกลายเป็นสีม่วงเข้มขึ้นทีละน้อย จนทั้งกลีบเป็นสีของค่ำคืนที่ดีเยี่ยม อัดไว้ในจดหมาย มันช่วยให้ผู้อ่านได้ยินน้ำเสียงที่เจ้าตั้งใจสื่อจริงๆ",
     collection: SpeciesCollection.Original,
   },
   {
@@ -1022,7 +1022,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Opens a shade deeper on days when the sky above it is clouded, as if covering for an absent friend. Children on overcast afternoons have been caught talking to it about serious things.",
     descriptionTH:
-      "บานเป็นสีเข้มขึ้นในวันที่ท้องฟ้าเหนือมันมีเมฆปกคลุม ราวกับกำลังทำหน้าที่แทนเพื่อนที่ไม่มา เด็ก ๆ ในบ่ายที่ฟ้าหม่นถูกจับได้ว่ากำลังคุยเรื่องจริงจังกับมัน",
+      "บานเป็นสีเข้มขึ้นในวันที่ท้องฟ้าเหนือมันมีเมฆปกคลุม ราวกับกำลังทำหน้าที่แทนเพื่อนที่ไม่มา เด็กๆ ในบ่ายที่ฟ้าหม่นถูกจับได้ว่ากำลังคุยเรื่องจริงจังกับมัน",
     collection: SpeciesCollection.Original,
   },
   {
@@ -1077,7 +1077,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Opens slowly over the course of a full week, each petal the colour of a different lucky year. Keep one on a windowsill and you will notice small coincidences start arriving in pairs.",
     descriptionTH:
-      "บานช้า ๆ ตลอดหนึ่งสัปดาห์เต็ม กลีบแต่ละกลีบเป็นสีของปีนักษัตรที่ต่างกัน วางไว้ขอบหน้าต่าง เจ้าจะสังเกตเห็นเรื่องบังเอิญเล็ก ๆ เริ่มมาเป็นคู่",
+      "บานช้าๆ ตลอดหนึ่งสัปดาห์เต็ม กลีบแต่ละกลีบเป็นสีของปีนักษัตรที่ต่างกัน วางไว้ขอบหน้าต่าง เจ้าจะสังเกตเห็นเรื่องบังเอิญเล็กๆ เริ่มมาเป็นคู่",
     collection: SpeciesCollection.Original,
   },
   {
@@ -1099,7 +1099,7 @@ const series: readonly SpeciesDef[] = [
     descriptionEN:
       "Grows in the narrow cracks of any carved inscription that has been read aloud for more than a hundred years. Scholars tracing old memorials find the moss leads them to the lines that mattered most.",
     descriptionTH:
-      "งอกในรอยแคบของอักษรจารึกที่ถูกอ่านออกเสียงมานานกว่าหนึ่งร้อยปี นักวิชาการที่ตามอนุสรณ์เก่า ๆ จะพบว่ามอสพาพวกเขาไปหาบรรทัดที่สำคัญที่สุดเสมอ",
+      "งอกในรอยแคบของอักษรจารึกที่ถูกอ่านออกเสียงมานานกว่าหนึ่งร้อยปี นักวิชาการที่ตามอนุสรณ์เก่าๆ จะพบว่ามอสพาพวกเขาไปหาบรรทัดที่สำคัญที่สุดเสมอ",
     collection: SpeciesCollection.Original,
   },
 ];
