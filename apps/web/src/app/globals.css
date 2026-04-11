@@ -6,49 +6,51 @@
    `bg-cream-50`, `text-ink-900`, `shadow-soft-md`). */
 @theme {
   /* Cream — off-white warm scale (surfaces) */
-  --color-cream-50:  #FBF8F3;
-  --color-cream-100: #F6F1E8;
-  --color-cream-200: #EEE6D6;
-  --color-cream-300: #E3D7C0;
-  --color-cream-400: #D1C0A0;
+  --color-cream-50: #fbf8f3;
+  --color-cream-100: #f6f1e8;
+  --color-cream-200: #eee6d6;
+  --color-cream-300: #e3d7c0;
+  --color-cream-400: #d1c0a0;
 
   /* Ink — warm dark text */
-  --color-ink-900: #2B241B;
-  --color-ink-700: #4A3F30;
-  --color-ink-500: #6B5E4B;
-  --color-ink-300: #9C8F7B;
+  --color-ink-900: #2b241b;
+  --color-ink-700: #4a3f30;
+  --color-ink-500: #6b5e4b;
+  --color-ink-300: #9c8f7b;
 
   /* Clay — earthy terracotta accent */
-  --color-clay-400: #D89872;
-  --color-clay-500: #C7825A;
-  --color-clay-600: #A96842;
+  --color-clay-400: #d89872;
+  --color-clay-500: #c7825a;
+  --color-clay-600: #a96842;
 
   /* Leaf — nature green */
-  --color-leaf-300: #A8C49A;
-  --color-leaf-500: #6B8E4E;
-  --color-leaf-700: #4A6B35;
+  --color-leaf-300: #a8c49a;
+  --color-leaf-500: #6b8e4e;
+  --color-leaf-700: #4a6b35;
 
   /* Rarity tier colors */
-  --color-rarity-common:    #B8A888;
-  --color-rarity-rare:      #7A9CB8;
-  --color-rarity-legendary: #D4A24C;
+  --color-rarity-common: #b8a888;
+  --color-rarity-rare: #7a9cb8;
+  --color-rarity-legendary: #d4a24c;
 
   /* Utility */
-  --color-water:   #8EB5C7;
-  --color-warning: #C9925E;
-  --color-danger:  #B5574A;
+  --color-water: #8eb5c7;
+  --color-warning: #c9925e;
+  --color-danger: #b5574a;
 
   /* Warm soft shadows (not neutral gray) */
   --shadow-soft-sm: 0 1px 2px rgba(75, 55, 30, 0.06);
   --shadow-soft-md: 0 4px 12px rgba(75, 55, 30, 0.08);
   --shadow-soft-lg: 0 12px 32px rgba(75, 55, 30, 0.12);
-  --shadow-glow-common:    0 0 24px rgba(184, 168, 136, 0.4);
-  --shadow-glow-rare:      0 0 32px rgba(122, 156, 184, 0.5);
+  --shadow-glow-common: 0 0 24px rgba(184, 168, 136, 0.4);
+  --shadow-glow-rare: 0 0 32px rgba(122, 156, 184, 0.5);
   --shadow-glow-legendary: 0 0 48px rgba(212, 162, 76, 0.6);
 
   /* Typography — next/font injects CSS variables via layout.tsx */
-  --font-sans: var(--font-plex-thai), system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-serif: var(--font-fraunces), var(--font-noto-serif-thai), ui-serif, Georgia, serif;
+  --font-sans:
+    var(--font-plex-thai), system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif:
+    var(--font-fraunces), var(--font-noto-serif-thai), ui-serif, Georgia, serif;
 }
 
 /* ─── Base layer ───────────────────────────────────────────────── */
@@ -69,8 +71,8 @@
 
   /* Mobile fixes — designs/08 §8.2 */
   body {
-    overscroll-behavior: none;        /* prevent pull-to-refresh */
-    touch-action: manipulation;       /* kill 300ms tap delay */
+    overscroll-behavior: none; /* prevent pull-to-refresh */
+    touch-action: manipulation; /* kill 300ms tap delay */
     -webkit-tap-highlight-color: transparent;
     -webkit-user-select: none;
     user-select: none;
@@ -78,7 +80,7 @@
   input,
   textarea,
   select {
-    font-size: 16px;                  /* prevent iOS zoom on focus */
+    font-size: 16px; /* prevent iOS zoom on focus */
   }
   button {
     -webkit-tap-highlight-color: transparent;
@@ -127,6 +129,28 @@
     animation: scale-in 480ms cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
+  /* Juicy reveal: bouncy scale-in used by MaxRevealModal card. */
+  .animate-reveal-pop {
+    animation: reveal-pop 640ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+
+  /* Species image zoom-in for the reveal modal — starts tiny and
+     spring-scales up; pairs with a rotating radial glow behind it. */
+  .animate-reveal-zoom {
+    animation: reveal-zoom 720ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    transform-origin: center;
+  }
+
+  /* Radial glow ring behind the reveal image — expands + fades. */
+  .animate-reveal-glow {
+    animation: reveal-glow 1100ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  /* Staggered children inside the reveal modal — reuses fade-up. */
+  .animate-reveal-line {
+    animation: fade-up 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
   .animate-sheet-up {
     animation: sheet-up 460ms cubic-bezier(0.22, 1, 0.36, 1) both;
   }
@@ -167,7 +191,8 @@
      they depend on measured rects. Tiny upward hop at the start sells
      the "pluck" before the arc. */
   .animate-harvest-fly-to-gallery {
-    animation: harvest-fly-to-gallery 720ms cubic-bezier(0.5, 0, 0.2, 1) forwards;
+    animation: harvest-fly-to-gallery 720ms cubic-bezier(0.5, 0, 0.2, 1)
+      forwards;
     will-change: transform, opacity;
   }
 
@@ -278,7 +303,7 @@
     isolation: isolate;
   }
   .shine-on-hover::after {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0;
     background: linear-gradient(
@@ -350,6 +375,54 @@
   100% {
     opacity: 1;
     transform: scale(1);
+  }
+}
+
+@keyframes reveal-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.7) translateY(20px);
+  }
+  55% {
+    opacity: 1;
+    transform: scale(1.04) translateY(-2px);
+  }
+  80% {
+    transform: scale(0.98) translateY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes reveal-zoom {
+  0% {
+    opacity: 0;
+    transform: scale(0.4) rotate(-8deg);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.08) rotate(2deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@keyframes reveal-glow {
+  0% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  40% {
+    opacity: 0.9;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.4);
   }
 }
 
@@ -627,8 +700,12 @@
 /* ── Wave water fill ────────────────────────────── */
 
 @keyframes wave-drift {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 /* ── Water drops indicator animations ────────────── */
@@ -646,12 +723,24 @@
 }
 
 @keyframes claim-press {
-  0% { transform: scale(1); }
-  14% { transform: scale(0.94) translateY(2px); }
-  32% { transform: scale(1.05) translateY(-1px); }
-  52% { transform: scale(0.98); }
-  72% { transform: scale(1.02); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+  14% {
+    transform: scale(0.94) translateY(2px);
+  }
+  32% {
+    transform: scale(1.05) translateY(-1px);
+  }
+  52% {
+    transform: scale(0.98);
+  }
+  72% {
+    transform: scale(1.02);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 /* Ambient "factory working" puff — small emoji rises and fades out.
@@ -780,7 +869,8 @@
 }
 
 @keyframes milestone-glow {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 0 0 0 rgba(199, 130, 90, 0);
   }
   50% {
@@ -789,25 +879,39 @@
 }
 
 @keyframes claim-btn-glow {
-  0%, 100% {
-    box-shadow: 0 4px 16px rgba(199, 130, 90, 0.3),
-                0 0 0 0 rgba(199, 130, 90, 0);
+  0%,
+  100% {
+    box-shadow:
+      0 4px 16px rgba(199, 130, 90, 0.3),
+      0 0 0 0 rgba(199, 130, 90, 0);
   }
   50% {
-    box-shadow: 0 6px 24px rgba(199, 130, 90, 0.45),
-                0 0 20px 4px rgba(199, 130, 90, 0.2);
+    box-shadow:
+      0 6px 24px rgba(199, 130, 90, 0.45),
+      0 0 20px 4px rgba(199, 130, 90, 0.2);
   }
 }
 
 @keyframes drop-icon-wobble {
-  0%, 100% { transform: rotate(0deg); }
-  25% { transform: rotate(-12deg); }
-  75% { transform: rotate(12deg); }
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-12deg);
+  }
+  75% {
+    transform: rotate(12deg);
+  }
 }
 
 @keyframes shimmer-sweep {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
 }
 
 @keyframes claim-drop-burst {
@@ -817,7 +921,8 @@
   }
   30% {
     opacity: 1;
-    transform: translate(calc(var(--dx) * 0.4), calc(var(--dy) * 0.4)) scale(1.2);
+    transform: translate(calc(var(--dx) * 0.4), calc(var(--dy) * 0.4))
+      scale(1.2);
   }
   100% {
     transform: translate(var(--dx), var(--dy)) scale(0.4);
@@ -845,7 +950,8 @@
     transform: scale(1) translateY(0);
   }
   18% {
-    transform: scale(var(--sq-down, 0.91), var(--sq-y, 0.96)) translateY(var(--sq-dy, 2px));
+    transform: scale(var(--sq-down, 0.91), var(--sq-y, 0.96))
+      translateY(var(--sq-dy, 2px));
   }
   42% {
     transform: scale(var(--bn-up, 1.06), 0.97) translateY(var(--bn-dy, -3px));
@@ -881,13 +987,15 @@
     transform: rotate(0deg) scale(1);
   }
   15% {
-    transform: rotate(calc(var(--icon-rot, 14deg) * -1)) scale(var(--icon-s, 1.2));
+    transform: rotate(calc(var(--icon-rot, 14deg) * -1))
+      scale(var(--icon-s, 1.2));
   }
   35% {
     transform: rotate(calc(var(--icon-rot, 14deg) * 0.7)) scale(0.9);
   }
   55% {
-    transform: rotate(calc(var(--icon-rot, 14deg) * -0.35)) scale(calc(var(--icon-s, 1.2) * 0.9));
+    transform: rotate(calc(var(--icon-rot, 14deg) * -0.35))
+      scale(calc(var(--icon-s, 1.2) * 0.9));
   }
   75% {
     transform: rotate(calc(var(--icon-rot, 14deg) * 0.15)) scale(0.97);
@@ -912,11 +1020,22 @@
 }
 
 @keyframes water-btn-shake {
-  0%, 100% { transform: translateX(0); }
-  20% { transform: translateX(-3px) rotate(-1.5deg); }
-  40% { transform: translateX(3px) rotate(1.5deg); }
-  60% { transform: translateX(-2px) rotate(-1deg); }
-  80% { transform: translateX(2px) rotate(0.5deg); }
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-3px) rotate(-1.5deg);
+  }
+  40% {
+    transform: translateX(3px) rotate(1.5deg);
+  }
+  60% {
+    transform: translateX(-2px) rotate(-1deg);
+  }
+  80% {
+    transform: translateX(2px) rotate(0.5deg);
+  }
 }
 
 /* ── Combo burst: number pop + particle scatter ────────────── */
@@ -942,44 +1061,193 @@
 
 @keyframes combo-confetti-fly {
   0% {
-    transform: translate(
-      calc(-50% + var(--cox, 0px)),
-      var(--coy, 0px)
-    ) scale(0.3) rotate(0deg);
+    transform: translate(calc(-50% + var(--cox, 0px)), var(--coy, 0px))
+      scale(0.3) rotate(0deg);
     opacity: 0;
   }
   12% {
     opacity: 1;
-    transform: translate(
-      calc(-50% + var(--cox, 0px)),
-      var(--coy, 0px)
-    ) scale(1.1) rotate(0deg);
+    transform: translate(calc(-50% + var(--cox, 0px)), var(--coy, 0px))
+      scale(1.1) rotate(0deg);
   }
   70% {
     opacity: 0.85;
   }
   100% {
     transform: translate(
-      calc(-50% + var(--cdx, 0px)),
-      calc(var(--cdy, -30px) + 18px)
-    ) scale(0.35) rotate(var(--crot, 0deg));
+        calc(-50% + var(--cdx, 0px)),
+        calc(var(--cdy, -30px) + 18px)
+      )
+      scale(0.35) rotate(var(--crot, 0deg));
     opacity: 0;
   }
 }
 
 @keyframes booster-shake {
-  0%, 100% { transform: rotate(0deg); }
-  25% { transform: rotate(-4deg) scale(1.02); }
-  75% { transform: rotate(4deg) scale(1.02); }
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-4deg) scale(1.02);
+  }
+  75% {
+    transform: rotate(4deg) scale(1.02);
+  }
 }
 
 /* ── Gentle water-shake for flora & progress bar ───────────── */
 
 @keyframes water-shake {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  15% { transform: translate(-3px, 2px) scale(0.96, 1.04); }
-  35% { transform: translate(3px, -2px) scale(1.04, 0.97); }
-  55% { transform: translate(-2px, 1px) scale(0.98, 1.02); }
-  75% { transform: translate(1.5px, -0.5px) scale(1.01, 0.99); }
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  15% {
+    transform: translate(-3px, 2px) scale(0.96, 1.04);
+  }
+  35% {
+    transform: translate(3px, -2px) scale(1.04, 0.97);
+  }
+  55% {
+    transform: translate(-2px, 1px) scale(0.98, 1.02);
+  }
+  75% {
+    transform: translate(1.5px, -0.5px) scale(1.01, 0.99);
+  }
 }
 
+/* ── Flora Level frames ──────────────────────────────────────────── */
+/* Applied to a real absolutely-positioned <div> overlay inside the
+   tile (not ::after) because pseudo-elements interact poorly with
+   the tile's hover transform + overflow-hidden. The overlay sits on
+   top of the species image with pointer-events: none. */
+.fl-frame-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0.6;
+}
+.fl-frame-tier-1 {
+  border: 1px solid var(--fl-frame-color);
+}
+.fl-frame-tier-2 {
+  border: 2px solid var(--fl-frame-color);
+}
+.fl-frame-tier-3 {
+  border: 2px solid var(--fl-frame-metal-a);
+  box-shadow:
+    inset 0 0 20px -4px var(--fl-frame-metal-b),
+    0 0 10px -2px var(--fl-frame-metal-b);
+  animation: fl-frame-pulse 3s ease-in-out infinite;
+}
+@keyframes fl-frame-pulse {
+  0%,
+  100% {
+    opacity: 0.5;
+    filter: brightness(1);
+  }
+  50% {
+    opacity: 0.8;
+    filter: brightness(1.2);
+  }
+}
+
+.fl-frame-common {
+  --fl-frame-color: #b8a888;
+  --fl-frame-metal-a: #e8ecf0;
+  --fl-frame-metal-b: #b8a888;
+}
+.fl-frame-rare {
+  --fl-frame-color: #7a9cb8;
+  --fl-frame-metal-a: #fde9b5;
+  --fl-frame-metal-b: #7a9cb8;
+}
+.fl-frame-legendary {
+  --fl-frame-color: #d4a24c;
+  --fl-frame-metal-a: #ffb0c3;
+  --fl-frame-metal-b: #c9a3ff;
+}
+
+/* ── Flora Level — Shiny overlay (Lv 5) ─────────────────────────── */
+.shiny-overlay {
+  mix-blend-mode: overlay;
+  background-size: 200% 200%;
+}
+.shiny-common {
+  background-image: linear-gradient(
+    115deg,
+    transparent 40%,
+    rgba(232, 236, 240, 0.6) 50%,
+    rgba(255, 255, 255, 0.8) 55%,
+    rgba(184, 190, 197, 0.6) 60%,
+    transparent 70%
+  );
+  animation: fl-shiny-sweep 4.5s linear infinite;
+}
+.shiny-rare {
+  background-image: linear-gradient(
+    115deg,
+    transparent 40%,
+    rgba(200, 159, 74, 0.6) 50%,
+    rgba(253, 233, 181, 0.9) 55%,
+    rgba(155, 122, 42, 0.6) 60%,
+    transparent 70%
+  );
+  animation: fl-shiny-sweep 4.5s linear infinite;
+}
+.shiny-legendary {
+  background-image: linear-gradient(
+    115deg,
+    transparent 40%,
+    rgba(168, 122, 224, 0.55) 50%,
+    rgba(230, 200, 255, 0.85) 55%,
+    rgba(120, 80, 180, 0.55) 60%,
+    transparent 70%
+  );
+  animation: fl-shiny-sweep 4.5s linear infinite;
+}
+@keyframes fl-shiny-sweep {
+  0% {
+    background-position: 200% 0%;
+  }
+  100% {
+    background-position: -200% 0%;
+  }
+}
+@keyframes fl-shiny-hue {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+  100% {
+    filter: hue-rotate(360deg);
+  }
+}
+
+/* ── Flora Level — Rainbow epithet text ─────────────────────────── */
+.fl-rainbow-text {
+  background-image: linear-gradient(
+    90deg,
+    #ffb0c3 0%,
+    #ffe18a 20%,
+    #a6f0ad 40%,
+    #9ec6ff 60%,
+    #c9a3ff 80%,
+    #ffb0c3 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: fl-rainbow-sweep 4s linear infinite;
+}
+@keyframes fl-rainbow-sweep {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}

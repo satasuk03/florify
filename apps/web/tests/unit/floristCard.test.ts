@@ -9,6 +9,7 @@ import {
 import type { FloristCardData } from "@/store/gameStore";
 import { createInitialState } from "@/store/initialState";
 import { ACHIEVEMENTS } from "@/data/achievements";
+import { SPECIES } from "@/data/species";
 
 // ── deriveSerial ──────────────────────────────────────────────────
 
@@ -53,6 +54,7 @@ const sampleData: FloristCardData = {
   serial: "FL-3K2P-9XQ4",
   displayName: "Guest",
   title: "Apprentice",
+  titleShiny: false,
   avatar: null,
 };
 
@@ -167,25 +169,28 @@ describe("buildLayout", () => {
 // ── selectFloristCard — title + avatar resolution ─────────────────
 
 describe("selectFloristCard", () => {
-  it("uses the auto rank as title when titleAchievementId is null", () => {
+  it("uses the auto rank as title when titleSource is auto", () => {
     const state = createInitialState();
     const data = selectFloristCard(state);
     expect(data.title).toBe(data.rank); // Seedling at start
+    expect(data.titleShiny).toBe(false);
   });
 
-  it("uses the achievement name when titleAchievementId resolves", () => {
+  it("uses the achievement name when titleSource is achievement and id resolves", () => {
     const firstAch = ACHIEVEMENTS[0]!;
     const state = createInitialState();
-    state.passportCustomization.titleAchievementId = firstAch.id;
+    state.passportCustomization.titleSource = { type: "achievement", id: firstAch.id };
     const data = selectFloristCard(state);
     expect(data.title).toBe(firstAch.name);
+    expect(data.titleShiny).toBe(false);
   });
 
-  it("falls back to rank when titleAchievementId doesn't exist", () => {
+  it("falls back to rank when achievement id doesn't exist", () => {
     const state = createInitialState();
-    state.passportCustomization.titleAchievementId = "nonexistent_ach_id";
+    state.passportCustomization.titleSource = { type: "achievement", id: "nonexistent_ach_id" };
     const data = selectFloristCard(state);
     expect(data.title).toBe(data.rank);
+    expect(data.titleShiny).toBe(false);
   });
 
   it("passes avatar through when set", () => {
@@ -199,5 +204,64 @@ describe("selectFloristCard", () => {
     const state = createInitialState();
     const data = selectFloristCard(state);
     expect(data.avatar).toBeNull();
+  });
+});
+
+// ── selectFloristCard — title resolution (PassportTitleSource) ────
+
+describe("selectFloristCard — title resolution", () => {
+  it("auto → rank, not shiny", () => {
+    const s = createInitialState();
+    const c = selectFloristCard(s, "en");
+    expect(c.title).toBe(c.rank);
+    expect(c.titleShiny).toBe(false);
+  });
+
+  it("unknown achievement id → rank, not shiny", () => {
+    const s = createInitialState();
+    s.passportCustomization.titleSource = {
+      type: "achievement",
+      id: "__unknown_achievement__",
+    };
+    const c = selectFloristCard(s, "en");
+    expect(c.titleShiny).toBe(false);
+    expect(c.title).toBe(c.rank);
+  });
+
+  it("epithet source for a species with epithet → epithet text + shiny", () => {
+    const legendaryWithEpithet = SPECIES.find(
+      (sp) => sp.rarity === "legendary" && sp.epithet,
+    );
+    if (!legendaryWithEpithet) {
+      // Task 7 writes epithets; this case becomes testable after Task 7 runs.
+      return;
+    }
+    const s = createInitialState();
+    s.passportCustomization.titleSource = {
+      type: "epithet",
+      speciesId: legendaryWithEpithet.id,
+    };
+    const en = selectFloristCard(s, "en");
+    const th = selectFloristCard(s, "th");
+    expect(en.title).toBe(legendaryWithEpithet.epithet!.en);
+    expect(en.titleShiny).toBe(true);
+    expect(th.title).toBe(legendaryWithEpithet.epithet!.th);
+    expect(th.titleShiny).toBe(true);
+  });
+
+  it("epithet source for a species without epithet → rank, not shiny", () => {
+    const s = createInitialState();
+    s.passportCustomization.titleSource = { type: "epithet", speciesId: 0 };
+    const c = selectFloristCard(s, "en");
+    expect(c.title).toBe(c.rank);
+    expect(c.titleShiny).toBe(false);
+  });
+
+  it("epithet source for a completely unknown speciesId → rank, not shiny", () => {
+    const s = createInitialState();
+    s.passportCustomization.titleSource = { type: "epithet", speciesId: 999999 };
+    const c = selectFloristCard(s, "en");
+    expect(c.title).toBe(c.rank);
+    expect(c.titleShiny).toBe(false);
   });
 });

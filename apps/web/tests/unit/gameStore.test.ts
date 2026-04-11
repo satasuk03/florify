@@ -6,11 +6,11 @@ import {
   DROP_REGEN_MS, PITY_THRESHOLD, PITY_POINTS_COMMON, PITY_POINTS_RARE, PITY_POINTS_LEGENDARY,
   SCHEMA_VERSION,
   CHECKIN_BASE_DROPS, CHECKIN_STREAK_BONUS_MAX,
-  MISSION_MILESTONES, MISSION_MILESTONE_DROPS, MISSION_POINTS_PER, DAILY_MISSION_COUNT,
+  MISSION_MILESTONES, MISSION_MILESTONE_DROPS, DAILY_MISSION_COUNT,
   SPROUT_HARVEST_COMMON, SPROUT_HARVEST_RARE, SPROUT_HARVEST_LEGENDARY,
   SPROUT_QUEST_REFRESH_COST, SPROUT_ALL_MISSIONS_BONUS,
   BOOSTER_COST_COMMON,
-  type TreeInstance, type CollectedSpecies, type PlayerState, type DailyMission,
+  type TreeInstance, type CollectedSpecies, type DailyMission,
 } from '@florify/shared';
 import { SPECIES } from '@/data/species';
 import { todayLocalDate } from '@/lib/time';
@@ -1228,13 +1228,17 @@ describe('migrate v8 → v9', () => {
 describe('setPassportTitle / setPassportAvatar', () => {
   beforeEach(resetStore);
 
-  it('sets and clears the custom title', () => {
-    useGameStore.getState().setPassportTitle('collect_rank_1');
-    expect(useGameStore.getState().state.passportCustomization.titleAchievementId)
-      .toBe('collect_rank_1');
-    useGameStore.getState().setPassportTitle(null);
-    expect(useGameStore.getState().state.passportCustomization.titleAchievementId)
-      .toBeNull();
+  it('sets a custom achievement title', () => {
+    useGameStore.getState().setPassportTitle({ type: 'achievement', id: 'collect_rank_1' });
+    expect(useGameStore.getState().state.passportCustomization.titleSource)
+      .toEqual({ type: 'achievement', id: 'collect_rank_1' });
+  });
+
+  it('resets title to auto', () => {
+    useGameStore.getState().setPassportTitle({ type: 'achievement', id: 'collect_rank_1' });
+    useGameStore.getState().setPassportTitle({ type: 'auto' });
+    expect(useGameStore.getState().state.passportCustomization.titleSource)
+      .toEqual({ type: 'auto' });
   });
 
   it('sets and clears the avatar', () => {
@@ -1247,11 +1251,11 @@ describe('setPassportTitle / setPassportAvatar', () => {
 
   it('resetAllProgress clears passportCustomization back to defaults', () => {
     const store = useGameStore.getState();
-    store.setPassportTitle('collect_rank_1');
+    store.setPassportTitle({ type: 'achievement', id: 'collect_rank_1' });
     store.setPassportAvatar({ speciesId: 5, stage: 3 });
     store.resetAllProgress();
     expect(useGameStore.getState().state.passportCustomization).toEqual({
-      titleAchievementId: null,
+      titleSource: { type: 'auto' },
       avatar: null,
     });
   });
@@ -1289,7 +1293,7 @@ describe('migrate v11 → v12', () => {
     const result = migrate(v11State as unknown as { schemaVersion: number } & Record<string, unknown>);
     expect(result.schemaVersion).toBe(SCHEMA_VERSION);
     expect(result.passportCustomization).toEqual({
-      titleAchievementId: null,
+      titleSource: { type: 'auto' },
       avatar: null,
     });
   });
@@ -1452,5 +1456,60 @@ describe('claimAllCompletedBonus', () => {
     }));
     const { sproutsAwarded } = useGameStore.getState().claimAllCompletedBonus();
     expect(sproutsAwarded).toBe(0);
+  });
+});
+
+describe('migration v12 → v13', () => {
+  it('seeds floraLevels with Lv 1 entries for every collected species', () => {
+    const v12 = {
+      schemaVersion: 12,
+      collection: [
+        { speciesId: 3, rarity: 'common', count: 5, totalWaterings: 60, firstHarvestedAt: 1, lastHarvestedAt: 2 },
+        { speciesId: 47, rarity: 'legendary', count: 1, totalWaterings: 15, firstHarvestedAt: 3, lastHarvestedAt: 3 },
+      ],
+      passportCustomization: { titleAchievementId: null, avatar: null },
+    };
+    const next = migrate(v12 as never);
+    expect(next.schemaVersion).toBe(SCHEMA_VERSION);
+    expect(next.floraLevels).toEqual({
+      3: { level: 1, pendingMerges: 0 },
+      47: { level: 1, pendingMerges: 0 },
+    });
+  });
+
+  it('converts a string titleAchievementId to { type: "achievement" }', () => {
+    const v12 = {
+      schemaVersion: 12,
+      collection: [],
+      passportCustomization: { titleAchievementId: 'master_cultivator', avatar: null },
+    };
+    const next = migrate(v12 as never);
+    expect(next.passportCustomization.titleSource).toEqual({
+      type: 'achievement',
+      id: 'master_cultivator',
+    });
+  });
+
+  it('converts a null titleAchievementId to { type: "auto" }', () => {
+    const v12 = {
+      schemaVersion: 12,
+      collection: [],
+      passportCustomization: { titleAchievementId: null, avatar: null },
+    };
+    const next = migrate(v12 as never);
+    expect(next.passportCustomization.titleSource).toEqual({ type: 'auto' });
+  });
+
+  it('preserves a pre-set avatar through migration', () => {
+    const v12 = {
+      schemaVersion: 12,
+      collection: [],
+      passportCustomization: {
+        titleAchievementId: null,
+        avatar: { speciesId: 7, stage: 2 },
+      },
+    };
+    const next = migrate(v12 as never);
+    expect(next.passportCustomization.avatar).toEqual({ speciesId: 7, stage: 2 });
   });
 });

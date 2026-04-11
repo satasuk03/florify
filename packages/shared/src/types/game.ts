@@ -141,16 +141,29 @@ export interface ProducerState {
   lastClaimAt: number;         // epoch ms — start of current accumulation window
 }
 
+// ── Flora Level ────────────────────────────────────────────────────
+export interface FloraLevelEntry {
+  /** 1..5. 1 is granted the moment the species is first harvested. */
+  level: 1 | 2 | 3 | 4 | 5;
+  /** Unclaimed duplicate harvests waiting to be merged. 0..MAX_PENDING_MERGES. */
+  pendingMerges: number;
+}
+
 // ── Passport customization ─────────────────────────────────────────
+export type PassportTitleSource =
+  | { type: 'auto' }
+  | { type: 'achievement'; id: string }
+  | { type: 'epithet'; speciesId: number };
+
 export interface PassportCustomization {
-  /** Achievement ID chosen as the displayed title. null = fall back to auto rank. */
-  titleAchievementId: string | null;
+  /** Source of the displayed title pill. `auto` = rank fallback. */
+  titleSource: PassportTitleSource;
   /** Avatar spec. null = placeholder 🌱. */
   avatar: { speciesId: number; stage: 1 | 2 | 3 } | null;
 }
 
 export interface PlayerState {
-  schemaVersion: 12;
+  schemaVersion: 13;
   userId: string;              // local nanoid; linked to a cloud account later
   displayName: string;         // user-editable; 'Guest' until renamed
   createdAt: number;
@@ -166,6 +179,7 @@ export interface PlayerState {
   dailyMissions: DailyMissionState;
   achievements: Record<string, AchievementProgress>;
   producer: ProducerState;       // idle reward machine — accumulates over 24h, claimed manually
+  floraLevels: Record<number, FloraLevelEntry>;
   passportCustomization: PassportCustomization; // Florist Card title + avatar picker
 }
 

@@ -29,6 +29,7 @@ const sampleData: FloristCardData = {
   serial: 'FL-TEST-0001',
   displayName: 'Guest',
   title: 'Seedling',
+  titleShiny: false,
   avatar: null,
 };
 

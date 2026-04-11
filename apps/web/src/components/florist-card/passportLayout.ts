@@ -54,6 +54,8 @@ export type DrawOp =
        *  agnostic to the measurement — `fitTextOps` mutates the op before the
        *  main draw loop. */
       fitTo?: { maxWidth: number; sizeLadder: number[] };
+      /** DOM-only: render a rainbow gradient sweep (Legendary epithet). */
+      shiny?: boolean;
     }
   | {
       type: "rect";
@@ -250,6 +252,7 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
     align: "center",
     letterSpacing: 2,
     fitTo: { maxWidth: col.right - col.left, sizeLadder: [44, 40, 36, 32] },
+    shiny: data.titleShiny,
   });
 
   // ── Rarity bars ──────────────────────────────────────────────────

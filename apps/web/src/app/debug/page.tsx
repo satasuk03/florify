@@ -12,8 +12,11 @@ import {
   PRODUCER_PERIOD_MS,
   SPROUT_PRODUCER_YIELD,
   WATER_PRODUCER_YIELD,
+  FLORA_MAX_LEVEL,
+  MAX_PENDING_MERGES,
 } from '@florify/shared';
 import { ACHIEVEMENTS } from '@/data/achievements';
+import { SPECIES } from '@/data/species';
 
 const SPROUT_AMOUNTS = [100, 500, 1000, 5000] as const;
 const DROP_AMOUNTS = [10, 25, 50] as const;
@@ -185,8 +188,145 @@ export default function DebugPage() {
           <div className="text-xs text-ink-400 uppercase tracking-wider text-center">Achievements</div>
           <AchievementDebug setLastAction={setLastAction} />
         </section>
+
+        {/* Conjure species */}
+        <section className="w-full max-w-xs mx-auto space-y-3">
+          <div className="text-xs text-ink-400 uppercase tracking-wider text-center">Conjure Species</div>
+          <ConjureDebug setLastAction={setLastAction} />
+        </section>
       </div>
     </main>
+  );
+}
+
+function ConjureDebug({ setLastAction }: { setLastAction: (s: string) => void }) {
+  const collection = useGameStore((s) => s.state.collection);
+  const floraLevels = useGameStore((s) => s.state.floraLevels);
+  const [query, setQuery] = useState('');
+
+  const filtered = (() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return SPECIES.slice(0, 30);
+    const matches = SPECIES.filter(
+      (sp) => sp.name.toLowerCase().includes(q) || String(sp.id) === q,
+    );
+    return matches.slice(0, 60);
+  })();
+
+  const addSpecies = (speciesId: number) => {
+    const s = useGameStore.getState().state;
+    const sp = SPECIES.find((x) => x.id === speciesId);
+    if (!sp) return;
+    const now = Date.now();
+    const idx = s.collection.findIndex((c) => c.speciesId === speciesId);
+    const isNew = idx < 0;
+
+    let nextCollection: typeof s.collection;
+    if (isNew) {
+      nextCollection = [
+        {
+          speciesId,
+          rarity: sp.rarity,
+          count: 1,
+          totalWaterings: 0,
+          firstHarvestedAt: now,
+          lastHarvestedAt: now,
+        },
+        ...s.collection,
+      ];
+    } else {
+      const existing = s.collection[idx]!;
+      const merged = {
+        ...existing,
+        count: existing.count + 1,
+        lastHarvestedAt: now,
+      };
+      nextCollection = [
+        merged,
+        ...s.collection.slice(0, idx),
+        ...s.collection.slice(idx + 1),
+      ];
+    }
+
+    const nextFloraLevels = { ...s.floraLevels };
+    const existingFL = nextFloraLevels[speciesId];
+    if (!existingFL) {
+      nextFloraLevels[speciesId] = { level: 1, pendingMerges: 0 };
+    } else if (existingFL.level < FLORA_MAX_LEVEL) {
+      nextFloraLevels[speciesId] = {
+        level: existingFL.level,
+        pendingMerges: Math.min(
+          existingFL.pendingMerges + 1,
+          MAX_PENDING_MERGES,
+        ),
+      };
+    }
+
+    const next = {
+      ...s,
+      collection: nextCollection,
+      floraLevels: nextFloraLevels,
+      updatedAt: now,
+    };
+    useGameStore.setState({ state: next });
+    scheduleSave(next);
+    const count = nextCollection[0]!.count;
+    setLastAction(`+1 ${sp.name} ${isNew ? '(new!)' : `×${count}`}`);
+  };
+
+  const rarityDot: Record<typeof SPECIES[number]['rarity'], string> = {
+    common: 'bg-leaf-500',
+    rare: 'bg-clay-400',
+    legendary: 'bg-amber-500',
+  };
+
+  return (
+    <div className="space-y-3">
+      <input
+        type="text"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        placeholder="Search name or id…"
+        className="w-full h-9 px-3 text-sm rounded-lg border border-cream-300 bg-white text-ink-900 placeholder:text-ink-400"
+      />
+      <div className="max-h-64 overflow-y-auto space-y-1 scrollbar-elegant">
+        {filtered.length === 0 && (
+          <p className="text-xs text-ink-400 text-center py-2">No match</p>
+        )}
+        {filtered.map((sp) => {
+          const collected = collection.find((c) => c.speciesId === sp.id);
+          const fl = floraLevels[sp.id];
+          return (
+            <div key={sp.id} className="flex items-center gap-2 text-xs">
+              <span
+                className={`inline-block w-2 h-2 rounded-full shrink-0 ${rarityDot[sp.rarity]}`}
+                aria-hidden
+              />
+              <span className="flex-1 truncate text-ink-700">
+                #{sp.id} {sp.name}
+              </span>
+              {fl && (
+                <span className="shrink-0 text-[10px] text-ink-400 tabular-nums">
+                  Lv{fl.level}
+                  {fl.pendingMerges > 0 && `+${fl.pendingMerges}`}
+                </span>
+              )}
+              {collected && (
+                <span className="shrink-0 text-[10px] text-ink-400 tabular-nums">
+                  ×{collected.count}
+                </span>
+              )}
+              <button
+                onClick={() => addSpecies(sp.id)}
+                className="shrink-0 px-2 py-0.5 rounded bg-clay-500 text-cream-50 hover:bg-clay-400"
+              >
+                Add
+              </button>
+            </div>
+          );
+        })}
+      </div>
+    </div>
   );
 }
 

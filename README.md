@@ -64,11 +64,21 @@ Spend Sprouts on 3 tiers of Booster Packs for better odds at Rare and Legendary 
 ### Pity System
 Duplicate harvests earn **Dried Leaves** — hit the threshold and you're guaranteed a new species. No more bad luck streaks.
 
+### Flora Level — Merge Duplicates
+Every duplicate harvest also stacks as a **Pending Merge** on that species. Tap **Merge** in the detail view to level it up through **Lv 1 → Lv 5**. The curve is `1 · 1 · 2 · 2` — a total of **6 duplicates** to max.
+
+Rewards at Lv 5:
+- **Shiny shimmer** across the species art (silver for Common, gold for Rare, purple for Legendary) — clipped to the plant silhouette
+- **Metallic frame** around the Gallery tile in matching rarity tones
+- **Legendary only:** unlocks a unique **epithet** you can display as your passport title (rainbow gradient font)
+
+Max Reveal moment: a juicy pop-in modal with staggered text reveals, plus a pulsing glow ring behind the species art.
+
 ### Idle Factory — Auto Rewards
 An idle reward machine that fills up over **24 hours** even while the game is closed. Tap **Claim** once to grab both **Sprouts** 🌱 and **Water Drops** 💧 in a single press. Two independent upgrade tracks (Sprout & Water) — level each one up to **Lv 11** to boost yield per cycle.
 
 ### Florist Card — Your Gardener Passport
-A personal card showing your rank, species count, Streak, and harvest total — **export it as an image and share on social media.**
+A personal card showing your rank, species count, Streak, and harvest total — **export it as an image and share on social media.** Customize your title pill with either an achievement name or a Legendary epithet (animated rainbow font), and pin any collected species as your profile avatar.
 
 ---
 

@@ -39,8 +39,9 @@ export function createInitialState(): PlayerState {
       waterLevel: 1,
       lastClaimAt: now,
     },
+    floraLevels: {},
     passportCustomization: {
-      titleAchievementId: null,
+      titleSource: { type: 'auto' },
       avatar: null,
     },
   };

@@ -4,6 +4,11 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ACHIEVEMENTS } from "@/data/achievements";
 import { useGameStore } from "@/store/gameStore";
 import { CheckIcon } from "@/components/icons";
+import { useLanguage } from "@/i18n/useT";
+import type { PassportTitleSource } from "@florify/shared";
+import { FLORA_MAX_LEVEL } from "@florify/shared";
+import { SPECIES_BY_ID } from "@/data/species";
+import type { SpeciesDef } from "@/data/species";
 
 interface Props {
   onClose: () => void;
@@ -14,8 +19,10 @@ interface Props {
 /** Match globals.css `sheet-down` / `overlay-out` duration. */
 const EXIT_DURATION_MS = 260;
 
+type TitleTab = 'achievements' | 'legendary';
+
 /**
- * Modal for picking the passport title from claimed achievements.
+ * Modal for picking the passport title from claimed achievements or Legendary epithets.
  *
  * Opens over FloristCardSheet (z-50 > sheet's z-40). Writes immediately
  * on selection via setPassportTitle, then closes.
@@ -23,8 +30,15 @@ const EXIT_DURATION_MS = 260;
 export function TitleChangeModal({ onClose, currentRank }: Props) {
   const state = useGameStore((s) => s.state);
   const setPassportTitle = useGameStore((s) => s.setPassportTitle);
-  const currentTitleId = state.passportCustomization.titleAchievementId;
+  const titleSource = state.passportCustomization.titleSource;
+  const floraLevels = state.floraLevels;
+  const collection = state.collection;
+  const lang = useLanguage();
+
   const [query, setQuery] = useState("");
+  const [tab, setTab] = useState<TitleTab>(
+    titleSource.type === 'epithet' ? 'legendary' : 'achievements',
+  );
   const [closing, setClosing] = useState(false);
   const closeTimer = useRef<number | null>(null);
 
@@ -68,8 +82,8 @@ export function TitleChangeModal({ onClose, currentRank }: Props) {
     return () => document.removeEventListener("keydown", onKey);
   }, [beginClose]);
 
-  const handlePick = (id: string | null) => {
-    setPassportTitle(id);
+  const handlePick = (source: PassportTitleSource) => {
+    setPassportTitle(source);
     beginClose();
   };
 
@@ -100,49 +114,153 @@ export function TitleChangeModal({ onClose, currentRank }: Props) {
           </button>
         </div>
 
-        <input
-          type="text"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="ค้นหาจากชื่อหรือคำอธิบาย"
-          className="w-full px-4 py-2.5 rounded-lg bg-cream-100 border border-cream-200 text-sm text-ink-900 placeholder:text-ink-300 focus:outline-none focus:ring-2 focus:ring-clay-400 mb-3"
-          autoFocus
-        />
-
-        {/* Inner padding + extra column gap keeps the ring-2 + hover
-            borders on active/hovered rows from getting clipped by the
-            scroll container's overflow edge. */}
-        <div className="flex-1 overflow-y-auto scrollbar-elegant p-1 flex flex-col gap-2">
-          {/* Auto fallback — always on top, never filtered out */}
-          <TitleRow
-            label={`Auto — ${currentRank}`}
-            description="ใช้ rank ของคุณเป็นฉายาโดยอัตโนมัติ"
-            selected={currentTitleId === null}
-            onClick={() => handlePick(null)}
-          />
-
-          {claimed.length === 0 && (
-            <p className="text-xs text-ink-500 mt-3 text-center">
-              ยังไม่มี Achievement ที่เคลม — ไปเคลมที่แท็บ 🏆 ก่อนนะ
-            </p>
-          )}
-
-          {filtered.map((a) => (
-            <TitleRow
-              key={a.id}
-              label={a.name}
-              description={a.description.th}
-              selected={currentTitleId === a.id}
-              onClick={() => handlePick(a.id)}
-            />
-          ))}
-
-          {claimed.length > 0 && filtered.length === 0 && (
-            <p className="text-xs text-ink-500 mt-3 text-center">
-              ไม่เจอฉายาที่ตรงกับคำค้น
-            </p>
-          )}
+        {/* Segmented tab control */}
+        <div className="flex rounded-xl bg-cream-200 p-1 mb-3 text-xs font-semibold">
+          <button
+            type="button"
+            onClick={() => setTab('achievements')}
+            className={`flex-1 py-2 rounded-lg transition-all ${
+              tab === 'achievements' ? 'bg-cream-50 text-ink-900 shadow-sm' : 'text-ink-500'
+            }`}
+          >
+            Achievements
+          </button>
+          <button
+            type="button"
+            onClick={() => setTab('legendary')}
+            className={`flex-1 py-2 rounded-lg transition-all ${
+              tab === 'legendary' ? 'bg-cream-50 text-ink-900 shadow-sm' : 'text-ink-500'
+            }`}
+          >
+            Legendary
+          </button>
         </div>
+
+        {tab === 'achievements' && (
+          <>
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="ค้นหาจากชื่อหรือคำอธิบาย"
+              className="w-full px-4 py-2.5 rounded-lg bg-cream-100 border border-cream-200 text-sm text-ink-900 placeholder:text-ink-300 focus:outline-none focus:ring-2 focus:ring-clay-400 mb-3"
+              autoFocus
+            />
+
+            {/* Inner padding + extra column gap keeps the ring-2 + hover
+                borders on active/hovered rows from getting clipped by the
+                scroll container's overflow edge. */}
+            <div className="flex-1 overflow-y-auto scrollbar-elegant p-1 flex flex-col gap-2">
+              {/* Auto fallback — always on top, never filtered out */}
+              <TitleRow
+                label={`Auto — ${currentRank}`}
+                description="ใช้ rank ของคุณเป็นฉายาโดยอัตโนมัติ"
+                selected={titleSource.type === 'auto'}
+                onClick={() => handlePick({ type: 'auto' })}
+              />
+
+              {claimed.length === 0 && (
+                <p className="text-xs text-ink-500 mt-3 text-center">
+                  ยังไม่มี Achievement ที่เคลม — ไปเคลมที่แท็บ 🏆 ก่อนนะ
+                </p>
+              )}
+
+              {filtered.map((a) => (
+                <TitleRow
+                  key={a.id}
+                  label={a.name}
+                  description={a.description.th}
+                  selected={titleSource.type === 'achievement' && titleSource.id === a.id}
+                  onClick={() => handlePick({ type: 'achievement', id: a.id })}
+                />
+              ))}
+
+              {claimed.length > 0 && filtered.length === 0 && (
+                <p className="text-xs text-ink-500 mt-3 text-center">
+                  ไม่เจอฉายาที่ตรงกับคำค้น
+                </p>
+              )}
+            </div>
+          </>
+        )}
+
+        {tab === 'legendary' && (() => {
+          type LegendaryRow = { id: number; species: SpeciesDef; level: 1 | 2 | 3 | 4 | 5 };
+          const legendaryRows = (collection
+            .filter((c) => c.rarity === 'legendary')
+            .map((c) => {
+              const sp = SPECIES_BY_ID[c.speciesId];
+              const level = floraLevels[c.speciesId]?.level ?? 1;
+              return { id: c.speciesId, species: sp, level };
+            })
+            .filter((row) => row.species != null) as LegendaryRow[])
+            .sort((a, b) => {
+              const aUnlocked = a.level === FLORA_MAX_LEVEL && a.species.epithet != null ? 0 : 1;
+              const bUnlocked = b.level === FLORA_MAX_LEVEL && b.species.epithet != null ? 0 : 1;
+              if (aUnlocked !== bUnlocked) return aUnlocked - bUnlocked;
+              if (aUnlocked === 1) return b.level - a.level; // locked: higher level first
+              return a.id - b.id;
+            });
+
+          if (legendaryRows.length === 0) {
+            return (
+              <div className="flex-1 overflow-y-auto scrollbar-elegant p-1 flex items-center justify-center">
+                <p className="text-xs text-ink-500 text-center max-w-xs">
+                  เก็บพันธุ์ Legendary ก่อนจึงจะมีฉายาให้เลือก
+                </p>
+              </div>
+            );
+          }
+
+          return (
+            <div className="flex-1 overflow-y-auto scrollbar-elegant p-1 flex flex-col gap-2">
+              {legendaryRows.map(({ id, species, level }) => {
+                const unlocked = level === FLORA_MAX_LEVEL && species.epithet != null;
+                const epithetText = species.epithet ? species.epithet[lang] : species.name;
+                const selected =
+                  titleSource.type === 'epithet' && titleSource.speciesId === id;
+                return (
+                  <button
+                    key={id}
+                    type="button"
+                    disabled={!unlocked}
+                    onClick={() =>
+                      unlocked && handlePick({ type: 'epithet', speciesId: id })
+                    }
+                    className={`text-left px-3.5 py-3 rounded-lg transition-colors flex items-center gap-2 border-2 ${
+                      unlocked
+                        ? selected
+                          ? 'bg-clay-100 border-clay-400'
+                          : 'bg-cream-50 border-cream-200 hover:bg-cream-100'
+                        : 'bg-cream-100/50 border-cream-200/50 text-ink-400 cursor-not-allowed'
+                    }`}
+                  >
+                    <div className="flex-1 min-w-0">
+                      {unlocked ? (
+                        <>
+                          <div className="font-serif text-sm fl-rainbow-text">
+                            ✦ {epithetText} ✦
+                          </div>
+                          <div className="text-[11px] text-ink-500 mt-0.5">{species.name}</div>
+                        </>
+                      ) : (
+                        <>
+                          <div className="font-semibold text-sm">🔒 {species.name}</div>
+                          <div className="text-[11px] text-ink-400 mt-0.5">Lv {level}/{FLORA_MAX_LEVEL}</div>
+                        </>
+                      )}
+                    </div>
+                    {selected && unlocked && (
+                      <span className="shrink-0 w-6 h-6 rounded-full bg-clay-500 text-cream-50 flex items-center justify-center">
+                        <CheckIcon size={14} />
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          );
+        })()}
       </div>
     </div>
   );
