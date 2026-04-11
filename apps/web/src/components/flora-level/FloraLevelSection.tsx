@@ -78,7 +78,11 @@ export function FloraLevelSection({ speciesId, rarity, onMaxReveal, labels }: Pr
   };
 
   return (
-    <div className="mt-4 pt-4 border-t border-cream-300/70 flex items-center gap-2 text-xs">
+    <section className="mt-4 pt-4 border-t border-cream-300/70 text-xs">
+      <h3 className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-ink-500">
+        {labels.title}
+      </h3>
+      <div className="flex items-center gap-2">
       <span
         className={`font-semibold tabular-nums shrink-0 ${
           isMax
@@ -126,6 +130,7 @@ export function FloraLevelSection({ speciesId, rarity, onMaxReveal, labels }: Pr
           </div>
         </>
       )}
-    </div>
+      </div>
+    </section>
   );
 }

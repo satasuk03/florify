@@ -697,6 +697,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
     const next: PlayerState = {
       ...state,
+      updatedAt: Date.now(),
       floraLevels: {
         ...state.floraLevels,
         [speciesId]: {
@@ -706,18 +707,21 @@ export const useGameStore = create<GameStore>((set, get) => ({
       },
     };
     set({ state: next });
+    scheduleSave(next);
   },
 
   setPassportTitle: (source) => {
     const state = get().state;
     const next: PlayerState = {
       ...state,
+      updatedAt: Date.now(),
       passportCustomization: {
         ...state.passportCustomization,
         titleSource: source,
       },
     };
     set({ state: next });
+    scheduleSave(next);
   },
 
   setPassportAvatar: (avatar) => {
