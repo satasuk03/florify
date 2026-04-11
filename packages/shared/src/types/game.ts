@@ -103,6 +103,16 @@ export interface AchievementDef {
   rewards: AchievementReward[];
   condition: AchievementCondition;
   secret?: boolean;
+  /**
+   * Optional badge presentation override. Fields are merged over the
+   * category default in the client:
+   * - `shield`: shield color slug from `public/badges/shield-1/*.svg`
+   * - `emoji`: text emoji rendered over the shield
+   */
+  badge?: {
+    shield?: string;
+    emoji?: string;
+  };
 }
 
 export interface AchievementProgress {

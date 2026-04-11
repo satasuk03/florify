@@ -6,6 +6,8 @@
 - Compress images
 - Next Collection: Fungi Kingdom
 
+- Achievement ควรมี Badge เท่ๆ
+
 ## Done
 - เครื่องผลิต Sprout กับ น้ำ
 - Acheivements

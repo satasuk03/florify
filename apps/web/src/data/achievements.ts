@@ -1,10 +1,26 @@
 import type { AchievementDef } from "@florify/shared";
 
+// ═══════════════════════════════════════════════════════════════════
+// Badge shield rank ladder (low → high):
+//   brown → green → blue → bronze → silver → gold → purple-gradient → rainbow
+//
+// For a series with N tiers, pick the RIGHTMOST N shields from the ladder.
+//   1 tier  → [rainbow]
+//   2 tiers → [purple-gradient, rainbow]
+//   3 tiers → [gold, purple-gradient, rainbow]
+//   4 tiers → [silver, gold, purple-gradient, rainbow]
+//   5 tiers → [bronze, silver, gold, purple-gradient, rainbow]
+//   …up to 8 tiers uses the full ladder.
+//
+// Emoji in badge replaces the old leading emoji in `name` — names are now
+// plain text since the badge visually carries the icon.
+// ═══════════════════════════════════════════════════════════════════
 export const ACHIEVEMENTS: readonly AchievementDef[] = [
-  // ── Collection: Rank Milestones ────────────────────────────────────
+  // ── Collection: Rank Milestones (4 tiers) ──────────────────────────
   {
     id: "collect_rank_1",
-    name: "🌱 Seedling Steps",
+    name: "Seedling Steps",
+    badge: { shield: "silver", emoji: "🌱" },
     description: { en: "Unlock 20 species", th: "ปลดล็อค 20 สายพันธุ์" },
     flavor: {
       en: "Every botanist starts with a single sprout.",
@@ -15,7 +31,8 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
   },
   {
     id: "collect_rank_2",
-    name: "📗 Apprentice Botanist",
+    name: "Apprentice Botanist",
+    badge: { shield: "gold", emoji: "📗" },
     description: { en: "Unlock 75 species", th: "ปลดล็อค 75 สายพันธุ์" },
     flavor: {
       en: "Your notebook is getting thicker.",
@@ -26,7 +43,8 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
   },
   {
     id: "collect_rank_3",
-    name: "🌳 Gardener's Pride",
+    name: "Gardener's Pride",
+    badge: { shield: "purple-gradient", emoji: "🌳" },
     description: { en: "Unlock 150 species", th: "ปลดล็อค 150 สายพันธุ์" },
     flavor: {
       en: "The garden has started to know you.",
@@ -37,7 +55,8 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
   },
   {
     id: "collect_rank_4",
-    name: "👑 Master Cultivator",
+    name: "Master Cultivator",
+    badge: { shield: "rainbow", emoji: "👑" },
     description: { en: "Unlock 250 species", th: "ปลดล็อค 250 สายพันธุ์" },
     flavor: {
       en: "The plants call you sensei now.",
@@ -47,10 +66,11 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
     condition: { type: "species_unlocked", target: 250 },
   },
 
-  // ── Collection: Common ──────────────────────────────────────────────
+  // ── Collection: Common (4 tiers) ───────────────────────────────────
   {
     id: "collect_common_10",
-    name: "🌼 Common Starter",
+    name: "Common Starter",
+    badge: { shield: "silver", emoji: "🌼" },
     description: {
       en: "Collect 10 common species",
       th: "สะสม 10 สายพันธุ์ธรรมดา",
@@ -64,7 +84,8 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
   },
   {
     id: "collect_common_50",
-    name: "🌼 Common Collector",
+    name: "Common Collector",
+    badge: { shield: "gold", emoji: "🌼" },
     description: {
       en: "Collect 50 common species",
       th: "สะสม 50 สายพันธุ์ธรรมดา",
@@ -78,7 +99,8 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
   },
   {
     id: "collect_common_100",
-    name: "🌼 Common Enthusiast",
+    name: "Common Enthusiast",
+    badge: { shield: "purple-gradient", emoji: "🌼" },
     description: {
       en: "Collect 100 common species",
       th: "สะสม 100 สายพันธุ์ธรรมดา",
@@ -92,7 +114,8 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
   },
   {
     id: "collect_common_200",
-    name: "🌼 Common Completionist",
+    name: "Common Completionist",
+    badge: { shield: "rainbow", emoji: "🌼" },
     description: {
       en: "Collect 200 common species",
       th: "สะสม 200 สายพันธุ์ธรรมดา",
@@ -105,10 +128,11 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
     condition: { type: "species_by_rarity", rarity: "common", target: 200 },
   },
 
-  // ── Collection: Rare ────────────────────────────────────────────────
+  // ── Collection: Rare (2 tiers) ─────────────────────────────────────
   {
     id: "collect_rare_10",
-    name: "💎 Rare Finder",
+    name: "Rare Finder",
+    badge: { shield: "purple-gradient", emoji: "💎" },
     description: {
       en: "Collect 10 rare species",
       th: "สะสม 10 สายพันธุ์หายาก",
@@ -122,7 +146,8 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
   },
   {
     id: "collect_rare_50",
-    name: "💎 Rare Connoisseur",
+    name: "Rare Connoisseur",
+    badge: { shield: "rainbow", emoji: "💎" },
     description: {
       en: "Collect 50 rare species",
       th: "สะสม 50 สายพันธุ์หายาก",
@@ -135,10 +160,11 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
     condition: { type: "species_by_rarity", rarity: "rare", target: 50 },
   },
 
-  // ── Collection: Legendary ───────────────────────────────────────────
+  // ── Collection: Legendary (3 tiers) ────────────────────────────────
   {
     id: "collect_legend_5",
-    name: "⭐ Lucky Star",
+    name: "Lucky Star",
+    badge: { shield: "gold", emoji: "⭐" },
     description: {
       en: "Collect 5 legendary species",
       th: "สะสม 5 สายพันธุ์ตำนาน",
@@ -152,7 +178,8 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
   },
   {
     id: "collect_legend_10",
-    name: "⭐ Stargazer",
+    name: "Stargazer",
+    badge: { shield: "purple-gradient", emoji: "⭐" },
     description: {
       en: "Collect 10 legendary species",
       th: "สะสม 10 สายพันธุ์ตำนาน",
@@ -166,7 +193,8 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
   },
   {
     id: "collect_legend_20",
-    name: "⭐ Celestial Garden",
+    name: "Celestial Garden",
+    badge: { shield: "rainbow", emoji: "⭐" },
     description: {
       en: "Collect 20 legendary species",
       th: "สะสม 20 สายพันธุ์ตำนาน",
@@ -179,10 +207,11 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
     condition: { type: "species_by_rarity", rarity: "legendary", target: 20 },
   },
 
-  // ── Collection: Sets ────────────────────────────────────────────────
+  // ── Collection: Sets — Original (5 tiers) ──────────────────────────
   {
     id: "set_original_10",
-    name: "🌸 Original Explorer",
+    name: "Original Explorer",
+    badge: { shield: "bronze", emoji: "🌸" },
     description: {
       en: "Collect 10 Original flora",
       th: "สะสม 10 ดอกไม้ Original",
@@ -200,7 +229,8 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
   },
   {
     id: "set_original_50",
-    name: "🌸 Original Collector",
+    name: "Original Collector",
+    badge: { shield: "silver", emoji: "🌸" },
     description: {
       en: "Collect 50 Original flora",
       th: "สะสม 50 ดอกไม้ Original",
@@ -218,7 +248,8 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
   },
   {
     id: "set_original_100",
-    name: "🌸 Original Enthusiast",
+    name: "Original Enthusiast",
+    badge: { shield: "gold", emoji: "🌸" },
     description: {
       en: "Collect 100 Original flora",
       th: "สะสม 100 ดอกไม้ Original",
@@ -236,7 +267,8 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
   },
   {
     id: "set_original_200",
-    name: "🌸 Original Devotee",
+    name: "Original Devotee",
+    badge: { shield: "purple-gradient", emoji: "🌸" },
     description: {
       en: "Collect 200 Original flora",
       th: "สะสม 200 ดอกไม้ Original",
@@ -254,7 +286,8 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
   },
   {
     id: "set_original_300",
-    name: "🌸 Original Completionist",
+    name: "Original Completionist",
+    badge: { shield: "rainbow", emoji: "🌸" },
     description: {
       en: "Collect all 300 Original flora",
       th: "สะสม 300 ดอกไม้ Original ครบ",
@@ -270,9 +303,11 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
       target: 300,
     },
   },
+  // ── Collection: Sets — Chinese Garden (1 tier) ─────────────────────
   {
     id: "set_chinese_5",
-    name: "🏮 Chinese Garden Master",
+    name: "Chinese Garden Master",
+    badge: { shield: "rainbow", emoji: "🏮" },
     description: {
       en: "Collect all 5 Chinese Garden flora",
       th: "สะสม 5 Chinese Garden ครบ",
@@ -288,9 +323,12 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
       target: 5,
     },
   },
+
+  // ── Collection: Sets — Abyssal Garden (4 tiers) ────────────────────
   {
     id: "set_abyssal_10",
-    name: "🌑 Abyssal Explorer",
+    name: "Abyssal Explorer",
+    badge: { shield: "silver", emoji: "🌑" },
     description: {
       en: "Collect 10 Abyssal Garden flora",
       th: "สะสม 10 Abyssal Garden",
@@ -308,7 +346,8 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
   },
   {
     id: "set_abyssal_20",
-    name: "🌑 Abyssal Diver",
+    name: "Abyssal Diver",
+    badge: { shield: "gold", emoji: "🌑" },
     description: {
       en: "Collect 20 Abyssal Garden flora",
       th: "สะสม 20 Abyssal Garden",
@@ -326,7 +365,8 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
   },
   {
     id: "set_abyssal_50",
-    name: "🌑 Abyssal Conqueror",
+    name: "Abyssal Conqueror",
+    badge: { shield: "purple-gradient", emoji: "🌑" },
     description: {
       en: "Collect 50 Abyssal Garden flora",
       th: "สะสม 50 Abyssal Garden",
@@ -344,7 +384,8 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
   },
   {
     id: "set_abyssal_100",
-    name: "🌑 Abyssal Completionist",
+    name: "Abyssal Completionist",
+    badge: { shield: "rainbow", emoji: "🌑" },
     description: {
       en: "Collect all 100 Abyssal Garden flora",
       th: "สะสม 100 Abyssal Gardenครบ",
@@ -361,10 +402,11 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
     },
   },
 
-  // ── Harvest: Total ──────────────────────────────────────────────────
+  // ── Harvest: Total (6 tiers) ───────────────────────────────────────
   {
     id: "harvest_total_10",
-    name: "🌾 First Harvest",
+    name: "First Harvest",
+    badge: { shield: "blue", emoji: "🌾" },
     description: { en: "Harvest 10 flora", th: "เก็บเกี่ยว 10 ต้น" },
     flavor: {
       en: "Remember your very first harvest?",
@@ -375,7 +417,8 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
   },
   {
     id: "harvest_total_50",
-    name: "🌾 Budding Farmer",
+    name: "Budding Farmer",
+    badge: { shield: "bronze", emoji: "🌾" },
     description: { en: "Harvest 50 flora", th: "เก็บเกี่ยว 50 ต้น" },
     flavor: {
       en: "The basket is getting heavy.",
@@ -386,7 +429,8 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
   },
   {
     id: "harvest_total_100",
-    name: "🌾 Harvest Moon",
+    name: "Harvest Moon",
+    badge: { shield: "silver", emoji: "🌾" },
     description: { en: "Harvest 100 flora", th: "เก็บเกี่ยว 100 ต้น" },
     flavor: {
       en: "A hundred blooms have passed through your hands.",
@@ -397,7 +441,8 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
   },
   {
     id: "harvest_total_200",
-    name: "🌾 Golden Harvest",
+    name: "Golden Harvest",
+    badge: { shield: "gold", emoji: "🌾" },
     description: { en: "Harvest 200 flora", th: "เก็บเกี่ยว 200 ต้น" },
     flavor: {
       en: "Now that's a real gardener.",
@@ -408,7 +453,8 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
   },
   {
     id: "harvest_total_500",
-    name: "🌾 Harvest Festival",
+    name: "Harvest Festival",
+    badge: { shield: "purple-gradient", emoji: "🌾" },
     description: { en: "Harvest 500 flora", th: "เก็บเกี่ยว 500 ต้น" },
     flavor: {
       en: "Five hundred blooms — call it a festival.",
@@ -419,7 +465,8 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
   },
   {
     id: "harvest_total_1000",
-    name: "🌾 Eternal Harvest",
+    name: "Eternal Harvest",
+    badge: { shield: "rainbow", emoji: "🌾" },
     description: { en: "Harvest 1,000 flora", th: "เก็บเกี่ยว 1,000 ต้น" },
     flavor: {
       en: "A thousand. Still not stopping?",
@@ -429,10 +476,14 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
     condition: { type: "harvest_total", target: 1000 },
   },
 
-  // ── Harvest: By Rarity (Common) ────────────────────────────────────
+  // ── Harvest: By Rarity (Common) (6 tiers) ──────────────────────────
   ...([10, 50, 100, 200, 500, 1000] as const).map((n, i) => ({
     id: `harvest_common_${n}`,
-    name: `🌼 Common Reaper ${n}`,
+    name: `Common Reaper ${n}`,
+    badge: {
+      shield: ["blue", "bronze", "silver", "gold", "purple-gradient", "rainbow"][i]!,
+      emoji: "🌼",
+    },
     description: {
       en: `Harvest ${n.toLocaleString()} common flora`,
       th: `เก็บเกี่ยวดอกไม้ธรรมดา ${n.toLocaleString()} ต้น`,
@@ -458,10 +509,14 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
     },
   })),
 
-  // ── Harvest: By Rarity (Rare) ──────────────────────────────────────
+  // ── Harvest: By Rarity (Rare) (6 tiers) ────────────────────────────
   ...([10, 50, 100, 200, 500, 1000] as const).map((n, i) => ({
     id: `harvest_rare_${n}`,
-    name: `💎 Rare Reaper ${n}`,
+    name: `Rare Reaper ${n}`,
+    badge: {
+      shield: ["blue", "bronze", "silver", "gold", "purple-gradient", "rainbow"][i]!,
+      emoji: "💎",
+    },
     description: {
       en: `Harvest ${n.toLocaleString()} rare flora`,
       th: `เก็บเกี่ยวดอกไม้หายาก ${n.toLocaleString()} ต้น`,
@@ -487,10 +542,14 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
     },
   })),
 
-  // ── Harvest: By Rarity (Legendary) ─────────────────────────────────
+  // ── Harvest: By Rarity (Legendary) (6 tiers) ───────────────────────
   ...([10, 50, 100, 200, 500, 1000] as const).map((n, i) => ({
     id: `harvest_legend_${n}`,
-    name: `⭐ Legend Reaper ${n}`,
+    name: `Legend Reaper ${n}`,
+    badge: {
+      shield: ["blue", "bronze", "silver", "gold", "purple-gradient", "rainbow"][i]!,
+      emoji: "⭐",
+    },
     description: {
       en: `Harvest ${n.toLocaleString()} legendary flora`,
       th: `เก็บเกี่ยวดอกไม้ตำนาน ${n.toLocaleString()} ต้น`,
@@ -516,16 +575,14 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
     },
   })),
 
-  // ── Watering ────────────────────────────────────────────────────────
+  // ── Watering (5 tiers) ─────────────────────────────────────────────
   ...([1000, 5000, 10000, 100000, 1000000] as const).map((n, i) => ({
     id: `water_${n}`,
-    name: [
-      "💧 Drizzle",
-      "💧 Steady Stream",
-      "💧 Rainfall",
-      "💧 Monsoon",
-      "💧 Ocean",
-    ][i]!,
+    name: ["Drizzle", "Steady Stream", "Rainfall", "Monsoon", "Ocean"][i]!,
+    badge: {
+      shield: ["bronze", "silver", "gold", "purple-gradient", "rainbow"][i]!,
+      emoji: "💧",
+    },
     description: {
       en: `Water ${n.toLocaleString()} times`,
       th: `รดน้ำ ${n.toLocaleString()} ครั้ง`,
@@ -543,17 +600,21 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
     condition: { type: "total_watered" as const, target: n },
   })),
 
-  // ── Sprout Economy: Gained ──────────────────────────────────────────
+  // ── Sprout Economy: Gained (6 tiers) ───────────────────────────────
   ...([500, 1000, 5000, 10000, 100000, 1000000] as const).map((n, i) => ({
     id: `sprout_gain_${n}`,
     name: [
-      "🌱 Penny Sprout",
-      "🌱 Growing Fund",
-      "🌱 Sprouting Rich",
-      "🌱 Sprout Baron",
-      "🌱 Sprout Tycoon",
-      "🌱 Sprout Mogul",
+      "Penny Sprout",
+      "Growing Fund",
+      "Sprouting Rich",
+      "Sprout Baron",
+      "Sprout Tycoon",
+      "Sprout Mogul",
     ][i]!,
+    badge: {
+      shield: ["blue", "bronze", "silver", "gold", "purple-gradient", "rainbow"][i]!,
+      emoji: "🌱",
+    },
     description: {
       en: `Earn ${n.toLocaleString()} sprouts total`,
       th: `ได้รับ 🌱 รวม ${n.toLocaleString()}`,
@@ -575,17 +636,21 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
     condition: { type: "sprouts_gained" as const, target: n },
   })),
 
-  // ── Sprout Economy: Spent ───────────────────────────────────────────
+  // ── Sprout Economy: Spent (6 tiers) ────────────────────────────────
   ...([500, 1000, 5000, 10000, 100000, 1000000] as const).map((n, i) => ({
     id: `sprout_spend_${n}`,
     name: [
-      "💸 Window Shopper",
-      "💸 Casual Buyer",
-      "💸 Big Spender",
-      "💸 Shopaholic",
-      "💸 Sprout Whale",
-      "💸 Sprout Overlord",
+      "Window Shopper",
+      "Casual Buyer",
+      "Big Spender",
+      "Shopaholic",
+      "Sprout Whale",
+      "Sprout Overlord",
     ][i]!,
+    badge: {
+      shield: ["blue", "bronze", "silver", "gold", "purple-gradient", "rainbow"][i]!,
+      emoji: "💸",
+    },
     description: {
       en: `Spend ${n.toLocaleString()} sprouts total`,
       th: `ใช้ 🌱 รวม ${n.toLocaleString()}`,
@@ -607,16 +672,20 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
     condition: { type: "sprouts_spent" as const, target: n },
   })),
 
-  // ── Streaks ─────────────────────────────────────────────────────────
+  // ── Streaks (5 tiers) ──────────────────────────────────────────────
   ...([7, 14, 30, 90, 365] as const).map((n, i) => ({
     id: `streak_${n}`,
     name: [
-      "🔥 Week Warrior",
-      "🔥 Fortnight Flora",
-      "🔥 Monthly Devotion",
-      "🔥 Seasonal Spirit",
-      "🔥 Eternal Flame",
+      "Week Warrior",
+      "Fortnight Flora",
+      "Monthly Devotion",
+      "Seasonal Spirit",
+      "Eternal Flame",
     ][i]!,
+    badge: {
+      shield: ["bronze", "silver", "gold", "purple-gradient", "rainbow"][i]!,
+      emoji: "🔥",
+    },
     description: { en: `${n}-day streak`, th: `เข้าเล่นติดต่อกัน ${n} วัน` },
     flavor: [
       {
@@ -640,11 +709,15 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
     condition: { type: "streak" as const, target: n },
   })),
 
-  // ── Combos ──────────────────────────────────────────────────────────
+  // ── Combos (3 levels × 4 tiers) ────────────────────────────────────
   ...([10, 15, 20] as const).flatMap((level) =>
     ([100, 200, 500, 1000] as const).map((n, i) => ({
       id: `combo${level}_${n}`,
-      name: `⚡ ${level === 10 ? "Combo" : level === 15 ? "Surge" : "Thunder"} ${["Starter", "Regular", "Veteran", "Master"][i]!}`,
+      name: `${level === 10 ? "Combo" : level === 15 ? "Surge" : "Thunder"} ${["Starter", "Regular", "Veteran", "Master"][i]!}`,
+      badge: {
+        shield: ["silver", "gold", "purple-gradient", "rainbow"][i]!,
+        emoji: "⚡",
+      },
       description: {
         en: `Hit ${level}x combo ${n.toLocaleString()} times`,
         th: `ทำ Combo ${level}x สะสม ${n.toLocaleString()} ครั้ง`,
@@ -697,16 +770,20 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
     })),
   ),
 
-  // ── Seed Packets: Total ─────────────────────────────────────────────
+  // ── Seed Packets: Total (5 tiers) ──────────────────────────────────
   ...([1, 10, 50, 100, 500] as const).map((n, i) => ({
     id: `seedpacket_total_${n}`,
     name: [
-      "🎁 First Unboxing",
-      "🎁 Pack Opener",
-      "🎁 Pack Enthusiast",
-      "🎁 Pack Collector",
-      "🎁 Pack Addict",
+      "First Unboxing",
+      "Pack Opener",
+      "Pack Enthusiast",
+      "Pack Collector",
+      "Pack Addict",
     ][i]!,
+    badge: {
+      shield: ["bronze", "silver", "gold", "purple-gradient", "rainbow"][i]!,
+      emoji: "🎁",
+    },
     description: {
       en: `Open ${n.toLocaleString()} seed packet${n > 1 ? "s" : ""}`,
       th: `เปิดซองเมล็ดพันธุ์ ${n.toLocaleString()} ซอง`,
@@ -734,15 +811,19 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
     },
   })),
 
-  // ── Seed Packets: Common ────────────────────────────────────────────
+  // ── Seed Packets: Common (4 tiers) ─────────────────────────────────
   ...([1, 10, 50, 100] as const).map((n, i) => ({
     id: `seedpacket_common_${n}`,
     name: [
-      "🌼 Common Unboxing",
-      "🌼 Common Pack Fan",
-      "🌼 Common Pack Pro",
-      "🌼 Common Pack Master",
+      "Common Unboxing",
+      "Common Pack Fan",
+      "Common Pack Pro",
+      "Common Pack Master",
     ][i]!,
+    badge: {
+      shield: ["silver", "gold", "purple-gradient", "rainbow"][i]!,
+      emoji: "🌼",
+    },
     description: {
       en: `Open ${n.toLocaleString()} common packet${n > 1 ? "s" : ""}`,
       th: `เปิดซองธรรมดา ${n.toLocaleString()} ซอง`,
@@ -761,15 +842,19 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
     },
   })),
 
-  // ── Seed Packets: Rare ──────────────────────────────────────────────
+  // ── Seed Packets: Rare (4 tiers) ───────────────────────────────────
   ...([1, 10, 50, 100] as const).map((n, i) => ({
     id: `seedpacket_rare_${n}`,
     name: [
-      "💎 Rare Unboxing",
-      "💎 Rare Pack Fan",
-      "💎 Rare Pack Pro",
-      "💎 Rare Pack Master",
+      "Rare Unboxing",
+      "Rare Pack Fan",
+      "Rare Pack Pro",
+      "Rare Pack Master",
     ][i]!,
+    badge: {
+      shield: ["silver", "gold", "purple-gradient", "rainbow"][i]!,
+      emoji: "💎",
+    },
     description: {
       en: `Open ${n.toLocaleString()} rare packet${n > 1 ? "s" : ""}`,
       th: `เปิดซองหายาก ${n.toLocaleString()} ซอง`,
@@ -791,15 +876,19 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
     },
   })),
 
-  // ── Seed Packets: Legendary ─────────────────────────────────────────
+  // ── Seed Packets: Legendary (4 tiers) ──────────────────────────────
   ...([1, 10, 50, 100] as const).map((n, i) => ({
     id: `seedpacket_legendary_${n}`,
     name: [
-      "⭐ Legendary Unboxing",
-      "⭐ Legendary Pack Fan",
-      "⭐ Legendary Pack Pro",
-      "⭐ Legendary Pack Master",
+      "Legendary Unboxing",
+      "Legendary Pack Fan",
+      "Legendary Pack Pro",
+      "Legendary Pack Master",
     ][i]!,
+    badge: {
+      shield: ["silver", "gold", "purple-gradient", "rainbow"][i]!,
+      emoji: "⭐",
+    },
     description: {
       en: `Open ${n.toLocaleString()} legendary packet${n > 1 ? "s" : ""}`,
       th: `เปิดซองตำนาน ${n.toLocaleString()} ซอง`,
@@ -830,18 +919,22 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
     },
   })),
 
-  // ── Daily Mission Completion ────────────────────────────────────────
+  // ── Daily Mission Completion (7 tiers) ─────────────────────────────
   ...([100, 300, 1000, 5000, 10000, 100000, 1000000] as const).map((n, i) => ({
     id: `mission_${n}`,
     name: [
-      "📋 Task Starter",
-      "📋 Task Regular",
-      "📋 Task Veteran",
-      "📋 Task Expert",
-      "📋 Task Master",
-      "📋 Task Legend",
-      "📋 Task God",
+      "Task Starter",
+      "Task Regular",
+      "Task Veteran",
+      "Task Expert",
+      "Task Master",
+      "Task Legend",
+      "Task God",
     ][i]!,
+    badge: {
+      shield: ["green", "blue", "bronze", "silver", "gold", "purple-gradient", "rainbow"][i]!,
+      emoji: "📋",
+    },
     description: {
       en: `Complete ${n.toLocaleString()} missions`,
       th: `ทำภารกิจสำเร็จ ${n.toLocaleString()} ครั้ง`,
@@ -864,16 +957,20 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
     condition: { type: "missions_completed" as const, target: n },
   })),
 
-  // ── All Daily Mission Completion ────────────────────────────────────
+  // ── All Daily Mission Completion (5 tiers) ─────────────────────────
   ...([10, 30, 90, 365, 1000] as const).map((n, i) => ({
     id: `daily_all_${n}`,
     name: [
-      "🌟 Devoted 10",
-      "🌟 Devoted 30",
-      "🌟 Devoted 90",
-      "🌟 Devoted 365",
-      "🌟 Devoted 1000",
+      "Devoted 10",
+      "Devoted 30",
+      "Devoted 90",
+      "Devoted 365",
+      "Devoted 1000",
     ][i]!,
+    badge: {
+      shield: ["bronze", "silver", "gold", "purple-gradient", "rainbow"][i]!,
+      emoji: "🌟",
+    },
     description: {
       en: `Complete all daily missions ${n.toLocaleString()} days`,
       th: `ทำภารกิจประจำวันครบทั้งหมด ${n.toLocaleString()} วัน`,
@@ -891,10 +988,11 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
     condition: { type: "all_daily_completed" as const, target: n },
   })),
 
-  // ── Secrets ────────────────────────────────────────────────────────
+  // ── Secrets (non-tiered — all use black shield) ────────────────────
   {
     id: "secret_high_noon",
-    name: "🌞 It's High Noon",
+    name: "It's High Noon",
+    badge: { shield: "black", emoji: "🌞" },
     description: {
       en: "Watering at high noon. Aren't you hungry?",
       th: "รดน้ำตอนเที่ยงพอดี หิวข้าวยัง?",
@@ -905,7 +1003,8 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
   },
   {
     id: "secret_midnight_mass",
-    name: "🌙 Midnight Mass",
+    name: "Midnight Mass",
+    badge: { shield: "black", emoji: "🌙" },
     description: {
       en: "Watering at midnight. Shouldn't you be sleeping?",
       th: "รดน้ำตอนเที่ยงคืนพอดี ไม่นอนหรอ?",

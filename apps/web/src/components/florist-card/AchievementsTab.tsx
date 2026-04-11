@@ -10,6 +10,7 @@ import type {
   PlayerState,
 } from "@florify/shared";
 import { useLanguage } from "@/i18n/useT";
+import { badgeForAchievement } from "./achievementBadge";
 
 const CATEGORIES: { label: string; filter: (d: AchievementDef) => boolean }[] =
   [
@@ -435,6 +436,8 @@ function AchievementRow({
     0,
   );
 
+  const badge = badgeForAchievement(def);
+
   return (
     <div
       className={`rounded-xl p-3 transition-colors relative animate-fade-up ${
@@ -454,73 +457,138 @@ function AchievementRow({
       }
     >
       {justClaimed && <ClaimConfetti />}
-      <div className="flex items-center justify-between gap-2">
+      <div className="flex items-start gap-3">
+        <AchievementBadge
+          shield={badge.shield}
+          emoji={badge.emoji}
+          unlocked={isUnlocked}
+          claimed={isClaimed}
+        />
         <div className="flex-1 min-w-0">
-          <p
-            className={`text-sm font-medium truncate ${isUnlocked ? "text-ink-900" : "text-ink-500"}`}
-          >
-            {def.name}
-          </p>
-          <p className="text-xs text-ink-400 truncate">
-            {def.description[lang]}
-          </p>
-          {isUnlocked && def.flavor && (
-            <p className="text-[11px] italic text-clay-400/80 mt-0.5">
-              &ldquo;{def.flavor[lang]}&rdquo;
-            </p>
-          )}
-          {isUnlocked && progress && (
-            <p className="text-[10px] text-ink-300 mt-0.5">
-              {lang === "th" ? "ปลดล็อคเมื่อ " : "Unlocked "}
-              {new Date(progress.unlockedAt).toLocaleDateString(
-                lang === "th" ? "th-TH" : "en-US",
-                { year: "numeric", month: "short", day: "numeric" },
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex-1 min-w-0">
+              <p
+                className={`text-sm font-medium truncate ${isUnlocked ? "text-ink-900" : "text-ink-500"}`}
+              >
+                {def.name}
+              </p>
+              <p className="text-xs text-ink-400 truncate">
+                {def.description[lang]}
+              </p>
+              {isUnlocked && def.flavor && (
+                <p className="text-[11px] italic text-clay-400/80 mt-0.5">
+                  &ldquo;{def.flavor[lang]}&rdquo;
+                </p>
               )}
-            </p>
-          )}
-        </div>
-        <div className="flex-shrink-0">
-          {isClaimed ? (
-            <span className="text-xs text-ink-400">🌱 {sproutReward} ✅</span>
-          ) : isUnlocked ? (
-            <button
-              onClick={handleClaim}
-              className="text-xs font-semibold bg-clay-500 text-cream-50 px-3 py-1 rounded-lg hover:bg-clay-400 transition-colors shadow-soft-md overflow-hidden relative"
-            >
-              + 🌱 {sproutReward}
-              {justClaimed && (
-                <span
-                  aria-hidden
-                  className="absolute inset-0 pointer-events-none"
+              {isUnlocked && progress && (
+                <p className="text-[10px] text-ink-300 mt-0.5">
+                  {lang === "th" ? "ปลดล็อคเมื่อ " : "Unlocked "}
+                  {new Date(progress.unlockedAt).toLocaleDateString(
+                    lang === "th" ? "th-TH" : "en-US",
+                    { year: "numeric", month: "short", day: "numeric" },
+                  )}
+                </p>
+              )}
+            </div>
+            <div className="flex-shrink-0">
+              {isClaimed ? (
+                <span className="text-xs text-ink-400">
+                  🌱 {sproutReward} ✅
+                </span>
+              ) : isUnlocked ? (
+                <button
+                  onClick={handleClaim}
+                  className="text-xs font-semibold bg-clay-500 text-cream-50 px-3 py-1 rounded-lg hover:bg-clay-400 transition-colors shadow-soft-md overflow-hidden relative"
+                >
+                  + 🌱 {sproutReward}
+                  {justClaimed && (
+                    <span
+                      aria-hidden
+                      className="absolute inset-0 pointer-events-none"
+                      style={{
+                        animation: "water-btn-shine 400ms ease-out 80ms both",
+                        background:
+                          "linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.45) 50%, transparent 65%)",
+                      }}
+                    />
+                  )}
+                </button>
+              ) : (
+                <span className="text-xs text-ink-400">🌱 {sproutReward}</span>
+              )}
+            </div>
+          </div>
+          {!isClaimed && def.condition.type !== "secret" && (
+            <div className="mt-2">
+              <div className="h-1.5 bg-cream-200 rounded-full overflow-hidden">
+                <div
+                  className={`h-full rounded-full ${isUnlocked ? "bg-clay-400" : "bg-clay-400/50"}`}
                   style={{
-                    animation: "water-btn-shine 400ms ease-out 80ms both",
-                    background:
-                      "linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.45) 50%, transparent 65%)",
+                    width: `${pct}%`,
+                    animation: `progress-fill 800ms cubic-bezier(0.22, 1, 0.36, 1) ${delay + 200}ms both`,
                   }}
                 />
-              )}
-            </button>
-          ) : (
-            <span className="text-xs text-ink-400">🌱 {sproutReward}</span>
+              </div>
+              <p className="text-[10px] text-ink-400 mt-0.5 text-right">
+                {currentValue.toLocaleString()}/{target.toLocaleString()}
+              </p>
+            </div>
           )}
         </div>
       </div>
-      {!isClaimed && def.condition.type !== "secret" && (
-        <div className="mt-2">
-          <div className="h-1.5 bg-cream-200 rounded-full overflow-hidden">
-            <div
-              className={`h-full rounded-full ${isUnlocked ? "bg-clay-400" : "bg-clay-400/50"}`}
-              style={{
-                width: `${pct}%`,
-                animation: `progress-fill 800ms cubic-bezier(0.22, 1, 0.36, 1) ${delay + 200}ms both`,
-              }}
-            />
-          </div>
-          <p className="text-[10px] text-ink-400 mt-0.5 text-right">
-            {currentValue.toLocaleString()}/{target.toLocaleString()}
-          </p>
-        </div>
-      )}
+    </div>
+  );
+}
+
+function AchievementBadge({
+  shield,
+  emoji,
+  unlocked,
+  claimed,
+  size = 48,
+}: {
+  shield: string;
+  emoji: string;
+  unlocked: boolean;
+  claimed: boolean;
+  size?: number;
+}) {
+  const dimmed = !unlocked;
+  return (
+    <div
+      className="relative shrink-0"
+      style={{ width: size, height: size }}
+      aria-hidden
+    >
+      <img
+        src={`/badges/shield-1/${shield}.svg`}
+        alt=""
+        draggable={false}
+        className="absolute inset-0 w-full h-full select-none"
+        style={{
+          filter: dimmed
+            ? "grayscale(1) brightness(0.95)"
+            : "drop-shadow(0 2px 3px rgba(92, 64, 40, 0.18))",
+          opacity: dimmed ? 0.45 : claimed ? 0.9 : 1,
+          transition: "filter 300ms ease, opacity 300ms ease",
+        }}
+      />
+      <span
+        className="absolute select-none flex items-center justify-center leading-none"
+        style={{
+          left: "50%",
+          top: "50%",
+          transform: "translate(-50%, -50%)",
+          fontSize: size * 0.4,
+          filter: dimmed
+            ? "grayscale(1)"
+            : "drop-shadow(0 1px 1px rgba(0, 0, 0, 0.25))",
+          opacity: dimmed ? 0.55 : 1,
+          transition: "filter 300ms ease, opacity 300ms ease",
+        }}
+      >
+        {emoji}
+      </span>
     </div>
   );
 }
