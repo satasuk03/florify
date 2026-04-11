@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ACHIEVEMENTS } from "@/data/achievements";
 import { useGameStore } from "@/store/gameStore";
 import { CheckIcon } from "@/components/icons";
@@ -10,6 +10,9 @@ interface Props {
   /** Text shown for the "Auto" fallback, e.g. "Gardener". */
   currentRank: string;
 }
+
+/** Match globals.css `sheet-down` / `overlay-out` duration. */
+const EXIT_DURATION_MS = 260;
 
 /**
  * Modal for picking the passport title from claimed achievements.
@@ -22,6 +25,24 @@ export function TitleChangeModal({ onClose, currentRank }: Props) {
   const setPassportTitle = useGameStore((s) => s.setPassportTitle);
   const currentTitleId = state.passportCustomization.titleAchievementId;
   const [query, setQuery] = useState("");
+  const [closing, setClosing] = useState(false);
+  const closeTimer = useRef<number | null>(null);
+
+  // Play the exit animation, then signal the parent to unmount us.
+  const beginClose = useCallback(() => {
+    if (closing) return;
+    setClosing(true);
+    closeTimer.current = window.setTimeout(() => {
+      onClose();
+    }, EXIT_DURATION_MS);
+  }, [closing, onClose]);
+
+  useEffect(
+    () => () => {
+      if (closeTimer.current != null) window.clearTimeout(closeTimer.current);
+    },
+    [],
+  );
 
   const claimed = useMemo(
     () => ACHIEVEMENTS.filter((a) => state.achievements[a.id]?.claimedAt),
@@ -41,33 +62,37 @@ export function TitleChangeModal({ onClose, currentRank }: Props) {
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") beginClose();
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [onClose]);
+  }, [beginClose]);
 
   const handlePick = (id: string | null) => {
     setPassportTitle(id);
-    onClose();
+    beginClose();
   };
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-ink-900/50 backdrop-blur-sm flex items-end sm:items-center justify-center animate-overlay-in"
-      onClick={onClose}
+      className={`fixed inset-0 z-50 bg-ink-900/50 backdrop-blur-sm flex items-end sm:items-center justify-center ${
+        closing ? "animate-overlay-out" : "animate-overlay-in"
+      }`}
+      onClick={beginClose}
       role="dialog"
       aria-modal="true"
       aria-label="เลือกฉายา"
     >
       <div
-        className="w-full sm:max-w-md bg-cream-50 rounded-t-3xl sm:rounded-3xl p-6 shadow-soft-lg max-h-[80dvh] flex flex-col animate-sheet-up"
+        className={`w-full sm:max-w-md bg-cream-50 rounded-t-3xl sm:rounded-3xl p-6 shadow-soft-lg max-h-[80dvh] flex flex-col ${
+          closing ? "animate-sheet-down" : "animate-sheet-up"
+        }`}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-lg font-serif text-ink-900">เลือกฉายา</h2>
           <button
-            onClick={onClose}
+            onClick={beginClose}
             aria-label="Close"
             className="text-ink-500 text-2xl leading-none w-10 h-10 flex items-center justify-center hover:bg-cream-100 rounded-full transition-colors"
           >

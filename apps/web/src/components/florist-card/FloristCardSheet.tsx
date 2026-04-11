@@ -35,6 +35,11 @@ interface Props {
   onClose: () => void;
 }
 
+/** Match the longer of the two exit keyframes in globals.css
+ *  (`sheet-down` / `overlay-out`) so the sheet stays mounted until both
+ *  finish before unmounting. */
+const EXIT_DURATION_MS = 260;
+
 export function FloristCardSheet({ open, onClose }: Props) {
   // Subscribe to the stable raw `state` reference and derive the card
   // data with useMemo — NEVER put selectFloristCard inline in a Zustand
@@ -44,6 +49,26 @@ export function FloristCardSheet({ open, onClose }: Props) {
   const router = useRouter();
   const state = useGameStore((s) => s.state);
   const data = useMemo(() => selectFloristCard(state), [state]);
+
+  // Keep the sheet mounted during its exit animation. `open` (from the
+  // parent) drives the intent; `rendered` drives the actual DOM
+  // presence; `closing` toggles the exit animation classes.
+  const [rendered, setRendered] = useState(open);
+  const [closing, setClosing] = useState(false);
+  useEffect(() => {
+    if (open) {
+      setRendered(true);
+      setClosing(false);
+    } else if (rendered) {
+      setClosing(true);
+      const id = setTimeout(() => {
+        setRendered(false);
+        setClosing(false);
+      }, EXIT_DURATION_MS);
+      return () => clearTimeout(id);
+    }
+    return undefined;
+  }, [open, rendered]);
 
   const handleEditAvatar = useCallback(() => {
     onClose();
@@ -148,7 +173,7 @@ export function FloristCardSheet({ open, onClose }: Props) {
     }
   }, [data]);
 
-  if (!open) return null;
+  if (!rendered) return null;
 
   const shareLabel = (() => {
     switch (sheet.phase) {
@@ -180,7 +205,9 @@ export function FloristCardSheet({ open, onClose }: Props) {
 
   return (
     <div
-      className="fixed inset-0 z-40 bg-ink-900/50 backdrop-blur-sm flex items-end sm:items-center justify-center animate-overlay-in"
+      className={`fixed inset-0 z-40 bg-ink-900/50 backdrop-blur-sm flex items-end sm:items-center justify-center ${
+        closing ? "animate-overlay-out" : "animate-overlay-in"
+      }`}
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -188,7 +215,9 @@ export function FloristCardSheet({ open, onClose }: Props) {
     >
       <div
         ref={contentRef}
-        className="w-full sm:max-w-md bg-cream-50 rounded-t-3xl sm:rounded-3xl p-6 shadow-soft-lg max-h-[92dvh] overflow-y-auto scrollbar-elegant animate-sheet-up"
+        className={`w-full sm:max-w-md bg-cream-50 rounded-t-3xl sm:rounded-3xl p-6 shadow-soft-lg max-h-[92dvh] overflow-y-auto scrollbar-elegant ${
+          closing ? "animate-sheet-down" : "animate-sheet-up"
+        }`}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between mb-4">
