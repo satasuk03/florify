@@ -920,7 +920,9 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
   })),
 
   // ── Daily Mission Completion (7 tiers) ─────────────────────────────
-  ...([100, 300, 1000, 5000, 10000, 100000, 1000000] as const).map((n, i) => ({
+  // Max 5 missions/day — Task God (1,800) caps at ~360 days (~1 year) of
+  // perfect play so even the top tier stays reachable within a year.
+  ...([25, 75, 200, 400, 750, 1200, 1800] as const).map((n, i) => ({
     id: `mission_${n}`,
     name: [
       "Task Starter",
@@ -942,11 +944,11 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
     flavor: [
       { en: "The todo list is shrinking.", th: "To-do list สั้นลงแล้ว" },
       { en: "Task runner engaged.", th: "โหมดทำภารกิจเปิด" },
-      { en: "A thousand tasks complete.", th: "ทำภารกิจครบพันแล้ว" },
+      { en: "Two hundred tasks complete.", th: "ทำภารกิจครบสองร้อยแล้ว" },
       { en: "You could run an office.", th: "เปิดออฟฟิศได้เลย" },
       { en: "Task God mode.", th: "โหมดเทพแห่งภารกิจ" },
       { en: "Missions are afraid of you.", th: "ภารกิจกลัวคุณ" },
-      { en: "A million missions. Take a break.", th: "ล้านภารกิจ พักบ้างเถอะ" },
+      { en: "A full year of perfect missions. Take a bow.", th: "ครบหนึ่งปีเต็มของภารกิจ คำนับเลย" },
     ][i]!,
     rewards: [
       {
