@@ -1460,7 +1460,7 @@ describe('claimAllCompletedBonus', () => {
 });
 
 describe('migration v12 → v13', () => {
-  it('seeds floraLevels with Lv 1 entries for every collected species', () => {
+  it('seeds floraLevels with Lv 1 entries and retroactive pendingMerges from collection count', () => {
     const v12 = {
       schemaVersion: 12,
       collection: [
@@ -1472,8 +1472,38 @@ describe('migration v12 → v13', () => {
     const next = migrate(v12 as never);
     expect(next.schemaVersion).toBe(SCHEMA_VERSION);
     expect(next.floraLevels).toEqual({
-      3: { level: 1, pendingMerges: 0 },
+      3: { level: 1, pendingMerges: 4 },
       47: { level: 1, pendingMerges: 0 },
+    });
+  });
+
+  it('caps retroactive pendingMerges at MAX_PENDING_MERGES', () => {
+    const v12 = {
+      schemaVersion: 12,
+      collection: [
+        { speciesId: 7, rarity: 'common', count: 20, totalWaterings: 240, firstHarvestedAt: 1, lastHarvestedAt: 2 },
+      ],
+      passportCustomization: { titleAchievementId: null, avatar: null },
+    };
+    const next = migrate(v12 as never);
+    expect(next.floraLevels).toEqual({
+      7: { level: 1, pendingMerges: 6 },
+    });
+  });
+
+  it('handles missing or zero count on legacy collection entries', () => {
+    const v12 = {
+      schemaVersion: 12,
+      collection: [
+        { speciesId: 9, rarity: 'common' },
+        { speciesId: 10, rarity: 'common', count: 0 },
+      ],
+      passportCustomization: { titleAchievementId: null, avatar: null },
+    };
+    const next = migrate(v12 as never);
+    expect(next.floraLevels).toEqual({
+      9: { level: 1, pendingMerges: 0 },
+      10: { level: 1, pendingMerges: 0 },
     });
   });
 

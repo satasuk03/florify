@@ -1,4 +1,4 @@
-import { MAX_WATER_DROPS, SCHEMA_VERSION, type PlayerState, type CollectedSpecies, type Rarity } from '@florify/shared';
+import { MAX_PENDING_MERGES, MAX_WATER_DROPS, SCHEMA_VERSION, type PlayerState, type CollectedSpecies, type Rarity } from '@florify/shared';
 
 type UnknownState = { schemaVersion: number } & Record<string, unknown>;
 
@@ -218,12 +218,16 @@ function migrateV11toV12(s: UnknownState): UnknownState {
 // v12 → v13: introduce floraLevels (Flora Level system) and replace
 // titleAchievementId with the new titleSource discriminated union.
 function migrateV12toV13(s: UnknownState): UnknownState {
-  const floraLevels: Record<number, { level: 1; pendingMerges: 0 }> = {};
-  const collection = Array.isArray(s.collection) ? (s.collection as Array<{ speciesId?: unknown }>) : [];
+  const floraLevels: Record<number, { level: 1; pendingMerges: number }> = {};
+  const collection = Array.isArray(s.collection)
+    ? (s.collection as Array<{ speciesId?: unknown; count?: unknown }>)
+    : [];
   for (const c of collection) {
-    if (typeof c?.speciesId === 'number') {
-      floraLevels[c.speciesId] = { level: 1, pendingMerges: 0 };
-    }
+    if (typeof c?.speciesId !== 'number') continue;
+    const count = typeof c.count === 'number' && c.count > 0 ? Math.floor(c.count) : 1;
+    const extras = Math.max(count - 1, 0);
+    const pendingMerges = Math.min(extras, MAX_PENDING_MERGES);
+    floraLevels[c.speciesId] = { level: 1, pendingMerges };
   }
 
   const oldCustom = (s.passportCustomization ?? {}) as {
