@@ -19,6 +19,7 @@ export function migrate(state: UnknownState): PlayerState {
   if (s.schemaVersion === 8) s = migrateV8toV9(s);
   if (s.schemaVersion === 9) s = migrateV9toV10(s);
   if (s.schemaVersion === 10) s = migrateV10toV11(s);
+  if (s.schemaVersion === 11) s = migrateV11toV12(s);
   if (s.schemaVersion !== SCHEMA_VERSION) {
     console.warn(`[migrate] unknown schemaVersion ${s.schemaVersion}, falling back to as-is`);
   }
@@ -199,5 +200,16 @@ function migrateV10toV11(s: UnknownState): UnknownState {
       waterLevel: 1,
       lastClaimAt: Date.now(),
     },
+  };
+}
+
+// v11 → v12: add passportCustomization (title + avatar picker for the
+// Florist Card). Existing players get both null — auto rank pill and
+// placeholder avatar until they customize.
+function migrateV11toV12(s: UnknownState): UnknownState {
+  return {
+    ...s,
+    schemaVersion: 12,
+    passportCustomization: { titleAchievementId: null, avatar: null },
   };
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/Button";
 import { selectFloristCard, useGameStore } from "@/store/gameStore";
 import { toast } from "@/lib/toast";
@@ -9,6 +10,7 @@ import { copyText } from "@/lib/clipboard";
 import { PassportCard } from "./PassportCard";
 import { AchievementsTab } from "./AchievementsTab";
 import { sharePassport, type ShareResult } from "./sharePassport";
+import { TitleChangeModal } from "./TitleChangeModal";
 import { gameEventBus } from "@/lib/gameEventBus";
 
 /**
@@ -39,12 +41,19 @@ export function FloristCardSheet({ open, onClose }: Props) {
   // selector. The selector would rebuild a fresh object every call,
   // which breaks useSyncExternalStore's server-snapshot caching and
   // triggers an infinite render loop. See selectFloristCard docstring.
+  const router = useRouter();
   const state = useGameStore((s) => s.state);
   const data = useMemo(() => selectFloristCard(state), [state]);
+
+  const handleEditAvatar = useCallback(() => {
+    onClose();
+    router.push("/gallery/");
+  }, [onClose, router]);
   const [sheet, setSheet] = useState<SheetState>({ phase: "viewing" });
   const [activeTab, setActiveTab] = useState<"passport" | "achievements">(
     "passport",
   );
+  const [titleModalOpen, setTitleModalOpen] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
   const [cardWidth, setCardWidth] = useState(320);
 
@@ -63,6 +72,7 @@ export function FloristCardSheet({ open, onClose }: Props) {
     if (open) {
       setSheet({ phase: "viewing" });
       setActiveTab("passport");
+      setTitleModalOpen(false);
     }
   }
 
@@ -221,7 +231,13 @@ export function FloristCardSheet({ open, onClose }: Props) {
         {activeTab === "passport" ? (
           <>
             <div className="flex justify-center mb-5">
-              <PassportCard data={data} maxWidth={cardWidth} />
+              <PassportCard
+                data={data}
+                maxWidth={cardWidth}
+                editable
+                onEditTitle={() => setTitleModalOpen(true)}
+                onEditAvatar={handleEditAvatar}
+              />
             </div>
 
             <div className="flex flex-col gap-2 items-center">
@@ -255,6 +271,12 @@ export function FloristCardSheet({ open, onClose }: Props) {
           <AchievementsTab scrollRef={contentRef} />
         )}
       </div>
+      {titleModalOpen && (
+        <TitleChangeModal
+          onClose={() => setTitleModalOpen(false)}
+          currentRank={data.rank}
+        />
+      )}
     </div>
   );
 }

@@ -39,5 +39,9 @@ export function createInitialState(): PlayerState {
       waterLevel: 1,
       lastClaimAt: now,
     },
+    passportCustomization: {
+      titleAchievementId: null,
+      avatar: null,
+    },
   };
 }

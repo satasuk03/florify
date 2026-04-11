@@ -6,8 +6,8 @@
 - Compress images
 - Next Collection: Fungi Kingdom
 
-- เครื่องผลิต Sprout กับ น้ำ
 ## Done
+- เครื่องผลิต Sprout กับ น้ำ
 - Acheivements
 - เพิ่ม Achievement เกี่ยวกับ Daily Mission
   - Daily Mission Completion -> ทำภารกิจสำเร็จ x ครั้ง 100, 300, 1000, 5000, 10000, 100000, 1000000
