@@ -60,6 +60,9 @@ interface PackedPayload {
   ti?: string;
   /** Avatar: {speciesId, stage}. Absent = placeholder. */
   av?: { i: number; g: 1 | 2 | 3 };
+  /** Title-shiny flag. 1 if the title is a Legendary epithet — recipient
+   *  renders it with a rainbow gradient. Absent = not shiny. */
+  tsh?: 1;
 }
 
 export type DecodeResult =
@@ -90,6 +93,7 @@ export async function encodePassportPayload(data: FloristCardData): Promise<stri
     ...(data.avatar
       ? { av: { i: data.avatar.speciesId, g: data.avatar.stage } }
       : {}),
+    ...(data.titleShiny ? { tsh: 1 as const } : {}),
   };
   const json = JSON.stringify(packed);
   const compressed = await gzip(new TextEncoder().encode(json));
@@ -179,6 +183,7 @@ function unpack(p: PackedPayload): FloristCardData {
     displayName: p.n,
     sharedAt: p.d,
     title: p.ti ?? p.r,
+    titleShiny: p.tsh === 1,
     avatar: validateAvatar(p.av),
   };
 }
@@ -259,6 +264,10 @@ function validatePacked(v: unknown): PackedPayload | null {
       : undefined;
   // Optional: sharedAt.
   const d = typeof o.d === 'number' && Number.isFinite(o.d) ? o.d : undefined;
+  // Optional: title-shiny flag. Must be exactly 1 or absent — any other
+  // value (e.g. true, 2) is treated as tampering and the link is rejected.
+  if (o.tsh !== undefined && o.tsh !== 1) return null;
+  const tsh = o.tsh === 1 ? (1 as const) : undefined;
 
   return {
     v: v_,
@@ -276,6 +285,7 @@ function validatePacked(v: unknown): PackedPayload | null {
     ...(d !== undefined ? { d } : {}),
     ...(ti !== undefined ? { ti } : {}),
     ...(av !== undefined ? { av } : {}),
+    ...(tsh !== undefined ? { tsh } : {}),
   };
 }
 

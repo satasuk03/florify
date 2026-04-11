@@ -1,4 +1,4 @@
-export const SCHEMA_VERSION = 12 as const;
+export const SCHEMA_VERSION = 13 as const;
 export const CHECKIN_BASE_DROPS = 30;
 export const CHECKIN_STREAK_BONUS_MAX = 20;
 export const MAX_WATER_DROPS = 50;
@@ -35,3 +35,17 @@ export const WATER_PRODUCER_UPGRADE_COST = [0, 120, 280, 500, 850, 1300, 2000, 3
 
 export const STORAGE_KEY = 'florify:v1:player';
 export const SETTINGS_KEY = 'florify:v1:settings';
+
+// ── Flora Level (Merge) ────────────────────────────────────────────
+/** Max level a species can reach. */
+export const FLORA_MAX_LEVEL = 5 as const;
+
+/** Merge cost to go from Lv N to Lv N+1. Indexed by `(currentLevel - 1)`.
+ *  Total cost to reach Lv 5 from Lv 1: 1 + 1 + 2 + 2 = 6 duplicate merges. */
+export const FLORA_LEVEL_CURVE = [1, 1, 2, 2] as const;
+
+/** Cap on stored `pendingMerges`. Above this, further duplicate harvests
+ *  stop adding XP but still contribute to Dried Leaves and `collection[].count`
+ *  normally. Equals the total cost of reaching Lv 5 so a player who never
+ *  merges can still stockpile the full grind. */
+export const MAX_PENDING_MERGES = 6 as const;

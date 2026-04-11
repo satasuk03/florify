@@ -6,8 +6,9 @@ import { Card } from "@/components/Card";
 import { RarityBadge } from "@/components/RarityBadge";
 import { BackIcon } from "@/components/icons";
 import { FloraImage } from "@/components/FloraImage";
+import { ShinyOverlay } from "@/components/flora-level/ShinyOverlay";
 import { AnimatedNumber } from "@/components/AnimatedNumber";
-import { useGameStore } from "@/store/gameStore";
+import { useGameStore, canMergeFloraLevel } from "@/store/gameStore";
 import { gameEventBus } from "@/lib/gameEventBus";
 import {
   SPECIES,
@@ -17,6 +18,7 @@ import {
 } from "@/data/species";
 import type { SpeciesDef } from "@/data/species";
 import type { Rarity } from "@florify/shared";
+import { FLORA_MAX_LEVEL } from "@florify/shared";
 import { useT } from "@/i18n/useT";
 
 const RARITY_ORDER: Rarity[] = ["common", "rare", "legendary"];
@@ -97,6 +99,7 @@ function LockIcon() {
 export function GalleryView() {
   const t = useT();
   const collection = useGameStore((s) => s.state.collection);
+  const floraLevels = useGameStore((s) => s.state.floraLevels);
   const unlocked = useGameStore((s) => s.uniqueSpeciesUnlocked());
   const hydrated = useGameStore((s) => s.hydrated);
 
@@ -128,6 +131,8 @@ export function GalleryView() {
   const [showMode, setShowMode] = useState<"all" | "found" | "missing">(
     "found",
   );
+  const [showPending, setShowPending] = useState(false);
+  const [showMaxed, setShowMaxed] = useState(false);
 
   const toggleRarity = (r: Rarity) => {
     setSelectedRarities((prev) => {
@@ -159,6 +164,14 @@ export function GalleryView() {
       const isFound = discoveredSet.has(sp.id);
       if (showMode === "found" && !isFound) return false;
       if (showMode === "missing" && isFound) return false;
+      // Flora Level filters
+      const entry = floraLevels[sp.id];
+      if (showPending) {
+        if (!canMergeFloraLevel(entry)) return false;
+      }
+      if (showMaxed) {
+        if (!entry || entry.level !== FLORA_MAX_LEVEL) return false;
+      }
       // Search
       if (q) {
         const collLabel = COLLECTION_LABELS[sp.collection];
@@ -186,7 +199,7 @@ export function GalleryView() {
       // Within same rarity: higher ID first
       return b.id - a.id;
     });
-  }, [search, selectedRarities, selectedCollections, showMode, discoveredSet]);
+  }, [search, selectedRarities, selectedCollections, showMode, discoveredSet, showPending, showMaxed, floraLevels]);
 
   /* ── Total species per collection (for progression display) ───── */
   const collectionTotals = useMemo(() => {
@@ -230,13 +243,17 @@ export function GalleryView() {
   const isDefaultFilters =
     selectedRarities.size === RARITY_ORDER.length &&
     selectedCollections.size === ALL_COLLECTIONS.length &&
-    showMode === "all";
+    showMode === "all" &&
+    !showPending &&
+    !showMaxed;
 
   const activeFilterCount =
     RARITY_ORDER.length -
     selectedRarities.size +
     (ALL_COLLECTIONS.length - selectedCollections.size) +
-    (showMode !== "all" ? 1 : 0);
+    (showMode !== "all" ? 1 : 0) +
+    (showPending ? 1 : 0) +
+    (showMaxed ? 1 : 0);
 
   return (
     <div
@@ -365,6 +382,37 @@ export function GalleryView() {
               </div>
             </div>
 
+            {/* Flora level filters */}
+            <div>
+              <h3 className="text-xs font-medium text-ink-500 uppercase tracking-wider mb-2">
+                {t("gallery.filterStatus")} Lv
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowPending((v) => !v)}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 ${
+                    showPending
+                      ? "bg-yellow-400 text-ink-900 shadow-sm"
+                      : "bg-cream-200 text-ink-700 hover:bg-cream-300"
+                  }`}
+                >
+                  ● {t("gallery.filter.pending")}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowMaxed((v) => !v)}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 ${
+                    showMaxed
+                      ? "bg-amber-500 text-cream-50 shadow-sm"
+                      : "bg-cream-200 text-ink-700 hover:bg-cream-300"
+                  }`}
+                >
+                  ✦ {t("gallery.filter.maxed")}
+                </button>
+              </div>
+            </div>
+
             {/* Rarity checkboxes */}
             <div>
               <h3 className="text-xs font-medium text-ink-500 uppercase tracking-wider mb-2">
@@ -448,6 +496,8 @@ export function GalleryView() {
                   setSelectedRarities(new Set(RARITY_ORDER));
                   setSelectedCollections(new Set(ALL_COLLECTIONS));
                   setShowMode("all");
+                  setShowPending(false);
+                  setShowMaxed(false);
                 }}
                 className="text-xs text-clay-500 hover:text-clay-600 underline underline-offset-2 transition-colors"
               >
@@ -502,11 +552,16 @@ export function GalleryView() {
                 <div className="grid grid-cols-3 gap-3">
                   {group.species.map((sp, i) => {
                     const isFound = discoveredSet.has(sp.id);
-                    const entry = isFound
+                    const collEntry = isFound
                       ? collectionMap.get(sp.id)
                       : undefined;
                     // Only animate first 12 tiles of the first group
                     const animate = gi === 0 && i < 12;
+
+                    // Flora level data for this tile
+                    const floraEntry = floraLevels[sp.id];
+                    const level = floraEntry?.level ?? null;
+                    const canMerge = canMergeFloraLevel(floraEntry);
 
                     return isFound ? (
                       <Link
@@ -526,7 +581,12 @@ export function GalleryView() {
                           } as React.CSSProperties
                         }
                       >
-                        <GalleryTile species={sp} count={entry?.count ?? 1} />
+                        <GalleryTile
+                          species={sp}
+                          count={collEntry?.count ?? 1}
+                          level={level}
+                          canMerge={canMerge}
+                        />
                       </Link>
                     ) : (
                       <div
@@ -582,25 +642,79 @@ export function GalleryView() {
 const GalleryTile = memo(function GalleryTile({
   species,
   count,
+  level,
+  canMerge,
 }: {
   species: SpeciesDef;
   count: number;
+  level: number | null;
+  canMerge: boolean;
 }) {
+  const frameTier =
+    level === null || level <= 1
+      ? null
+      : level <= 2
+        ? "fl-frame-tier-1"
+        : level <= 4
+          ? "fl-frame-tier-2"
+          : "fl-frame-tier-3";
+  const frameRarity = `fl-frame-${species.rarity}`;
+
   return (
     <div>
-      <Card className="overflow-hidden aspect-[3/4] relative group-hover:-translate-y-1 group-hover:shadow-soft-md">
-        <FloraImage
-          speciesId={species.id}
-          progress={1}
-          className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
-        />
+      <Card
+        className={`overflow-hidden aspect-[3/4] relative group-hover:shadow-soft-md`}
+      >
+        {level === FLORA_MAX_LEVEL ? (
+          <ShinyOverlay rarity={species.rarity}>
+            <FloraImage
+              speciesId={species.id}
+              progress={1}
+              className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
+            />
+          </ShinyOverlay>
+        ) : (
+          <FloraImage
+            speciesId={species.id}
+            progress={1}
+            className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
+          />
+        )}
+        {/* Flora Level frame overlay — sits above image, below badges */}
+        {frameTier !== null && (
+          <div
+            aria-hidden
+            className={`fl-frame-overlay ${frameTier} ${frameRarity}`}
+          />
+        )}
+        {/* Rarity badge — top-right */}
         <div className="absolute top-1 right-1">
           <RarityBadge rarity={species.rarity} />
         </div>
-        {count > 1 && (
+        {/* Pending merge dot — below rarity badge, top-right */}
+        {canMerge && (
+          <span
+            aria-label="pending merges"
+            className="absolute top-7 right-1.5 w-2 h-2 rounded-full bg-yellow-400 animate-pulse"
+          />
+        )}
+        {/* Harvest count — bottom-left (existing position preserved) */}
+        {count > 0 && (
           <div className="absolute bottom-1 left-1 bg-ink-900/60 text-cream-50 text-[10px] font-medium px-1.5 py-0.5 rounded-full backdrop-blur-sm">
             ×{count}
           </div>
+        )}
+        {/* Level badge — bottom-right */}
+        {level !== null && (
+          <span
+            className={`absolute bottom-1 right-1 text-[10px] font-semibold px-1.5 py-0.5 rounded-full ${
+              level === FLORA_MAX_LEVEL
+                ? "bg-cream-50/90 text-amber-700 ring-1 ring-amber-400"
+                : "bg-cream-50/80 text-ink-700"
+            }`}
+          >
+            {level === FLORA_MAX_LEVEL ? "✦ Lv 5 ✦" : `Lv ${level}`}
+          </span>
         )}
       </Card>
       <div className="text-xs mt-1 text-ink-700 truncate">{species.name}</div>

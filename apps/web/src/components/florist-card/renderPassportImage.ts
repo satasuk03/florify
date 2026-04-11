@@ -190,10 +190,29 @@ function coverRect(
 }
 
 function drawText(ctx: CanvasRenderingContext2D, op: Extract<DrawOp, { type: 'text' }>): void {
-  ctx.fillStyle = op.color;
   ctx.textBaseline = 'alphabetic';
   ctx.textAlign = op.align;
   ctx.font = `${op.weight} ${op.size}px ${canvasFontFamily(op.family)}`;
+
+  if (op.shiny) {
+    // Static rainbow gradient — frozen snapshot for PNG export (no animation).
+    // Font must be set first so measureText uses the correct metrics.
+    const width = ctx.measureText(op.text).width;
+    const startX =
+      op.align === 'center' ? op.x - width / 2
+      : op.align === 'right' ? op.x - width
+      : op.x;
+    const grad = ctx.createLinearGradient(startX, op.y, startX + width, op.y);
+    grad.addColorStop(0.00, '#FFB0C3');
+    grad.addColorStop(0.20, '#FFE18A');
+    grad.addColorStop(0.40, '#A6F0AD');
+    grad.addColorStop(0.60, '#9EC6FF');
+    grad.addColorStop(0.80, '#C9A3FF');
+    grad.addColorStop(1.00, '#FFB0C3');
+    ctx.fillStyle = grad;
+  } else {
+    ctx.fillStyle = op.color;
+  }
 
   if (!op.letterSpacing) {
     ctx.fillText(op.text, op.x, op.y);

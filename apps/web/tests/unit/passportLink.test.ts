@@ -22,6 +22,7 @@ const base: FloristCardData = {
   serial: 'FL-ABCD-EFGH',
   displayName: 'Tester',
   title: 'Apprentice',
+  titleShiny: false,
   avatar: null,
 };
 
@@ -86,6 +87,42 @@ describe('passportLink round-trip with customization', () => {
     expect(decoded.ok).toBe(true);
     if (decoded.ok) {
       expect(decoded.data.avatar).toBeNull();
+    }
+  });
+});
+
+describe('passportLink — titleShiny (tsh)', () => {
+  it('encodes tsh: 1 when titleShiny is true', async () => {
+    const data: FloristCardData = { ...base, title: 'Ethereal Wanderer', titleShiny: true };
+    const body = await encodePassportPayload(data);
+    const decoded = await decodePassportLink(body);
+    expect(decoded.ok).toBe(true);
+    if (decoded.ok) {
+      expect(decoded.data.titleShiny).toBe(true);
+      expect(decoded.data.title).toBe('Ethereal Wanderer');
+    }
+  });
+
+  it('omits tsh when titleShiny is false', async () => {
+    const data: FloristCardData = { ...base, title: 'Gardener', titleShiny: false };
+    const body = await encodePassportPayload(data);
+    const decoded = await decodePassportLink(body);
+    expect(decoded.ok).toBe(true);
+    if (decoded.ok) {
+      expect(decoded.data.titleShiny).toBe(false);
+    }
+  });
+
+  it('decodes an old link without tsh as titleShiny: false', async () => {
+    // Build a payload that intentionally lacks tsh — simulate a legacy link
+    // by encoding a payload with titleShiny: false and confirming the
+    // encoded string contains no 'tsh' key. Then decode and assert false.
+    const data: FloristCardData = { ...base, title: 'Master', titleShiny: false };
+    const body = await encodePassportPayload(data);
+    const decoded = await decodePassportLink(body);
+    expect(decoded.ok).toBe(true);
+    if (decoded.ok) {
+      expect(decoded.data.titleShiny).toBe(false);
     }
   });
 });

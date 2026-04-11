@@ -20,6 +20,7 @@ export function migrate(state: UnknownState): PlayerState {
   if (s.schemaVersion === 9) s = migrateV9toV10(s);
   if (s.schemaVersion === 10) s = migrateV10toV11(s);
   if (s.schemaVersion === 11) s = migrateV11toV12(s);
+  if (s.schemaVersion === 12) s = migrateV12toV13(s);
   if (s.schemaVersion !== SCHEMA_VERSION) {
     console.warn(`[migrate] unknown schemaVersion ${s.schemaVersion}, falling back to as-is`);
   }
@@ -211,5 +212,36 @@ function migrateV11toV12(s: UnknownState): UnknownState {
     ...s,
     schemaVersion: 12,
     passportCustomization: { titleAchievementId: null, avatar: null },
+  };
+}
+
+// v12 → v13: introduce floraLevels (Flora Level system) and replace
+// titleAchievementId with the new titleSource discriminated union.
+function migrateV12toV13(s: UnknownState): UnknownState {
+  const floraLevels: Record<number, { level: 1; pendingMerges: 0 }> = {};
+  const collection = Array.isArray(s.collection) ? (s.collection as Array<{ speciesId?: unknown }>) : [];
+  for (const c of collection) {
+    if (typeof c?.speciesId === 'number') {
+      floraLevels[c.speciesId] = { level: 1, pendingMerges: 0 };
+    }
+  }
+
+  const oldCustom = (s.passportCustomization ?? {}) as {
+    titleAchievementId?: string | null;
+    avatar?: unknown;
+  };
+  const titleSource =
+    typeof oldCustom.titleAchievementId === 'string'
+      ? { type: 'achievement', id: oldCustom.titleAchievementId }
+      : { type: 'auto' };
+
+  return {
+    ...s,
+    schemaVersion: 13,
+    floraLevels,
+    passportCustomization: {
+      titleSource,
+      avatar: oldCustom.avatar ?? null,
+    },
   };
 }

@@ -31,6 +31,8 @@ export const dict = {
     "gallery.filter.all": "ทั้งหมด",
     "gallery.filter.found": "เจอแล้ว",
     "gallery.filter.missing": "ยังไม่เจอ",
+    "gallery.filter.pending": "รอรวม",
+    "gallery.filter.maxed": "เต็ม Lv",
     "gallery.filterRarity": "ความหายาก",
     "gallery.rarity.common": "ธรรมดา",
     "gallery.rarity.rare": "หายาก",
@@ -132,6 +134,18 @@ export const dict = {
     "guide.driedLeaves.rates":
       "+{common} ธรรมดา · +{rare} หายาก · +{legendary} ตำนาน",
     "guide.driedLeaves.progress": "🍂 {current} / {threshold}",
+    "guide.floraLevel.title": "รวมต้นไม้ซ้ำ",
+    "guide.floraLevel.body":
+      "ทุกครั้งที่เก็บเกี่ยวต้นไม้ซ้ำ จะสะสม 'Pending' ไว้ให้ต้นนั้นๆ กดปุ่ม 'รวม' ในหน้ารายละเอียดเพื่ออัพเลเวลต้นไม้ (Lv 1–5) ได้กรอบและความวิ้งวับใหม่",
+    "guide.floraLevel.curveTitle": "จำนวนต้นซ้ำที่ต้องใช้ต่อเลเวล",
+    "guide.floraLevel.curveTotal": "รวมทั้งหมด {total} ต้นเพื่อไป Lv {max}",
+    "guide.floraLevel.rewardTitle": "รางวัลเมื่อถึง Lv 5",
+    "guide.floraLevel.rewardFrame":
+      "กรอบต้นไม้ใน Gallery เปลี่ยนเป็นโทนโลหะวิ้งๆ ตาม rarity (เงิน/ทอง/ม่วง)",
+    "guide.floraLevel.rewardShiny":
+      "รูปต้นไม้มี effect Shiny วิ้งๆ ตัดเฉพาะตัวรูป ทั้งในหน้า Gallery และ Detail",
+    "guide.floraLevel.rewardEpithet":
+      "เฉพาะ Legendary: ปลดฉายาพิเศษ เลือกไปโชว์เป็น Title ในพาสปอร์ตได้",
     "harvest.driedLeavesGained": "🍂 +{points}",
     "harvest.driedLeavesReward": "🍂 ได้สายพันธุ์ใหม่!",
     "harvest.fromBooster": "เปิดจาก Booster Pack",
@@ -310,6 +324,8 @@ export const dict = {
     "gallery.filter.all": "All",
     "gallery.filter.found": "Found",
     "gallery.filter.missing": "Not found",
+    "gallery.filter.pending": "Pending",
+    "gallery.filter.maxed": "Maxed",
     "gallery.filterRarity": "Rarity",
     "gallery.rarity.common": "Common",
     "gallery.rarity.rare": "Rare",
@@ -411,6 +427,18 @@ export const dict = {
     "guide.driedLeaves.rates":
       "+{common} common · +{rare} rare · +{legendary} legendary",
     "guide.driedLeaves.progress": "🍂 {current} / {threshold}",
+    "guide.floraLevel.title": "Merging Duplicates",
+    "guide.floraLevel.body":
+      "Every duplicate harvest stacks as a 'Pending' merge on that species. Tap Merge in the detail view to level it up (Lv 1–5) and unlock new frames and shimmer.",
+    "guide.floraLevel.curveTitle": "Duplicates needed per level",
+    "guide.floraLevel.curveTotal": "Total {total} duplicates to reach Lv {max}",
+    "guide.floraLevel.rewardTitle": "Rewards at Lv 5",
+    "guide.floraLevel.rewardFrame":
+      "Gallery tile gets a metallic shimmering frame in the rarity's palette (silver / gold / purple).",
+    "guide.floraLevel.rewardShiny":
+      "A Shiny shimmer plays across the species art, masked to the plant's silhouette in both Gallery and Detail views.",
+    "guide.floraLevel.rewardEpithet":
+      "Legendary only: unlocks a unique epithet you can display as your passport title.",
     "harvest.driedLeavesGained": "🍂 +{points}",
     "harvest.driedLeavesReward": "🍂 New species unlocked!",
     "harvest.fromBooster": "From Booster Pack",

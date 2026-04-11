@@ -14,6 +14,10 @@ import {
 import { useGameStore } from "@/store/gameStore";
 import { SPECIES, SpeciesCollection, COLLECTION_LABELS } from "@/data/species";
 import { toast } from "@/lib/toast";
+import { FloraLevelSection } from "@/components/flora-level/FloraLevelSection";
+import { MaxRevealModal } from "@/components/flora-level/MaxRevealModal";
+import { ShinyOverlay } from "@/components/flora-level/ShinyOverlay";
+import { FLORA_MAX_LEVEL } from "@florify/shared";
 
 /**
  * Detail view for a single harvested tree. Reads `id` from the parent
@@ -40,6 +44,13 @@ const COPY = {
     removeProfile: "ลบรูปโปรไฟล์",
     profileToastSet: "ตั้งเป็นรูปโปรไฟล์แล้ว 🌼",
     profileToastRemoved: "ลบรูปโปรไฟล์แล้ว",
+    floraLevelTitle: "เลเวลต้นไม้",
+    floraLevelMerge: (n: number) => `รวม ×${n}`,
+    floraLevelMax: "เต็มเลเวลแล้ว ✦",
+    maxRevealShiny: "ปลดล็อก Shiny",
+    maxRevealEpithet: "ปลดล็อกฉายา",
+    maxRevealHint: "เลือกเป็นฉายาได้ที่หน้าปรับแต่งพาสปอร์ต",
+    maxRevealClose: "ปิด",
   },
   en: {
     notFound: "Tree not found",
@@ -56,6 +67,13 @@ const COPY = {
     removeProfile: "Remove profile picture",
     profileToastSet: "Profile picture set 🌼",
     profileToastRemoved: "Profile picture removed",
+    floraLevelTitle: "Flora Level",
+    floraLevelMerge: (n: number) => `Merge ×${n}`,
+    floraLevelMax: "Max Level ✦",
+    maxRevealShiny: "Shiny Unlocked",
+    maxRevealEpithet: "Epithet Unlocked",
+    maxRevealHint: "Choose this title from your passport customization.",
+    maxRevealClose: "Close",
   },
 };
 
@@ -63,6 +81,7 @@ export function DetailView({ speciesId }: { speciesId: number | null }) {
   const [lang, setLang] = useState<Lang>("th");
   const [stage, setStage] = useState<Stage>(3);
   const [lightbox, setLightbox] = useState(false);
+  const [maxRevealSpecies, setMaxRevealSpecies] = useState<number | null>(null);
   const t = COPY[lang];
 
   const closeLightbox = useCallback(() => setLightbox(false), []);
@@ -71,6 +90,9 @@ export function DetailView({ speciesId }: { speciesId: number | null }) {
     speciesId != null
       ? (s.state.collection.find((c) => c.speciesId === speciesId) ?? null)
       : null,
+  );
+  const floraLevel = useGameStore((s) =>
+    speciesId != null ? (s.state.floraLevels[speciesId]?.level ?? null) : null,
   );
   const avatar = useGameStore((s) => s.state.passportCustomization.avatar);
   const setPassportAvatar = useGameStore((s) => s.setPassportAvatar);
@@ -178,13 +200,46 @@ export function DetailView({ speciesId }: { speciesId: number | null }) {
             className="relative flex items-center justify-center max-h-[88%] max-w-[82%] h-full w-full cursor-zoom-in"
             aria-label="View fullscreen"
           >
-            <FloraImage
-              key={`${entry.speciesId}-${stage}`}
-              speciesId={entry.speciesId}
-              progress={STAGE_PROGRESS[stage]}
-              className="max-h-full max-w-full object-contain drop-shadow-[0_18px_30px_rgba(75,55,30,0.18)]"
-            />
+            {floraLevel === FLORA_MAX_LEVEL && species ? (
+              <ShinyOverlay
+                rarity={entry.rarity}
+                maskSrc={`/floras/${species.folder}/stage-${stage}.webp`}
+              >
+                <FloraImage
+                  key={`${entry.speciesId}-${stage}`}
+                  speciesId={entry.speciesId}
+                  progress={STAGE_PROGRESS[stage]}
+                  className="w-full h-full object-contain drop-shadow-[0_18px_30px_rgba(75,55,30,0.18)]"
+                />
+              </ShinyOverlay>
+            ) : (
+              <FloraImage
+                key={`${entry.speciesId}-${stage}`}
+                speciesId={entry.speciesId}
+                progress={STAGE_PROGRESS[stage]}
+                className="max-h-full max-w-full object-contain drop-shadow-[0_18px_30px_rgba(75,55,30,0.18)]"
+              />
+            )}
           </div>
+
+          {/* Profile picture toggle — top-right of the specimen frame */}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleProfileClick();
+            }}
+            aria-label={profileButtonLabel}
+            className={`absolute top-6 right-10 z-10 px-3 h-8 rounded-full text-xs font-medium shadow-soft-md transition-all hover:scale-[1.03] active:scale-95 whitespace-nowrap ${
+              isCurrentStage
+                ? "bg-cream-100 text-ink-700 border border-cream-300 hover:bg-cream-200"
+                : isCurrentSpecies
+                  ? "bg-cream-50 text-clay-600 border border-clay-300 hover:bg-cream-100"
+                  : "bg-clay-500 text-cream-50 hover:bg-clay-400"
+            }`}
+          >
+            {profileButtonLabel}
+          </button>
 
           {/* Stage selector floats over the bottom edge of the frame. */}
           <div
@@ -244,19 +299,34 @@ export function DetailView({ speciesId }: { speciesId: number | null }) {
             </dl>
           </div>
 
-          <button
-            onClick={handleProfileClick}
-            className={`mt-4 w-full h-11 rounded-lg text-sm font-medium transition-colors ${
-              isCurrentStage
-                ? "bg-cream-200 text-ink-700 hover:bg-cream-300 border border-cream-300"
-                : "bg-clay-500 text-cream-50 hover:bg-clay-400 shadow-soft-md"
-            }`}
-            aria-label={profileButtonLabel}
-          >
-            {isCurrentStage ? "🗑️" : "🌼"} {profileButtonLabel}
-          </button>
+          {entry && speciesId != null && (
+            <FloraLevelSection
+              speciesId={speciesId}
+              rarity={entry.rarity}
+              onMaxReveal={setMaxRevealSpecies}
+              labels={{
+                title: t.floraLevelTitle,
+                merge: t.floraLevelMerge,
+                max: t.floraLevelMax,
+              }}
+            />
+          )}
         </div>
       </div>
+
+      {maxRevealSpecies !== null && (
+        <MaxRevealModal
+          speciesId={maxRevealSpecies}
+          lang={lang}
+          labels={{
+            shiny: t.maxRevealShiny,
+            epithet: t.maxRevealEpithet,
+            hint: t.maxRevealHint,
+            close: t.maxRevealClose,
+          }}
+          onClose={() => setMaxRevealSpecies(null)}
+        />
+      )}
 
       {lightbox && (
         <div

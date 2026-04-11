@@ -204,6 +204,19 @@ function EditButton({
 function renderOp(op: DrawOp, key: number) {
   switch (op.type) {
     case 'text': {
+      const shinyStyle: CSSProperties | undefined = op.shiny
+        ? {
+            backgroundImage:
+              'linear-gradient(90deg, #FFB0C3 0%, #FFE18A 20%, #A6F0AD 40%, #9EC6FF 60%, #C9A3FF 80%, #FFB0C3 100%)',
+            backgroundSize: '200% 100%',
+            WebkitBackgroundClip: 'text',
+            backgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            color: 'transparent',
+            animation: 'fl-rainbow-sweep 4s linear infinite',
+          }
+        : undefined;
+
       const style: CSSProperties = {
         position: 'absolute',
         left: 0,
@@ -223,6 +236,8 @@ function renderOp(op: DrawOp, key: number) {
         paddingRight: op.align === 'right' ? PASSPORT_W - op.x : 0,
         // For center we just let textAlign do it; the full-width div is fine
         whiteSpace: 'nowrap',
+        // Shiny overrides come last so color: 'transparent' wins over op.color
+        ...shinyStyle,
       };
 
       // If this op has animate metadata, replace the numeric portion

@@ -892,6 +892,10 @@ const series: readonly SpeciesDef[] = [
     descriptionTH:
       "ใบไม้ใบสุดท้ายของต้นไม้ที่มอดไหม้ไปเมื่อพันปีก่อน ยังคงอุ่นและสมบูรณ์ มันบรรทุกความทรงจำของผืนป่าที่ปฏิเสธการถูกลบเลือน ผู้ที่ถือครองจะกลายเป็นผู้พิทักษ์แห่งการยืนหยัดนั้น",
     collection: SpeciesCollection.Original,
+    epithet: {
+      en: "Ember of the Old Flame",
+      th: "เปลวอาลัยกาลก่อน",
+    },
   },
   {
     id: 281,
@@ -903,6 +907,10 @@ const series: readonly SpeciesDef[] = [
     descriptionTH:
       "กำเนิดจากเถ้าถ่านและรอดชีวิตจากความสูญสิ้น ใบแต่ละใบคือปาฏิหาริย์ของการคงอยู่ งอกงามเฉพาะในที่ที่บางสิ่งปฏิเสธความตาย และเฟิร์นจะจดจำการยืนหยัดนั้นนานกว่าตัวตนเดิมของมันเสียอีก",
     collection: SpeciesCollection.Original,
+    epithet: {
+      en: "Fern That Would Not Die",
+      th: "เฟิร์นผู้ไม่ยอมดับ",
+    },
   },
   {
     id: 282,
@@ -914,6 +922,10 @@ const series: readonly SpeciesDef[] = [
     descriptionTH:
       "บานครั้งเดียวในรอบพันปี ในคืนที่มีคนซึ่งสูญเสียทุกสิ่งหยุดวิ่งหนีความจริงในที่สุด ดอกไม้จะบานเพื่อให้คนผู้นั้นได้เห็นว่าความสูญเสียมิใช่บทอวสานของเรื่องราวเสมอไป",
     collection: SpeciesCollection.Original,
+    epithet: {
+      en: "Bloom of the Thousandth Night",
+      th: "บุปผาพันปีหนึ่งคืน",
+    },
   },
   {
     id: 283,
@@ -925,6 +937,10 @@ const series: readonly SpeciesDef[] = [
     descriptionTH:
       "ดำสนิทดั่งถ่านที่ร้อนจัดและอุ่นดั่งคำอธิษฐานถึงผู้สาบสูญ ผู้ที่สัมผัสมันจะไม่นึกถึงความสูญเสีย ทว่าจะจำเสี้ยววินาทีที่ตัดสินใจได้ว่าความสูญเสียนั้นไม่มีสิทธิ์มานิยามตัวตนของพวกเขา",
     collection: SpeciesCollection.Original,
+    epithet: {
+      en: "Prayer of Quiet Coals",
+      th: "คำอธิษฐานจากถ่านไฟ",
+    },
   },
   {
     id: 284,
@@ -936,6 +952,10 @@ const series: readonly SpeciesDef[] = [
     descriptionTH:
       "งอกงามเฉพาะบนผืนดินไหม้เกรียมที่อารยธรรมหนึ่งยอมล่มสลายแทนการยอมสยบ มอสจดจำทางเลือกนั้นและพร่ำสอนถึงความกระจ่างแจ้งอันน่าครั่นคร้ามที่มาจากการตัดสินใจเด็ดขาด",
     collection: SpeciesCollection.Original,
+    epithet: {
+      en: "Witness of the Final Choice",
+      th: "พยานแห่งทางเลือกสุดท้าย",
+    },
   },
   {
     id: 285,
@@ -947,6 +967,10 @@ const series: readonly SpeciesDef[] = [
     descriptionTH:
       "รวบรวมสีสันทั้งหมดที่เคยมีมา และบางสีที่ยังไม่หาทางมาสู่โลก ผู้ครอบครองจะมองเห็นตัวตนที่แท้จริงของทุกคนที่พบเจอ ทว่าพวกเขามักเลือกที่จะลืมสิ่งที่เห็น—อย่างชาญฉลาด",
     collection: SpeciesCollection.Original,
+    epithet: {
+      en: "Keeper of Unseen Hues",
+      th: "ผู้เก็บสีที่ไม่มีใครเห็น",
+    },
   },
   {
     id: 286,
@@ -958,6 +982,10 @@ const series: readonly SpeciesDef[] = [
     descriptionTH:
       "ใบแต่ละใบมีสีต่างกันตามมุมของแสง สอนให้รู้ว่าความจริงเดียวสามารถปรากฏต่างกันไปตามทิศทางที่มอง เฟิร์นรู้อยู่เสมอว่าทุกมุมมองสามารถเป็นความจริงได้ในตัวมันเอง",
     collection: SpeciesCollection.Original,
+    epithet: {
+      en: "Fern of Many Truths",
+      th: "เฟิร์นแห่งสัจจะหลายนัย",
+    },
   },
   {
     id: 287,
@@ -969,6 +997,10 @@ const series: readonly SpeciesDef[] = [
     descriptionTH:
       "บานเป็นดอกไม้ที่บรรจุแสงสว่างของชั่วขณะนับพันในคราวเดียว แสดงทุกความเป็นไปได้ที่คุณสามารถเป็นได้ ผู้ที่เคยเห็นมันบานเพียงครั้งเดียวจะไม่มีวันเป็นคนเดิมอีกต่อไป",
     collection: SpeciesCollection.Original,
+    epithet: {
+      en: "Bloom of Every Maybe",
+      th: "บุปผาทุกความเป็นได้",
+    },
   },
   {
     id: 288,
@@ -980,6 +1012,10 @@ const series: readonly SpeciesDef[] = [
     descriptionTH:
       "แสดงสีต่างกันให้แก่ทุกคนที่มอง และไม่มีใครเห็นพ้องตรงกันในสิ่งที่เห็น มันสอนว่าความจริงที่ทรงพลังที่สุดไม่อาจเอ่ยออกมาเป็นคำพูด ทำได้เพียงแค่เฝ้ามองด้วยตาเท่านั้น",
     collection: SpeciesCollection.Original,
+    epithet: {
+      en: "Petal Beyond Words",
+      th: "กลีบเหนือถ้อยคำ",
+    },
   },
   {
     id: 289,
@@ -991,6 +1027,10 @@ const series: readonly SpeciesDef[] = [
     descriptionTH:
       "งอกงามเฉพาะในจุดที่เคยมีกระจกตั้งอยู่และเคยบันทึกภาพสะท้อนของบุคคลสำคัญ มอสนี้จะดักจับแสงและสะท้อนกลับมา โดยไม่มีมุมใดซ้ำเดิมเป็นครั้งที่สอง",
     collection: SpeciesCollection.Original,
+    epithet: {
+      en: "Moss of Lingering Reflection",
+      th: "มอสเงาที่ยังคลอ",
+    },
   },
   {
     id: 290,
@@ -1002,6 +1042,10 @@ const series: readonly SpeciesDef[] = [
     descriptionTH:
       "สีทองอำพันและอุ่นด้วยความร้อนจากเบื้องลึกของโลก เรืองแสงจางๆ แม้ในความมืดมิดสนิท การถือมันคือการเชื่อมั่นชั่วขณะว่าความสูญเสียทั้งหมดจะหวนกลับมาในรูปแบบที่ดีกว่าเดิม",
     collection: SpeciesCollection.Original,
+    epithet: {
+      en: "Leaf of Returning Light",
+      th: "ใบนำแสงหวนคืน",
+    },
   },
   {
     id: 291,
@@ -1013,6 +1057,10 @@ const series: readonly SpeciesDef[] = [
     descriptionTH:
       "ใบของมันดักจับแสงและส่องไปข้างหน้า ราวกับต้นไม้กำลังพยายามนำทางคุณผ่านความมืดมิด กล่าวกันว่าเฟิร์นจะยิ่งเรืองรองสว่างไสวขึ้นตามความต้องการของผู้ใช้",
     collection: SpeciesCollection.Original,
+    epithet: {
+      en: "Lantern of the Lost Path",
+      th: "ประทีปทางไกล",
+    },
   },
   {
     id: 292,
@@ -1024,6 +1072,10 @@ const series: readonly SpeciesDef[] = [
     descriptionTH:
       "ผลิบานในวินาทีที่ใครบางคนเข้าใจได้ในที่สุดว่าแสงสว่างในตัวเขาไม่เคยจากไปไหน ดอกจะคงอยู่ตราบนานเท่านานที่ความเข้าใจนั้นยังคงอยู่ ซึ่งมักจะนานเกินกว่าที่ใครคาดคิด",
     collection: SpeciesCollection.Original,
+    epithet: {
+      en: "Bloom of Light Within",
+      th: "บุปผาแสงในตน",
+    },
   },
   {
     id: 293,
@@ -1035,6 +1087,10 @@ const series: readonly SpeciesDef[] = [
     descriptionTH:
       "อุ่นและเรืองแสง การกลืนกินมันจะทำให้คุณรู้ซึ้งถึงคุณค่าที่แท้จริงของตนเองโดยไร้ข้อกังขาเป็นเวลาหนึ่งวัน แม้ความกระจ่างจะจางไปในยามเย็น แต่ความทรงจำที่ว่าครั้งหนึ่งเคยรู้จะคงอยู่ตลอดกาล",
     collection: SpeciesCollection.Original,
+    epithet: {
+      en: "Petal of One Bright Day",
+      th: "กลีบวันแจ่มใส",
+    },
   },
   {
     id: 294,
@@ -1046,6 +1102,10 @@ const series: readonly SpeciesDef[] = [
     descriptionTH:
       "งอกงามเฉพาะบนหินที่อาบแสงแดดมานานนับหมื่นวัน ว่ากันว่ามันเป็นเครื่องหมายบ่งชี้สถานที่ที่แสงตะวันเลือกที่จะสถิตอยู่ตลอดไป เป็นมอสแห่งการแปรเปลี่ยนผ่านความแน่วแน่",
     collection: SpeciesCollection.Original,
+    epithet: {
+      en: "Stone of Ten Thousand Suns",
+      th: "หินหมื่นตะวัน",
+    },
   },
   {
     id: 295,
@@ -1057,6 +1117,10 @@ const series: readonly SpeciesDef[] = [
     descriptionTH:
       "ถือกำเนิดในจุดที่ดาวตกจมสู่ก้นบึ้งของมหาสมุทร แตกกิ่งก้านดั่งเขาวงกตแห่งความทรงจำ เติบโตเป็นโครงสร้างที่เก่าแก่กว่าภาษาใดๆ การดูแลมันคือภาระหน้าที่ต่อความต่อเนื่องของยุคสมัยที่คุณไม่มีวันเข้าใจได้ทั้งหมด",
     collection: SpeciesCollection.Original,
+    epithet: {
+      en: "Heir of Drowned Stars",
+      th: "ทายาทดาวจมสมุทร",
+    },
   },
   {
     id: 296,
@@ -1068,6 +1132,10 @@ const series: readonly SpeciesDef[] = [
     descriptionTH:
       "ใบของมันสมบูรณ์แบบราวกับสลักเสลาโดยช่างฝีมือโบราณ บรรทุกความทรงจำของอารยธรรมที่สร้างอนุสาวรีย์เพื่อบูชาความงาม การดูแลมันคือการเข้าร่วมในพันธสัญญาที่มีมาตั้งแต่ก่อนคุณเกิด",
     collection: SpeciesCollection.Original,
+    epithet: {
+      en: "Heir of the Elder Vow",
+      th: "ทายาทพันธสัญญาโบราณ",
+    },
   },
   {
     id: 297,
@@ -1079,6 +1147,10 @@ const series: readonly SpeciesDef[] = [
     descriptionTH:
       "ผลิบานในยามที่ 'สิ่งเป็นไปไม่ได้' กลายเป็น 'สิ่งจำเป็น' ตัวดอกพร่ำสอนว่าความเมตตาจะมาถึงเมื่อเราหมดสิ้นทุกหนทางแล้วจริงๆ การได้เห็นมันบานคือการเชื่อมั่นในความรอดพ้น",
     collection: SpeciesCollection.Original,
+    epithet: {
+      en: "Bloom of the Last Grace",
+      th: "บุปผาเมตตาสุดท้าย",
+    },
   },
   {
     id: 298,
@@ -1090,6 +1162,10 @@ const series: readonly SpeciesDef[] = [
     descriptionTH:
       "กลีบดอกที่ร่วงหล่นจากดอกไม้ใต้ทะเลลึกเมื่อหมื่นปีก่อน ยังคงเย็นกว่าเหมันต์และแข็งกว่ามุก การถือมันไว้คือการครอบครองชั่วขณะแห่งความสง่างามอันเป็นนิรันดร์",
     collection: SpeciesCollection.Original,
+    epithet: {
+      en: "Petal of the Unending Hour",
+      th: "กลีบชั่วขณะนิรันดร์",
+    },
   },
   {
     id: 299,
@@ -1101,6 +1177,10 @@ const series: readonly SpeciesDef[] = [
     descriptionTH:
       "งอกงามเฉพาะในส่วนลึกที่สุดของมหาสมุทรที่แสงตะวันไปไม่ถึง เรืองรองด้วยแสงที่ไม่เป็นของดาวดวงใด การพบกอมอสนี้นับว่าเป็นการค้นพบความลับที่โลกยังไม่รู้เสียด้วยซ้ำว่าตนเองซ่อนไว้",
     collection: SpeciesCollection.Original,
+    epithet: {
+      en: "Glow of No Known Star",
+      th: "มอสแสงไร้ดาว",
+    },
   },
 ];
 

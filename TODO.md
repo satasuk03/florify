@@ -5,10 +5,12 @@
 - คำอธิบาย collection
 - Compress images
 - Next Collection: Fungi Kingdom
-
-- Achievement ควรมี Badge เท่ๆ
+- Particles decoration -> อาจจะให้ซื้อจาก Shop? -> แต่ใช้ Currency พิเศษ (Cosmetic coins)
+- Badge Achievement ต้องมีที่ให้โชว์ ใน Passport
+- Filter ดอกไม้ที่สามารถ upgrade ได้ -> อาจจะใช้คำสั้นๆ
 
 ## Done
+- Achievement ควรมี Badge เท่ๆ
 - เครื่องผลิต Sprout กับ น้ำ
 - Acheivements
 - เพิ่ม Achievement เกี่ยวกับ Daily Mission

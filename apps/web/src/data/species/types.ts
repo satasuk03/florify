@@ -14,4 +14,7 @@ export interface SpeciesDef {
   readonly descriptionEN: string;
   readonly descriptionTH: string;
   readonly collection: SpeciesCollection;
+  /** Bilingual title unlocked when this Legendary reaches Flora Level 5.
+   *  Only defined for Legendary species. */
+  readonly epithet?: { readonly en: string; readonly th: string };
 }

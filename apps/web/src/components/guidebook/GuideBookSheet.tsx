@@ -9,6 +9,7 @@ import {
   PITY_THRESHOLD, PITY_POINTS_COMMON, PITY_POINTS_RARE, PITY_POINTS_LEGENDARY,
   SPROUT_HARVEST_COMMON, SPROUT_HARVEST_RARE, SPROUT_HARVEST_LEGENDARY,
   SPROUT_ALL_MISSIONS_BONUS, SPROUT_QUEST_REFRESH_COST,
+  FLORA_LEVEL_CURVE, FLORA_MAX_LEVEL,
 } from '@florify/shared';
 import type { Rarity } from '@florify/shared';
 
@@ -74,6 +75,7 @@ export function GuideBookSheet({ open, onClose }: Props) {
           <ProducerSection />
           <FeaturesSection />
           <DriedLeavesSection />
+          <FloraLevelGuideSection />
           <InstallPWASection />
           <SaveSection />
           <DeveloperSection />
@@ -304,6 +306,74 @@ function DriedLeavesSection() {
               </div>
             </div>
           ))}
+        </div>
+      </div>
+    </Accordion>
+  );
+}
+
+function FloraLevelGuideSection() {
+  const t = useT();
+  const total = FLORA_LEVEL_CURVE.reduce((a, b) => a + b, 0);
+  return (
+    <Accordion icon="✨" title={t('guide.floraLevel.title')}>
+      <div className="space-y-3">
+        <p className="text-xs text-ink-600 leading-relaxed">
+          {t('guide.floraLevel.body')}
+        </p>
+
+        {/* Curve table */}
+        <div className="space-y-1.5">
+          <div className="text-xs text-ink-500">
+            {t('guide.floraLevel.curveTitle')}
+          </div>
+          <div className="rounded-lg bg-cream-100/70 border border-cream-200 divide-y divide-cream-200">
+            {FLORA_LEVEL_CURVE.map((cost, i) => (
+              <div
+                key={i}
+                className="flex items-center justify-between px-3 py-1.5 text-xs"
+              >
+                <span className="tabular-nums text-ink-600">
+                  Lv {i + 1} → Lv {i + 2}
+                </span>
+                <span className="tabular-nums font-semibold text-amber-600">
+                  ×{cost}
+                </span>
+              </div>
+            ))}
+            <div className="flex items-center justify-between px-3 py-1.5 text-xs bg-cream-200/60">
+              <span className="text-ink-500">
+                {t('guide.floraLevel.curveTotal', {
+                  total: String(total),
+                  max: String(FLORA_MAX_LEVEL),
+                })}
+              </span>
+              <span className="tabular-nums font-semibold text-amber-700">
+                ×{total}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Rewards */}
+        <div className="space-y-2 pt-1">
+          <div className="text-xs font-semibold text-amber-600">
+            ✦ {t('guide.floraLevel.rewardTitle')}
+          </div>
+          <ul className="space-y-1.5 text-xs text-ink-600 leading-relaxed">
+            <li className="flex gap-2">
+              <span className="text-amber-500 shrink-0">▸</span>
+              <span>{t('guide.floraLevel.rewardFrame')}</span>
+            </li>
+            <li className="flex gap-2">
+              <span className="text-amber-500 shrink-0">▸</span>
+              <span>{t('guide.floraLevel.rewardShiny')}</span>
+            </li>
+            <li className="flex gap-2">
+              <span className="text-amber-500 shrink-0">▸</span>
+              <span>{t('guide.floraLevel.rewardEpithet')}</span>
+            </li>
+          </ul>
         </div>
       </div>
     </Accordion>

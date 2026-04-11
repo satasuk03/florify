@@ -8,6 +8,9 @@ import {
   CHECKIN_STREAK_BONUS_MAX,
   DAILY_MISSION_COUNT,
   FIRST_FLORA_COST,
+  FLORA_LEVEL_CURVE,
+  FLORA_MAX_LEVEL,
+  MAX_PENDING_MERGES,
   MAX_WATER_COST,
   MAX_WATER_DROPS,
   MIN_WATER_COST,
@@ -32,13 +35,16 @@ import {
   WATER_PRODUCER_YIELD,
   type BoosterTier,
   type CollectedSpecies,
+  type FloraLevelEntry,
+  type Language,
   type MissionType,
+  type PassportTitleSource,
   type PlayerState,
   type Rarity,
   type TreeInstance,
 } from '@florify/shared';
 import { DROP_REGEN_MS } from '@/lib/debug';
-import { SPECIES, SPECIES_BY_RARITY } from '@/data/species';
+import { SPECIES, SPECIES_BY_ID, SPECIES_BY_RARITY } from '@/data/species';
 import { RARITY_ROLL_WEIGHTS } from '@/data/rarityWeights';
 import { BOOSTER_ROLL_WEIGHTS } from '@/data/boosterWeights';
 import { ACHIEVEMENTS_BY_ID } from '@/data/achievements';
@@ -92,6 +98,9 @@ export interface FloristCardData {
   /** Resolved title for the rank pill. Either the chosen achievement name
    *  or the auto-derived rank as fallback. */
   title: string;
+  /** True iff the title should render with a metallic / rainbow treatment
+   *  (set when the title source is a Legendary epithet). */
+  titleShiny: boolean;
   /** Avatar spec or null for the 🌱 placeholder. */
   avatar: { speciesId: number; stage: 1 | 2 | 3 } | null;
 }
@@ -189,8 +198,9 @@ export interface GameStore {
   checkinStreak: () => void;
   resetAllProgress: () => void;
   setDisplayName: (name: string) => void;
-  setPassportTitle: (achievementId: string | null) => void;
+  setPassportTitle: (source: PassportTitleSource) => void;
   setPassportAvatar: (avatar: { speciesId: number; stage: 1 | 2 | 3 } | null) => void;
+  mergeFloraLevel: (speciesId: number) => void;
   replaceState: (next: PlayerState) => void;
 
   // Sprout currency / Shop
@@ -231,7 +241,31 @@ export const DISPLAY_NAME_MAX_LENGTH = 24;
  * `useShallow`, because the SSR snapshot path starts with an empty ref
  * cache. Consumers must derive it via `useMemo(() => selectFloristCard(state), [state])`.
  */
-export function selectFloristCard(state: PlayerState): FloristCardData {
+
+function resolveTitleAndShiny(
+  state: PlayerState,
+  lang: Language,
+  rank: string,
+): { title: string; titleShiny: boolean } {
+  const source = state.passportCustomization.titleSource;
+  switch (source.type) {
+    case 'auto':
+      return { title: rank, titleShiny: false };
+    case 'achievement': {
+      const ach = ACHIEVEMENTS_BY_ID.get(source.id);
+      return { title: ach?.name ?? rank, titleShiny: false };
+    }
+    case 'epithet': {
+      const sp = SPECIES_BY_ID[source.speciesId];
+      const ep = sp?.epithet?.[lang];
+      return ep
+        ? { title: ep, titleShiny: true }
+        : { title: rank, titleShiny: false };
+    }
+  }
+}
+
+export function selectFloristCard(state: PlayerState, lang: Language = 'th'): FloristCardData {
   let common = 0;
   let rare = 0;
   let legendary = 0;
@@ -243,15 +277,7 @@ export function selectFloristCard(state: PlayerState): FloristCardData {
   const speciesUnlocked = state.collection.length;
   const rank = deriveRank(speciesUnlocked);
 
-  // Resolve customization. A stale or invalid titleAchievementId (e.g. a
-  // renamed / removed achievement) silently falls back to the auto rank
-  // instead of leaving the user's pill blank.
-  const customTitleId = state.passportCustomization.titleAchievementId;
-  let title: string = rank;
-  if (customTitleId) {
-    const ach = ACHIEVEMENTS_BY_ID.get(customTitleId);
-    if (ach) title = ach.name;
-  }
+  const { title, titleShiny } = resolveTitleAndShiny(state, lang, rank);
 
   return {
     rank,
@@ -268,8 +294,16 @@ export function selectFloristCard(state: PlayerState): FloristCardData {
     serial: deriveSerial(state.userId),
     displayName: state.displayName,
     title,
+    titleShiny,
     avatar: state.passportCustomization.avatar,
   };
+}
+
+/** Returns true iff `mergeFloraLevel` would advance at least one level. */
+export function canMergeFloraLevel(entry: FloraLevelEntry | undefined): boolean {
+  if (!entry || entry.level >= FLORA_MAX_LEVEL) return false;
+  const cost = FLORA_LEVEL_CURVE[entry.level - 1];
+  return cost !== undefined && entry.pendingMerges >= cost;
 }
 
 // ── Rarity roll ─────────────────────────────────────────────────────
@@ -328,6 +362,7 @@ function rollPityReward(
 
 export interface HarvestCollectionResult {
   collection: CollectedSpecies[];
+  floraLevels: Record<number, FloraLevelEntry>;
   pityPoints: number;
   pityPointsGained: number;
   pityReward?: { speciesId: number; rarity: Rarity };
@@ -339,6 +374,7 @@ export interface HarvestCollectionResult {
  */
 function applyHarvestToCollection(
   collection: CollectedSpecies[],
+  floraLevels: Record<number, FloraLevelEntry>,
   speciesId: number,
   rarity: Rarity,
   waterings: number,
@@ -371,6 +407,20 @@ function applyHarvestToCollection(
     updated = [entry, ...collection];
   }
 
+  // Flora level update
+  const nextFloraLevels = { ...floraLevels };
+  const existingFL = nextFloraLevels[speciesId];
+  if (!existingFL) {
+    // First harvest — unlock at Lv 1.
+    nextFloraLevels[speciesId] = { level: 1, pendingMerges: 0 };
+  } else if (existingFL.level < FLORA_MAX_LEVEL) {
+    nextFloraLevels[speciesId] = {
+      level: existingFL.level,
+      pendingMerges: Math.min(existingFL.pendingMerges + 1, MAX_PENDING_MERGES),
+    };
+  }
+  // else: already at max level. Leave untouched.
+
   // Pity accumulation
   let pityPoints = currentPityPoints;
   let pityPointsGained = 0;
@@ -389,6 +439,9 @@ function applyHarvestToCollection(
         const reward = rollPityReward(collectedIds);
         if (reward) {
           updated = addPityRewardToCollection(updated, reward);
+          // The pity reward is always a brand-new species (filtered via collectedIds),
+          // so it has no prior floraLevels entry — seed one now.
+          nextFloraLevels[reward.speciesId] = { level: 1, pendingMerges: 0 };
           collectedIds.add(reward.speciesId);
           pityReward = reward;
           pityPoints = 0;
@@ -399,7 +452,7 @@ function applyHarvestToCollection(
     }
   }
 
-  return { collection: updated, pityPoints, pityPointsGained, pityReward };
+  return { collection: updated, floraLevels: nextFloraLevels, pityPoints, pityPointsGained, pityReward };
 }
 
 function addPityRewardToCollection(
@@ -526,7 +579,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       };
       const isDuplicate = s.collection.some((c) => c.speciesId === harvested.speciesId);
       const result = applyHarvestToCollection(
-        s.collection, harvested.speciesId, harvested.rarity,
+        s.collection, s.floraLevels, harvested.speciesId, harvested.rarity,
         harvested.requiredWaterings, s.pityPoints,
       );
       const sproutsGained = SPROUT_GAIN[harvested.rarity];
@@ -537,6 +590,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         lastDropRegenAt: regenAt,
         activeTree: null,
         collection: result.collection,
+        floraLevels: result.floraLevels,
         pityPoints: result.pityPoints,
         sprouts: s.sprouts + sproutsGained,
         stats: {
@@ -628,15 +682,42 @@ export const useGameStore = create<GameStore>((set, get) => ({
   // and unlocked species, so any value passed here is assumed valid.
   // Render-time fallback in selectFloristCard / buildLayout handles
   // stale ids gracefully.
-  setPassportTitle: (achievementId) => {
-    const s = get().state;
-    if (s.passportCustomization.titleAchievementId === achievementId) return;
+  mergeFloraLevel: (speciesId) => {
+    const state = get().state;
+    const entry = state.floraLevels[speciesId];
+    if (!entry || entry.level >= FLORA_MAX_LEVEL || entry.pendingMerges === 0) return;
+
+    let level: number = entry.level;
+    let pendingMerges = entry.pendingMerges;
+    while (level < FLORA_MAX_LEVEL) {
+      const cost = FLORA_LEVEL_CURVE[level - 1];
+      if (cost === undefined || pendingMerges < cost) break;
+      pendingMerges -= cost;
+      level += 1;
+    }
     const next: PlayerState = {
-      ...s,
+      ...state,
+      updatedAt: Date.now(),
+      floraLevels: {
+        ...state.floraLevels,
+        [speciesId]: {
+          level: level as FloraLevelEntry['level'],
+          pendingMerges,
+        },
+      },
+    };
+    set({ state: next });
+    scheduleSave(next);
+  },
+
+  setPassportTitle: (source) => {
+    const state = get().state;
+    const next: PlayerState = {
+      ...state,
       updatedAt: Date.now(),
       passportCustomization: {
-        ...s.passportCustomization,
-        titleAchievementId: achievementId,
+        ...state.passportCustomization,
+        titleSource: source,
       },
     };
     set({ state: next });
@@ -836,7 +917,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const isNew = !s.collection.some((c) => c.speciesId === species.id);
 
     const result = applyHarvestToCollection(
-      s.collection, species.id, rarity, 0, s.pityPoints,
+      s.collection, s.floraLevels, species.id, rarity, 0, s.pityPoints,
     );
     const sproutsGained = SPROUT_GAIN[rarity];
 
@@ -844,6 +925,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       ...s,
       sprouts: s.sprouts - cost + sproutsGained,
       collection: result.collection,
+      floraLevels: result.floraLevels,
       pityPoints: result.pityPoints,
       stats: {
         ...s.stats,

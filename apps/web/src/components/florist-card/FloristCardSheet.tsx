@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/Button";
 import { selectFloristCard, useGameStore } from "@/store/gameStore";
+import { useLanguage } from "@/i18n/useT";
 import { toast } from "@/lib/toast";
 import { encodePassportLink } from "@/lib/passportLink";
 import { copyText } from "@/lib/clipboard";
@@ -48,7 +49,8 @@ export function FloristCardSheet({ open, onClose }: Props) {
   // triggers an infinite render loop. See selectFloristCard docstring.
   const router = useRouter();
   const state = useGameStore((s) => s.state);
-  const data = useMemo(() => selectFloristCard(state), [state]);
+  const lang = useLanguage();
+  const data = useMemo(() => selectFloristCard(state, lang), [state, lang]);
 
   // Keep the sheet mounted during its exit animation. `open` (from the
   // parent) drives the intent; `rendered` drives the actual DOM
