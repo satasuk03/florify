@@ -1,7 +1,14 @@
 /**
  * SVG icon set — stroke-based, consumes `currentColor` so parent Text
  * utilities drive the color (warm ink-700 by default).
+ *
+ * This file is the barrel for the icons folder. Monochrome stroke icons
+ * live inline below; full-color / complex icons live in their own files
+ * (e.g. `./PencilIcon.tsx`) and are re-exported here so all consumers
+ * can keep importing from `@/components/icons`.
  */
+
+export { PencilIcon } from "./PencilIcon";
 
 interface IconProps {
   size?: number;

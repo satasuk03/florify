@@ -1,5 +1,5 @@
 import type { FloristCardData, FloristRank } from '@/store/gameStore';
-import { SPECIES_BY_RARITY } from '@/data/species';
+import { SPECIES_BY_ID, SPECIES_BY_RARITY } from '@/data/species';
 import { gzip, gunzip } from './saveTransfer';
 
 /**
@@ -55,6 +55,11 @@ interface PackedPayload {
   rl: number; // rarity legendary unlocked
   t: number; // startedAt (epoch ms)
   d?: number; // sharedAt (epoch ms) — when the snapshot was taken
+  /** Custom title text (resolved, not achievement id). Omitted when
+   *  title === rank so the owner's "auto" choice stays snapshot-clean. */
+  ti?: string;
+  /** Avatar: {speciesId, stage}. Absent = placeholder. */
+  av?: { i: number; g: 1 | 2 | 3 };
 }
 
 export type DecodeResult =
@@ -79,6 +84,12 @@ export async function encodePassportPayload(data: FloristCardData): Promise<stri
     rl: data.rarityProgress.legendary.unlocked,
     t: data.startedAt,
     d: Date.now(),
+    // Only bake `ti` when the user explicitly chose a non-rank title —
+    // keeps auto-mode links byte-compatible with pre-customization v1.
+    ...(data.title !== data.rank ? { ti: data.title } : {}),
+    ...(data.avatar
+      ? { av: { i: data.avatar.speciesId, g: data.avatar.stage } }
+      : {}),
   };
   const json = JSON.stringify(packed);
   const compressed = await gzip(new TextEncoder().encode(json));
@@ -167,7 +178,25 @@ function unpack(p: PackedPayload): FloristCardData {
     serial: p.s,
     displayName: p.n,
     sharedAt: p.d,
+    title: p.ti ?? p.r,
+    avatar: validateAvatar(p.av),
   };
+}
+
+function validateAvatar(av: unknown): FloristCardData['avatar'] {
+  if (!av || typeof av !== 'object') return null;
+  const o = av as Record<string, unknown>;
+  const i =
+    typeof o.i === 'number' && Number.isFinite(o.i) && o.i >= 0
+      ? (o.i as number)
+      : null;
+  const g = o.g === 1 || o.g === 2 || o.g === 3 ? o.g : null;
+  if (i === null || g === null) return null;
+  // Species may have been removed from the catalog since the link was
+  // written — degrade gracefully to a placeholder rather than linking
+  // to a broken webp.
+  if (!SPECIES_BY_ID[i]) return null;
+  return { speciesId: i, stage: g };
 }
 
 function validatePacked(v: unknown): PackedPayload | null {
@@ -216,6 +245,21 @@ function validatePacked(v: unknown): PackedPayload | null {
     return null;
   }
 
+  // Optional: title text (≤64 chars). Deeper validation (rank fallback)
+  // happens in unpack via the `?? p.r` fallback.
+  const ti =
+    typeof o.ti === 'string' && o.ti.length > 0 && o.ti.length <= 64
+      ? o.ti
+      : undefined;
+  // Optional: avatar object. Structural validation happens in
+  // validateAvatar — here we just pass through any object-shaped value.
+  const av =
+    typeof o.av === 'object' && o.av !== null
+      ? (o.av as PackedPayload['av'])
+      : undefined;
+  // Optional: sharedAt.
+  const d = typeof o.d === 'number' && Number.isFinite(o.d) ? o.d : undefined;
+
   return {
     v: v_,
     s,
@@ -229,6 +273,9 @@ function validatePacked(v: unknown): PackedPayload | null {
     rr,
     rl,
     t,
+    ...(d !== undefined ? { d } : {}),
+    ...(ti !== undefined ? { ti } : {}),
+    ...(av !== undefined ? { av } : {}),
   };
 }
 

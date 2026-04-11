@@ -131,8 +131,16 @@ export interface ProducerState {
   lastClaimAt: number;         // epoch ms — start of current accumulation window
 }
 
+// ── Passport customization ─────────────────────────────────────────
+export interface PassportCustomization {
+  /** Achievement ID chosen as the displayed title. null = fall back to auto rank. */
+  titleAchievementId: string | null;
+  /** Avatar spec. null = placeholder 🌱. */
+  avatar: { speciesId: number; stage: 1 | 2 | 3 } | null;
+}
+
 export interface PlayerState {
-  schemaVersion: 11;
+  schemaVersion: 12;
   userId: string;              // local nanoid; linked to a cloud account later
   displayName: string;         // user-editable; 'Guest' until renamed
   createdAt: number;
@@ -148,6 +156,7 @@ export interface PlayerState {
   dailyMissions: DailyMissionState;
   achievements: Record<string, AchievementProgress>;
   producer: ProducerState;       // idle reward machine — accumulates over 24h, claimed manually
+  passportCustomization: PassportCustomization; // Florist Card title + avatar picker
 }
 
 export type Language = 'th' | 'en';

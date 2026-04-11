@@ -1225,6 +1225,76 @@ describe('migrate v8 → v9', () => {
   });
 });
 
+describe('setPassportTitle / setPassportAvatar', () => {
+  beforeEach(resetStore);
+
+  it('sets and clears the custom title', () => {
+    useGameStore.getState().setPassportTitle('collect_rank_1');
+    expect(useGameStore.getState().state.passportCustomization.titleAchievementId)
+      .toBe('collect_rank_1');
+    useGameStore.getState().setPassportTitle(null);
+    expect(useGameStore.getState().state.passportCustomization.titleAchievementId)
+      .toBeNull();
+  });
+
+  it('sets and clears the avatar', () => {
+    useGameStore.getState().setPassportAvatar({ speciesId: 5, stage: 3 });
+    expect(useGameStore.getState().state.passportCustomization.avatar)
+      .toEqual({ speciesId: 5, stage: 3 });
+    useGameStore.getState().setPassportAvatar(null);
+    expect(useGameStore.getState().state.passportCustomization.avatar).toBeNull();
+  });
+
+  it('resetAllProgress clears passportCustomization back to defaults', () => {
+    const store = useGameStore.getState();
+    store.setPassportTitle('collect_rank_1');
+    store.setPassportAvatar({ speciesId: 5, stage: 3 });
+    store.resetAllProgress();
+    expect(useGameStore.getState().state.passportCustomization).toEqual({
+      titleAchievementId: null,
+      avatar: null,
+    });
+  });
+});
+
+describe('migrate v11 → v12', () => {
+  it('adds default passportCustomization to a v11 save', () => {
+    const v11State = {
+      schemaVersion: 11,
+      userId: 'test',
+      displayName: 'Guest',
+      createdAt: 0,
+      updatedAt: 0,
+      waterDrops: MAX_WATER_DROPS,
+      lastDropRegenAt: 0,
+      activeTree: null,
+      collection: [],
+      stats: {
+        totalPlanted: 0, totalWatered: 0, totalHarvested: 0,
+        driedLeavesGained: 0, sproutsGained: 0, sproutsSpent: 0,
+        shopPurchases: { common: 0, rare: 0, legendary: 0 },
+        harvestByRarity: { common: 0, rare: 0, legendary: 0 },
+        comboCount: { combo10: 0, combo15: 0, combo20: 0 },
+        seedPacketsOpened: { total: 0, common: 0, rare: 0, legendary: 0 },
+        missionsCompleted: 0,
+        allDailyMissionsCompleted: 0,
+      },
+      streak: { currentStreak: 0, longestStreak: 0, lastCheckinDate: '', lastRewardDate: '' },
+      pityPoints: 0,
+      sprouts: 0,
+      dailyMissions: { date: '', missions: [], claimedPoints: 0, claimedMilestones: [], allCompletedClaimed: false },
+      achievements: {},
+      producer: { sproutLevel: 1, waterLevel: 1, lastClaimAt: 0 },
+    };
+    const result = migrate(v11State as unknown as { schemaVersion: number } & Record<string, unknown>);
+    expect(result.schemaVersion).toBe(SCHEMA_VERSION);
+    expect(result.passportCustomization).toEqual({
+      titleAchievementId: null,
+      avatar: null,
+    });
+  });
+});
+
 // ── Sprout currency ────────────────────────────────────────────────
 
 describe('sprout awarding on harvest', () => {

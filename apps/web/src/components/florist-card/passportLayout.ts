@@ -1,4 +1,5 @@
 import type { FloristCardData } from "@/store/gameStore";
+import { SPECIES_BY_ID } from "@/data/species";
 
 /**
  * Pure layout spec for the Florist Card passport.
@@ -48,6 +49,11 @@ export type DrawOp =
       letterSpacing?: number;
       /** DOM-only: count-up animation metadata (ignored by canvas renderer). */
       animate?: { value: number; delay?: number };
+      /** If set, renderers measure and shrink `size` down through `sizeLadder`
+       *  until the rendered text fits inside `maxWidth`. Pure layout stays
+       *  agnostic to the measurement — `fitTextOps` mutates the op before the
+       *  main draw loop. */
+      fitTo?: { maxWidth: number; sizeLadder: number[] };
     }
   | {
       type: "rect";
@@ -80,6 +86,20 @@ export type DrawOp =
       corner: "tl" | "tr" | "bl" | "br";
       color: string;
       width: number;
+    }
+  | {
+      type: "image";
+      /** Webp URL, or null to draw the placeholder instead. */
+      src: string | null;
+      x: number;
+      y: number;
+      w: number;
+      h: number;
+      radius: number;
+      bgColor: string;
+      border?: { color: string; width: number };
+      /** Rendered centered when src is null or load fails. */
+      placeholder?: { text: string; size: number; color: string };
     };
 
 function formatDate(ms: number): string {
@@ -173,9 +193,9 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
   ops.push({
     type: "line",
     x1: col.left,
-    y1: 430,
+    y1: 450,
     x2: col.right,
-    y2: 430,
+    y2: 450,
     color: PASSPORT_COLORS.divider,
     width: 2,
   });
@@ -186,11 +206,14 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
   const DELAY_STATS = 400;
 
   // ── Hero block: total harvested ──────────────────────────────────
+  // Baseline at y=625 — balances the visible cap of "0" (~515) against
+  // PASSPORT (375) around the divider at 450, giving roughly equal
+  // visual breathing above and below the divider.
   ops.push({
     type: "text",
     text: `${data.totalHarvested}`,
     x: cx,
-    y: 640,
+    y: 625,
     size: 180,
     weight: 700,
     family: "serif",
@@ -202,7 +225,7 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
     type: "text",
     text: "TOTAL HARVESTED",
     x: cx,
-    y: 720,
+    y: 705,
     size: 36,
     weight: 600,
     family: "sans",
@@ -211,18 +234,22 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
     letterSpacing: 8,
   });
 
-  // ── Rank pill ────────────────────────────────────────────────────
+  // ── Title pill (was Rank pill) ───────────────────────────────────
+  // Text is data.title — either a chosen achievement name or the auto
+  // rank fallback. Achievement names are longer than ranks, so the
+  // renderer will auto-shrink via the `fitTo` hint if needed.
   ops.push({
     type: "text",
-    text: `◆  ${data.rank.toUpperCase()}  ◆`,
+    text: `◆  ${data.title}  ◆`,
     x: cx,
-    y: 870,
-    size: 52,
+    y: 780,
+    size: 44,
     weight: 600,
     family: "serif",
     color: PASSPORT_COLORS.clay600,
     align: "center",
-    letterSpacing: 4,
+    letterSpacing: 2,
+    fitTo: { maxWidth: col.right - col.left, sizeLadder: [44, 40, 36, 32] },
   });
 
   // ── Rarity bars ──────────────────────────────────────────────────
@@ -247,8 +274,8 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
     },
   ] as const;
 
-  const barRowY0 = 1020;
-  const rowHeight = 110;
+  const barRowY0 = 920;
+  const rowHeight = 80;
   const barX = col.left + 280;
   const barW = 420;
   const barH = 20;
@@ -317,7 +344,7 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
     type: "text",
     text: `${data.speciesUnlocked} / ${totalSpecies} species unlocked`,
     x: cx,
-    y: 1390,
+    y: 1200,
     size: 34,
     weight: 600,
     family: "sans",
@@ -331,7 +358,7 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
     type: "text",
     text: `🔥  ${data.currentStreak} day streak`,
     x: cx,
-    y: 1440,
+    y: 1250,
     size: 34,
     weight: 500,
     family: "sans",
@@ -343,7 +370,7 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
     type: "text",
     text: `Longest streak: ${data.longestStreak} days`,
     x: cx,
-    y: 1495,
+    y: 1305,
     size: 28,
     weight: 400,
     family: "sans",
@@ -356,19 +383,47 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
   ops.push({
     type: "line",
     x1: col.left,
-    y1: 1580,
+    y1: 1390,
     x2: col.right,
-    y2: 1580,
+    y2: 1390,
     color: PASSPORT_COLORS.divider,
     width: 2,
   });
 
   // ── Identity block ───────────────────────────────────────────────
+  // Avatar frame sits on the left; text columns shift right of it.
+  const avatarX = col.left;
+  const avatarY = 1420;
+  const avatarW = 180;
+  const avatarH = 220;
+  const avatarGap = 30;
+  const idTextX = avatarX + avatarW + avatarGap; // 390
+
+  // Avatar image op (before the text so the border stroke sits under
+  // nothing — text doesn't intersect this region anyway).
+  const avatarSrc = data.avatar
+    ? (SPECIES_BY_ID[data.avatar.speciesId]
+        ? `/floras/${SPECIES_BY_ID[data.avatar.speciesId]!.folder}/stage-${data.avatar.stage}.webp`
+        : null)
+    : null;
+  ops.push({
+    type: "image",
+    src: avatarSrc,
+    x: avatarX,
+    y: avatarY,
+    w: avatarW,
+    h: avatarH,
+    radius: 16,
+    bgColor: PASSPORT_COLORS.bgTop,
+    border: { color: PASSPORT_COLORS.border, width: 2 },
+    placeholder: { text: "🌱", size: 80, color: PASSPORT_COLORS.ink300 },
+  });
+
   ops.push({
     type: "text",
     text: data.displayName,
-    x: col.left,
-    y: 1650,
+    x: idTextX,
+    y: 1460,
     size: 36,
     weight: 600,
     family: "sans",
@@ -378,8 +433,8 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
   ops.push({
     type: "text",
     text: data.serial,
-    x: col.left,
-    y: 1700,
+    x: idTextX,
+    y: 1510,
     size: 30,
     weight: 500,
     family: "mono",
@@ -390,8 +445,8 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
   ops.push({
     type: "text",
     text: `Issued ${formatDate(data.startedAt)}`,
-    x: col.left,
-    y: 1745,
+    x: idTextX,
+    y: 1555,
     size: 26,
     weight: 400,
     family: "sans",
@@ -402,8 +457,8 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
     ops.push({
       type: "text",
       text: `Data as of ${formatDate(data.sharedAt)}`,
-      x: col.left,
-      y: 1785,
+      x: idTextX,
+      y: 1595,
       size: 24,
       weight: 400,
       family: "sans",
@@ -417,7 +472,7 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
     type: "text",
     text: "florify.zeze.app",
     x: col.right,
-    y: 1745,
+    y: 1555,
     size: 30,
     weight: 500,
     family: "sans",

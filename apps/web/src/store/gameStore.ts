@@ -89,6 +89,11 @@ export interface FloristCardData {
   displayName: string;
   /** Epoch ms when the passport snapshot was taken. Only present in shared links. */
   sharedAt?: number;
+  /** Resolved title for the rank pill. Either the chosen achievement name
+   *  or the auto-derived rank as fallback. */
+  title: string;
+  /** Avatar spec or null for the 🌱 placeholder. */
+  avatar: { speciesId: number; stage: 1 | 2 | 3 } | null;
 }
 
 /**
@@ -184,6 +189,8 @@ export interface GameStore {
   checkinStreak: () => void;
   resetAllProgress: () => void;
   setDisplayName: (name: string) => void;
+  setPassportTitle: (achievementId: string | null) => void;
+  setPassportAvatar: (avatar: { speciesId: number; stage: 1 | 2 | 3 } | null) => void;
   replaceState: (next: PlayerState) => void;
 
   // Sprout currency / Shop
@@ -234,8 +241,20 @@ export function selectFloristCard(state: PlayerState): FloristCardData {
     else legendary++;
   }
   const speciesUnlocked = state.collection.length;
+  const rank = deriveRank(speciesUnlocked);
+
+  // Resolve customization. A stale or invalid titleAchievementId (e.g. a
+  // renamed / removed achievement) silently falls back to the auto rank
+  // instead of leaving the user's pill blank.
+  const customTitleId = state.passportCustomization.titleAchievementId;
+  let title: string = rank;
+  if (customTitleId) {
+    const ach = ACHIEVEMENTS_BY_ID.get(customTitleId);
+    if (ach) title = ach.name;
+  }
+
   return {
-    rank: deriveRank(speciesUnlocked),
+    rank,
     speciesUnlocked,
     totalHarvested: state.stats.totalHarvested,
     currentStreak: state.streak.currentStreak,
@@ -248,6 +267,8 @@ export function selectFloristCard(state: PlayerState): FloristCardData {
     startedAt: state.createdAt,
     serial: deriveSerial(state.userId),
     displayName: state.displayName,
+    title,
+    avatar: state.passportCustomization.avatar,
   };
 }
 
@@ -598,6 +619,50 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const s = get().state;
     if (s.displayName === displayName) return;
     const next: PlayerState = { ...s, displayName, updatedAt: Date.now() };
+    set({ state: next });
+    scheduleSave(next);
+  },
+
+  // ── Passport customization ────────────────────────────────────────
+  // No validation: the customize UI only offers claimed achievements
+  // and unlocked species, so any value passed here is assumed valid.
+  // Render-time fallback in selectFloristCard / buildLayout handles
+  // stale ids gracefully.
+  setPassportTitle: (achievementId) => {
+    const s = get().state;
+    if (s.passportCustomization.titleAchievementId === achievementId) return;
+    const next: PlayerState = {
+      ...s,
+      updatedAt: Date.now(),
+      passportCustomization: {
+        ...s.passportCustomization,
+        titleAchievementId: achievementId,
+      },
+    };
+    set({ state: next });
+    scheduleSave(next);
+  },
+
+  setPassportAvatar: (avatar) => {
+    const s = get().state;
+    const current = s.passportCustomization.avatar;
+    if (
+      current === avatar ||
+      (current &&
+        avatar &&
+        current.speciesId === avatar.speciesId &&
+        current.stage === avatar.stage)
+    ) {
+      return;
+    }
+    const next: PlayerState = {
+      ...s,
+      updatedAt: Date.now(),
+      passportCustomization: {
+        ...s.passportCustomization,
+        avatar,
+      },
+    };
     set({ state: next });
     scheduleSave(next);
   },

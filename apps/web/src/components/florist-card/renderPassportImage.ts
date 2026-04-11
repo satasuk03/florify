@@ -8,6 +8,7 @@ import {
   PASSPORT_W,
   type DrawOp,
 } from './passportLayout';
+import { fitTextOps } from './fitTextOps';
 
 /**
  * Canvas 2D renderer — walks the shared draw-instruction list and
@@ -47,10 +48,30 @@ export async function renderPassportImage(data: FloristCardData): Promise<Blob> 
   ctx.fillStyle = bg;
   ctx.fillRect(0, 0, PASSPORT_W, PASSPORT_H);
 
-  // ── Walk draw ops ───────────────────────────────────────────────
+  // ── Build ops, shrink titles, preload any image sources ────────
   const ops = buildLayout(data);
+  fitTextOps(ops);
+
+  const imageCache = new Map<string, HTMLImageElement>();
+  const imageSources = new Set<string>();
   for (const op of ops) {
-    drawOp(ctx, op);
+    if (op.type === 'image' && op.src !== null) imageSources.add(op.src);
+  }
+  await Promise.allSettled(
+    [...imageSources].map(async (src) => {
+      try {
+        const img = await loadImage(src);
+        imageCache.set(src, img);
+      } catch {
+        // Swallow — drawImageOp falls back to the placeholder when the
+        // src is missing from the cache.
+      }
+    }),
+  );
+
+  // ── Walk draw ops ───────────────────────────────────────────────
+  for (const op of ops) {
+    drawOp(ctx, op, imageCache);
   }
 
   // ── Serialize ───────────────────────────────────────────────────
@@ -61,7 +82,11 @@ export async function renderPassportImage(data: FloristCardData): Promise<Blob> 
   return blob;
 }
 
-function drawOp(ctx: CanvasRenderingContext2D, op: DrawOp): void {
+function drawOp(
+  ctx: CanvasRenderingContext2D,
+  op: DrawOp,
+  imageCache: Map<string, HTMLImageElement>,
+): void {
   switch (op.type) {
     case 'text':
       drawText(ctx, op);
@@ -80,7 +105,88 @@ function drawOp(ctx: CanvasRenderingContext2D, op: DrawOp): void {
     case 'corner':
       drawCorner(ctx, op);
       return;
+    case 'image':
+      drawImageOp(ctx, op, imageCache);
+      return;
   }
+}
+
+function loadImage(src: string): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    // Same-origin static assets — the flag is defensive in case we ever
+    // host floras on a CDN.
+    img.crossOrigin = 'anonymous';
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error(`failed to load ${src}`));
+    img.src = src;
+  });
+}
+
+function drawImageOp(
+  ctx: CanvasRenderingContext2D,
+  op: Extract<DrawOp, { type: 'image' }>,
+  cache: Map<string, HTMLImageElement>,
+): void {
+  const r = Math.min(op.radius, op.h / 2, op.w / 2);
+
+  // 1) Background fill (rounded rect) — always drawn, even for placeholder.
+  ctx.save();
+  ctx.beginPath();
+  pathRoundedRect(ctx, op.x, op.y, op.w, op.h, r);
+  ctx.closePath();
+  ctx.fillStyle = op.bgColor;
+  ctx.fill();
+
+  // 2) Clip and draw (object-fit: cover — overflow cropped by the clip)
+  ctx.clip();
+  const img = op.src ? cache.get(op.src) : undefined;
+  if (img && img.naturalWidth > 0 && img.naturalHeight > 0) {
+    const { dx, dy, dw, dh } = coverRect(
+      img.naturalWidth,
+      img.naturalHeight,
+      op.x,
+      op.y,
+      op.w,
+      op.h,
+    );
+    ctx.drawImage(img, dx, dy, dw, dh);
+  } else if (op.placeholder) {
+    ctx.fillStyle = op.placeholder.color;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.font = `${op.placeholder.size}px ${canvasFontFamily('sans')}`;
+    ctx.fillText(op.placeholder.text, op.x + op.w / 2, op.y + op.h / 2);
+  }
+  ctx.restore();
+
+  // 3) Border stroke on top (non-clipped so it's crisp).
+  if (op.border) {
+    ctx.beginPath();
+    pathRoundedRect(ctx, op.x, op.y, op.w, op.h, r);
+    ctx.closePath();
+    ctx.strokeStyle = op.border.color;
+    ctx.lineWidth = op.border.width;
+    ctx.stroke();
+  }
+}
+
+function coverRect(
+  srcW: number,
+  srcH: number,
+  boxX: number,
+  boxY: number,
+  boxW: number,
+  boxH: number,
+): { dx: number; dy: number; dw: number; dh: number } {
+  // Mirror object-fit: cover — scale so the shorter side fills the box
+  // (overflow on the longer side is cropped by the caller's clip path).
+  const ratio = Math.max(boxW / srcW, boxH / srcH);
+  const dw = srcW * ratio;
+  const dh = srcH * ratio;
+  const dx = boxX + (boxW - dw) / 2;
+  const dy = boxY + (boxH - dh) / 2;
+  return { dx, dy, dw, dh };
 }
 
 function drawText(ctx: CanvasRenderingContext2D, op: Extract<DrawOp, { type: 'text' }>): void {

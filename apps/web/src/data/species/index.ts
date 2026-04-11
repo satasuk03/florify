@@ -46,6 +46,14 @@ for (let i = 0; i < _species.length; i++) {
 
 export const SPECIES: readonly SpeciesDef[] = _species;
 
+/** O(1) lookup by species id. Sparse allowed — future ids may be gapped. */
+export const SPECIES_BY_ID: Readonly<Record<number, SpeciesDef>> = Object.freeze(
+  _species.reduce<Record<number, SpeciesDef>>((acc, s) => {
+    acc[s.id] = s;
+    return acc;
+  }, {}),
+);
+
 export const SPECIES_BY_RARITY: Record<Rarity, readonly SpeciesDef[]> = {
   common: SPECIES.filter((s) => s.rarity === "common"),
   rare: SPECIES.filter((s) => s.rarity === "rare"),

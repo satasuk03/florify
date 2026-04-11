@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { deriveSerial } from "@/store/gameStore";
+import { deriveSerial, selectFloristCard } from "@/store/gameStore";
 import {
   buildLayout,
   PASSPORT_H,
@@ -7,6 +7,8 @@ import {
   type DrawOp,
 } from "@/components/florist-card/passportLayout";
 import type { FloristCardData } from "@/store/gameStore";
+import { createInitialState } from "@/store/initialState";
+import { ACHIEVEMENTS } from "@/data/achievements";
 
 // ── deriveSerial ──────────────────────────────────────────────────
 
@@ -50,6 +52,8 @@ const sampleData: FloristCardData = {
   startedAt: new Date(2026, 0, 12).getTime(),
   serial: "FL-3K2P-9XQ4",
   displayName: "Guest",
+  title: "Apprentice",
+  avatar: null,
 };
 
 describe("buildLayout", () => {
@@ -64,7 +68,7 @@ describe("buildLayout", () => {
     expect(textContent).toContain("124");
     expect(textContent).toContain("TOTAL HARVESTED");
     expect(textContent).toContain("47 / 300 species unlocked");
-    expect(textContent).toContain("◆  APPRENTICE  ◆");
+    expect(textContent).toContain("◆  Apprentice  ◆");
     expect(textContent).toContain("Common");
     expect(textContent).toContain("Rare");
     expect(textContent).toContain("Legendary");
@@ -118,5 +122,82 @@ describe("buildLayout", () => {
     const a = JSON.stringify(buildLayout(sampleData));
     const b = JSON.stringify(buildLayout(sampleData));
     expect(a).toBe(b);
+  });
+
+  it("emits a title pill with a fitTo hint", () => {
+    const data: FloristCardData = {
+      ...sampleData,
+      title: "📗 Apprentice Botanist",
+    };
+    const ops = buildLayout(data);
+    const titleOp = ops.find(
+      (o): o is Extract<DrawOp, { type: "text" }> =>
+        o.type === "text" && o.text.includes("Apprentice Botanist"),
+    );
+    expect(titleOp).toBeDefined();
+    expect(titleOp!.fitTo).toBeDefined();
+    expect(titleOp!.fitTo!.sizeLadder[0]).toBe(44);
+  });
+
+  it("emits an image op with placeholder when avatar is null", () => {
+    const data: FloristCardData = { ...sampleData, avatar: null };
+    const ops = buildLayout(data);
+    const imgOp = ops.find(
+      (o): o is Extract<DrawOp, { type: "image" }> => o.type === "image",
+    );
+    expect(imgOp).toBeDefined();
+    expect(imgOp!.src).toBeNull();
+    expect(imgOp!.placeholder?.text).toBe("🌱");
+  });
+
+  it("emits an image op with species src when avatar is set", () => {
+    const data: FloristCardData = {
+      ...sampleData,
+      avatar: { speciesId: 1, stage: 3 },
+    };
+    const ops = buildLayout(data);
+    const imgOp = ops.find(
+      (o): o is Extract<DrawOp, { type: "image" }> => o.type === "image",
+    );
+    expect(imgOp).toBeDefined();
+    expect(imgOp!.src).toMatch(/\/floras\/.+\/stage-3\.webp$/);
+  });
+});
+
+// ── selectFloristCard — title + avatar resolution ─────────────────
+
+describe("selectFloristCard", () => {
+  it("uses the auto rank as title when titleAchievementId is null", () => {
+    const state = createInitialState();
+    const data = selectFloristCard(state);
+    expect(data.title).toBe(data.rank); // Seedling at start
+  });
+
+  it("uses the achievement name when titleAchievementId resolves", () => {
+    const firstAch = ACHIEVEMENTS[0]!;
+    const state = createInitialState();
+    state.passportCustomization.titleAchievementId = firstAch.id;
+    const data = selectFloristCard(state);
+    expect(data.title).toBe(firstAch.name);
+  });
+
+  it("falls back to rank when titleAchievementId doesn't exist", () => {
+    const state = createInitialState();
+    state.passportCustomization.titleAchievementId = "nonexistent_ach_id";
+    const data = selectFloristCard(state);
+    expect(data.title).toBe(data.rank);
+  });
+
+  it("passes avatar through when set", () => {
+    const state = createInitialState();
+    state.passportCustomization.avatar = { speciesId: 1, stage: 2 };
+    const data = selectFloristCard(state);
+    expect(data.avatar).toEqual({ speciesId: 1, stage: 2 });
+  });
+
+  it("returns null avatar by default", () => {
+    const state = createInitialState();
+    const data = selectFloristCard(state);
+    expect(data.avatar).toBeNull();
   });
 });

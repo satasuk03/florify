@@ -28,6 +28,8 @@ const sampleData: FloristCardData = {
   startedAt: 0,
   serial: 'FL-TEST-0001',
   displayName: 'Guest',
+  title: 'Seedling',
+  avatar: null,
 };
 
 describe('sharePassport', () => {

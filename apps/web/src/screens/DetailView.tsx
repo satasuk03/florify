@@ -13,6 +13,7 @@ import {
 } from "@/components/StageSelector";
 import { useGameStore } from "@/store/gameStore";
 import { SPECIES, SpeciesCollection, COLLECTION_LABELS } from "@/data/species";
+import { toast } from "@/lib/toast";
 
 /**
  * Detail view for a single harvested tree. Reads `id` from the parent
@@ -34,6 +35,11 @@ const COPY = {
     lastHarvested: "ได้รับล่าสุด",
     locale: "th-TH" as const,
     stageLabel: (n: Stage) => `ระยะ ${n}`,
+    setAsProfile: "ตั้งเป็นรูปโปรไฟล์",
+    updateProfile: (s: Stage) => `อัปเดตเป็น Stage ${s}`,
+    removeProfile: "ลบรูปโปรไฟล์",
+    profileToastSet: "ตั้งเป็นรูปโปรไฟล์แล้ว 🌼",
+    profileToastRemoved: "ลบรูปโปรไฟล์แล้ว",
   },
   en: {
     notFound: "Tree not found",
@@ -45,6 +51,11 @@ const COPY = {
     lastHarvested: "Last obtained",
     locale: "en-US" as const,
     stageLabel: (n: Stage) => `Stage ${n}`,
+    setAsProfile: "Set as profile picture",
+    updateProfile: (s: Stage) => `Update to Stage ${s}`,
+    removeProfile: "Remove profile picture",
+    profileToastSet: "Profile picture set 🌼",
+    profileToastRemoved: "Profile picture removed",
   },
 };
 
@@ -61,6 +72,35 @@ export function DetailView({ speciesId }: { speciesId: number | null }) {
       ? (s.state.collection.find((c) => c.speciesId === speciesId) ?? null)
       : null,
   );
+  const avatar = useGameStore((s) => s.state.passportCustomization.avatar);
+  const setPassportAvatar = useGameStore((s) => s.setPassportAvatar);
+
+  const isCurrentSpecies =
+    avatar != null && speciesId != null && avatar.speciesId === speciesId;
+  const isCurrentStage = isCurrentSpecies && avatar.stage === stage;
+  const profileButtonLabel = isCurrentStage
+    ? t.removeProfile
+    : isCurrentSpecies
+      ? t.updateProfile(stage)
+      : t.setAsProfile;
+
+  const handleProfileClick = useCallback(() => {
+    if (speciesId == null) return;
+    if (isCurrentStage) {
+      setPassportAvatar(null);
+      toast(t.profileToastRemoved);
+    } else {
+      setPassportAvatar({ speciesId, stage });
+      toast(t.profileToastSet);
+    }
+  }, [
+    speciesId,
+    stage,
+    isCurrentStage,
+    setPassportAvatar,
+    t.profileToastSet,
+    t.profileToastRemoved,
+  ]);
 
   if (!entry) {
     return (
@@ -203,6 +243,18 @@ export function DetailView({ speciesId }: { speciesId: number | null }) {
               </dd>
             </dl>
           </div>
+
+          <button
+            onClick={handleProfileClick}
+            className={`mt-4 w-full h-11 rounded-lg text-sm font-medium transition-colors ${
+              isCurrentStage
+                ? "bg-cream-200 text-ink-700 hover:bg-cream-300 border border-cream-300"
+                : "bg-clay-500 text-cream-50 hover:bg-clay-400 shadow-soft-md"
+            }`}
+            aria-label={profileButtonLabel}
+          >
+            {isCurrentStage ? "🗑️" : "🌼"} {profileButtonLabel}
+          </button>
         </div>
       </div>
 

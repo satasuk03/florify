@@ -5,6 +5,7 @@ import {
   MAX_WATER_DROPS,
   PRODUCER_MAX_LEVEL,
   PRODUCER_PERIOD_MS,
+  SCHEMA_VERSION,
   SPROUT_PRODUCER_UPGRADE_COST,
   SPROUT_PRODUCER_YIELD,
   WATER_PRODUCER_UPGRADE_COST,
@@ -248,7 +249,7 @@ describe('migration v10 → v11', () => {
     const migrated = migrate(oldSave as any);
     const after = Date.now();
 
-    expect(migrated.schemaVersion).toBe(11);
+    expect(migrated.schemaVersion).toBe(SCHEMA_VERSION);
     expect(migrated.producer).toBeDefined();
     expect(migrated.producer.sproutLevel).toBe(1);
     expect(migrated.producer.waterLevel).toBe(1);

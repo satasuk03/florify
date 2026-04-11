@@ -131,8 +131,16 @@
     animation: sheet-up 460ms cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
+  .animate-sheet-down {
+    animation: sheet-down 260ms cubic-bezier(0.55, 0, 0.6, 1) both;
+  }
+
   .animate-overlay-in {
     animation: overlay-in 360ms ease-out both;
+  }
+
+  .animate-overlay-out {
+    animation: overlay-out 260ms ease-in both;
   }
 
   .animate-toast-in {
@@ -142,6 +150,13 @@
   /* Slow, gentle breathing — used for the harvest rarity glow. */
   .animate-pulse-slow {
     animation: pulse-slow 3600ms ease-in-out infinite;
+  }
+
+  /* Soft tilt back-and-forth — signals the passport edit affordances
+     are interactive without pulling focus away from the card content. */
+  .animate-pencil-wiggle {
+    animation: pencil-wiggle 2600ms ease-in-out infinite;
+    transform-origin: center;
   }
 
   /* Fly-to-gallery — plays on the harvest overlay's flora clone when
@@ -360,6 +375,28 @@
   }
 }
 
+@keyframes sheet-down {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+
+@keyframes overlay-out {
+  from {
+    opacity: 1;
+    backdrop-filter: blur(6px);
+  }
+  to {
+    opacity: 0;
+    backdrop-filter: blur(0);
+  }
+}
+
 @keyframes toast-in {
   from {
     opacity: 0;
@@ -428,6 +465,16 @@
   50% {
     opacity: 1;
     transform: scale(1.04);
+  }
+}
+
+@keyframes pencil-wiggle {
+  0%,
+  100% {
+    transform: rotate(-6deg);
+  }
+  50% {
+    transform: rotate(6deg);
   }
 }
 
