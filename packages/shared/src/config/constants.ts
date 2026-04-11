@@ -31,7 +31,7 @@ export const PRODUCER_MAX_LEVEL = 11 as const;
 export const SPROUT_PRODUCER_YIELD = [100, 105, 115, 130, 145, 165, 185, 210, 235, 265, 300] as const;
 export const SPROUT_PRODUCER_UPGRADE_COST = [0, 50, 120, 250, 450, 750, 1150, 1700, 2500, 3600, 5000] as const;
 export const WATER_PRODUCER_YIELD = [30, 32, 35, 39, 44, 50, 57, 65, 75, 87, 100] as const;
-export const WATER_PRODUCER_UPGRADE_COST = [0, 60, 130, 230, 380, 600, 900, 1350, 2000, 2900, 4100] as const;
+export const WATER_PRODUCER_UPGRADE_COST = [0, 120, 280, 500, 850, 1300, 2000, 3000, 4300, 6200, 8500] as const;
 
 export const STORAGE_KEY = 'florify:v1:player';
 export const SETTINGS_KEY = 'florify:v1:settings';
