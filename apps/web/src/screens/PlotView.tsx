@@ -67,6 +67,10 @@ export function PlotView() {
   const hasUnclaimedAchievements = useGameStore((s) =>
     Object.values(s.state.achievements).some((a) => !a.claimedAt),
   );
+  const collection = useGameStore((s) => s.state.collection);
+  const isSpeciesUnlocked = tree
+    ? collection.some((c) => c.speciesId === tree.speciesId)
+    : false;
 
   // Show welcome dialogue on first ever visit, or check-in modal after hydration.
   const [checkinShown, setCheckinShown] = useState(false);
@@ -255,20 +259,28 @@ export function PlotView() {
             className="flex flex-col items-center gap-1.5 animate-fade-in rounded-2xl bg-cream-50/30 backdrop-blur-md border border-cream-200/60 shadow-soft-sm px-5 py-3"
           >
             <div className="flex items-baseline gap-2">
-              <div className="font-serif text-sm font-medium text-ink-700">
-                {species.name}
-              </div>
-              <div
-                className={`text-[10px] uppercase tracking-[0.15em] font-semibold ${
-                  tree.rarity === "legendary"
-                    ? "text-amber-600"
-                    : tree.rarity === "rare"
-                      ? "text-sky-600"
-                      : "text-ink-400"
-                }`}
-              >
-                {tree.rarity}
-              </div>
+              {isSpeciesUnlocked ? (
+                <>
+                  <div className="font-serif text-sm font-medium text-ink-700">
+                    {species.name}
+                  </div>
+                  <div
+                    className={`text-[10px] uppercase tracking-[0.15em] font-semibold ${
+                      tree.rarity === "legendary"
+                        ? "text-amber-600"
+                        : tree.rarity === "rare"
+                          ? "text-sky-600"
+                          : "text-ink-400"
+                    }`}
+                  >
+                    {tree.rarity}
+                  </div>
+                </>
+              ) : (
+                <div className="font-serif text-sm font-medium text-ink-400">
+                  ???
+                </div>
+              )}
             </div>
             <div className="w-32 h-1.5 rounded-full bg-ink-900/10 overflow-hidden">
               <div
