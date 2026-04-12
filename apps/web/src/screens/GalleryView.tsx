@@ -704,7 +704,7 @@ const GalleryTile = memo(function GalleryTile({
           </div>
         )}
         {/* Level badge — bottom-right */}
-        {level !== null && (
+        {level !== null && level > 1 && (
           <span
             className={`absolute bottom-1 right-1 text-[10px] font-semibold px-1.5 py-0.5 rounded-full ${
               level === FLORA_MAX_LEVEL
