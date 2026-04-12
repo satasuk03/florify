@@ -81,6 +81,7 @@ export function FloristCardSheet({ open, onClose }: Props) {
     "passport",
   );
   const [titleModalOpen, setTitleModalOpen] = useState(false);
+  const [editMode, setEditMode] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
   const [cardWidth, setCardWidth] = useState(320);
 
@@ -100,6 +101,7 @@ export function FloristCardSheet({ open, onClose }: Props) {
       setSheet({ phase: "viewing" });
       setActiveTab("passport");
       setTitleModalOpen(false);
+      setEditMode(false);
     }
   }
 
@@ -261,11 +263,17 @@ export function FloristCardSheet({ open, onClose }: Props) {
 
         {activeTab === "passport" ? (
           <>
+            <div className="flex justify-end mb-2">
+              <EditModeToggle
+                active={editMode}
+                onToggle={() => setEditMode((v) => !v)}
+              />
+            </div>
             <div className="flex justify-center mb-5">
               <PassportCard
                 data={data}
                 maxWidth={cardWidth}
-                editable
+                editable={editMode}
                 onEditTitle={() => setTitleModalOpen(true)}
                 onEditAvatar={handleEditAvatar}
               />
@@ -309,5 +317,29 @@ export function FloristCardSheet({ open, onClose }: Props) {
         />
       )}
     </div>
+  );
+}
+
+function EditModeToggle({
+  active,
+  onToggle,
+}: {
+  active: boolean;
+  onToggle: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onToggle}
+      aria-label="เปิด/ปิดโหมดแก้ไขพาสปอร์ต"
+      aria-pressed={active}
+      className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+        active
+          ? "bg-cream-200 text-ink-900 ring-1 ring-ink-200"
+          : "bg-cream-100 text-ink-500 hover:text-ink-700"
+      }`}
+    >
+      {active ? "✓ เสร็จ" : "✏️ แก้ไข"}
+    </button>
   );
 }
