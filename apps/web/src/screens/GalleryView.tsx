@@ -698,13 +698,13 @@ const GalleryTile = memo(function GalleryTile({
           />
         )}
         {/* Harvest count — bottom-left (existing position preserved) */}
-        {count > 0 && (
+        {count > 1 && (
           <div className="absolute bottom-1 left-1 bg-ink-900/60 text-cream-50 text-[10px] font-medium px-1.5 py-0.5 rounded-full backdrop-blur-sm">
             ×{count}
           </div>
         )}
         {/* Level badge — bottom-right */}
-        {level !== null && (
+        {level !== null && level > 1 && (
           <span
             className={`absolute bottom-1 right-1 text-[10px] font-semibold px-1.5 py-0.5 rounded-full ${
               level === FLORA_MAX_LEVEL

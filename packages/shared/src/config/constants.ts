@@ -1,7 +1,7 @@
 export const SCHEMA_VERSION = 13 as const;
 export const CHECKIN_BASE_DROPS = 30;
 export const CHECKIN_STREAK_BONUS_MAX = 20;
-export const MAX_WATER_DROPS = 50;
+export const MAX_WATER_DROPS = 100;
 export const DROP_REGEN_MS = 2 * 60 * 1000;     // 2 minutes per drop
 export const MIN_WATER_COST = 12;
 export const MAX_WATER_COST = 25;

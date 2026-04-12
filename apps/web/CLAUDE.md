@@ -5,7 +5,7 @@
 Watering is resource-based, not cooldown-based. Players accumulate **water drops** over time and spend 1 drop per tap of the Water button.
 
 - **Constants** (`packages/shared/src/config/constants.ts`):
-  - `MAX_WATER_DROPS = 50` — pool cap
+  - `MAX_WATER_DROPS = 100` — pool cap
   - `DROP_REGEN_MS = 2 min` — 1 drop regenerates every 2 minutes
   - `MIN_WATER_COST = 12`, `MAX_WATER_COST = 25` — drops needed per flora (random)
   - `FIRST_FLORA_COST = 10` — first-ever flora costs less for onboarding
@@ -43,7 +43,7 @@ Bilingual support is **client-side only** — no library, no locale routes, no S
 # Flora & Species
 
 - 305 species split across `src/data/species/series-{0,1,2,3}.ts`, re-exported from `src/data/species/index.ts`. Types live in `src/data/species/types.ts`. To add a new batch, create a new `series-N.ts` and import it in `index.ts`.
-- Rarity weights: 82% common, 15% rare, 3% legendary (`src/data/rarityWeights.ts`).
+- Rarity weights: 88% common, 9% rare, 3% legendary (`src/data/rarityWeights.ts`).
 - Images: `public/floras/{folder}/stage-{1,2,3}.webp` — 3 growth stages per species.
 - Stage thresholds: < 1/3 progress → stage 1, < 2/3 → stage 2, >= 2/3 → stage 3.
 - Adding a new flora: use the `/add-flora` skill.
