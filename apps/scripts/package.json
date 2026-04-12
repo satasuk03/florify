@@ -7,9 +7,12 @@
     "generate": "tsx src/generate.ts",
     "generate:all": "tsx src/generate.ts --all",
     "banner": "tsx src/generate-banner.ts",
+    "nanobanana": "tsx src/nanobanana.ts",
+    "grok": "tsx src/grok.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@google/genai": "^1.49.0",
     "dotenv": "^16.4.5",
     "openai": "^4.77.0",
     "sharp": "^0.33.5"

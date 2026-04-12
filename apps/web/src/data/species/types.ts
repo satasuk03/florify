@@ -4,6 +4,7 @@ export enum SpeciesCollection {
   Original = "original",
   ChineseGarden = "chinese-garden",
   AbyssalGarden = "abyssal-garden",
+  CelestialCourt = "celestial-court",
 }
 
 export interface SpeciesDef {

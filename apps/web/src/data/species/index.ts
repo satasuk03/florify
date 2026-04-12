@@ -5,6 +5,7 @@ import series0 from "./series-0";
 import series1 from "./series-1";
 import series2 from "./series-2";
 import series3 from "./series-3";
+import series4 from "./series-4";
 
 export type { SpeciesDef } from "./types";
 export { SpeciesCollection } from "./types";
@@ -31,6 +32,7 @@ registerSeries(_species, series0);
 registerSeries(_species, series1);
 registerSeries(_species, series2);
 registerSeries(_species, series3);
+registerSeries(_species, series4);
 
 // Integrity: catch id/ordering drift early — the app fails to boot rather
 // than quietly rendering the wrong image for a saved tree.
@@ -62,6 +64,7 @@ export const SPECIES_BY_RARITY: Record<Rarity, readonly SpeciesDef[]> = {
 
 /* Newest collection first */
 export const ALL_COLLECTIONS: SpeciesCollection[] = [
+  SpeciesCollection.CelestialCourt,
   SpeciesCollection.AbyssalGarden,
   SpeciesCollection.ChineseGarden,
   SpeciesCollection.Original,
@@ -71,4 +74,5 @@ export const COLLECTION_LABELS: Record<SpeciesCollection, { th: string; en: stri
   [SpeciesCollection.Original]: { th: 'Original', en: 'Original' },
   [SpeciesCollection.ChineseGarden]: { th: 'Chinese Garden', en: 'Chinese Garden' },
   [SpeciesCollection.AbyssalGarden]: { th: 'Abyssal Garden', en: 'Abyssal Garden' },
+  [SpeciesCollection.CelestialCourt]: { th: 'Celestial Court', en: 'Celestial Court' },
 };
