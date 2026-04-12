@@ -5,10 +5,11 @@ import type { FloristCardData } from '@/store/gameStore';
 import { AnimatedNumber } from '@/components/AnimatedNumber';
 import {
   buildLayout,
-  PASSPORT_COLORS,
+  DEFAULT_THEME,
   PASSPORT_H,
   PASSPORT_W,
   type DrawOp,
+  type PassportTheme,
 } from './passportLayout';
 import { fitTextOps } from './fitTextOps';
 import { PencilIcon } from '@/components/icons';
@@ -33,6 +34,7 @@ interface PassportCardProps {
   editable?: boolean;
   onEditTitle?: () => void;
   onEditAvatar?: () => void;
+  theme?: PassportTheme;
 }
 
 export function PassportCard({
@@ -41,12 +43,13 @@ export function PassportCard({
   editable = false,
   onEditTitle,
   onEditAvatar,
+  theme = DEFAULT_THEME,
 }: PassportCardProps) {
   const ops = useMemo(() => {
-    const list = buildLayout(data);
+    const list = buildLayout(data, theme);
     fitTextOps(list);
     return list;
-  }, [data]);
+  }, [data, theme]);
   const scale = maxWidth / PASSPORT_W;
 
   return (
@@ -59,7 +62,11 @@ export function PassportCard({
         position: 'relative',
         overflow: 'hidden',
         borderRadius: 24 * scale,
-        background: `linear-gradient(180deg, ${PASSPORT_COLORS.bgTop} 0%, ${PASSPORT_COLORS.bgBottom} 100%)`,
+        background: theme.background.map((layer) => {
+          if (layer.type === 'gradient')
+            return `linear-gradient(${layer.angle ?? 180}deg, ${layer.from}, ${layer.to})`;
+          return layer.color;
+        }).join(', '),
         boxShadow: '0 12px 32px rgba(75, 55, 30, 0.18)',
       }}
     >
@@ -204,26 +211,11 @@ function EditButton({
 function renderOp(op: DrawOp, key: number) {
   switch (op.type) {
     case 'text': {
-      const shinyStyle: CSSProperties | undefined = op.shiny
-        ? {
-            backgroundImage:
-              'linear-gradient(90deg, #FFB0C3 0%, #FFE18A 20%, #A6F0AD 40%, #9EC6FF 60%, #C9A3FF 80%, #FFB0C3 100%)',
-            backgroundSize: '200% 100%',
-            WebkitBackgroundClip: 'text',
-            backgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            color: 'transparent',
-            animation: 'fl-rainbow-sweep 4s linear infinite',
-          }
-        : undefined;
-
       const style: CSSProperties = {
         position: 'absolute',
         left: 0,
         top: 0,
         width: PASSPORT_W,
-        // y in DrawOp is the text baseline (matches canvas textBaseline='alphabetic').
-        // Translate so the element's baseline sits at `y` regardless of font.
         transform: `translate(0px, ${op.y - op.size}px)`,
         fontFamily: fontFamilyCss(op.family),
         fontSize: op.size,
@@ -234,10 +226,7 @@ function renderOp(op: DrawOp, key: number) {
         lineHeight: 1,
         paddingLeft: op.align !== 'left' ? 0 : op.x,
         paddingRight: op.align === 'right' ? PASSPORT_W - op.x : 0,
-        // For center we just let textAlign do it; the full-width div is fine
         whiteSpace: 'nowrap',
-        // Shiny overrides come last so color: 'transparent' wins over op.color
-        ...shinyStyle,
       };
 
       // If this op has animate metadata, replace the numeric portion
@@ -381,6 +370,75 @@ function renderOp(op: DrawOp, key: number) {
             </span>
           )}
         </div>
+      );
+    }
+    case 'gradientText': {
+      const gradientCss = `linear-gradient(90deg, ${op.gradient.colors.map((c, i) => `${c} ${(op.gradient.stops[i] ?? 0) * 100}%`).join(', ')})`;
+      const gradientStyle: CSSProperties = {
+        backgroundImage: gradientCss,
+        backgroundSize: op.animateGradient ? '200% 100%' : '100% 100%',
+        WebkitBackgroundClip: 'text',
+        backgroundClip: 'text',
+        WebkitTextFillColor: 'transparent',
+        color: 'transparent',
+        animation: op.animateGradient ? 'fl-rainbow-sweep 4s linear infinite' : undefined,
+      };
+
+      const style: CSSProperties = {
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        width: PASSPORT_W,
+        transform: `translate(0px, ${op.y - op.size}px)`,
+        fontFamily: fontFamilyCss(op.family),
+        fontSize: op.size,
+        fontWeight: op.weight,
+        textAlign: op.align,
+        letterSpacing: op.letterSpacing ? `${op.letterSpacing}px` : undefined,
+        lineHeight: 1,
+        paddingLeft: op.align !== 'left' ? 0 : op.x,
+        paddingRight: op.align === 'right' ? PASSPORT_W - op.x : 0,
+        whiteSpace: 'nowrap',
+        ...gradientStyle,
+      };
+
+      if (op.animate) {
+        const valStr = String(op.animate.value);
+        const idx = op.text.indexOf(valStr);
+        if (idx >= 0) {
+          const prefix = op.text.slice(0, idx);
+          const suffix = op.text.slice(idx + valStr.length);
+          return (
+            <div key={key} style={style}>
+              {prefix}
+              <AnimatedNumber value={op.animate.value} delay={op.animate.delay} />
+              {suffix}
+            </div>
+          );
+        }
+      }
+
+      return (
+        <div key={key} style={style}>
+          {op.text}
+        </div>
+      );
+    }
+    case 'glow': {
+      return (
+        <div
+          key={key}
+          style={{
+            position: 'absolute',
+            left: op.x,
+            top: op.y,
+            width: op.w,
+            height: op.h,
+            background: op.color,
+            filter: `blur(${op.blur}px)`,
+            borderRadius: op.radius ?? 0,
+          }}
+        />
       );
     }
   }

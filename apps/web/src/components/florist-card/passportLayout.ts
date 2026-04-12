@@ -33,6 +33,73 @@ export const PASSPORT_COLORS = {
   barLegendary: "#D4A24C",
 } as const;
 
+// ── Theme types ──────────────────────────────────────────────────
+
+export type BackgroundLayer =
+  | { type: "gradient"; from: string; to: string; angle?: number }
+  | { type: "solid"; color: string };
+
+export interface RarityTextStyle {
+  color: string;
+  family: "serif" | "sans" | "mono";
+  weight: 400 | 500 | 600 | 700;
+  letterSpacing?: number;
+  gradient?: { colors: string[]; stops: number[] };
+  glow?: { color: string; blur: number };
+}
+
+export interface PassportTheme {
+  id: string;
+  background: BackgroundLayer[];
+  colors: typeof PASSPORT_COLORS;
+  rarityStyle: {
+    common: RarityTextStyle;
+    rare: RarityTextStyle;
+    legendary: RarityTextStyle;
+  };
+}
+
+export const DEFAULT_THEME: PassportTheme = {
+  id: "classic",
+  background: [{ type: "gradient", from: "#FBF8F3", to: "#F3E9D6" }],
+  colors: PASSPORT_COLORS,
+  rarityStyle: {
+    common: {
+      color: PASSPORT_COLORS.ink700,
+      family: "serif",
+      weight: 600,
+      letterSpacing: 1,
+      gradient: {
+        colors: ["#8B7355", "#A68B5B", "#C4A96A", "#A68B5B", "#8B7355"],
+        stops: [0, 0.25, 0.5, 0.75, 1],
+      },
+      glow: { color: "rgba(184, 168, 136, 0.25)", blur: 10 },
+    },
+    rare: {
+      color: PASSPORT_COLORS.ink700,
+      family: "serif",
+      weight: 600,
+      letterSpacing: 1,
+      gradient: {
+        colors: ["#5A7A8A", "#8AB4C8", "#B8D8E8", "#8AB4C8", "#5A7A8A"],
+        stops: [0, 0.25, 0.5, 0.75, 1],
+      },
+      glow: { color: "rgba(122, 156, 184, 0.35)", blur: 14 },
+    },
+    legendary: {
+      color: PASSPORT_COLORS.ink700,
+      family: "serif",
+      weight: 700,
+      letterSpacing: 2,
+      gradient: {
+        colors: ["#8B6914", "#D4A24C", "#FFD700", "#D4A24C", "#8B6914"],
+        stops: [0, 0.25, 0.5, 0.75, 1],
+      },
+      glow: { color: "rgba(212, 162, 76, 0.45)", blur: 20 },
+    },
+  },
+};
+
 export type Align = "left" | "center" | "right";
 
 export type DrawOp =
@@ -54,8 +121,6 @@ export type DrawOp =
        *  agnostic to the measurement — `fitTextOps` mutates the op before the
        *  main draw loop. */
       fitTo?: { maxWidth: number; sizeLadder: number[] };
-      /** DOM-only: render a rainbow gradient sweep (Legendary epithet). */
-      shiny?: boolean;
     }
   | {
       type: "rect";
@@ -102,6 +167,32 @@ export type DrawOp =
       border?: { color: string; width: number };
       /** Rendered centered when src is null or load fails. */
       placeholder?: { text: string; size: number; color: string };
+    }
+  | {
+      type: "gradientText";
+      text: string;
+      x: number;
+      y: number;
+      size: number;
+      weight: 400 | 500 | 600 | 700;
+      family: "serif" | "sans" | "mono";
+      gradient: { colors: string[]; stops: number[] };
+      align: Align;
+      letterSpacing?: number;
+      animate?: { value: number; delay?: number };
+      fitTo?: { maxWidth: number; sizeLadder: number[] };
+      /** DOM-only: animate the gradient position (rainbow sweep). */
+      animateGradient?: boolean;
+    }
+  | {
+      type: "glow";
+      x: number;
+      y: number;
+      w: number;
+      h: number;
+      color: string;
+      blur: number;
+      radius?: number;
     };
 
 function formatDate(ms: number): string {
@@ -119,15 +210,19 @@ function formatDate(ms: number): string {
  * Pixel ranges mirror designs/11 §11.5. Critical content stays within
  * y ∈ [240, 1680] so Instagram/Facebook story overlays never cover it.
  */
-export function buildLayout(data: FloristCardData): DrawOp[] {
+export function buildLayout(
+  data: FloristCardData,
+  theme: PassportTheme = DEFAULT_THEME,
+): DrawOp[] {
   const ops: DrawOp[] = [];
   const cx = PASSPORT_W / 2;
   const col = { left: 180, right: PASSPORT_W - 180 }; // 720px content column
+  const c = theme.colors;
 
   // ── Decorative corner frames ─────────────────────────────────────
-  const cornerArm = 90;
+  const cornerArm = 100;
   const cornerInset = 80;
-  const cornerWidth = 4;
+  const cornerWidth = 5;
   ops.push(
     {
       type: "corner",
@@ -135,7 +230,7 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
       x: cornerInset,
       y: cornerInset,
       len: cornerArm,
-      color: PASSPORT_COLORS.border,
+      color: c.clay600,
       width: cornerWidth,
     },
     {
@@ -144,7 +239,7 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
       x: PASSPORT_W - cornerInset,
       y: cornerInset,
       len: cornerArm,
-      color: PASSPORT_COLORS.border,
+      color: c.clay600,
       width: cornerWidth,
     },
     {
@@ -153,7 +248,7 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
       x: cornerInset,
       y: PASSPORT_H - cornerInset,
       len: cornerArm,
-      color: PASSPORT_COLORS.border,
+      color: c.clay600,
       width: cornerWidth,
     },
     {
@@ -162,7 +257,7 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
       x: PASSPORT_W - cornerInset,
       y: PASSPORT_H - cornerInset,
       len: cornerArm,
-      color: PASSPORT_COLORS.border,
+      color: c.clay600,
       width: cornerWidth,
     },
   );
@@ -176,7 +271,7 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
     size: 96,
     weight: 700,
     family: "serif",
-    color: PASSPORT_COLORS.ink900,
+    color: c.ink900,
     align: "center",
     letterSpacing: 8,
   });
@@ -188,7 +283,7 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
     size: 32,
     weight: 500,
     family: "sans",
-    color: PASSPORT_COLORS.ink500,
+    color: c.ink500,
     align: "center",
     letterSpacing: 10,
   });
@@ -198,7 +293,7 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
     y1: 450,
     x2: col.right,
     y2: 450,
-    color: PASSPORT_COLORS.divider,
+    color: c.divider,
     width: 2,
   });
 
@@ -219,7 +314,7 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
     size: 180,
     weight: 700,
     family: "serif",
-    color: PASSPORT_COLORS.ink900,
+    color: c.ink900,
     align: "center",
     animate: { value: data.totalHarvested, delay: DELAY_HERO },
   });
@@ -231,7 +326,7 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
     size: 36,
     weight: 600,
     family: "sans",
-    color: PASSPORT_COLORS.ink500,
+    color: c.ink500,
     align: "center",
     letterSpacing: 8,
   });
@@ -240,40 +335,99 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
   // Text is data.title — either a chosen achievement name or the auto
   // rank fallback. Achievement names are longer than ranks, so the
   // renderer will auto-shrink via the `fitTo` hint if needed.
-  ops.push({
-    type: "text",
-    text: `◆  ${data.title}  ◆`,
-    x: cx,
-    y: 780,
-    size: 44,
-    weight: 600,
-    family: "serif",
-    color: PASSPORT_COLORS.clay600,
-    align: "center",
-    letterSpacing: 2,
-    fitTo: { maxWidth: col.right - col.left, sizeLadder: [44, 40, 36, 32] },
-    shiny: data.titleShiny,
-  });
+  const titleText = `◆  ${data.title}  ◆`;
+  const titleFitTo = { maxWidth: col.right - col.left, sizeLadder: [44, 40, 36, 32] as number[] };
+  if (data.titleShiny) {
+    ops.push({
+      type: "gradientText",
+      text: titleText,
+      x: cx,
+      y: 780,
+      size: 44,
+      weight: 600,
+      family: "serif",
+      gradient: {
+        colors: ["#FFB0C3", "#FFE18A", "#A6F0AD", "#9EC6FF", "#C9A3FF", "#FFB0C3"],
+        stops: [0, 0.2, 0.4, 0.6, 0.8, 1],
+      },
+      align: "center",
+      letterSpacing: 2,
+      fitTo: titleFitTo,
+      animateGradient: true,
+    });
+  } else {
+    ops.push({
+      type: "text",
+      text: titleText,
+      x: cx,
+      y: 780,
+      size: 44,
+      weight: 600,
+      family: "serif",
+      color: c.clay600,
+      align: "center",
+      letterSpacing: 2,
+      fitTo: titleFitTo,
+    });
+  }
+
+  // ── Rarity section ornament ───────────────────────────────────────
+  const ornY = 860;
+  const ornLineW = 80;
+  ops.push(
+    {
+      type: "line",
+      x1: cx - ornLineW - 30,
+      y1: ornY,
+      x2: cx - 30,
+      y2: ornY,
+      color: c.divider,
+      width: 2,
+    },
+    {
+      type: "text",
+      text: "◈",
+      x: cx,
+      y: ornY + 8,
+      size: 28,
+      weight: 400,
+      family: "serif",
+      color: c.clay500,
+      align: "center",
+    },
+    {
+      type: "line",
+      x1: cx + 30,
+      y1: ornY,
+      x2: cx + ornLineW + 30,
+      y2: ornY,
+      color: c.divider,
+      width: 2,
+    },
+  );
 
   // ── Rarity bars ──────────────────────────────────────────────────
   const barRows = [
     {
       label: "Common",
+      rarity: "common" as const,
       unlocked: data.rarityProgress.common.unlocked,
       total: data.rarityProgress.common.total,
-      fill: PASSPORT_COLORS.barCommon,
+      fill: c.barCommon,
     },
     {
       label: "Rare",
+      rarity: "rare" as const,
       unlocked: data.rarityProgress.rare.unlocked,
       total: data.rarityProgress.rare.total,
-      fill: PASSPORT_COLORS.barRare,
+      fill: c.barRare,
     },
     {
       label: "Legendary",
+      rarity: "legendary" as const,
       unlocked: data.rarityProgress.legendary.unlocked,
       total: data.rarityProgress.legendary.total,
-      fill: PASSPORT_COLORS.barLegendary,
+      fill: c.barLegendary,
     },
   ] as const;
 
@@ -286,18 +440,48 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
   for (let i = 0; i < barRows.length; i++) {
     const row = barRows[i]!;
     const y = barRowY0 + i * rowHeight;
-    // Label
-    ops.push({
-      type: "text",
-      text: row.label,
-      x: col.left,
-      y: y + 4,
-      size: 34,
-      weight: 500,
-      family: "sans",
-      color: PASSPORT_COLORS.ink700,
-      align: "left",
-    });
+    // Rarity label — styled per theme
+    const rs = theme.rarityStyle[row.rarity];
+    const labelSize = row.rarity === "legendary" ? 36 : 34;
+    if (rs.glow) {
+      ops.push({
+        type: "glow",
+        x: col.left - rs.glow.blur,
+        y: y + 4 - labelSize - rs.glow.blur / 2,
+        w: 200 + rs.glow.blur * 2,
+        h: labelSize + rs.glow.blur,
+        color: rs.glow.color,
+        blur: rs.glow.blur,
+        radius: rs.glow.blur,
+      });
+    }
+    if (rs.gradient) {
+      ops.push({
+        type: "gradientText",
+        text: row.label,
+        x: col.left,
+        y: y + 4,
+        size: labelSize,
+        weight: rs.weight,
+        family: rs.family,
+        gradient: rs.gradient,
+        align: "left",
+        letterSpacing: rs.letterSpacing,
+      });
+    } else {
+      ops.push({
+        type: "text",
+        text: row.label,
+        x: col.left,
+        y: y + 4,
+        size: labelSize,
+        weight: rs.weight,
+        family: rs.family,
+        color: rs.color,
+        align: "left",
+        letterSpacing: rs.letterSpacing,
+      });
+    }
     // Bar background
     ops.push({
       type: "rect",
@@ -305,7 +489,7 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
       y: y - 20,
       w: barW,
       h: barH,
-      color: PASSPORT_COLORS.barBg,
+      color: c.barBg,
       radius: barH / 2,
     });
     // Bar fill
@@ -332,11 +516,22 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
       size: 30,
       weight: 500,
       family: "sans",
-      color: PASSPORT_COLORS.ink500,
+      color: c.ink500,
       align: "right",
       animate: { value: row.unlocked, delay: DELAY_BARS + i * 50 },
     });
   }
+
+  // ── Stats panel background ────────────────────────────────────────
+  ops.push({
+    type: "rect",
+    x: col.left - 20,
+    y: 1160,
+    w: col.right - col.left + 40,
+    h: 175,
+    color: c.barBg,
+    radius: 16,
+  });
 
   // ── Species unlocked summary (below rarity bars) ─────────────────
   const totalSpecies =
@@ -351,7 +546,7 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
     size: 34,
     weight: 600,
     family: "sans",
-    color: PASSPORT_COLORS.ink700,
+    color: c.ink700,
     align: "center",
     animate: { value: data.speciesUnlocked, delay: DELAY_STATS },
   });
@@ -365,7 +560,7 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
     size: 34,
     weight: 500,
     family: "sans",
-    color: PASSPORT_COLORS.ink700,
+    color: c.ink700,
     align: "center",
     animate: { value: data.currentStreak, delay: DELAY_STATS + 50 },
   });
@@ -377,7 +572,7 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
     size: 28,
     weight: 400,
     family: "sans",
-    color: PASSPORT_COLORS.ink500,
+    color: c.ink500,
     align: "center",
     animate: { value: data.longestStreak, delay: DELAY_STATS + 100 },
   });
@@ -389,7 +584,7 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
     y1: 1390,
     x2: col.right,
     y2: 1390,
-    color: PASSPORT_COLORS.divider,
+    color: c.divider,
     width: 2,
   });
 
@@ -410,6 +605,16 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
         : null)
     : null;
   ops.push({
+    type: "glow",
+    x: avatarX - 6,
+    y: avatarY - 6,
+    w: avatarW + 12,
+    h: avatarH + 12,
+    color: "rgba(75, 55, 30, 0.08)",
+    blur: 12,
+    radius: 20,
+  });
+  ops.push({
     type: "image",
     src: avatarSrc,
     x: avatarX,
@@ -417,9 +622,9 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
     w: avatarW,
     h: avatarH,
     radius: 16,
-    bgColor: PASSPORT_COLORS.bgTop,
-    border: { color: PASSPORT_COLORS.border, width: 2 },
-    placeholder: { text: "🌱", size: 80, color: PASSPORT_COLORS.ink300 },
+    bgColor: c.bgTop,
+    border: { color: c.border, width: 2 },
+    placeholder: { text: "🌱", size: 80, color: c.ink300 },
   });
 
   ops.push({
@@ -430,7 +635,7 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
     size: 36,
     weight: 600,
     family: "sans",
-    color: PASSPORT_COLORS.ink900,
+    color: c.ink900,
     align: "left",
   });
   ops.push({
@@ -441,7 +646,7 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
     size: 30,
     weight: 500,
     family: "mono",
-    color: PASSPORT_COLORS.ink500,
+    color: c.ink500,
     align: "left",
     letterSpacing: 2,
   });
@@ -453,7 +658,7 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
     size: 26,
     weight: 400,
     family: "sans",
-    color: PASSPORT_COLORS.ink500,
+    color: c.ink500,
     align: "left",
   });
   if (data.sharedAt) {
@@ -465,7 +670,7 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
       size: 24,
       weight: 400,
       family: "sans",
-      color: PASSPORT_COLORS.ink300,
+      color: c.ink300,
       align: "left",
     });
   }
@@ -479,7 +684,7 @@ export function buildLayout(data: FloristCardData): DrawOp[] {
     size: 30,
     weight: 500,
     family: "sans",
-    color: PASSPORT_COLORS.clay500,
+    color: c.clay500,
     align: "right",
   });
 

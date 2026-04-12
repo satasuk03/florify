@@ -7,6 +7,7 @@
 - Next Collection: Fungi Kingdom
 - Particles decoration -> อาจจะให้ซื้อจาก Shop? -> แต่ใช้ Currency พิเศษ (Cosmetic coins)
 - Badge Achievement ต้องมีที่ให้โชว์ ใน Passport
+- Passport Background Customization (or theme selection?)
 
 ## Done
 - Filter ดอกไม้ที่สามารถ upgrade ได้ -> อาจจะใช้คำสั้นๆ

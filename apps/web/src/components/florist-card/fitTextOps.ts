@@ -17,7 +17,7 @@ export function fitTextOps(ops: DrawOp[]): void {
   if (!ctx) return;
 
   for (const op of ops) {
-    if (op.type !== "text" || !op.fitTo) continue;
+    if ((op.type !== "text" && op.type !== "gradientText") || !op.fitTo) continue;
 
     const { maxWidth, sizeLadder } = op.fitTo;
     let fittedSize = sizeLadder[sizeLadder.length - 1] ?? op.size;

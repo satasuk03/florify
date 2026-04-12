@@ -3,10 +3,11 @@
 import type { FloristCardData } from '@/store/gameStore';
 import {
   buildLayout,
-  PASSPORT_COLORS,
+  DEFAULT_THEME,
   PASSPORT_H,
   PASSPORT_W,
   type DrawOp,
+  type PassportTheme,
 } from './passportLayout';
 import { fitTextOps } from './fitTextOps';
 
@@ -22,7 +23,10 @@ import { fitTextOps } from './fitTextOps';
  * instead of using html2canvas / dom-to-image.
  */
 
-export async function renderPassportImage(data: FloristCardData): Promise<Blob> {
+export async function renderPassportImage(
+  data: FloristCardData,
+  theme: PassportTheme = DEFAULT_THEME,
+): Promise<Blob> {
   if (typeof document === 'undefined') {
     throw new Error('renderPassportImage is client-only');
   }
@@ -41,15 +45,27 @@ export async function renderPassportImage(data: FloristCardData): Promise<Blob> 
   const ctx = canvas.getContext('2d');
   if (!ctx) throw new Error('2d context unavailable');
 
-  // ── Background gradient ─────────────────────────────────────────
-  const bg = ctx.createLinearGradient(0, 0, 0, PASSPORT_H);
-  bg.addColorStop(0, PASSPORT_COLORS.bgTop);
-  bg.addColorStop(1, PASSPORT_COLORS.bgBottom);
-  ctx.fillStyle = bg;
-  ctx.fillRect(0, 0, PASSPORT_W, PASSPORT_H);
+  // ── Background from theme ───────────────────────────────────────
+  for (const layer of theme.background) {
+    if (layer.type === 'gradient') {
+      const rad = ((layer.angle ?? 180) - 90) * (Math.PI / 180);
+      const dx = Math.cos(rad) * PASSPORT_H;
+      const dy = Math.sin(rad) * PASSPORT_H;
+      const cx = PASSPORT_W / 2;
+      const cy = PASSPORT_H / 2;
+      const bg = ctx.createLinearGradient(cx - dx / 2, cy - dy / 2, cx + dx / 2, cy + dy / 2);
+      bg.addColorStop(0, layer.from);
+      bg.addColorStop(1, layer.to);
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, PASSPORT_W, PASSPORT_H);
+    } else {
+      ctx.fillStyle = layer.color;
+      ctx.fillRect(0, 0, PASSPORT_W, PASSPORT_H);
+    }
+  }
 
   // ── Build ops, shrink titles, preload any image sources ────────
-  const ops = buildLayout(data);
+  const ops = buildLayout(data, theme);
   fitTextOps(ops);
 
   const imageCache = new Map<string, HTMLImageElement>();
@@ -107,6 +123,12 @@ function drawOp(
       return;
     case 'image':
       drawImageOp(ctx, op, imageCache);
+      return;
+    case 'gradientText':
+      drawGradientText(ctx, op);
+      return;
+    case 'glow':
+      drawGlow(ctx, op);
       return;
   }
 }
@@ -193,26 +215,7 @@ function drawText(ctx: CanvasRenderingContext2D, op: Extract<DrawOp, { type: 'te
   ctx.textBaseline = 'alphabetic';
   ctx.textAlign = op.align;
   ctx.font = `${op.weight} ${op.size}px ${canvasFontFamily(op.family)}`;
-
-  if (op.shiny) {
-    // Static rainbow gradient — frozen snapshot for PNG export (no animation).
-    // Font must be set first so measureText uses the correct metrics.
-    const width = ctx.measureText(op.text).width;
-    const startX =
-      op.align === 'center' ? op.x - width / 2
-      : op.align === 'right' ? op.x - width
-      : op.x;
-    const grad = ctx.createLinearGradient(startX, op.y, startX + width, op.y);
-    grad.addColorStop(0.00, '#FFB0C3');
-    grad.addColorStop(0.20, '#FFE18A');
-    grad.addColorStop(0.40, '#A6F0AD');
-    grad.addColorStop(0.60, '#9EC6FF');
-    grad.addColorStop(0.80, '#C9A3FF');
-    grad.addColorStop(1.00, '#FFB0C3');
-    ctx.fillStyle = grad;
-  } else {
-    ctx.fillStyle = op.color;
-  }
+  ctx.fillStyle = op.color;
 
   if (!op.letterSpacing) {
     ctx.fillText(op.text, op.x, op.y);
@@ -306,6 +309,64 @@ function drawCorner(ctx: CanvasRenderingContext2D, op: Extract<DrawOp, { type: '
   }
   ctx.fillRect(hx, hy, hw, op.width);
   ctx.fillRect(vx, vy, op.width, vh);
+}
+
+function drawGradientText(
+  ctx: CanvasRenderingContext2D,
+  op: Extract<DrawOp, { type: 'gradientText' }>,
+): void {
+  ctx.textBaseline = 'alphabetic';
+  ctx.textAlign = op.align;
+  ctx.font = `${op.weight} ${op.size}px ${canvasFontFamily(op.family)}`;
+
+  const width = ctx.measureText(op.text).width;
+  const startX =
+    op.align === 'center' ? op.x - width / 2
+    : op.align === 'right' ? op.x - width
+    : op.x;
+  const grad = ctx.createLinearGradient(startX, op.y, startX + width, op.y);
+  for (let i = 0; i < op.gradient.colors.length; i++) {
+    grad.addColorStop(op.gradient.stops[i] ?? 0, op.gradient.colors[i]!);
+  }
+  ctx.fillStyle = grad;
+
+  if (!op.letterSpacing) {
+    ctx.fillText(op.text, op.x, op.y);
+    return;
+  }
+
+  const ctxAny = ctx as CanvasRenderingContext2D & { letterSpacing?: string };
+  if (typeof ctxAny.letterSpacing !== 'undefined') {
+    ctxAny.letterSpacing = `${op.letterSpacing}px`;
+    ctx.fillText(op.text, op.x, op.y);
+    ctxAny.letterSpacing = '0px';
+    return;
+  }
+
+  const chars = [...op.text];
+  const widths = chars.map((ch) => ctx.measureText(ch).width);
+  const totalWidth = widths.reduce((a, b) => a + b, 0) + op.letterSpacing * (chars.length - 1);
+  let cursorX = op.x;
+  if (op.align === 'center') cursorX = op.x - totalWidth / 2;
+  else if (op.align === 'right') cursorX = op.x - totalWidth;
+  ctx.textAlign = 'left';
+  for (let i = 0; i < chars.length; i++) {
+    ctx.fillText(chars[i]!, cursorX, op.y);
+    cursorX += widths[i]! + op.letterSpacing;
+  }
+}
+
+function drawGlow(
+  ctx: CanvasRenderingContext2D,
+  op: Extract<DrawOp, { type: 'glow' }>,
+): void {
+  ctx.save();
+  ctx.filter = `blur(${op.blur}px)`;
+  ctx.fillStyle = op.color;
+  ctx.beginPath();
+  pathRoundedRect(ctx, op.x, op.y, op.w, op.h, op.radius ?? 0);
+  ctx.fill();
+  ctx.restore();
 }
 
 function canvasFontFamily(family: 'serif' | 'sans' | 'mono'): string {
