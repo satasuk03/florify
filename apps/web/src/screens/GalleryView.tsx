@@ -20,6 +20,7 @@ import type { SpeciesDef } from "@/data/species";
 import type { Rarity } from "@florify/shared";
 import { FLORA_MAX_LEVEL } from "@florify/shared";
 import { useT } from "@/i18n/useT";
+import { useGalleryFilters } from "@/hooks/useSessionState";
 
 const RARITY_ORDER: Rarity[] = ["common", "rare", "legendary"];
 
@@ -119,23 +120,27 @@ export function GalleryView() {
     [collection],
   );
 
-  /* ── Filter state ────────────────────────────────────────────── */
-  const [search, setSearch] = useState("");
-  const [showFilters, setShowFilters] = useState(false);
-  const [selectedRarities, setSelectedRarities] = useState<Set<Rarity>>(
-    new Set(RARITY_ORDER),
-  );
-  const [selectedCollections, setSelectedCollections] = useState<
-    Set<SpeciesCollection>
-  >(new Set(ALL_COLLECTIONS));
-  const [showMode, setShowMode] = useState<"all" | "found" | "missing">(
-    "found",
-  );
-  const [showPending, setShowPending] = useState(false);
-  const [showMaxed, setShowMaxed] = useState(false);
+  /* ── Filter state (persisted to sessionStorage) ──────────────── */
+  const {
+    search,
+    setSearch,
+    showFilters,
+    setShowFilters,
+    selectedRarities,
+    setSelectedRarities,
+    selectedCollections,
+    setSelectedCollections,
+    showMode,
+    setShowMode,
+    showPending,
+    setShowPending,
+    showMaxed,
+    setShowMaxed,
+    resetFilters,
+  } = useGalleryFilters(RARITY_ORDER, ALL_COLLECTIONS);
 
   const toggleRarity = (r: Rarity) => {
-    setSelectedRarities((prev) => {
+    setSelectedRarities((prev: Set<string>) => {
       const next = new Set(prev);
       if (next.has(r)) next.delete(r);
       else next.add(r);
@@ -144,7 +149,7 @@ export function GalleryView() {
   };
 
   const toggleCollection = (c: SpeciesCollection) => {
-    setSelectedCollections((prev) => {
+    setSelectedCollections((prev: Set<string>) => {
       const next = new Set(prev);
       if (next.has(c)) next.delete(c);
       else next.add(c);
@@ -492,13 +497,7 @@ export function GalleryView() {
             {/* Reset filters */}
             {!isDefaultFilters && (
               <button
-                onClick={() => {
-                  setSelectedRarities(new Set(RARITY_ORDER));
-                  setSelectedCollections(new Set(ALL_COLLECTIONS));
-                  setShowMode("all");
-                  setShowPending(false);
-                  setShowMaxed(false);
-                }}
+                onClick={resetFilters}
                 className="text-xs text-clay-500 hover:text-clay-600 underline underline-offset-2 transition-colors"
               >
                 {t("gallery.resetFilters")}
