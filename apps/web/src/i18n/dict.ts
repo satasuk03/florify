@@ -250,9 +250,6 @@ export const dict = {
     "checkin.maxBonus": "โบนัสเต็ม!",
 
     // ── Harvest overlay ────────────────────────
-    "harvest.headline.common": "ต้นไม้ใหม่ 🌿",
-    "harvest.headline.rare": "พบของหายาก ✨",
-    "harvest.headline.legendary": "บานสะพรั่งในตำนาน 🌼",
     "harvest.unlocked": "ปลดล็อก!",
     "harvest.waterings": "ใช้ {count} หยด · เก็บเข้า Gallery แล้ว",
     "harvest.collect": "เก็บเข้า Gallery",
@@ -545,9 +542,6 @@ export const dict = {
     "checkin.maxBonus": "Max bonus!",
 
     // ── Harvest overlay ────────────────────────
-    "harvest.headline.common": "New addition 🌿",
-    "harvest.headline.rare": "Rare find ✨",
-    "harvest.headline.legendary": "Legendary bloom 🌼",
     "harvest.unlocked": "UNLOCKED!",
     "harvest.waterings": "{count} drops used · Added to Gallery",
     "harvest.collect": "Add to Gallery",

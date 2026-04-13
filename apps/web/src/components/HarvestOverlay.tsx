@@ -8,9 +8,9 @@ import { FloraImage } from '@/components/FloraImage';
 import { HarvestConfetti } from '@/components/HarvestConfetti';
 import { SPECIES, SpeciesCollection, COLLECTION_LABELS } from '@/data/species';
 import { useT, useLanguage } from '@/i18n/useT';
+import { pickHarvestHeadline } from '@/i18n/harvestHeadlines';
 import { shareSpecies } from '@/lib/shareSpecies';
 import { useGameStore } from '@/store/gameStore';
-import type { DictKey } from '@/i18n/dict';
 
 /**
  * Full-screen harvest celebration.
@@ -40,12 +40,6 @@ const GLOW: Record<Rarity, string> = {
   legendary: 'radial-gradient(closest-side, rgba(212, 162, 76, 0.65), rgba(251, 248, 243, 0) 70%)',
 };
 
-
-const HEADLINE_KEY: Record<Rarity, DictKey> = {
-  common: 'harvest.headline.common',
-  rare: 'harvest.headline.rare',
-  legendary: 'harvest.headline.legendary',
-};
 
 /** Trim a description down to a single glanceable teaser. Cuts at a
  *  word boundary so we don't leave a mangled syllable behind. */
@@ -94,7 +88,7 @@ export function HarvestOverlay({ tree, isNew = false, pityPointsGained, pityRewa
   if (!tree) return null;
 
   const species = SPECIES[tree.speciesId];
-  const headline = t(HEADLINE_KEY[tree.rarity]);
+  const headline = pickHarvestHeadline(lang, tree.rarity, tree.id);
   const description = species
     ? lang === 'th'
       ? species.descriptionTH
@@ -220,12 +214,12 @@ export function HarvestOverlay({ tree, isNew = false, pityPointsGained, pityRewa
         <div className="animate-fade-up" style={{ animationDelay: '200ms' }}>
           <RarityBadge rarity={tree.rarity} />
         </div>
-        <h2
-          className="font-serif text-3xl text-ink-900 animate-fade-up"
+        <p
+          className="font-serif italic text-sm text-ink-500 animate-fade-up"
           style={{ animationDelay: '260ms' }}
         >
           {headline}
-        </h2>
+        </p>
         {isNew && (
           <div
             className="animate-fade-up flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-clay-500 to-[#D4A24C] text-cream-50 text-xs font-bold tracking-[0.2em] uppercase shadow-sm ring-1 ring-[#D4A24C]/40"
