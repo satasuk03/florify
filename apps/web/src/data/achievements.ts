@@ -402,6 +402,65 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
     },
   },
 
+  // ── Collection: Sets — Celestial Court (3 tiers) ───────────────────
+  {
+    id: "set_celestial_5",
+    name: "Celestial Initiate",
+    badge: { shield: "silver", emoji: "⭐" },
+    description: {
+      en: "Collect 5 Celestial Court flora",
+      th: "สะสม 5 Celestial Court",
+    },
+    flavor: {
+      en: "The stars whisper your name.",
+      th: "ดวงดาวเริ่มกระซิบชื่อคุณ",
+    },
+    rewards: [{ type: "sprouts", amount: 100 }],
+    condition: {
+      type: "species_by_collection",
+      collection: "celestial-court",
+      target: 5,
+    },
+  },
+  {
+    id: "set_celestial_10",
+    name: "Celestial Courtier",
+    badge: { shield: "gold", emoji: "⭐" },
+    description: {
+      en: "Collect 10 Celestial Court flora",
+      th: "สะสม 10 Celestial Court",
+    },
+    flavor: {
+      en: "You walk among the constellations.",
+      th: "คุณเดินเคียงข้างหมู่ดาว",
+    },
+    rewards: [{ type: "sprouts", amount: 300 }],
+    condition: {
+      type: "species_by_collection",
+      collection: "celestial-court",
+      target: 10,
+    },
+  },
+  {
+    id: "set_celestial_15",
+    name: "Celestial Sovereign",
+    badge: { shield: "purple-gradient", emoji: "⭐" },
+    description: {
+      en: "Collect 15 Celestial Court flora",
+      th: "สะสม 15 Celestial Court",
+    },
+    flavor: {
+      en: "The heavens bow to your garden.",
+      th: "สวรรค์โค้งคำนับสวนของคุณ",
+    },
+    rewards: [{ type: "sprouts", amount: 1000 }],
+    condition: {
+      type: "species_by_collection",
+      collection: "celestial-court",
+      target: 15,
+    },
+  },
+
   // ── Harvest: Total (6 tiers) ───────────────────────────────────────
   {
     id: "harvest_total_10",
