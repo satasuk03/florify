@@ -9,6 +9,8 @@
     "banner": "tsx src/generate-banner.ts",
     "nanobanana": "tsx src/nanobanana.ts",
     "grok": "tsx src/grok.ts",
+    "rembg": "tsx src/rembg.ts",
+    "finalize-character": "tsx src/finalize-character.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
