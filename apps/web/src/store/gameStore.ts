@@ -4,11 +4,19 @@ import {
   BOOSTER_COST_COMMON,
   BOOSTER_COST_RARE,
   BOOSTER_COST_LEGENDARY,
+  COSMETIC_BOX_COST,
   CHECKIN_BASE_DROPS,
   CHECKIN_STREAK_BONUS_MAX,
   DAILY_MISSION_COUNT,
   FIRST_FLORA_COST,
   FLORA_LEVEL_CURVE,
+  GOLD_HARVEST_COMMON,
+  GOLD_HARVEST_RARE,
+  GOLD_HARVEST_LEGENDARY,
+  rollCosmeticBoxDrop,
+  type CosmeticBoxDrop,
+  type CosmeticType,
+  type CollectedCosmetic,
   FLORA_MAX_LEVEL,
   MAX_PENDING_MERGES,
   MAX_WATER_COST,
@@ -45,6 +53,8 @@ import {
 } from '@florify/shared';
 import { DROP_REGEN_MS } from '@/lib/debug';
 import { SPECIES, SPECIES_BY_ID, SPECIES_BY_RARITY } from '@/data/species';
+import { CHARACTERS_BY_RARITY, CHARACTERS_BY_ID } from '@/data/characters';
+import { BACKGROUNDS_BY_RARITY, BACKGROUNDS_BY_ID } from '@/data/backgrounds';
 import { RARITY_ROLL_WEIGHTS } from '@/data/rarityWeights';
 import { BOOSTER_ROLL_WEIGHTS } from '@/data/boosterWeights';
 import { ACHIEVEMENTS_BY_ID } from '@/data/achievements';
@@ -73,6 +83,7 @@ export interface WaterResult {
   pityPointsGained?: number;
   pityReward?: { speciesId: number; rarity: Rarity };
   sproutsGained?: number;
+  goldGained?: number;
 }
 
 export type FloristRank = 'Seedling' | 'Apprentice' | 'Gardener' | 'Master' | 'Legend';
@@ -179,6 +190,14 @@ export interface BoosterResult {
   sproutsGained: number;
 }
 
+export interface CosmeticBoxResult {
+  type: CosmeticType;
+  drop: CosmeticBoxDrop;                          // raw roll for UI / analytics
+  item?: { id: number; rarity: Rarity; isNew: boolean };
+  goldAmount?: number;                            // set when drop.kind === 'gold'
+  dropsAmount?: number;                           // set when drop.kind === 'drops'
+}
+
 export interface GameStore {
   state: PlayerState;
   hydrated: boolean;
@@ -205,6 +224,11 @@ export interface GameStore {
 
   // Sprout currency / Shop
   openBooster: (tier: BoosterTier) => BoosterResult | null;
+
+  // Gold currency / Cosmetic boxes
+  openCosmeticBox: (type: CosmeticType) => CosmeticBoxResult | null;
+  equipCharacter: (id: number | null) => void;
+  equipBackground: (id: number | null) => void;
 
   // Daily missions
   ensureDailyMissions: () => void;
@@ -322,6 +346,12 @@ const SPROUT_GAIN: Record<Rarity, number> = {
   common: SPROUT_HARVEST_COMMON,
   rare: SPROUT_HARVEST_RARE,
   legendary: SPROUT_HARVEST_LEGENDARY,
+};
+
+const GOLD_GAIN: Record<Rarity, number> = {
+  common: GOLD_HARVEST_COMMON,
+  rare: GOLD_HARVEST_RARE,
+  legendary: GOLD_HARVEST_LEGENDARY,
 };
 
 // ── Booster cost per tier ───────────────────────────────────────────
@@ -508,7 +538,26 @@ export const useGameStore = create<GameStore>((set, get) => ({
   // ── Hydrate from localStorage on app start ────────────────────────
   hydrate: async () => {
     const loaded = await saveStore.load();
-    if (loaded) set({ state: loaded });
+    if (loaded) {
+      // Defensive backfill — a save persisted during mid-flight schema
+      // changes can arrive with its version marked current but the new
+      // fields undefined. Treat missing cosmetic fields as empty.
+      const patched: PlayerState = {
+        ...loaded,
+        gold: loaded.gold ?? 0,
+        characters: loaded.characters ?? [],
+        backgrounds: loaded.backgrounds ?? [],
+        equippedCharacterId: loaded.equippedCharacterId ?? null,
+        equippedBackgroundId: loaded.equippedBackgroundId ?? null,
+        stats: {
+          ...loaded.stats,
+          goldGained: loaded.stats?.goldGained ?? 0,
+          goldSpent: loaded.stats?.goldSpent ?? 0,
+          cosmeticBoxesOpened: loaded.stats?.cosmeticBoxesOpened ?? { character: 0, background: 0 },
+        },
+      };
+      set({ state: patched });
+    }
     get().checkinStreak();
     get().ensureDailyMissions();
     set({ hydrated: true });
@@ -583,6 +632,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         harvested.requiredWaterings, s.pityPoints,
       );
       const sproutsGained = SPROUT_GAIN[harvested.rarity];
+      const goldGained = GOLD_GAIN[harvested.rarity];
 
       const next: PlayerState = {
         ...s,
@@ -593,12 +643,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
         floraLevels: result.floraLevels,
         pityPoints: result.pityPoints,
         sprouts: s.sprouts + sproutsGained,
+        gold: s.gold + goldGained,
         stats: {
           ...s.stats,
           totalWatered: s.stats.totalWatered + 1,
           totalHarvested: s.stats.totalHarvested + 1,
           driedLeavesGained: s.stats.driedLeavesGained + result.pityPointsGained,
           sproutsGained: s.stats.sproutsGained + sproutsGained,
+          goldGained: s.stats.goldGained + goldGained,
           harvestByRarity: {
             ...s.stats.harvestByRarity,
             [harvested.rarity]: s.stats.harvestByRarity[harvested.rarity] + 1,
@@ -611,7 +663,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   
       gameEventBus.emit({ type: 'water' });
       gameEventBus.emit({ type: 'harvest', rarity: harvested.rarity, isNew: !isDuplicate });
-      return { ok: true, harvested, isNew: !isDuplicate, pityPointsGained: result.pityPointsGained, pityReward: result.pityReward, sproutsGained };
+      return { ok: true, harvested, isNew: !isDuplicate, pityPointsGained: result.pityPointsGained, pityReward: result.pityReward, sproutsGained, goldGained };
     }
 
     const next: PlayerState = {
@@ -1129,6 +1181,103 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set({ state: next });
     scheduleSave(next);
     return { ok: true, cost };
+  },
+
+  // ── Cosmetic boxes (characters + backgrounds) ────────────────────
+  openCosmeticBox: (type: CosmeticType): CosmeticBoxResult | null => {
+    const s = get().state;
+    if (s.gold < COSMETIC_BOX_COST) return null;
+
+    const drop = rollCosmeticBoxDrop();
+    const now = Date.now();
+
+    let gold = s.gold - COSMETIC_BOX_COST;
+    let waterDrops = s.waterDrops;
+    let characters = s.characters;
+    let backgrounds = s.backgrounds;
+    let itemResult: CosmeticBoxResult['item'];
+    let goldAmount = 0;
+    let dropsAmount = 0;
+
+    if (drop.kind === 'item') {
+      const pool = type === 'character'
+        ? CHARACTERS_BY_RARITY[drop.rarity]
+        : BACKGROUNDS_BY_RARITY[drop.rarity];
+      if (pool.length === 0) {
+        // Fallback: pool empty at this tier → convert to gold consolation
+        // so the box never returns "nothing". 20 gold is middle of the
+        // gold consolation band.
+        gold += 20;
+        itemResult = undefined;
+        goldAmount = 20;
+      } else {
+        const picked = pool[Math.floor(Math.random() * pool.length)]!;
+        const inv = type === 'character' ? characters : backgrounds;
+        const idx = inv.findIndex((c) => c.id === picked.id);
+        const isNew = idx < 0;
+        const nextInv: CollectedCosmetic[] = isNew
+          ? [{ id: picked.id, count: 1, firstObtainedAt: now }, ...inv]
+          : inv.map((c, i) => i === idx ? { ...c, count: c.count + 1 } : c);
+        if (type === 'character') characters = nextInv;
+        else backgrounds = nextInv;
+        itemResult = { id: picked.id, rarity: drop.rarity, isNew };
+      }
+    } else if (drop.kind === 'gold') {
+      gold += drop.amount;
+      goldAmount = drop.amount;
+    } else {
+      // drops — allowed to exceed MAX_WATER_DROPS per product direction.
+      // Regen math in computeDrops clamps to the cap going forward, so
+      // the overflow effectively pauses regen until it's spent down.
+      waterDrops = s.waterDrops + drop.amount;
+      dropsAmount = drop.amount;
+    }
+
+    const next: PlayerState = {
+      ...s,
+      gold,
+      waterDrops,
+      characters,
+      backgrounds,
+      stats: {
+        ...s.stats,
+        goldSpent: s.stats.goldSpent + COSMETIC_BOX_COST,
+        goldGained: s.stats.goldGained + goldAmount,
+        cosmeticBoxesOpened: {
+          ...s.stats.cosmeticBoxesOpened,
+          [type]: s.stats.cosmeticBoxesOpened[type] + 1,
+        },
+      },
+      updatedAt: now,
+    };
+    set({ state: next });
+    scheduleSave(next);
+
+    return {
+      type,
+      drop,
+      item: itemResult,
+      goldAmount: goldAmount || undefined,
+      dropsAmount: dropsAmount || undefined,
+    };
+  },
+
+  equipCharacter: (id: number | null) => {
+    const s = get().state;
+    if (id !== null && !s.characters.some((c) => c.id === id)) return;
+    if (id !== null && !CHARACTERS_BY_ID[id]) return;
+    const next: PlayerState = { ...s, equippedCharacterId: id, updatedAt: Date.now() };
+    set({ state: next });
+    scheduleSave(next);
+  },
+
+  equipBackground: (id: number | null) => {
+    const s = get().state;
+    if (id !== null && !s.backgrounds.some((b) => b.id === id)) return;
+    if (id !== null && !BACKGROUNDS_BY_ID[id]) return;
+    const next: PlayerState = { ...s, equippedBackgroundId: id, updatedAt: Date.now() };
+    set({ state: next });
+    scheduleSave(next);
   },
 }));
 

@@ -351,7 +351,7 @@ describe('selectFloristCard', () => {
           mockCollected({ speciesId: 250, rarity: 'rare' }),
           mockCollected({ speciesId: 290, rarity: 'legendary' }),
         ],
-        stats: { totalPlanted: 4, totalWatered: 20, totalHarvested: 4, driedLeavesGained: 0, sproutsGained: 0, sproutsSpent: 0, shopPurchases: { common: 0, rare: 0, legendary: 0 }, harvestByRarity: { common: 0, rare: 0, legendary: 0 }, comboCount: { combo10: 0, combo15: 0, combo20: 0 }, seedPacketsOpened: { total: 0, common: 0, rare: 0, legendary: 0 }, missionsCompleted: 0, allDailyMissionsCompleted: 0 },
+        stats: { totalPlanted: 4, totalWatered: 20, totalHarvested: 4, driedLeavesGained: 0, sproutsGained: 0, sproutsSpent: 0, goldGained: 0, goldSpent: 0, shopPurchases: { common: 0, rare: 0, legendary: 0 }, cosmeticBoxesOpened: { character: 0, background: 0 }, harvestByRarity: { common: 0, rare: 0, legendary: 0 }, comboCount: { combo10: 0, combo15: 0, combo20: 0 }, seedPacketsOpened: { total: 0, common: 0, rare: 0, legendary: 0 }, missionsCompleted: 0, allDailyMissionsCompleted: 0 },
       },
     }));
     const card = selectFloristCard(useGameStore.getState().state);
@@ -420,7 +420,7 @@ describe('resetAllProgress', () => {
         ...s.state,
         activeTree: mockTree(),
         collection: [mockCollected()],
-        stats: { totalPlanted: 5, totalWatered: 10, totalHarvested: 2, driedLeavesGained: 0, sproutsGained: 0, sproutsSpent: 0, shopPurchases: { common: 0, rare: 0, legendary: 0 }, harvestByRarity: { common: 0, rare: 0, legendary: 0 }, comboCount: { combo10: 0, combo15: 0, combo20: 0 }, seedPacketsOpened: { total: 0, common: 0, rare: 0, legendary: 0 }, missionsCompleted: 0, allDailyMissionsCompleted: 0 },
+        stats: { totalPlanted: 5, totalWatered: 10, totalHarvested: 2, driedLeavesGained: 0, sproutsGained: 0, sproutsSpent: 0, goldGained: 0, goldSpent: 0, shopPurchases: { common: 0, rare: 0, legendary: 0 }, cosmeticBoxesOpened: { character: 0, background: 0 }, harvestByRarity: { common: 0, rare: 0, legendary: 0 }, comboCount: { combo10: 0, combo15: 0, combo20: 0 }, seedPacketsOpened: { total: 0, common: 0, rare: 0, legendary: 0 }, missionsCompleted: 0, allDailyMissionsCompleted: 0 },
       },
     }));
     useGameStore.getState().resetAllProgress();

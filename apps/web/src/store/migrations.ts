@@ -21,6 +21,7 @@ export function migrate(state: UnknownState): PlayerState {
   if (s.schemaVersion === 10) s = migrateV10toV11(s);
   if (s.schemaVersion === 11) s = migrateV11toV12(s);
   if (s.schemaVersion === 12) s = migrateV12toV13(s);
+  if (s.schemaVersion === 13) s = migrateV13toV14(s);
   if (s.schemaVersion !== SCHEMA_VERSION) {
     console.warn(`[migrate] unknown schemaVersion ${s.schemaVersion}, falling back to as-is`);
   }
@@ -246,6 +247,29 @@ function migrateV12toV13(s: UnknownState): UnknownState {
     passportCustomization: {
       titleSource,
       avatar: oldCustom.avatar ?? null,
+    },
+  };
+}
+
+// v13 → v14: introduce gold currency and cosmetic inventories.
+// Existing players start with zero gold and empty character/background
+// collections; they'll earn gold on the next harvest and browse the shop
+// to buy cosmetic boxes.
+function migrateV13toV14(s: UnknownState): UnknownState {
+  const stats = (s.stats ?? {}) as Record<string, unknown>;
+  return {
+    ...s,
+    schemaVersion: 14,
+    gold: 0,
+    characters: [],
+    backgrounds: [],
+    equippedCharacterId: null,
+    equippedBackgroundId: null,
+    stats: {
+      ...stats,
+      goldGained: 0,
+      goldSpent: 0,
+      cosmeticBoxesOpened: { character: 0, background: 0 },
     },
   };
 }

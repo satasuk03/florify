@@ -14,6 +14,8 @@ import {
   WaterDropIcon,
   SproutIcon,
 } from "@/components/icons";
+import { PlotCharacterToggle, type ViewMode } from "@/components/PlotCharacterToggle";
+import { CharacterScene } from "@/components/CharacterScene";
 import { FloristCardSheet } from "@/components/florist-card/FloristCardSheet";
 import { GuideBookSheet } from "@/components/guidebook/GuideBookSheet";
 import { SettingsSheet } from "@/components/settings/SettingsSheet";
@@ -106,6 +108,7 @@ export function PlotView() {
   // one-shot droplet animation from the start. 0 means "never tapped",
   // which suppresses the initial render.
   const [splashKey, setSplashKey] = useState(0);
+  const [viewMode, setViewMode] = useState<ViewMode>('plot');
   const cardRef = useRef<HTMLDivElement>(null);
 
   // Plot phase state machine. Drives whether we show the seed packet,
@@ -190,7 +193,7 @@ export function PlotView() {
           Gated on `phase === 'tree'` rather than `tree` directly so the
           seed packet has time to finish its opening sequence before the
           flora mounts and plays its stage-in animation. */}
-      {tree && phase === "tree" && (
+      {viewMode === "plot" && tree && phase === "tree" && (
         <HandheldFlora
           speciesId={tree.speciesId}
           progress={tree.currentWaterings / tree.requiredWaterings}
@@ -199,14 +202,14 @@ export function PlotView() {
 
       {/* Water droplet burst — remounts on every successful water tap
           via the `splashKey` counter so the keyframes replay cleanly. */}
-      {phase === "tree" && splashKey > 0 && <WaterSplash key={splashKey} />}
+      {viewMode === "plot" && phase === "tree" && splashKey > 0 && <WaterSplash key={splashKey} />}
 
       {/* ─── SEED PACKET ───────────────────────────────────
           Centerpiece of the empty state; plays its opening sequence
           while the phase is 'opening'. Sized to ~62% of viewport
           width (capped at 280px) so it sits comfortably between the
           corner chrome and the bottom button on phone screens. */}
-      {phase !== "tree" && (
+      {viewMode === "plot" && phase !== "tree" && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <SeedPacket
             state={phase === "opening" ? "opening" : "idle"}
@@ -216,13 +219,9 @@ export function PlotView() {
         </div>
       )}
 
-      {/* ─── TOP-CENTER: Florify wordmark + active tree readout ─────
-          Identifies the app (Fraunces serif, same family as the passport
-          wordmark) and — when a tree is active — surfaces its species
-          name, a growth gauge, and the waterings tally. Sits between the
-          corner buttons; width is capped so it never collides with them. */}
+      {/* ─── TOP-CENTER: Florify wordmark + active tree readout ─── */}
       <div
-        className="absolute top-0 left-0 right-0 flex flex-col items-center pointer-events-none animate-fade-down"
+        className="absolute top-0 left-0 right-0 z-30 flex flex-col items-center pointer-events-none animate-fade-down"
         style={{
           paddingTop: "calc(env(safe-area-inset-top) + 0.9rem)",
           animationDelay: "60ms",
@@ -238,6 +237,7 @@ export function PlotView() {
           Florify
         </div>
       </div>
+      {viewMode === "plot" && (<>
       {/* Readout card lives OUTSIDE the animate-fade-down wrapper above.
           That wrapper's keyframes leave `transform: translateY(0)` set via
           `animation-fill-mode: both`, which creates a stacking context and
@@ -250,7 +250,7 @@ export function PlotView() {
         <div
           className="absolute left-0 right-0 flex justify-center pointer-events-none"
           style={{
-            top: "calc(env(safe-area-inset-top) + 3.8rem)",
+            top: "calc(env(safe-area-inset-top) + 6rem)",
           }}
         >
           <div
@@ -294,6 +294,18 @@ export function PlotView() {
           </div>
         </div>
       )}
+      </>)}
+
+      {/* ─── TOP-CENTER: Plot ⇄ Character toggle (below wordmark) ── */}
+      <div
+        className="absolute top-0 left-0 right-0 flex justify-center z-20 pointer-events-none animate-fade-down"
+        style={{ paddingTop: "calc(env(safe-area-inset-top) + 3.5rem)" }}
+      >
+        <PlotCharacterToggle mode={viewMode} onChange={setViewMode} />
+      </div>
+
+      {/* ─── CHARACTER SCENE (replaces plot canvas) ─────── */}
+      {viewMode === "character" && <CharacterScene />}
 
       {/* ─── TOP-LEFT: Gallery + Language toggle ───────── */}
       <div
@@ -363,6 +375,7 @@ export function PlotView() {
       </div>
 
       {/* ─── BOTTOM CENTER ACTION ──────────────────────── */}
+      {viewMode === "plot" && (
       <div
         className="absolute bottom-0 left-0 right-0 flex flex-col items-center pointer-events-none animate-fade-up overflow-visible"
         style={{
@@ -398,6 +411,7 @@ export function PlotView() {
           ) : null}
         </div>
       </div>
+      )}
 
       <CheckinModal open={showCheckin} onClose={() => setShowCheckin(false)} />
       <DailyMissionSheet

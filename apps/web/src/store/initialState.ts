@@ -22,6 +22,9 @@ export function createInitialState(): PlayerState {
       seedPacketsOpened: { total: 0, common: 0, rare: 0, legendary: 0 },
       missionsCompleted: 0,
       allDailyMissionsCompleted: 0,
+      goldGained: 0,
+      goldSpent: 0,
+      cosmeticBoxesOpened: { character: 0, background: 0 },
     },
     streak: { currentStreak: 0, longestStreak: 0, lastCheckinDate: '', lastRewardDate: '' },
     pityPoints: 0,
@@ -44,5 +47,10 @@ export function createInitialState(): PlayerState {
       titleSource: { type: 'auto' },
       avatar: null,
     },
+    gold: 0,
+    characters: [],
+    backgrounds: [],
+    equippedCharacterId: null,
+    equippedBackgroundId: null,
   };
 }

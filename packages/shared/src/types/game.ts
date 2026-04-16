@@ -127,12 +127,24 @@ export interface PlayerStats {
   driedLeavesGained: number;
   sproutsGained: number;
   sproutsSpent: number;
+  goldGained: number;
+  goldSpent: number;
   shopPurchases: ShopPurchases;
+  cosmeticBoxesOpened: { character: number; background: number };
   harvestByRarity: { common: number; rare: number; legendary: number };
   comboCount: { combo10: number; combo15: number; combo20: number };
   seedPacketsOpened: { total: number; common: number; rare: number; legendary: number };
   missionsCompleted: number;
   allDailyMissionsCompleted: number;
+}
+
+// ── Cosmetics (characters + backgrounds) ───────────────────────────
+export type CosmeticType = 'character' | 'background';
+
+export interface CollectedCosmetic {
+  id: number;
+  count: number;              // stacked duplicates (always >= 1)
+  firstObtainedAt: number;    // epoch ms
 }
 
 export interface ProducerState {
@@ -163,7 +175,7 @@ export interface PassportCustomization {
 }
 
 export interface PlayerState {
-  schemaVersion: 13;
+  schemaVersion: 14;
   userId: string;              // local nanoid; linked to a cloud account later
   displayName: string;         // user-editable; 'Guest' until renamed
   createdAt: number;
@@ -181,6 +193,11 @@ export interface PlayerState {
   producer: ProducerState;       // idle reward machine — accumulates over 24h, claimed manually
   floraLevels: Record<number, FloraLevelEntry>;
   passportCustomization: PassportCustomization; // Florist Card title + avatar picker
+  gold: number;                                 // 🪙 currency — no cap; earned from harvest, spent on cosmetic boxes
+  characters: CollectedCosmetic[];              // owned character cosmetics
+  backgrounds: CollectedCosmetic[];             // owned background cosmetics
+  equippedCharacterId: number | null;           // null = placeholder silhouette
+  equippedBackgroundId: number | null;          // null = placeholder scene
 }
 
 export type Language = 'th' | 'en';

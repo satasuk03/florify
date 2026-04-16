@@ -20,9 +20,11 @@ import { SPECIES } from '@/data/species';
 
 const SPROUT_AMOUNTS = [100, 500, 1000, 5000] as const;
 const DROP_AMOUNTS = [10, 25, 50] as const;
+const GOLD_AMOUNTS = [100, 500, 1000, 5000] as const;
 
 export default function DebugPage() {
   const sprouts = useGameStore((s) => s.state.sprouts);
+  const gold = useGameStore((s) => s.state.gold ?? 0);
   const waterDrops = useGameStore((s) => s.waterDrops());
   const missions = useGameStore((s) => s.state.dailyMissions.missions);
   const [lastAction, setLastAction] = useState('');
@@ -47,6 +49,19 @@ export default function DebugPage() {
     useGameStore.setState({ state: next });
     scheduleSave(next);
     setLastAction(`+${amount} 🌱`);
+  };
+
+  const addGold = (amount: number) => {
+    const s = useGameStore.getState().state;
+    const next = {
+      ...s,
+      gold: (s.gold ?? 0) + amount,
+      stats: { ...s.stats, goldGained: (s.stats.goldGained ?? 0) + amount },
+      updatedAt: Date.now(),
+    };
+    useGameStore.setState({ state: next });
+    scheduleSave(next);
+    setLastAction(`+${amount} 🪙`);
   };
 
   const addDrops = (amount: number) => {
@@ -105,10 +120,14 @@ export default function DebugPage() {
 
       <div className="flex-1 flex flex-col gap-8 px-6 pb-8">
         {/* Current values */}
-        <div className="flex justify-center gap-6">
+        <div className="flex justify-center gap-6 flex-wrap">
           <div className="text-center">
             <div className="font-mono text-2xl font-bold text-ink-900 tabular-nums">🌱 {sprouts}</div>
             <div className="text-xs text-ink-400 mt-0.5">Sprouts</div>
+          </div>
+          <div className="text-center">
+            <div className="font-mono text-2xl font-bold text-ink-900 tabular-nums">🪙 {gold}</div>
+            <div className="text-xs text-ink-400 mt-0.5">Gold</div>
           </div>
           <div className="text-center">
             <div className="font-mono text-2xl font-bold text-ink-900 tabular-nums">💧 {waterDrops}</div>
@@ -129,6 +148,18 @@ export default function DebugPage() {
             {SPROUT_AMOUNTS.map((amt) => (
               <Button key={amt} size="md" onClick={() => addSprouts(amt)} className="w-full">
                 +{amt} 🌱
+              </Button>
+            ))}
+          </div>
+        </section>
+
+        {/* Gold */}
+        <section className="w-full max-w-xs mx-auto space-y-3">
+          <div className="text-xs text-ink-400 uppercase tracking-wider text-center">Add Gold</div>
+          <div className="grid grid-cols-2 gap-2">
+            {GOLD_AMOUNTS.map((amt) => (
+              <Button key={amt} size="md" variant="secondary" onClick={() => addGold(amt)} className="w-full">
+                +{amt} 🪙
               </Button>
             ))}
           </div>

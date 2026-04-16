@@ -1,4 +1,4 @@
-export const SCHEMA_VERSION = 13 as const;
+export const SCHEMA_VERSION = 14 as const;
 export const CHECKIN_BASE_DROPS = 30;
 export const CHECKIN_STREAK_BONUS_MAX = 20;
 export const MAX_WATER_DROPS = 100;
@@ -19,6 +19,15 @@ export const SPROUT_QUEST_REFRESH_COST = 10;
 export const BOOSTER_COST_COMMON = 100;
 export const BOOSTER_COST_RARE = 300;
 export const BOOSTER_COST_LEGENDARY = 450;
+
+// ── Gold & cosmetic boxes ──────────────────────────────────────────
+// Gold is a second currency earned by harvesting and spent on cosmetic
+// loot boxes (characters + backgrounds). Separate from sprouts so the
+// two progression tracks don't compete for the same wallet.
+export const GOLD_HARVEST_COMMON = 2;
+export const GOLD_HARVEST_RARE = 5;
+export const GOLD_HARVEST_LEGENDARY = 10;
+export const COSMETIC_BOX_COST = 100;
 
 // ── Producer (idle reward machine) ──────────────────────────────────
 // Two independent upgrade tracks (sprout + water), single claim button.

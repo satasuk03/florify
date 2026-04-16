@@ -269,6 +269,83 @@ export function ProducerIcon({ size = 22, className }: IconProps) {
   );
 }
 
+/** Bronze coin icon from vector-icon-pack-pro. Full-color SVG, not stroke-based. */
+export function CoinIcon({ size = 22, className }: IconProps) {
+  return (
+    <img
+      src="/icons/coin-bronze.svg"
+      alt=""
+      width={size}
+      height={size}
+      className={className}
+      aria-hidden
+      draggable={false}
+    />
+  );
+}
+
+export function CharacterBoxIcon({ size = 22, className }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.75"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden
+    >
+      <rect x="3" y="8" width="18" height="13" rx="1.5" />
+      <path d="M3 12 H21" />
+      <path d="M12 8 V21" />
+      <path d="M8 8 L12 4 L16 8" />
+    </svg>
+  );
+}
+
+export function BackgroundBoxIcon({ size = 22, className }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.75"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden
+    >
+      <rect x="3" y="5" width="18" height="14" rx="2" />
+      <path d="M3 16 L9 11 L14 15 L17 13 L21 16" />
+      <circle cx="8" cy="9" r="1.3" />
+    </svg>
+  );
+}
+
+export function CosmeticsIcon({ size = 22, className }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.75"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden
+    >
+      <path d="M12 21 S 4 15 4 9 A4 4 0 0 1 12 7 A4 4 0 0 1 20 9 C 20 15 12 21 12 21 Z" />
+    </svg>
+  );
+}
+
 export function ShopIcon({ size = 22, className }: IconProps) {
   return (
     <svg
