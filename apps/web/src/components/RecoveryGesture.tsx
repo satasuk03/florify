@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 
 /**
- * Secret gesture: tap top-left corner (60x60px) 5 times within 3 seconds
+ * Secret gesture: tap bottom-left corner (60x60px) 5 times within 3 seconds
  * to navigate to /recovery. Uses vanilla DOM events so it works even when
  * React event handlers are broken (the main use case for recovery).
  */
@@ -28,8 +28,8 @@ export function RecoveryGesture() {
         return;
       }
 
-      // Only count taps in top-left corner
-      if (x > ZONE_SIZE || y > ZONE_SIZE) {
+      // Only count taps in bottom-left corner
+      if (x > ZONE_SIZE || y < window.innerHeight - ZONE_SIZE) {
         taps.length = 0;
         return;
       }
