@@ -20,7 +20,7 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
   {
     id: "collect_rank_1",
     name: "Seedling Steps",
-    badge: { shield: "silver", emoji: "🌱" },
+    badge: { shield: "brown", emoji: "🌱" },
     description: { en: "Unlock 20 species", th: "ปลดล็อค 20 สายพันธุ์" },
     flavor: {
       en: "Every botanist starts with a single sprout.",
@@ -32,7 +32,7 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
   {
     id: "collect_rank_2",
     name: "Apprentice Botanist",
-    badge: { shield: "gold", emoji: "📗" },
+    badge: { shield: "green", emoji: "📗" },
     description: { en: "Unlock 75 species", th: "ปลดล็อค 75 สายพันธุ์" },
     flavor: {
       en: "Your notebook is getting thicker.",
@@ -44,7 +44,7 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
   {
     id: "collect_rank_3",
     name: "Gardener's Pride",
-    badge: { shield: "purple-gradient", emoji: "🌳" },
+    badge: { shield: "blue", emoji: "🌳" },
     description: { en: "Unlock 150 species", th: "ปลดล็อค 150 สายพันธุ์" },
     flavor: {
       en: "The garden has started to know you.",
@@ -56,7 +56,7 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
   {
     id: "collect_rank_4",
     name: "Master Cultivator",
-    badge: { shield: "rainbow", emoji: "👑" },
+    badge: { shield: "bronze", emoji: "👑" },
     description: { en: "Unlock 250 species", th: "ปลดล็อค 250 สายพันธุ์" },
     flavor: {
       en: "The plants call you sensei now.",
@@ -64,6 +64,42 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
     },
     rewards: [{ type: "sprouts", amount: 1000 }],
     condition: { type: "species_unlocked", target: 250 },
+  },
+  {
+    id: "collect_rank_5",
+    name: "Flora Sage",
+    badge: { shield: "silver", emoji: "🧙" },
+    description: { en: "Unlock 300 species", th: "ปลดล็อค 300 สายพันธุ์" },
+    flavor: {
+      en: "The plants whisper their secrets now.",
+      th: "ต้นไม้กระซิบความลับให้ฟังแล้ว",
+    },
+    rewards: [{ type: "sprouts", amount: 1500 }],
+    condition: { type: "species_unlocked", target: 300 },
+  },
+  {
+    id: "collect_rank_6",
+    name: "Garden Oracle",
+    badge: { shield: "gold", emoji: "🔮" },
+    description: { en: "Unlock 350 species", th: "ปลดล็อค 350 สายพันธุ์" },
+    flavor: {
+      en: "You see what the garden will become.",
+      th: "คุณเห็นอนาคตของสวนได้",
+    },
+    rewards: [{ type: "sprouts", amount: 2000 }],
+    condition: { type: "species_unlocked", target: 350 },
+  },
+  {
+    id: "collect_rank_7",
+    name: "Flora Ascendant",
+    badge: { shield: "rainbow", emoji: "✨" },
+    description: { en: "Unlock 400 species", th: "ปลดล็อค 400 สายพันธุ์" },
+    flavor: {
+      en: "You've transcended the garden itself.",
+      th: "คุณข้ามพ้นสวนไปแล้ว",
+    },
+    rewards: [{ type: "sprouts", amount: 3000 }],
+    condition: { type: "species_unlocked", target: 400 },
   },
 
   // ── Collection: Common (4 tiers) ───────────────────────────────────
@@ -399,6 +435,84 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
       type: "species_by_collection",
       collection: "abyssal-garden",
       target: 100,
+    },
+  },
+
+  // ── Collection: Sets — Celestial Court (4 tiers) ───────────────────
+  {
+    id: "set_celestial_5",
+    name: "Court Initiate",
+    badge: { shield: "silver", emoji: "☁️" },
+    description: {
+      en: "Collect 5 Celestial Court flora",
+      th: "สะสม 5 Celestial Court",
+    },
+    flavor: {
+      en: "The gates of heaven creak open.",
+      th: "ประตูสวรรค์เริ่มเปิดแล้ว",
+    },
+    rewards: [{ type: "sprouts", amount: 200 }],
+    condition: {
+      type: "species_by_collection",
+      collection: "celestial-court",
+      target: 5,
+    },
+  },
+  {
+    id: "set_celestial_10",
+    name: "Court Acolyte",
+    badge: { shield: "gold", emoji: "☁️" },
+    description: {
+      en: "Collect 10 Celestial Court flora",
+      th: "สะสม 10 Celestial Court",
+    },
+    flavor: {
+      en: "Myths gather in your garden.",
+      th: "ตำนานมารวมตัวในสวนคุณ",
+    },
+    rewards: [{ type: "sprouts", amount: 500 }],
+    condition: {
+      type: "species_by_collection",
+      collection: "celestial-court",
+      target: 10,
+    },
+  },
+  {
+    id: "set_celestial_15",
+    name: "Court Noble",
+    badge: { shield: "purple-gradient", emoji: "☁️" },
+    description: {
+      en: "Collect 15 Celestial Court flora",
+      th: "สะสม 15 Celestial Court",
+    },
+    flavor: {
+      en: "The pantheon knows your name.",
+      th: "เทพเจ้าจำชื่อคุณได้แล้ว",
+    },
+    rewards: [{ type: "sprouts", amount: 1500 }],
+    condition: {
+      type: "species_by_collection",
+      collection: "celestial-court",
+      target: 15,
+    },
+  },
+  {
+    id: "set_celestial_20",
+    name: "Court Sovereign",
+    badge: { shield: "rainbow", emoji: "☁️" },
+    description: {
+      en: "Collect all 20 Celestial Court flora",
+      th: "สะสม 20 Celestial Court ครบ",
+    },
+    flavor: {
+      en: "All 20 myths. You sit among gods.",
+      th: "ครบ 20 คุณนั่งร่วมกับเทพเจ้าแล้ว",
+    },
+    rewards: [{ type: "sprouts", amount: 5000 }],
+    condition: {
+      type: "species_by_collection",
+      collection: "celestial-court",
+      target: 20,
     },
   },
 
