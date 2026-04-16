@@ -11,6 +11,7 @@ import { useT, useLanguage } from '@/i18n/useT';
 import { pickHarvestHeadline } from '@/i18n/harvestHeadlines';
 import { shareSpecies } from '@/lib/shareSpecies';
 import { useGameStore } from '@/store/gameStore';
+import { CoinIcon } from '@/components/icons';
 
 /**
  * Full-screen harvest celebration.
@@ -30,6 +31,7 @@ interface Props {
   pityPointsGained?: number;
   pityReward?: { speciesId: number; rarity: Rarity };
   sproutsGained?: number;
+  goldGained?: number;
   source?: 'harvest' | 'booster';
   onDismiss: () => void;
 }
@@ -62,7 +64,7 @@ interface FlyState {
  *  overlay dismisses the frame the clone lands, not before. */
 const FLY_DURATION_MS = 720;
 
-export function HarvestOverlay({ tree, isNew = false, pityPointsGained, pityReward, sproutsGained, source = 'harvest', onDismiss }: Props) {
+export function HarvestOverlay({ tree, isNew = false, pityPointsGained, pityReward, sproutsGained, goldGained, source = 'harvest', onDismiss }: Props) {
   const t = useT();
   const lang = useLanguage();
   const displayName = useGameStore((s) => s.state.displayName);
@@ -272,6 +274,15 @@ export function HarvestOverlay({ tree, isNew = false, pityPointsGained, pityRewa
             style={{ animationDelay: '460ms' }}
           >
             🌱 +{sproutsGained}
+          </p>
+        )}
+
+        {goldGained != null && goldGained > 0 && (
+          <p
+            className="text-sm text-amber-600 font-medium animate-fade-up inline-flex items-center gap-1"
+            style={{ animationDelay: '480ms' }}
+          >
+            <CoinIcon size={16} /> +{goldGained}
           </p>
         )}
 

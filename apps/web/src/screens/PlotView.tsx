@@ -103,6 +103,7 @@ export function PlotView() {
     { speciesId: number; rarity: import("@florify/shared").Rarity } | undefined
   >();
   const [sproutsGained, setSproutsGained] = useState(0);
+  const [goldGained, setGoldGained] = useState(0);
   // Monotonic counter keyed onto <WaterSplash> — incrementing it on
   // every successful water tap remounts the component and replays its
   // one-shot droplet animation from the start. 0 means "never tapped",
@@ -165,6 +166,7 @@ export function PlotView() {
       setPityPointsGained(result.pityPointsGained ?? 0);
       setPityReward(result.pityReward);
       setSproutsGained(result.sproutsGained ?? 0);
+      setGoldGained(result.goldGained ?? 0);
     }
   };
 
@@ -444,6 +446,7 @@ export function PlotView() {
         pityPointsGained={pityPointsGained}
         pityReward={pityReward}
         sproutsGained={sproutsGained}
+        goldGained={goldGained}
         onDismiss={() => {
           setHarvested(null);
           setHarvestedIsNew(false);
