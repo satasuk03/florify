@@ -24,6 +24,16 @@ import { useGalleryFilters } from "@/hooks/useSessionState";
 
 const RARITY_ORDER: Rarity[] = ["common", "rare", "legendary"];
 
+/* ── Level → star mapping ───────────────────────────────────────── */
+function starCount(level: number): number {
+  return level <= 3 ? level : 3;
+}
+function starSrc(level: number): string {
+  if (level <= 3) return "/icons/star-gold.svg";
+  if (level === 4) return "/icons/star-blue.svg";
+  return "/icons/star-rainbow.svg";
+}
+
 /* ── Icons (inline SVGs to avoid extra deps) ────────────────────── */
 function SearchIcon() {
   return (
@@ -697,23 +707,27 @@ const GalleryTile = memo(function GalleryTile({
             className="absolute top-7 right-1.5 w-2 h-2 rounded-full bg-yellow-400 animate-pulse"
           />
         )}
-        {/* Harvest count — bottom-left (existing position preserved) */}
-        {count > 1 && (
-          <div className="absolute bottom-1 left-1 bg-ink-900/60 text-cream-50 text-[10px] font-medium px-1.5 py-0.5 rounded-full backdrop-blur-sm">
-            ×{count}
+        {/* Star badge — bottom-left (replaces text level badge) */}
+        {level !== null && (
+          <div className="absolute bottom-1 left-1 flex items-center gap-0.5 px-1 py-0.5 rounded-full bg-cream-50/70 backdrop-blur-sm">
+            {Array.from({ length: starCount(level) }).map((_, i) => (
+              <img
+                key={i}
+                src={starSrc(level)}
+                alt=""
+                width={12}
+                height={12}
+                aria-hidden
+                draggable={false}
+              />
+            ))}
           </div>
         )}
-        {/* Level badge — bottom-right */}
-        {level !== null && level > 1 && (
-          <span
-            className={`absolute bottom-1 right-1 text-[10px] font-semibold px-1.5 py-0.5 rounded-full ${
-              level === FLORA_MAX_LEVEL
-                ? "bg-cream-50/90 text-amber-700 ring-1 ring-amber-400"
-                : "bg-cream-50/80 text-ink-700"
-            }`}
-          >
-            {level === FLORA_MAX_LEVEL ? "✦ Lv 5 ✦" : `Lv ${level}`}
-          </span>
+        {/* Harvest count — bottom-right */}
+        {count > 1 && (
+          <div className="absolute bottom-1 right-1 bg-ink-900/60 text-cream-50 text-[10px] font-medium px-1.5 py-0.5 rounded-full backdrop-blur-sm">
+            ×{count}
+          </div>
         )}
       </Card>
       <div className="text-xs mt-1 text-ink-700 truncate">{species.name}</div>
