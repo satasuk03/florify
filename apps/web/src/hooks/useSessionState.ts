@@ -100,7 +100,7 @@ export function useGalleryFilters(
   const resetFilters = useCallback(() => {
     setSelectedRarities(new Set(allRarities));
     setSelectedCollections(new Set(allCollections));
-    setShowMode("all");
+    setShowMode("found");
     setShowPending(false);
     setShowMaxed(false);
   }, [allRarities, allCollections]);

@@ -51,6 +51,7 @@
     var(--font-plex-thai), system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-serif:
     var(--font-fraunces), var(--font-noto-serif-thai), ui-serif, Georgia, serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
 /* ─── Base layer ───────────────────────────────────────────────── */
@@ -1223,6 +1224,150 @@
   100% {
     filter: hue-rotate(360deg);
   }
+}
+
+/* ── Herbarium Gallery ──────────────────────────────────────────── */
+/* Field-journal treatment for the gallery. Most layout is handled by
+   Tailwind utilities; the rules below are the bits that are awkward in
+   utility classes: the paper texture, tape corners, LATEST wax stamp,
+   and the radial gradient / dashed frame on each plate tile. */
+
+.hb-paper {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse 80% 60% at 50% 0%,
+      rgba(227, 215, 192, 0.35),
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 60% 80% at 50% 100%,
+      rgba(227, 215, 192, 0.3),
+      transparent 70%
+    ),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' seed='5'/><feColorMatrix values='0 0 0 0 0.42 0 0 0 0 0.34 0 0 0 0 0.23 0 0 0 0.08 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+/* ── Hero plate ── */
+.hb-hero-plate {
+  background: radial-gradient(circle at 50% 45%, #fefcf5 0%, #f6f0e2 80%);
+  border: 1px dashed var(--color-cream-400);
+  border-radius: 4px;
+}
+.hb-hero-plate::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, transparent 0%, rgba(227, 215, 192, 0.1) 100%),
+    radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.5), transparent 60%);
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* Tape corners — transparent amber with a dusty border */
+.hb-tape {
+  position: absolute;
+  width: 44px;
+  height: 16px;
+  background: rgba(212, 162, 76, 0.22);
+  border: 1px solid rgba(212, 162, 76, 0.35);
+  box-shadow: 0 1px 2px rgba(75, 55, 30, 0.1);
+  z-index: 2;
+}
+.hb-tape.tl { top: -7px;    left: 14px;  transform: rotate(-6deg); }
+.hb-tape.tr { top: -7px;    right: 14px; transform: rotate(5deg); }
+.hb-tape.bl { bottom: -7px; left: 14px;  transform: rotate(4deg); }
+.hb-tape.br { bottom: -7px; right: 14px; transform: rotate(-5deg); }
+
+/* LATEST wax stamp — concentric rings, clay tone */
+.hb-stamp-ring {
+  width: 64px;
+  height: 64px;
+  border: 1.5px solid rgba(169, 104, 66, 0.6);
+  border-radius: 50%;
+  padding: 4px;
+  box-shadow: inset 0 0 0 1.5px rgba(169, 104, 66, 0.3);
+  background: rgba(254, 251, 244, 0.85);
+}
+.hb-stamp-inner {
+  width: 100%;
+  height: 100%;
+  border: 1px dashed rgba(169, 104, 66, 0.5);
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-clay-600);
+  padding: 0 4px;
+}
+
+/* ── Plate tile ── */
+.hb-tile-inner {
+  aspect-ratio: 9 / 14;
+  background: radial-gradient(circle at 50% 55%, #fefcf5 0%, #f2ebd8 90%);
+  border: 1px dashed var(--color-cream-400);
+  border-radius: 2px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+}
+.hb-tile-inner.locked {
+  background: #f2ebd8;
+  border-style: dotted;
+}
+.hb-tile-maxglow {
+  position: absolute;
+  inset: -3px;
+  border-radius: 4px;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(212, 162, 76, 0.35),
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Rarity hairline frame on tiles */
+.hb-frame-rare {
+  border-color: #aabed1;
+}
+.hb-frame-legendary {
+  border-color: var(--color-rarity-legendary);
+  box-shadow:
+    0 0 0 1px rgba(212, 162, 76, 0.3),
+    var(--shadow-soft-sm);
+}
+
+/* Rarity inline tag inside the hero */
+.hb-rar {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  padding: 1.5px 6px;
+  border-radius: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+.hb-rar-common {
+  background: rgba(184, 168, 136, 0.22);
+  color: var(--color-rarity-common);
+  border: 1px solid rgba(184, 168, 136, 0.45);
+}
+.hb-rar-rare {
+  background: rgba(122, 156, 184, 0.22);
+  color: #5e81a0;
+  border: 1px solid rgba(122, 156, 184, 0.5);
+}
+.hb-rar-legendary {
+  background: rgba(212, 162, 76, 0.22);
+  color: #a37a2d;
+  border: 1px solid rgba(212, 162, 76, 0.55);
 }
 
 /* ── Flora Level — Rainbow epithet text ─────────────────────────── */
