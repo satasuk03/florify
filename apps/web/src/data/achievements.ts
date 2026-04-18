@@ -339,24 +339,81 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
       target: 300,
     },
   },
-  // ── Collection: Sets — Chinese Garden (1 tier) ─────────────────────
+  // ── Collection: Sets — Chinese Garden (4 tiers) ────────────────────
   {
     id: "set_chinese_5",
-    name: "Chinese Garden Master",
-    badge: { shield: "rainbow", emoji: "🏮" },
+    name: "Jianghu Wanderer",
+    badge: { shield: "silver", emoji: "🏮" },
     description: {
-      en: "Collect all 5 Chinese Garden flora",
-      th: "สะสม 5 Chinese Garden ครบ",
+      en: "Collect 5 Chinese Garden flora",
+      th: "สะสม 5 Chinese Garden",
     },
     flavor: {
-      en: "A Chinese garden blooms in your hands.",
-      th: "สวนจีนผลิบานในมือคุณ",
+      en: "A lone sword steps onto the rivers and lakes.",
+      th: "ดาบเดียวดายก้าวสู่แม่น้ำและทะเลสาบ",
     },
-    rewards: [{ type: "sprouts", amount: 500 }],
+    rewards: [{ type: "sprouts", amount: 100 }],
     condition: {
       type: "species_by_collection",
       collection: "chinese-garden",
       target: 5,
+    },
+  },
+  {
+    id: "set_chinese_10",
+    name: "Plum Blossom Swordsman",
+    badge: { shield: "gold", emoji: "🏮" },
+    description: {
+      en: "Collect 10 Chinese Garden flora",
+      th: "สะสม 10 Chinese Garden",
+    },
+    flavor: {
+      en: "Your blade dances with falling plum blossoms.",
+      th: "ดาบของคุณร่ายรำกับดอกบ๊วยที่ร่วงหล่น",
+    },
+    rewards: [{ type: "sprouts", amount: 300 }],
+    condition: {
+      type: "species_by_collection",
+      collection: "chinese-garden",
+      target: 10,
+    },
+  },
+  {
+    id: "set_chinese_15",
+    name: "Orchid Pavilion Sage",
+    badge: { shield: "purple-gradient", emoji: "🏮" },
+    description: {
+      en: "Collect 15 Chinese Garden flora",
+      th: "สะสม 15 Chinese Garden",
+    },
+    flavor: {
+      en: "The pavilion bows to your mastery.",
+      th: "ศาลาน้อมคำนับต่อวิชาของคุณ",
+    },
+    rewards: [{ type: "sprouts", amount: 1000 }],
+    condition: {
+      type: "species_by_collection",
+      collection: "chinese-garden",
+      target: 15,
+    },
+  },
+  {
+    id: "set_chinese_20",
+    name: "Ninefold Lotus Immortal",
+    badge: { shield: "rainbow", emoji: "🏮" },
+    description: {
+      en: "Collect 20 Chinese Garden flora",
+      th: "สะสม 20 Chinese Garden",
+    },
+    flavor: {
+      en: "Nine lotuses bloom — you ascend to immortality.",
+      th: "บัวเก้ากลีบผลิบาน คุณก้าวสู่ความเป็นอมตะ",
+    },
+    rewards: [{ type: "sprouts", amount: 5000 }],
+    condition: {
+      type: "species_by_collection",
+      collection: "chinese-garden",
+      target: 20,
     },
   },
 
@@ -593,7 +650,14 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
   // ── Harvest: By Rarity (Common) (6 tiers) ──────────────────────────
   ...([10, 50, 100, 200, 500, 1000] as const).map((n, i) => ({
     id: `harvest_common_${n}`,
-    name: `Common Reaper ${n}`,
+    name: [
+      "Petal Plucker",
+      "Meadow Hand",
+      "Daisy Scythe",
+      "Bouquet Baron",
+      "Garland Lord",
+      "Emperor of Meadows",
+    ][i]!,
     badge: {
       shield: ["blue", "bronze", "silver", "gold", "purple-gradient", "rainbow"][i]!,
       emoji: "🌼",
@@ -626,7 +690,14 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
   // ── Harvest: By Rarity (Rare) (6 tiers) ────────────────────────────
   ...([10, 50, 100, 200, 500, 1000] as const).map((n, i) => ({
     id: `harvest_rare_${n}`,
-    name: `Rare Reaper ${n}`,
+    name: [
+      "Gem Gleaner",
+      "Prism Hunter",
+      "Sapphire Scythe",
+      "Jewel Baron",
+      "Crystal Sovereign",
+      "Empress of Prisms",
+    ][i]!,
     badge: {
       shield: ["blue", "bronze", "silver", "gold", "purple-gradient", "rainbow"][i]!,
       emoji: "💎",
@@ -659,7 +730,14 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
   // ── Harvest: By Rarity (Legendary) (6 tiers) ───────────────────────
   ...([10, 50, 100, 200, 500, 1000] as const).map((n, i) => ({
     id: `harvest_legend_${n}`,
-    name: `Legend Reaper ${n}`,
+    name: [
+      "Starling Harvester",
+      "Comet Chaser",
+      "Nova Scythe",
+      "Myth Baron",
+      "Astral Monarch",
+      "Deity of Legends",
+    ][i]!,
     badge: {
       shield: ["blue", "bronze", "silver", "gold", "purple-gradient", "rainbow"][i]!,
       emoji: "⭐",
@@ -1077,11 +1155,11 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
   ...([10, 30, 90, 365, 1000] as const).map((n, i) => ({
     id: `daily_all_${n}`,
     name: [
-      "Devoted 10",
-      "Devoted 30",
-      "Devoted 90",
-      "Devoted 365",
-      "Devoted 1000",
+      "Kindled Spirit",
+      "Steady Lantern",
+      "Season's Vow",
+      "Year-Sworn",
+      "Timeless Oath",
     ][i]!,
     badge: {
       shield: ["bronze", "silver", "gold", "purple-gradient", "rainbow"][i]!,
