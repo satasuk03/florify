@@ -246,6 +246,259 @@ const series: readonly SpeciesDef[] = [
       "ดอกป๊อปปี้ที่ขึ้นเฉพาะเหนือแนวหิมะในหิมาลัย ที่ที่อากาศบางและบริสุทธิ์จนสีสันดูต่างออกไป — จริงกว่าปกติ กลีบเป็นสีน้ำเงินแบบที่ไม่มีอยู่ในที่ต่ำกว่า ราวกับยืมสีมาจากท้องฟ้าโดยตรง ดอกบางเบาดูเปราะ แต่มันอยู่รอดในสภาวะที่ฆ่าเกือบทุกอย่างได้ สตรีในชุดชุบาแดงตีขันสิงห์ใกล้โคนต้น กลีบสั่นสะเทือนเข้าจังหวะ — คลื่นเสียงที่มองเห็นได้กระเพื่อมผ่านสีน้ำเงินเหมือนก้อนหินหล่นลงน้ำ",
     collection: SpeciesCollection.CelestialCourt,
   },
+  // ── Celestial Court — Batch 3: Chinese Legend Characters ─────────────
+  {
+    id: 425,
+    folder: "baimudan",
+    name: "Bai Mudan",
+    rarity: "legendary",
+    descriptionEN:
+      "The most beautiful courtesan in all of Luoyang, said to be the earthly incarnation of the white peony flower fairy herself. Her tower is lit by crimson lanterns and scented with the breath of a thousand springs — where travelers, scholars, and even cultivators come to test, or lose, their discipline. She pours tea with a smile that could unmake empires and plays the pipa with fingers that remember every petal that has ever fallen. The peony beside her blooms impossibly full, impossibly white. When it sheds its petals, they never touch the ground.",
+    descriptionTH:
+      "นางคณิกาผู้งามที่สุดในลั่วหยาง ว่ากันว่าคือร่างจุติของภูติดอกโบตั๋นขาวเอง หอคอยของนางประดับโคมสีเลือดและอบอวลด้วยลมหายใจของฤดูใบไม้ผลินับพัน — ที่ที่นักเดินทาง บัณฑิต และแม้แต่นักพรตเซียนต่างมาพิสูจน์ หรือสูญเสีย วินัยของตน นางรินชาด้วยรอยยิ้มที่ทำลายอาณาจักรได้ และบรรเลงผีผาด้วยนิ้วที่จำกลีบดอกทุกกลีบที่เคยร่วงได้ ดอกโบตั๋นข้างกายนางบานเต็มที่ขาวบริสุทธิ์อย่างไม่น่าเป็นไปได้ เมื่อกลีบร่วง กลีบไม่เคยถึงพื้น",
+    collection: SpeciesCollection.CelestialCourt,
+    epithet: {
+      en: "Flower Spirit of Luoyang",
+      th: "ภูติโบตั๋นแห่งลั่วหยาง",
+    },
+  },
+  {
+    id: 426,
+    folder: "huamulan",
+    name: "Hua Mu Lan",
+    rarity: "legendary",
+    descriptionEN:
+      "The daughter of the Hua family who took her father's place in the emperor's army when the conscription scroll arrived and he was too old to march. For twelve years she rode, fought, and was mistaken for a man. When the war ended, she returned home to her loom, changed into women's robes, and the soldiers who had served beside her stood speechless. The magnolia tree beside her grew from the flower-name her mother chose, and its petals — pale violet and ivory — are said never to fall during wartime.",
+    descriptionTH:
+      "บุตรีแห่งตระกูลฮัวผู้เข้ารบแทนบิดาเมื่อราชหมายเกณฑ์มาถึง และบิดาแก่เกินจะเดินทัพ สิบสองปีที่นางขี่ม้า ออกรบ และถูกเข้าใจว่าเป็นบุรุษ เมื่อสงครามสงบ นางกลับบ้านสู่กี่ทอผ้า เปลี่ยนเป็นอาภรณ์สตรี ทหารที่เคยรบเคียงข้างต่างยืนตะลึงพูดไม่ออก ต้นแมกโนเลียข้างกายนางเติบโตจากชื่อดอกไม้ที่มารดาตั้งให้ และกลีบสีม่วงอ่อนกับงาช้างนั้น ว่ากันว่าไม่เคยร่วงในยามสงคราม",
+    collection: SpeciesCollection.CelestialCourt,
+    epithet: {
+      en: "Maiden Who Rode as a Man",
+      th: "นารีผู้ขี่ม้าแทนบุรุษ",
+    },
+  },
+  {
+    id: 427,
+    folder: "guihua",
+    name: "Gui Hua",
+    rarity: "legendary",
+    descriptionEN:
+      "An osmanthus tree that grows only on the moon, tended eternally by the immortal Wu Gang — frozen in his youth as part of his sentence, condemned to chop the tree down for having sought heaven before his time. Each stroke of his divine axe heals as fast as it cuts, and so the work never ends. The tiny golden blossoms release a fragrance that travels on moonlight alone, falling to earth only on clear autumn nights. Those who catch it in their sleep are said to remember people they have loved in lives they no longer recall.",
+    descriptionTH:
+      "ต้นกุ้ยฮวาที่ขึ้นเฉพาะบนดวงจันทร์ ดูแลชั่วนิรันดร์โดยเซียนหวูกัง — ถูกตรึงไว้ในวัยหนุ่มเป็นส่วนหนึ่งของคำสาป ต้องโค่นมันตลอดกาลเพราะแสวงหาสวรรค์ก่อนเวลาอันควร ทุกครั้งที่ขวานทิพย์ลง บาดแผลของต้นสมานทันที งานจึงไม่มีวันเสร็จ ดอกเล็กสีทองปล่อยกลิ่นหอมที่เดินทางตามแสงจันทร์ ร่วงลงสู่โลกเฉพาะในคืนฤดูใบไม้ร่วงที่ท้องฟ้าแจ่ม ผู้ใดได้กลิ่นในความฝัน ว่ากันว่าจะระลึกถึงคนที่เคยรักในชาติที่ไม่อาจจำได้",
+    collection: SpeciesCollection.CelestialCourt,
+    epithet: {
+      en: "Axe of the Eternal Moon",
+      th: "ขวานนิรันดร์เหนือดวงจันทร์",
+    },
+  },
+  {
+    id: 428,
+    folder: "zijing",
+    name: "Zi Jing",
+    rarity: "legendary",
+    descriptionEN:
+      "When the three Tian brothers decided to divide their father's estate, the last possession they could not agree on was the redbud tree in the courtyard. They resolved to chop it into three equal pieces at dawn — and that very night, the tree withered and died from grief. Seeing this, the brothers wept, reconciled, and vowed never to divide their family. At first light the redbud bloomed again, more riotously than ever, every branch heavy with magenta flowers. Since then, it blooms only where siblings dwell beneath one roof.",
+    descriptionTH:
+      "เมื่อสามพี่น้องตระกูลเถียนตัดสินใจแบ่งมรดกของบิดา สิ่งสุดท้ายที่ตกลงกันไม่ได้คือต้นจื่อจิงกลางลาน พวกเขาจึงตัดสินใจจะโค่นและแบ่งเป็นสามส่วนเท่ากันในยามรุ่งสาง — คืนนั้นเอง ต้นไม้เหี่ยวตายด้วยความโศก เมื่อเห็นเช่นนั้น ทั้งสามร้องไห้ คืนดีกัน และปฏิญาณว่าจะไม่แบ่งแยกครอบครัวอีก พอแสงแรกของวัน จื่อจิงก็บานขึ้นใหม่ บานเกินกว่าที่เคย ทุกกิ่งหนักด้วยดอกสีบานเย็น นับแต่นั้น มันบานเฉพาะที่ที่พี่น้องอาศัยใต้หลังคาเดียวกัน",
+    collection: SpeciesCollection.CelestialCourt,
+    epithet: {
+      en: "Redbud of Unbroken Kinship",
+      th: "จื่อจิงแห่งสายเลือดไม่แยก",
+    },
+  },
+  // ── Chinese Garden — Classical Chinese Plants ────────────────────────
+  {
+    id: 429,
+    folder: "mudan",
+    name: "Mu Dan",
+    rarity: "legendary",
+    descriptionEN:
+      "The queen of flowers, cultivated in the Tang imperial gardens and painted into more poems than any other bloom. A maiden in Tang-era crimson Qixiong ruqun and gold tends to it — her hair piled high, her sleeves wide enough to hide a small empire. When the peony opens, the other flowers in the garden quietly turn away, embarrassed by their own modesty. Emperors have been known to dismiss court and spend whole days beside a single blooming peony, doing nothing but looking.",
+    descriptionTH:
+      "ราชินีแห่งดอกไม้ ปลูกในสวนจักรพรรดิยุคถังและถูกวาดลงในบทกวีมากกว่าดอกไม้ใด นางในชุดฉีเซียงหรู่เฉวียนสีเลือดกับทองคอยดูแล — เกล้าผมสูง ชายแขนเสื้อกว้างพอซ่อนอาณาจักรเล็กๆ ได้ เมื่อโบตั๋นบาน ดอกไม้อื่นในสวนหันหน้าหลบเงียบๆ อายในความถ่อมตนของตน จักรพรรดิหลายพระองค์เลิกออกว่าราชการและนั่งข้างโบตั๋นดอกเดียวทั้งวัน โดยไม่ทำอะไรนอกจากมอง",
+    collection: SpeciesCollection.ChineseGarden,
+    epithet: {
+      en: "Queen of Ten Thousand Flowers",
+      th: "ราชินีแห่งหมื่นบุปผา",
+    },
+  },
+  {
+    id: 430,
+    folder: "yinxing",
+    name: "Yin Xing",
+    rarity: "rare",
+    descriptionEN:
+      "A ginkgo older than most dynasties, its fan-shaped leaves turning so yellow in autumn that temples are sometimes mistaken for being on fire. A Ming-era maiden in deep-gold Ao Qun tends to it, brushing fallen leaves into a small poem of her own composition. The ginkgo, being patient by nature, waits through empires. It has already outlived three capitals and does not plan to stop.",
+    descriptionTH:
+      "แปะก๊วยที่แก่กว่าราชวงศ์ส่วนใหญ่ ใบรูปพัดเปลี่ยนเป็นสีเหลืองจนมีผู้เข้าใจผิดว่าอารามกำลังลุกไหม้ในฤดูใบไม้ร่วง นางในชุดเอ้าฉุนยุคหมิงสีทองเข้มคอยดูแล กวาดใบร่วงเป็นบทกวีที่นางแต่งเอง แปะก๊วยอดทนเป็นธรรมชาติ รอผ่านอาณาจักร มันมีอายุยืนกว่าเมืองหลวงสามแห่งแล้ว และไม่คิดจะหยุด",
+    collection: SpeciesCollection.ChineseGarden,
+  },
+  {
+    id: 431,
+    folder: "haitang",
+    name: "Hai Tang",
+    rarity: "rare",
+    descriptionEN:
+      "The crabapple Yang Guifei leaned against the morning the emperor could not bear to wake her. A Republic-era maiden in blush-pink Qipao tends to it, silver fan in hand, a wistful smile playing at the corner of her mouth. The blossoms are the colour of a blush someone tried and failed to hide. It is said the tree remembers every sorrow a woman has ever told it, and refuses to repeat a single one.",
+    descriptionTH:
+      "ต้นไห่ถังที่หยางกุ้ยเฟยเอนกายพิงในเช้าที่จักรพรรดิทรงไม่กล้าปลุก นางในชุดเฉิงซามสมัยสาธารณรัฐสีชมพูระเรื่อคอยดูแล มีพัดเงินในมือ รอยยิ้มครุ่นคิดอยู่ที่มุมปาก ดอกมีสีอายที่ใครสักคนพยายามซ่อนแต่ซ่อนไม่ได้ ว่ากันว่าต้นจำความโศกทุกเรื่องที่สตรีเคยเล่าให้ฟัง และไม่ยอมเล่าซ้ำแม้สักเรื่อง",
+    collection: SpeciesCollection.ChineseGarden,
+  },
+  {
+    id: 432,
+    folder: "taohua",
+    name: "Tao Hua",
+    rarity: "common",
+    descriptionEN:
+      "A peach tree from a Tang orchard where the petals fall for thirty days straight every spring and no one ever sweeps them away. A maiden in blush-pink Qixiong ruqun tends to it with a round fan. To pass beneath a blooming peach tree was once said to promise you an unexpected love by summer. The orchard has never been empty of young poets pretending to stroll.",
+    descriptionTH:
+      "ต้นท้อจากสวนถังที่กลีบร่วงต่อเนื่องสามสิบวันทุกฤดูใบไม้ผลิ และไม่มีใครเคยกวาด นางในชุดฉีเซียงหรู่เฉวียนสีชมพูระเรื่อคอยดูแล มีพัดกลมในมือ เดินลอดต้นท้อที่กำลังบานเคยเชื่อว่าจะได้พบรักไม่คาดฝันก่อนเข้าฤดูร้อน สวนนี้ไม่เคยว่างเว้นจากกวีหนุ่มที่แกล้งเดินเล่น",
+    collection: SpeciesCollection.ChineseGarden,
+  },
+  {
+    id: 433,
+    folder: "juhua",
+    name: "Ju Hua",
+    rarity: "common",
+    descriptionEN:
+      "The chrysanthemum Tao Yuanming picked by his eastern fence the day he quit the emperor's service for good. A Han-era maiden in warm-ochre Quju tends to it, a bamboo-slip scroll in hand. The flower smells of autumn, ink, and the particular satisfaction of having walked away from something you did not want. Scholars have been trying to capture its exact yellow in paint for fifteen hundred years.",
+    descriptionTH:
+      "เก็กฮวยที่เต๋าเยวี้ยนหมิงเด็ดริมรั้วฝั่งตะวันออกในวันที่ลาออกจากราชการถาวร นางในชุดชวีจวีว์ยุคฮั่นสีน้ำตาลอบอุ่นคอยดูแล มีไม้ไผ่แกะบทกวีในมือ ดอกมีกลิ่นฤดูใบไม้ร่วง กลิ่นหมึก และความพอใจเฉพาะตัวของการได้เดินจากสิ่งที่ไม่ต้องการ บัณฑิตพยายามจับสีเหลืองนี้ลงบนผ้าใบมาหนึ่งพันห้าร้อยปีแล้ว",
+    collection: SpeciesCollection.ChineseGarden,
+  },
+  {
+    id: 434,
+    folder: "lanhua",
+    name: "Lan Hua",
+    rarity: "common",
+    descriptionEN:
+      "An orchid from a scholar's studio — not a garden flower, a private one, meant to be looked at by someone who already knows how to sit still. A Han-era maiden in ivory Quju tends to it near a guqin, her fingers never quite at rest. Confucius said the orchid blooms alone in an empty valley and lets its fragrance out anyway. The flower has been making the same argument ever since.",
+    descriptionTH:
+      "กล้วยไม้จากห้องทำงานบัณฑิต — ไม่ใช่ดอกไม้ประจำสวน แต่เป็นของส่วนตัว สำหรับผู้ที่รู้จักนั่งนิ่งแล้ว นางในชุดชวีจวีว์ยุคฮั่นสีงาช้างคอยดูแลข้างกู่ฉิน นิ้วไม่เคยว่างจริง ขงจื่อว่ากล้วยไม้บานอยู่ลำพังในหุบเขาว่าง และปล่อยกลิ่นหอมของมันออกอยู่ดี ดอกนี้ยืนยันข้อโต้แย้งเดิมมาตั้งแต่นั้น",
+    collection: SpeciesCollection.ChineseGarden,
+  },
+  {
+    id: 435,
+    folder: "meigui",
+    name: "Mei Gui",
+    rarity: "common",
+    descriptionEN:
+      "A Chinese rose cultivated since the Southern Song — older than any rose the West would recognise, and with fewer apologies. A Republic-era maiden in crimson Qipao tends to it with a folding fan, confident in the way only someone who has already been painted knows how to be. The scent is deep red in a way most perfumes cannot imitate without embarrassing themselves.",
+    descriptionTH:
+      "กุหลาบจีนที่ปลูกตั้งแต่ซ่งใต้ — เก่าแก่กว่ากุหลาบใดที่ตะวันตกรู้จัก และมีคำขอโทษน้อยกว่า นางในชุดเฉิงซามสมัยสาธารณรัฐสีเลือดคอยดูแล มีพัดพับในมือ มั่นใจในแบบที่เฉพาะผู้ที่เคยถูกวาดเท่านั้นจะรู้วิธีเป็น กลิ่นเป็นสีแดงเข้มในแบบที่น้ำหอมส่วนใหญ่เลียนแบบไม่ได้โดยไม่เขินอาย",
+    collection: SpeciesCollection.ChineseGarden,
+  },
+  {
+    id: 436,
+    folder: "xinghua",
+    name: "Xing Hua",
+    rarity: "common",
+    descriptionEN:
+      "The apricot blossoms in a Tang orchard are the colour of a dream right before you wake up. A maiden in ivory Qixiong ruqun tends to it with a round fan, and when the wind shifts the air fills with a smell so specifically of spring that some travelers turn around and go home. In ancient times medical students studied under apricot trees — so the flower has been quietly associated with healing ever since.",
+    descriptionTH:
+      "ดอกแอปริคอตในสวนถังมีสีของความฝันก่อนตื่น นางในชุดฉีเซียงหรู่เฉวียนสีงาช้างคอยดูแล มีพัดกลมในมือ เมื่อลมเปลี่ยนทิศ อากาศเต็มไปด้วยกลิ่นของฤดูใบไม้ผลิที่เฉพาะเจาะจงจนนักเดินทางบางคนหันหลังกลับบ้าน ในสมัยโบราณ นักเรียนแพทย์เรียนใต้ต้นแอปริคอต — ดอกนี้จึงเชื่อมโยงกับการรักษามาอย่างเงียบๆ นับแต่นั้น",
+    collection: SpeciesCollection.ChineseGarden,
+  },
+  {
+    id: 437,
+    folder: "lihua",
+    name: "Li Hua",
+    rarity: "common",
+    descriptionEN:
+      "Pear blossoms so white they make snow look dingy. A Song imperial-garden maiden in ivory Ao Qun tends to it, round silk fan half-raised, her gaze soft and downcast. The old poem said a pear blossom with a raindrop on it is a woman crying — the tree has always liked the comparison but never quite confirmed it. It blooms best in years of imperial sorrow, which is most of them.",
+    descriptionTH:
+      "ดอกสาลี่ขาวจนหิมะดูหมองลง นางในชุดเอ้าฉุนสวนพระราชวังซ่งสีงาช้างคอยดูแล มีพัดกลมยกขึ้นครึ่ง สายตานุ่มและทอดลง กวีเก่าว่าดอกสาลี่ที่มีเม็ดฝนบนกลีบคือสตรีที่กำลังร้องไห้ — ต้นชอบการเปรียบนี้มาเสมอ แต่ไม่เคยยืนยัน มันบานสวยที่สุดในปีที่ราชสำนักเศร้า ซึ่งแทบทุกปี",
+    collection: SpeciesCollection.ChineseGarden,
+  },
+  {
+    id: 438,
+    folder: "shuixian",
+    name: "Shui Xian",
+    rarity: "common",
+    descriptionEN:
+      "The Chinese narcissus blooms for the lunar New Year without fail, as if it owes somebody money and is determined to pay on time. A Ming-era maiden in pale-gold Ao Qun tends to it, bronze incense burner in hand. The fragrance is cold and auspicious — the particular smell of a year that has not yet let you down, because it has not yet begun.",
+    descriptionTH:
+      "นาซิสซัสจีนบานตรงเทศกาลตรุษจีนทุกปีไม่พลาด ราวกับติดหนี้ใครและตั้งใจจะชำระตรงเวลา นางในชุดเอ้าฉุนยุคหมิงสีทองอ่อนคอยดูแล มีกระถางธูปทองเหลืองในมือ กลิ่นเย็นและเป็นมงคล — กลิ่นเฉพาะของปีที่ยังไม่ทำให้คุณผิดหวัง เพราะยังไม่ได้เริ่ม",
+    collection: SpeciesCollection.ChineseGarden,
+  },
+  {
+    id: 439,
+    folder: "baihe",
+    name: "Bai He",
+    rarity: "common",
+    descriptionEN:
+      "A lily from a garden designed around the idea that silence is its own kind of music. A maiden in pale-blue Hanfu tends to it, basket in hand, never quite hurrying. The flower has six petals because in Chinese numerology six means a hundred-year peaceful union. Weddings steal them constantly. The lily does not mind.",
+    descriptionTH:
+      "ลิลลี่จากสวนที่ออกแบบรอบความเชื่อว่าความเงียบเป็นดนตรีแบบหนึ่ง นางในชุดฮั่นฝูสีฟ้าอ่อนคอยดูแล มีตะกร้าในมือ ไม่เคยรีบ ดอกมีหกกลีบเพราะในเลขศาสตร์จีน หกหมายถึงการครองคู่สงบสุขร้อยปี งานแต่งขโมยมันประจำ ลิลลี่ไม่ว่าอะไร",
+    collection: SpeciesCollection.ChineseGarden,
+  },
+  {
+    id: 440,
+    folder: "songshu",
+    name: "Song Shu",
+    rarity: "common",
+    descriptionEN:
+      "A pine from a Taoist mountain where the fog does not lift so much as rearrange itself. A young immortal in deep-green robes tends to it, carved bamboo staff in hand, ageless the way only those who have stopped counting years can be. White cranes circle the peak. The pine is the plant emperors plant when they want to be remembered. The mountain has cooperated so far.",
+    descriptionTH:
+      "ต้นสนจากภูเขาเต๋าที่หมอกไม่ได้จางหาย แต่จัดเรียงตัวใหม่ เซียนหนุ่มในอาภรณ์เขียวเข้มคอยดูแล มีไม้เท้าไผ่แกะสลักในมือ ไร้วัยในแบบที่เฉพาะผู้เลิกนับปีแล้วเท่านั้นจะเป็นได้ นกกระเรียนขาววนรอบยอดเขา สนคือต้นไม้ที่จักรพรรดิปลูกเมื่ออยากถูกจดจำ ภูเขาร่วมมือด้วยจนถึงตอนนี้",
+    collection: SpeciesCollection.ChineseGarden,
+  },
+  {
+    id: 441,
+    folder: "baishu",
+    name: "Bai Shu",
+    rarity: "common",
+    descriptionEN:
+      "A cypress from an imperial academy courtyard, grown by scholars who assumed someone eventually would read what they had written. A Ming-era scholar in sage-green Hanfu tends to it, ink brush poised over an unrolled scroll. The cypress does not mind being forgotten. It is quietly certain of its own usefulness and is never wrong.",
+    descriptionTH:
+      "ไซเปรสจากลานสถาบันหลวง ปลูกโดยบัณฑิตที่สมมติว่าสักวันจะมีใครอ่านสิ่งที่พวกเขาเขียน บัณฑิตหนุ่มในชุดฮั่นฝูยุคหมิงสีเขียวเสจคอยดูแล มีพู่กันพร้อมเขียนเหนือม้วนกระดาษที่คลี่ออก ไซเปรสไม่รังเกียจการถูกลืม มันแน่ใจอย่างเงียบๆ ในประโยชน์ของตน และไม่เคยคิดผิด",
+    collection: SpeciesCollection.ChineseGarden,
+  },
+  {
+    id: 442,
+    folder: "wutong",
+    name: "Wu Tong",
+    rarity: "common",
+    descriptionEN:
+      "The phoenix tree. Legend says the fenghuang will only perch on wutong — no other bough is dignified enough. A Tang-era maiden in lavender Qixiong ruqun tends to it, jade flute in hand, as if rehearsing a song the phoenix might arrive in time to hear. The phoenix has not yet come. The tree, unbothered, keeps growing anyway.",
+    descriptionTH:
+      "ต้นหงส์ ตำนานว่าฟ่งหวงจะลงเกาะเฉพาะบนอู๋ถง — กิ่งอื่นไม่มีศักดิ์ศรีพอ นางในชุดฉีเซียงหรู่เฉวียนยุคถังสีม่วงอ่อนคอยดูแล มีขลุ่ยหยกในมือ ราวกับซ้อมบทเพลงที่ฟ่งหวงอาจมาถึงทันฟัง ฟ่งหวงยังไม่มา ต้นไม้ไม่รำคาญ และเติบโตต่อไปอยู่ดี",
+    collection: SpeciesCollection.ChineseGarden,
+  },
+  {
+    id: 443,
+    folder: "shiliu",
+    name: "Shi Liu",
+    rarity: "common",
+    descriptionEN:
+      "A pomegranate tree a Ming bride once planted in a courtyard because the fruit has a hundred seeds and the in-laws had been hinting for a year. A Ming-era maiden in vermilion Ao Qun tends to it, red-lacquered basket in hand. The blossoms are the colour of a wedding veil in a village where weddings mean something. The fruit splits itself open every autumn, generously.",
+    descriptionTH:
+      "ต้นทับทิมที่เจ้าสาวสมัยหมิงปลูกในลานบ้านเพราะผลมีร้อยเมล็ด และญาติสามีใบ้มาทั้งปี นางในชุดเอ้าฉุนยุคหมิงสีแดงชาดคอยดูแล มีตะกร้าแดงในมือ ดอกมีสีเดียวกับผ้าคลุมหน้าเจ้าสาวในหมู่บ้านที่งานแต่งมีความหมาย ผลแตกตัวเองทุกฤดูใบไม้ร่วง อย่างใจกว้าง",
+    collection: SpeciesCollection.ChineseGarden,
+  },
+  {
+    id: 444,
+    folder: "furong",
+    name: "Fu Rong",
+    rarity: "common",
+    descriptionEN:
+      "A hibiscus beside an old pond, where the water is still enough to reflect any lie. A Republic-era maiden in turquoise Qipao tends to it, fan half-closed in her hand. The flower is pink in the morning, red by afternoon, and white by evening — as if it cannot decide on a mood and has made a whole life of that. The poets approve.",
+    descriptionTH:
+      "ชบาจีนริมสระเก่า น้ำที่นิ่งพอจะสะท้อนทุกคำโกหก นางในชุดเฉิงซามสมัยสาธารณรัฐสีเทอร์ควอยซ์คอยดูแล มีพัดปิดครึ่งในมือ ดอกเป็นสีชมพูในยามเช้า สีแดงในบ่าย และขาวในยามเย็น — ราวกับตัดสินใจไม่ได้ว่าจะอยู่อารมณ์ไหน และทำทั้งชีวิตไปกับเรื่องนี้ กวีเห็นด้วย",
+    collection: SpeciesCollection.ChineseGarden,
+  },
+  {
+    id: 445,
+    folder: "yelaixiang",
+    name: "Ye Lai Xiang",
+    rarity: "common",
+    descriptionEN:
+      "A night-blooming flower that opens only after the lanterns are lit, releasing a fragrance so thick you can almost see it drifting through the evening air. A Republic-era maiden in midnight-blue Qipao tends to it, silver lantern in hand, fireflies forming small constellations around her shoulders. The flower closes at dawn as if embarrassed to be caught doing something so sincere.",
+    descriptionTH:
+      "ดอกหอมกลางคืนที่บานหลังโคมถูกจุดเท่านั้น ปล่อยกลิ่นเข้มจนแทบเห็นเป็นไอลอยในอากาศยามค่ำ นางในชุดเฉิงซามสมัยสาธารณรัฐสีน้ำเงินเที่ยงคืนคอยดูแล มีตะเกียงเงินในมือ หิ่งห้อยรวมกลุ่มคล้ายกลุ่มดาวเล็กๆ รอบบ่า ดอกหุบยามรุ่งสางราวกับเขินที่ถูกจับได้ว่ากำลังทำสิ่งจริงใจขนาดนั้น",
+    collection: SpeciesCollection.ChineseGarden,
+  },
 ];
 
 export default series;
