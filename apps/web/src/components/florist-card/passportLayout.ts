@@ -2,105 +2,82 @@ import type { FloristCardData } from "@/store/gameStore";
 import { SPECIES_BY_ID } from "@/data/species";
 
 /**
- * Pure layout spec for the Florist Card passport.
+ * Florify Passport · B1 "Full Bleed" — layout spec.
  *
  * A list of absolute-positioned draw instructions over a 1080×1920
  * canvas. Both renderers — the in-app React DOM component and the
- * Canvas 2D share-image generator — walk this same list. This is the
- * "one definition, two renderers" pattern from designs/11 §11.6.
+ * Canvas 2D share-image generator — walk this same list.
  *
- * All coordinates are in canvas pixels, NOT CSS pixels. The DOM
- * renderer scales the whole thing down to fit inside the modal.
+ * Coordinates are canvas pixels, not CSS pixels. The DOM renderer
+ * scales the whole stage down to fit the modal.
+ *
+ * Reference: design_handoff_passport_b1/B1_Passport.html + README.md.
  */
 
 export const PASSPORT_W = 1080;
 export const PASSPORT_H = 1920;
 
+// ── B1 tokens (README §Design tokens) ────────────────────────────
 export const PASSPORT_COLORS = {
-  bgTop: "#FBF8F3",
-  bgBottom: "#F3E9D6",
-  border: "#E3D7C0",
-  ink900: "#2B241B",
-  ink700: "#4A3F30",
-  ink500: "#6B5E4B",
-  ink300: "#9C8F7B",
-  clay500: "#C7825A",
-  clay600: "#A96842",
-  divider: "#D1C0A0",
-  barBg: "#EEE6D6",
-  barCommon: "#B8A888",
-  barRare: "#7A9CB8",
-  barLegendary: "#D4A24C",
+  bgFallback: "#0A0806",
+  cream: "#F7F3EA",
+  muted: "rgba(247,243,234,0.72)",
+  faint: "rgba(247,243,234,0.55)",
+  divider: "rgba(247,243,234,0.25)",
+
+  rareCommon: "#B8A888",
+  rareRare: "#7A9CB8",
+  rareLegend: "#D4A24C",
+
+  shinyGradient: [
+    "#FFB0C3",
+    "#FFE18A",
+    "#A6F0AD",
+    "#9EC6FF",
+    "#C9A3FF",
+    "#FFB0C3",
+  ],
 } as const;
 
-// ── Theme types ──────────────────────────────────────────────────
+// Scrim gradients — asymmetric (heavier bottom, lighter top) to hold
+// type against any specimen. Don't swap for a symmetric tint.
+const TOP_SCRIM_STOPS = [
+  { offset: 0, color: "rgba(0,0,0,0.45)" },
+  { offset: 0.4, color: "rgba(0,0,0,0.18)" },
+  { offset: 0.7, color: "rgba(0,0,0,0)" },
+  { offset: 1, color: "rgba(0,0,0,0)" },
+];
+const BOTTOM_SCRIM_STOPS = [
+  { offset: 0, color: "rgba(0,0,0,0)" },
+  { offset: 0.35, color: "rgba(0,0,0,0.12)" },
+  { offset: 0.7, color: "rgba(0,0,0,0.45)" },
+  { offset: 1, color: "rgba(0,0,0,0.72)" },
+];
 
-export type BackgroundLayer =
-  | { type: "gradient"; from: string; to: string; angle?: number }
-  | { type: "solid"; color: string };
+// Shadow presets (README §DROP SHADOWS)
+const SHADOW_DEFAULT = { offsetY: 1, blur: 6, color: "rgba(0,0,0,0.40)" } as const;
+const SHADOW_CAPTION = { offsetY: 2, blur: 12, color: "rgba(0,0,0,0.35)" } as const;
+const SHADOW_TITLE = { offsetY: 4, blur: 24, color: "rgba(0,0,0,0.50)" } as const;
+const SHADOW_SHINY = { offsetY: 4, blur: 24, color: "rgba(0,0,0,0.55)" } as const;
 
-export interface RarityTextStyle {
-  color: string;
-  family: "serif" | "sans" | "mono";
-  weight: 400 | 500 | 600 | 700;
-  letterSpacing?: number;
-  gradient?: { colors: string[]; stops: number[] };
-  glow?: { color: string; blur: number };
-}
-
+// ── Theme (kept as a thin hook for future variants) ──────────────
 export interface PassportTheme {
   id: string;
-  background: BackgroundLayer[];
   colors: typeof PASSPORT_COLORS;
-  rarityStyle: {
-    common: RarityTextStyle;
-    rare: RarityTextStyle;
-    legendary: RarityTextStyle;
-  };
 }
 
 export const DEFAULT_THEME: PassportTheme = {
-  id: "classic",
-  background: [{ type: "gradient", from: "#FBF8F3", to: "#F3E9D6" }],
+  id: "b1-full-bleed",
   colors: PASSPORT_COLORS,
-  rarityStyle: {
-    common: {
-      color: PASSPORT_COLORS.ink700,
-      family: "serif",
-      weight: 600,
-      letterSpacing: 1,
-      gradient: {
-        colors: ["#8B7355", "#A68B5B", "#C4A96A", "#A68B5B", "#8B7355"],
-        stops: [0, 0.25, 0.5, 0.75, 1],
-      },
-      glow: { color: "rgba(184, 168, 136, 0.25)", blur: 10 },
-    },
-    rare: {
-      color: PASSPORT_COLORS.ink700,
-      family: "serif",
-      weight: 600,
-      letterSpacing: 1,
-      gradient: {
-        colors: ["#5A7A8A", "#8AB4C8", "#B8D8E8", "#8AB4C8", "#5A7A8A"],
-        stops: [0, 0.25, 0.5, 0.75, 1],
-      },
-      glow: { color: "rgba(122, 156, 184, 0.35)", blur: 14 },
-    },
-    legendary: {
-      color: PASSPORT_COLORS.ink700,
-      family: "serif",
-      weight: 700,
-      letterSpacing: 2,
-      gradient: {
-        colors: ["#8B6914", "#D4A24C", "#FFD700", "#D4A24C", "#8B6914"],
-        stops: [0, 0.25, 0.5, 0.75, 1],
-      },
-      glow: { color: "rgba(212, 162, 76, 0.45)", blur: 20 },
-    },
-  },
 };
 
 export type Align = "left" | "center" | "right";
+
+export interface TextShadow {
+  offsetY: number;
+  blur: number;
+  color: string;
+}
 
 export type DrawOp =
   | {
@@ -114,12 +91,10 @@ export type DrawOp =
       color: string;
       align: Align;
       letterSpacing?: number;
+      italic?: boolean;
+      shadow?: TextShadow;
       /** DOM-only: count-up animation metadata (ignored by canvas renderer). */
       animate?: { value: number; delay?: number };
-      /** If set, renderers measure and shrink `size` down through `sizeLadder`
-       *  until the rendered text fits inside `maxWidth`. Pure layout stays
-       *  agnostic to the measurement — `fitTextOps` mutates the op before the
-       *  main draw loop. */
       fitTo?: { maxWidth: number; sizeLadder: number[] };
     }
   | {
@@ -130,8 +105,6 @@ export type DrawOp =
       h: number;
       color: string;
       radius?: number;
-      /** DOM-only: bar-grow animation metadata (ignored by canvas renderer). */
-      animate?: { delay?: number };
     }
   | {
       type: "line";
@@ -143,20 +116,7 @@ export type DrawOp =
       width: number;
     }
   | {
-      type: "corner";
-      /** Top-left position of the L */
-      x: number;
-      y: number;
-      /** Length of each arm */
-      len: number;
-      /** 'tl' | 'tr' | 'bl' | 'br' */
-      corner: "tl" | "tr" | "bl" | "br";
-      color: string;
-      width: number;
-    }
-  | {
       type: "image";
-      /** Webp URL, or null to draw the placeholder instead. */
       src: string | null;
       x: number;
       y: number;
@@ -164,8 +124,6 @@ export type DrawOp =
       h: number;
       radius: number;
       bgColor: string;
-      border?: { color: string; width: number };
-      /** Rendered centered when src is null or load fails. */
       placeholder?: { text: string; size: number; color: string };
     }
   | {
@@ -179,514 +137,471 @@ export type DrawOp =
       gradient: { colors: string[]; stops: number[] };
       align: Align;
       letterSpacing?: number;
+      italic?: boolean;
+      shadow?: TextShadow;
       animate?: { value: number; delay?: number };
       fitTo?: { maxWidth: number; sizeLadder: number[] };
       /** DOM-only: animate the gradient position (rainbow sweep). */
       animateGradient?: boolean;
     }
   | {
-      type: "glow";
+      type: "gradientRect";
       x: number;
       y: number;
       w: number;
       h: number;
-      color: string;
-      blur: number;
-      radius?: number;
+      /** 0 = top→bottom, 90 = left→right. Matches CSS linear-gradient angles. */
+      angle: number;
+      stops: { offset: number; color: string }[];
     };
 
-function formatDate(ms: number): string {
-  const d = new Date(ms);
-  return d.toLocaleDateString("en-GB", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  });
-}
-
 /**
- * Build the full passport layout from player data.
+ * Build the full passport layout from player data. Pure — returns a
+ * fresh array per call (so the fit-text pass mutates only this render).
  *
- * Pixel ranges mirror designs/11 §11.5. Critical content stays within
- * y ∈ [240, 1680] so Instagram/Facebook story overlays never cover it.
+ * B1 is data-driven off `FloristCardData.avatar`: if an avatar is set,
+ * the resolved stage image is used as the full-bleed photo and the
+ * species name becomes the "Favourite Specimen" caption.
  */
 export function buildLayout(
   data: FloristCardData,
   theme: PassportTheme = DEFAULT_THEME,
 ): DrawOp[] {
   const ops: DrawOp[] = [];
-  const cx = PASSPORT_W / 2;
-  const col = { left: 180, right: PASSPORT_W - 180 }; // 720px content column
   const c = theme.colors;
 
-  // ── Decorative corner frames ─────────────────────────────────────
-  const cornerArm = 100;
-  const cornerInset = 80;
-  const cornerWidth = 5;
-  ops.push(
-    {
-      type: "corner",
-      corner: "tl",
-      x: cornerInset,
-      y: cornerInset,
-      len: cornerArm,
-      color: c.clay600,
-      width: cornerWidth,
-    },
-    {
-      type: "corner",
-      corner: "tr",
-      x: PASSPORT_W - cornerInset,
-      y: cornerInset,
-      len: cornerArm,
-      color: c.clay600,
-      width: cornerWidth,
-    },
-    {
-      type: "corner",
-      corner: "bl",
-      x: cornerInset,
-      y: PASSPORT_H - cornerInset,
-      len: cornerArm,
-      color: c.clay600,
-      width: cornerWidth,
-    },
-    {
-      type: "corner",
-      corner: "br",
-      x: PASSPORT_W - cornerInset,
-      y: PASSPORT_H - cornerInset,
-      len: cornerArm,
-      color: c.clay600,
-      width: cornerWidth,
-    },
-  );
+  // Safe-margin content column (README §Canvas: left/right 80)
+  const LEFT = 80;
+  const RIGHT = PASSPORT_W - 80;
+  const COL_W = RIGHT - LEFT;
 
-  // ── Header: wordmark + eyebrow + divider ─────────────────────────
+  // Resolve the favorite specimen from the avatar slot.
+  const species = data.avatar ? SPECIES_BY_ID[data.avatar.speciesId] : null;
+  const favoriteImage = species
+    ? `/floras/${species.folder}/stage-${data.avatar!.stage}.webp`
+    : null;
+  const favoriteName = species?.name ?? null;
+
+  // ── 1. Full-bleed flora image (or dark fallback) ─────────────────
+  // Background is the image, object-fit: cover, filling the entire
+  // 1080×1920 card. When there's no avatar set, the bg-fallback tint
+  // shows through and a subtle placeholder prompts the user.
   ops.push({
-    type: "text",
-    text: "FLORIFY",
-    x: cx,
-    y: 310,
-    size: 96,
-    weight: 700,
-    family: "serif",
-    color: c.ink900,
-    align: "center",
-    letterSpacing: 8,
+    type: "rect",
+    x: 0,
+    y: 0,
+    w: PASSPORT_W,
+    h: PASSPORT_H,
+    color: c.bgFallback,
   });
   ops.push({
+    type: "image",
+    src: favoriteImage,
+    x: 0,
+    y: 0,
+    w: PASSPORT_W,
+    h: PASSPORT_H,
+    radius: 0,
+    bgColor: c.bgFallback,
+    placeholder: {
+      text: "🌱",
+      size: 220,
+      color: "rgba(247,243,234,0.22)",
+    },
+  });
+
+  // ── 2. Top scrim (height 420) ────────────────────────────────────
+  ops.push({
+    type: "gradientRect",
+    x: 0,
+    y: 0,
+    w: PASSPORT_W,
+    h: 420,
+    angle: 180,
+    stops: TOP_SCRIM_STOPS,
+  });
+
+  // ── 3. Bottom scrim (height 960, anchored to bottom) ─────────────
+  ops.push({
+    type: "gradientRect",
+    x: 0,
+    y: PASSPORT_H - 960,
+    w: PASSPORT_W,
+    h: 960,
+    angle: 180,
+    stops: BOTTOM_SCRIM_STOPS,
+  });
+
+  // ── A. Masthead (top 70) ─────────────────────────────────────────
+  const MASTHEAD_Y = 70;
+  // "florify" wordmark — Fraunces 34/600, lowercase, tight tracking.
+  ops.push({
     type: "text",
-    text: "BOTANICAL PASSPORT",
-    x: cx,
-    y: 375,
-    size: 32,
+    text: "florify",
+    x: LEFT,
+    y: MASTHEAD_Y + 34, // top-anchored: baseline ≈ top + size
+    size: 34,
+    weight: 600,
+    family: "serif",
+    color: c.cream,
+    align: "left",
+    letterSpacing: -0.02 * 34,
+  });
+  // Serial — uppercase Plex 15/500, wide tracking, faint.
+  ops.push({
+    type: "text",
+    text: data.serial.toUpperCase(),
+    x: RIGHT,
+    y: MASTHEAD_Y + 26,
+    size: 15,
     weight: 500,
     family: "sans",
-    color: c.ink500,
-    align: "center",
-    letterSpacing: 10,
-  });
-  ops.push({
-    type: "line",
-    x1: col.left,
-    y1: 450,
-    x2: col.right,
-    y2: 450,
-    color: c.divider,
-    width: 2,
+    color: c.faint,
+    align: "right",
+    letterSpacing: 0.3 * 15,
   });
 
-  // ── Stagger delays for DOM count-up animations ───────────────────
-  const DELAY_HERO = 0;
-  const DELAY_BARS = 200;
-  const DELAY_STATS = 400;
-
-  // ── Hero block: total harvested ──────────────────────────────────
-  // Baseline at y=625 — balances the visible cap of "0" (~515) against
-  // PASSPORT (375) around the divider at 450, giving roughly equal
-  // visual breathing above and below the divider.
+  // ── B. Species caption (top 170) ─────────────────────────────────
+  const CAPTION_Y = 170;
+  // Eyebrow — "Fig. 01 · Favourite Specimen"
   ops.push({
     type: "text",
-    text: `${data.totalHarvested}`,
-    x: cx,
-    y: 625,
-    size: 180,
-    weight: 700,
-    family: "serif",
-    color: c.ink900,
-    align: "center",
-    animate: { value: data.totalHarvested, delay: DELAY_HERO },
-  });
-  ops.push({
-    type: "text",
-    text: "TOTAL HARVESTED",
-    x: cx,
-    y: 705,
-    size: 36,
-    weight: 600,
+    text: "FIG. 01 · FAVOURITE SPECIMEN",
+    x: LEFT,
+    y: CAPTION_Y + 14,
+    size: 14,
+    weight: 500,
     family: "sans",
-    color: c.ink500,
-    align: "center",
-    letterSpacing: 8,
+    color: c.faint,
+    align: "left",
+    letterSpacing: 0.4 * 14,
+  });
+  // Specimen name — italic Fraunces 48/500, or a muted placeholder.
+  const specimenText = favoriteName ?? "Not chosen yet";
+  ops.push({
+    type: "text",
+    text: specimenText,
+    x: LEFT,
+    y: CAPTION_Y + 14 + 6 + 48, // eyebrow baseline + margin + size
+    size: 48,
+    weight: 500,
+    family: "serif",
+    color: favoriteName ? c.cream : c.faint,
+    align: "left",
+    italic: true,
+    letterSpacing: -0.015 * 48,
+    shadow: SHADOW_CAPTION,
   });
 
-  // ── Title pill (was Rank pill) ───────────────────────────────────
-  // Text is data.title — either a chosen achievement name or the auto
-  // rank fallback. Achievement names are longer than ranks, so the
-  // renderer will auto-shrink via the `fitTo` hint if needed.
-  const titleText = `◆  ${data.title}  ◆`;
-  const titleFitTo = { maxWidth: col.right - col.left, sizeLadder: [44, 40, 36, 32] as number[] };
+  // ── C. Hero block (bottom 340) ───────────────────────────────────
+  // Kicker sits above the title; title baseline computed from kicker
+  // baseline + margin-bottom + its own size.
+  const HERO_BOTTOM = 340;
+  const TITLE_SIZE = 156;
+  const TITLE_BASELINE_Y = PASSPORT_H - HERO_BOTTOM; // bottom of title line box
+  const KICKER_MARGIN_BOTTOM = 22;
+  const KICKER_SIZE = 16;
+  // Title baseline: position the title so its bottom is at HERO_BOTTOM
+  // offset from bottom of canvas. Line-height 0.92 × size ≈ rendered
+  // height; baseline ≈ top + size.
+  const titleBaselineY = TITLE_BASELINE_Y;
+  const kickerBaselineY =
+    titleBaselineY - TITLE_SIZE - KICKER_MARGIN_BOTTOM;
+
+  ops.push({
+    type: "text",
+    text: "— BEARER OF THE TITLE",
+    x: LEFT,
+    y: kickerBaselineY,
+    size: KICKER_SIZE,
+    weight: 500,
+    family: "sans",
+    color: c.muted,
+    align: "left",
+    letterSpacing: 0.4 * KICKER_SIZE,
+    shadow: SHADOW_DEFAULT,
+  });
+
+  const titleFitTo = {
+    maxWidth: COL_W,
+    sizeLadder: [156, 140, 124, 108, 92] as number[],
+  };
   if (data.titleShiny) {
     ops.push({
       type: "gradientText",
-      text: titleText,
-      x: cx,
-      y: 780,
-      size: 44,
-      weight: 600,
+      text: data.title,
+      x: LEFT,
+      y: titleBaselineY,
+      size: TITLE_SIZE,
+      weight: 500,
       family: "serif",
       gradient: {
-        colors: ["#FFB0C3", "#FFE18A", "#A6F0AD", "#9EC6FF", "#C9A3FF", "#FFB0C3"],
+        colors: [...PASSPORT_COLORS.shinyGradient],
         stops: [0, 0.2, 0.4, 0.6, 0.8, 1],
       },
-      align: "center",
-      letterSpacing: 2,
+      align: "left",
+      letterSpacing: -0.045 * TITLE_SIZE,
+      shadow: SHADOW_SHINY,
       fitTo: titleFitTo,
       animateGradient: true,
     });
   } else {
     ops.push({
       type: "text",
-      text: titleText,
-      x: cx,
-      y: 780,
-      size: 44,
-      weight: 600,
+      text: data.title,
+      x: LEFT,
+      y: titleBaselineY,
+      size: TITLE_SIZE,
+      weight: 500,
       family: "serif",
-      color: c.clay600,
-      align: "center",
-      letterSpacing: 2,
+      color: c.cream,
+      align: "left",
+      letterSpacing: -0.045 * TITLE_SIZE,
+      shadow: SHADOW_TITLE,
       fitTo: titleFitTo,
     });
   }
 
-  // ── Rarity section ornament ───────────────────────────────────────
-  const ornY = 860;
-  const ornLineW = 80;
-  ops.push(
-    {
-      type: "line",
-      x1: cx - ornLineW - 30,
-      y1: ornY,
-      x2: cx - 30,
-      y2: ornY,
-      color: c.divider,
-      width: 2,
-    },
-    {
-      type: "text",
-      text: "◈",
-      x: cx,
-      y: ornY + 8,
-      size: 28,
-      weight: 400,
-      family: "serif",
-      color: c.clay500,
-      align: "center",
-    },
-    {
-      type: "line",
-      x1: cx + 30,
-      y1: ornY,
-      x2: cx + ornLineW + 30,
-      y2: ornY,
-      color: c.divider,
-      width: 2,
-    },
-  );
+  // ── D. Stats strip (bottom 130) ──────────────────────────────────
+  // 1 px divider on top, four columns: Harvested | Common | Rare | Legendary
+  const STATS_BOTTOM = 130;
+  const STATS_BASE_Y = PASSPORT_H - STATS_BOTTOM; // baseline for bottom-aligned big numbers
+  const STATS_DIVIDER_Y = STATS_BASE_Y - 112 - 6 - 13 - 28;
+  // ^ big number (112) + marginBottom (6) + label size (13) + paddingTop (28)
+  // gives the top of the stats block where the 1px divider sits.
 
-  // ── Rarity bars ──────────────────────────────────────────────────
-  const barRows = [
-    {
-      label: "Common",
-      rarity: "common" as const,
-      unlocked: data.rarityProgress.common.unlocked,
-      total: data.rarityProgress.common.total,
-      fill: c.barCommon,
-    },
-    {
-      label: "Rare",
-      rarity: "rare" as const,
-      unlocked: data.rarityProgress.rare.unlocked,
-      total: data.rarityProgress.rare.total,
-      fill: c.barRare,
-    },
-    {
-      label: "Legendary",
-      rarity: "legendary" as const,
-      unlocked: data.rarityProgress.legendary.unlocked,
-      total: data.rarityProgress.legendary.total,
-      fill: c.barLegendary,
-    },
-  ] as const;
-
-  const barRowY0 = 920;
-  const rowHeight = 80;
-  const barX = col.left + 280;
-  const barW = 420;
-  const barH = 20;
-
-  for (let i = 0; i < barRows.length; i++) {
-    const row = barRows[i]!;
-    const y = barRowY0 + i * rowHeight;
-    // Rarity label — styled per theme
-    const rs = theme.rarityStyle[row.rarity];
-    const labelSize = row.rarity === "legendary" ? 36 : 34;
-    if (rs.glow) {
-      ops.push({
-        type: "glow",
-        x: col.left - rs.glow.blur,
-        y: y + 4 - labelSize - rs.glow.blur / 2,
-        w: 200 + rs.glow.blur * 2,
-        h: labelSize + rs.glow.blur,
-        color: rs.glow.color,
-        blur: rs.glow.blur,
-        radius: rs.glow.blur,
-      });
-    }
-    if (rs.gradient) {
-      ops.push({
-        type: "gradientText",
-        text: row.label,
-        x: col.left,
-        y: y + 4,
-        size: labelSize,
-        weight: rs.weight,
-        family: rs.family,
-        gradient: rs.gradient,
-        align: "left",
-        letterSpacing: rs.letterSpacing,
-      });
-    } else {
-      ops.push({
-        type: "text",
-        text: row.label,
-        x: col.left,
-        y: y + 4,
-        size: labelSize,
-        weight: rs.weight,
-        family: rs.family,
-        color: rs.color,
-        align: "left",
-        letterSpacing: rs.letterSpacing,
-      });
-    }
-    // Bar background
-    ops.push({
-      type: "rect",
-      x: barX,
-      y: y - 20,
-      w: barW,
-      h: barH,
-      color: c.barBg,
-      radius: barH / 2,
-    });
-    // Bar fill
-    const frac =
-      row.total > 0 ? Math.max(0, Math.min(1, row.unlocked / row.total)) : 0;
-    if (frac > 0) {
-      ops.push({
-        type: "rect",
-        x: barX,
-        y: y - 20,
-        w: Math.max(barH, barW * frac),
-        h: barH,
-        color: row.fill,
-        radius: barH / 2,
-        animate: { delay: DELAY_BARS + i * 50 },
-      });
-    }
-    // Count
-    ops.push({
-      type: "text",
-      text: `${row.unlocked} / ${row.total}`,
-      x: col.right,
-      y: y + 4,
-      size: 30,
-      weight: 500,
-      family: "sans",
-      color: c.ink500,
-      align: "right",
-      animate: { value: row.unlocked, delay: DELAY_BARS + i * 50 },
-    });
-  }
-
-  // ── Stats panel background ────────────────────────────────────────
   ops.push({
-    type: "rect",
-    x: col.left - 20,
-    y: 1160,
-    w: col.right - col.left + 40,
-    h: 175,
-    color: c.barBg,
-    radius: 16,
+    type: "line",
+    x1: LEFT,
+    y1: STATS_DIVIDER_Y,
+    x2: RIGHT,
+    y2: STATS_DIVIDER_Y,
+    color: c.divider,
+    width: 1,
   });
 
-  // ── Species unlocked summary (below rarity bars) ─────────────────
+  // Column layout: hero (auto) takes ~36% of the width, three rarity
+  // columns split the remaining 1fr 1fr 1fr with gap 36.
+  const STATS_GAP = 36;
+  const HERO_COL_W = 360; // matches `auto` sizing for "1,247"-class numbers
+  const RARITY_AVAILABLE = COL_W - HERO_COL_W - 3 * STATS_GAP;
+  const RARITY_COL_W = RARITY_AVAILABLE / 3;
+
+  // Column 1: Harvested
+  const HERO_LABEL_SIZE = 13;
+  const HERO_NUM_SIZE = 112;
+  const heroNumBaselineY = STATS_BASE_Y; // bottom-aligned
+  const heroLabelBaselineY = heroNumBaselineY - HERO_NUM_SIZE * 0.88 - 6; // num line-height 0.88 + gap 6
+
+  ops.push({
+    type: "text",
+    text: "HARVESTED",
+    x: LEFT,
+    y: heroLabelBaselineY,
+    size: HERO_LABEL_SIZE,
+    weight: 500,
+    family: "sans",
+    color: c.muted,
+    align: "left",
+    letterSpacing: 0.3 * HERO_LABEL_SIZE,
+    shadow: SHADOW_DEFAULT,
+  });
+  ops.push({
+    type: "text",
+    text: data.totalHarvested.toLocaleString("en-US"),
+    x: LEFT,
+    y: heroNumBaselineY,
+    size: HERO_NUM_SIZE,
+    weight: 600,
+    family: "serif",
+    color: c.cream,
+    align: "left",
+    letterSpacing: -0.04 * HERO_NUM_SIZE,
+    shadow: SHADOW_DEFAULT,
+    animate: { value: data.totalHarvested, delay: 0 },
+  });
+
+  // Columns 2–4: Common / Rare / Legendary
+  const RARITY_NUM_SIZE = 48;
+  const RARITY_LABEL_SIZE = 13;
+  const DOT_SIZE = 8;
+  const DOT_GAP = 8;
+
+  const rarityNumBaselineY = STATS_BASE_Y; // bottom-aligned with hero number
+  const rarityLabelBaselineY =
+    rarityNumBaselineY - RARITY_NUM_SIZE - 6; // num line-height 1 + gap 6
+  const rarityDotCenterY = rarityLabelBaselineY - RARITY_LABEL_SIZE / 2 + 2;
+
+  const rarities = [
+    {
+      key: "common" as const,
+      label: "COMMON",
+      color: c.rareCommon,
+      data: data.rarityProgress.common,
+    },
+    {
+      key: "rare" as const,
+      label: "RARE",
+      color: c.rareRare,
+      data: data.rarityProgress.rare,
+    },
+    {
+      key: "legendary" as const,
+      label: "LEGENDARY",
+      color: c.rareLegend,
+      data: data.rarityProgress.legendary,
+    },
+  ];
+
+  let colX = LEFT + HERO_COL_W + STATS_GAP;
+  for (let i = 0; i < rarities.length; i++) {
+    const r = rarities[i]!;
+    // Dot
+    ops.push({
+      type: "rect",
+      x: colX,
+      y: rarityDotCenterY - DOT_SIZE / 2,
+      w: DOT_SIZE,
+      h: DOT_SIZE,
+      color: r.color,
+      radius: DOT_SIZE / 2,
+    });
+    // Label
+    ops.push({
+      type: "text",
+      text: r.label,
+      x: colX + DOT_SIZE + DOT_GAP,
+      y: rarityLabelBaselineY,
+      size: RARITY_LABEL_SIZE,
+      weight: 500,
+      family: "sans",
+      color: c.muted,
+      align: "left",
+      letterSpacing: 0.26 * RARITY_LABEL_SIZE,
+      shadow: SHADOW_DEFAULT,
+    });
+    // Number "X/Y" — drawn as two separate text ops so the suffix can
+    // take a different size/color. The slash is part of the suffix.
+    const unlockedStr = r.data.unlocked.toLocaleString("en-US");
+    ops.push({
+      type: "text",
+      text: unlockedStr,
+      x: colX,
+      y: rarityNumBaselineY,
+      size: RARITY_NUM_SIZE,
+      weight: 600,
+      family: "serif",
+      color: c.cream,
+      align: "left",
+      letterSpacing: -0.02 * RARITY_NUM_SIZE,
+      shadow: SHADOW_DEFAULT,
+      animate: { value: r.data.unlocked, delay: 150 + i * 60 },
+    });
+    ops.push({
+      type: "text",
+      text: `/${r.data.total.toLocaleString("en-US")}`,
+      // Position the suffix right after the unlocked number. We use an
+      // approximate advance — the unlocked number is short (≤3 digits
+      // typically), tabular-nums keeps widths stable. 30px per glyph
+      // at size 48 in Fraunces 600 is a close enough approximation
+      // for the offset; the visual read is "X/Y" with a clear split.
+      x: colX + unlockedStr.length * 30,
+      y: rarityNumBaselineY,
+      size: 24,
+      weight: 400,
+      family: "serif",
+      color: c.faint,
+      align: "left",
+      shadow: SHADOW_DEFAULT,
+    });
+
+    colX += RARITY_COL_W + STATS_GAP;
+  }
+
+  // ── E. Footer (bottom 50) ────────────────────────────────────────
+  const FOOTER_BOTTOM = 50;
+  const FOOTER_BASELINE_Y = PASSPORT_H - FOOTER_BOTTOM;
+
   const totalSpecies =
     data.rarityProgress.common.total +
     data.rarityProgress.rare.total +
     data.rarityProgress.legendary.total;
-  ops.push({
-    type: "text",
-    text: `${data.speciesUnlocked} / ${totalSpecies} species unlocked`,
-    x: cx,
-    y: 1200,
-    size: 34,
-    weight: 600,
-    family: "sans",
-    color: c.ink700,
-    align: "center",
-    animate: { value: data.speciesUnlocked, delay: DELAY_STATS },
-  });
 
-  // ── Stat line ────────────────────────────────────────────────────
-  ops.push({
-    type: "text",
-    text: `🔥  ${data.currentStreak} day streak`,
-    x: cx,
-    y: 1250,
-    size: 34,
-    weight: 500,
-    family: "sans",
-    color: c.ink700,
-    align: "center",
-    animate: { value: data.currentStreak, delay: DELAY_STATS + 50 },
-  });
-  ops.push({
-    type: "text",
-    text: `Longest streak: ${data.longestStreak} days`,
-    x: cx,
-    y: 1305,
-    size: 28,
-    weight: 400,
-    family: "sans",
-    color: c.ink500,
-    align: "center",
-    animate: { value: data.longestStreak, delay: DELAY_STATS + 100 },
-  });
-
-  // ── Divider ──────────────────────────────────────────────────────
-  ops.push({
-    type: "line",
-    x1: col.left,
-    y1: 1390,
-    x2: col.right,
-    y2: 1390,
-    color: c.divider,
-    width: 2,
-  });
-
-  // ── Identity block ───────────────────────────────────────────────
-  // Avatar frame sits on the left; text columns shift right of it.
-  const avatarX = col.left;
-  const avatarY = 1420;
-  const avatarW = 180;
-  const avatarH = 220;
-  const avatarGap = 30;
-  const idTextX = avatarX + avatarW + avatarGap; // 390
-
-  // Avatar image op (before the text so the border stroke sits under
-  // nothing — text doesn't intersect this region anyway).
-  const avatarSrc = data.avatar
-    ? (SPECIES_BY_ID[data.avatar.speciesId]
-        ? `/floras/${SPECIES_BY_ID[data.avatar.speciesId]!.folder}/stage-${data.avatar.stage}.webp`
-        : null)
-    : null;
-  ops.push({
-    type: "glow",
-    x: avatarX - 6,
-    y: avatarY - 6,
-    w: avatarW + 12,
-    h: avatarH + 12,
-    color: "rgba(75, 55, 30, 0.08)",
-    blur: 12,
-    radius: 20,
-  });
-  ops.push({
-    type: "image",
-    src: avatarSrc,
-    x: avatarX,
-    y: avatarY,
-    w: avatarW,
-    h: avatarH,
-    radius: 16,
-    bgColor: c.bgTop,
-    border: { color: c.border, width: 2 },
-    placeholder: { text: "🌱", size: 80, color: c.ink300 },
-  });
-
+  // Left cluster: display name + meta line
+  const DISPLAY_NAME_SIZE = 28;
   ops.push({
     type: "text",
     text: data.displayName,
-    x: idTextX,
-    y: 1460,
-    size: 36,
+    x: LEFT,
+    y: FOOTER_BASELINE_Y,
+    size: DISPLAY_NAME_SIZE,
     weight: 600,
-    family: "sans",
-    color: c.ink900,
+    family: "serif",
+    color: c.cream,
     align: "left",
+    letterSpacing: -0.01 * DISPLAY_NAME_SIZE,
+    shadow: SHADOW_DEFAULT,
   });
-  ops.push({
-    type: "text",
-    text: data.serial,
-    x: idTextX,
-    y: 1510,
-    size: 30,
-    weight: 500,
-    family: "mono",
-    color: c.ink500,
-    align: "left",
-    letterSpacing: 2,
-  });
-  ops.push({
-    type: "text",
-    text: `Issued ${formatDate(data.startedAt)}`,
-    x: idTextX,
-    y: 1555,
-    size: 26,
-    weight: 400,
-    family: "sans",
-    color: c.ink500,
-    align: "left",
-  });
-  if (data.sharedAt) {
-    ops.push({
-      type: "text",
-      text: `Data as of ${formatDate(data.sharedAt)}`,
-      x: idTextX,
-      y: 1595,
-      size: 24,
-      weight: 400,
-      family: "sans",
-      color: c.ink300,
-      align: "left",
-    });
-  }
 
-  // ── Footer URL ───────────────────────────────────────────────────
+  // Meta line sits to the right of the display name. We approximate
+  // the display-name advance so the two lines share a baseline (as per
+  // `align-items: baseline`). The gap is README-spec'd at 20px.
+  const nameApproxWidth = approxTextWidth(
+    data.displayName,
+    DISPLAY_NAME_SIZE,
+    "serif",
+  );
+  const metaX = LEFT + nameApproxWidth + 20;
+
+  const metaText = data.currentStreak > 0
+    ? `${data.speciesUnlocked} / ${totalSpecies} SPECIES · STREAK ${data.currentStreak}`
+    : `${data.speciesUnlocked} / ${totalSpecies} SPECIES`;
   ops.push({
     type: "text",
-    text: "florify.zeze.app",
-    x: col.right,
-    y: 1555,
-    size: 30,
+    text: metaText,
+    x: metaX,
+    y: FOOTER_BASELINE_Y,
+    size: 14,
     weight: 500,
     family: "sans",
-    color: c.clay500,
+    color: c.faint,
+    align: "left",
+    letterSpacing: 0.2 * 14,
+    shadow: SHADOW_DEFAULT,
+  });
+
+  // Right slot: URL
+  ops.push({
+    type: "text",
+    text: "FLORIFY.ZEZE.APP",
+    x: RIGHT,
+    y: FOOTER_BASELINE_Y,
+    size: 14,
+    weight: 500,
+    family: "sans",
+    color: c.faint,
     align: "right",
+    letterSpacing: 0.2 * 14,
+    shadow: SHADOW_DEFAULT,
   });
 
   return ops;
 }
+
+/**
+ * Rough text-width estimate used only for laying out adjacent baseline
+ * segments (display name + meta line in the footer). Fraunces at 600
+ * averages ~0.55em per glyph for mixed-case; Thai glyphs are wider so
+ * we bump the factor. Not a replacement for ctx.measureText — just a
+ * build-time approximation so layout is deterministic.
+ */
+function approxTextWidth(
+  text: string,
+  size: number,
+  family: "serif" | "sans" | "mono",
+): number {
+  const hasThai = /[\u0E00-\u0E7F]/.test(text);
+  const perGlyph = hasThai ? 0.72 : family === "serif" ? 0.58 : 0.55;
+  return text.length * size * perGlyph;
+}
+

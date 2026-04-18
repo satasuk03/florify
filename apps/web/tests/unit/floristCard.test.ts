@@ -59,40 +59,51 @@ const sampleData: FloristCardData = {
 };
 
 describe("buildLayout", () => {
-  it("includes the required text anchors", () => {
+  it("includes the required B1 text anchors", () => {
     const ops = buildLayout(sampleData);
     const texts = ops.filter(
       (o): o is Extract<DrawOp, { type: "text" }> => o.type === "text",
     );
     const textContent = texts.map((t) => t.text);
-    expect(textContent).toContain("FLORIFY");
-    expect(textContent).toContain("BOTANICAL PASSPORT");
-    expect(textContent).toContain("124");
-    expect(textContent).toContain("TOTAL HARVESTED");
-    expect(textContent).toContain("47 / 300 species unlocked");
-    expect(textContent).toContain("◆  Apprentice  ◆");
-    expect(textContent).toContain("Common");
-    expect(textContent).toContain("Rare");
-    expect(textContent).toContain("Legendary");
-    expect(textContent).toContain("Guest");
+    // B1 wordmark is lowercase.
+    expect(textContent).toContain("florify");
+    // Masthead serial.
     expect(textContent).toContain("FL-3K2P-9XQ4");
-    expect(textContent).toContain("florify.zeze.app");
+    // Species caption eyebrow + placeholder name when avatar is null.
+    expect(textContent).toContain("FIG. 01 · FAVOURITE SPECIMEN");
+    // Hero kicker + title.
+    expect(textContent).toContain("— BEARER OF THE TITLE");
+    expect(textContent).toContain("Apprentice");
+    // Stats strip.
+    expect(textContent).toContain("HARVESTED");
+    expect(textContent).toContain("124");
+    expect(textContent).toContain("COMMON");
+    expect(textContent).toContain("RARE");
+    expect(textContent).toContain("LEGENDARY");
+    // Footer.
+    expect(textContent).toContain("Guest");
+    expect(textContent).toContain("FLORIFY.ZEZE.APP");
+    // Meta line — 47 / 300 species · streak 12.
+    expect(
+      textContent.some((t) => t.includes("47 / 300 SPECIES") && t.includes("STREAK 12")),
+    ).toBe(true);
   });
 
-  it("keeps all content within story safe zone y ∈ [240, 1800]", () => {
-    const ops = buildLayout(sampleData);
-    for (const op of ops) {
-      if (op.type === "text") {
-        expect(op.y).toBeGreaterThanOrEqual(240);
-        expect(op.y).toBeLessThanOrEqual(1800);
-      }
-    }
+  it("drops the streak suffix when currentStreak is 0", () => {
+    const data: FloristCardData = { ...sampleData, currentStreak: 0 };
+    const ops = buildLayout(data);
+    const texts = ops.filter(
+      (o): o is Extract<DrawOp, { type: "text" }> => o.type === "text",
+    );
+    const metaLine = texts.find((t) => t.text.includes("SPECIES"));
+    expect(metaLine).toBeDefined();
+    expect(metaLine!.text).not.toMatch(/STREAK/);
   });
 
   it("builds within canvas bounds", () => {
     const ops = buildLayout(sampleData);
     for (const op of ops) {
-      if (op.type === "rect") {
+      if (op.type === "rect" || op.type === "gradientRect") {
         expect(op.x).toBeGreaterThanOrEqual(0);
         expect(op.y).toBeGreaterThanOrEqual(0);
         expect(op.x + op.w).toBeLessThanOrEqual(PASSPORT_W + 1);
@@ -101,23 +112,18 @@ describe("buildLayout", () => {
     }
   });
 
-  it("renders rarity bars proportional to unlocked/total", () => {
-    // Put a 50% legendary progress to verify bar fill width
-    const data: FloristCardData = {
-      ...sampleData,
-      rarityProgress: {
-        common: { unlocked: 100, total: 200 },
-        rare: { unlocked: 20, total: 80 },
-        legendary: { unlocked: 10, total: 20 },
-      },
-    };
-    const ops = buildLayout(data);
-    const rects = ops.filter(
-      (o): o is Extract<DrawOp, { type: "rect" }> => o.type === "rect",
+  it("emits top and bottom scrim gradient rects", () => {
+    const ops = buildLayout(sampleData);
+    const scrims = ops.filter(
+      (o): o is Extract<DrawOp, { type: "gradientRect" }> =>
+        o.type === "gradientRect",
     );
-    // There should be 3 background bars + 3 fills = 6 rects from bar rows
-    // (plus decorative corners — but those are 'corner' type, not 'rect').
-    expect(rects.length).toBeGreaterThanOrEqual(6);
+    // B1: one top scrim (y=0, h=420) + one bottom scrim (bottom-anchored, h=960).
+    expect(scrims.length).toBe(2);
+    const top = scrims.find((s) => s.y === 0);
+    const bottom = scrims.find((s) => s.y + s.h === PASSPORT_H);
+    expect(top?.h).toBe(420);
+    expect(bottom?.h).toBe(960);
   });
 
   it("is deterministic for the same data", () => {
@@ -126,7 +132,7 @@ describe("buildLayout", () => {
     expect(a).toBe(b);
   });
 
-  it("emits a title pill with a fitTo hint", () => {
+  it("emits a title with a fitTo hint starting at 156px", () => {
     const data: FloristCardData = {
       ...sampleData,
       title: "📗 Apprentice Botanist",
@@ -138,7 +144,7 @@ describe("buildLayout", () => {
     );
     expect(titleOp).toBeDefined();
     expect(titleOp!.fitTo).toBeDefined();
-    expect(titleOp!.fitTo!.sizeLadder[0]).toBe(44);
+    expect(titleOp!.fitTo!.sizeLadder[0]).toBe(156);
   });
 
   it("emits an image op with placeholder when avatar is null", () => {

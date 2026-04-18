@@ -12,6 +12,7 @@ import { PassportCard } from "./PassportCard";
 import { AchievementsTab } from "./AchievementsTab";
 import { sharePassport, type ShareResult } from "./sharePassport";
 import { TitleChangeModal } from "./TitleChangeModal";
+import { FullscreenPassport } from "./FullscreenPassport";
 import { gameEventBus } from "@/lib/gameEventBus";
 
 /**
@@ -82,6 +83,7 @@ export function FloristCardSheet({ open, onClose }: Props) {
   );
   const [titleModalOpen, setTitleModalOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
+  const [fullscreenOpen, setFullscreenOpen] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
   const [cardWidth, setCardWidth] = useState(320);
 
@@ -102,6 +104,7 @@ export function FloristCardSheet({ open, onClose }: Props) {
       setActiveTab("passport");
       setTitleModalOpen(false);
       setEditMode(false);
+      setFullscreenOpen(false);
     }
   }
 
@@ -270,13 +273,24 @@ export function FloristCardSheet({ open, onClose }: Props) {
               />
             </div>
             <div className="flex justify-center mb-5">
-              <PassportCard
-                data={data}
-                maxWidth={cardWidth}
-                editable={editMode}
-                onEditTitle={() => setTitleModalOpen(true)}
-                onEditAvatar={handleEditAvatar}
-              />
+              {editMode ? (
+                <PassportCard
+                  data={data}
+                  maxWidth={cardWidth}
+                  editable
+                  onEditTitle={() => setTitleModalOpen(true)}
+                  onEditAvatar={handleEditAvatar}
+                />
+              ) : (
+                <button
+                  type="button"
+                  aria-label="ดูการ์ดเต็มจอ"
+                  onClick={() => setFullscreenOpen(true)}
+                  className="p-0 bg-transparent border-0 cursor-zoom-in transition-transform hover:scale-[1.01] active:scale-[0.99]"
+                >
+                  <PassportCard data={data} maxWidth={cardWidth} />
+                </button>
+              )}
             </div>
 
             <div className="flex flex-col gap-2 items-center">
@@ -314,6 +328,12 @@ export function FloristCardSheet({ open, onClose }: Props) {
         <TitleChangeModal
           onClose={() => setTitleModalOpen(false)}
           currentRank={data.rank}
+        />
+      )}
+      {fullscreenOpen && (
+        <FullscreenPassport
+          data={data}
+          onClose={() => setFullscreenOpen(false)}
         />
       )}
     </div>
