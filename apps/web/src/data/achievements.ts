@@ -339,24 +339,81 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
       target: 300,
     },
   },
-  // ── Collection: Sets — Chinese Garden (1 tier) ─────────────────────
+  // ── Collection: Sets — Chinese Garden (4 tiers) ────────────────────
   {
     id: "set_chinese_5",
-    name: "Chinese Garden Master",
-    badge: { shield: "rainbow", emoji: "🏮" },
+    name: "Willow Wanderer",
+    badge: { shield: "silver", emoji: "🏮" },
     description: {
-      en: "Collect all 5 Chinese Garden flora",
-      th: "สะสม 5 Chinese Garden ครบ",
+      en: "Collect 5 Chinese Garden flora",
+      th: "สะสม 5 Chinese Garden",
     },
     flavor: {
-      en: "A Chinese garden blooms in your hands.",
-      th: "สวนจีนผลิบานในมือคุณ",
+      en: "A stroll past the willow gate.",
+      th: "เดินเล่นผ่านประตูต้นหลิว",
     },
-    rewards: [{ type: "sprouts", amount: 500 }],
+    rewards: [{ type: "sprouts", amount: 100 }],
     condition: {
       type: "species_by_collection",
       collection: "chinese-garden",
       target: 5,
+    },
+  },
+  {
+    id: "set_chinese_10",
+    name: "Bamboo Scholar",
+    badge: { shield: "gold", emoji: "🏮" },
+    description: {
+      en: "Collect 10 Chinese Garden flora",
+      th: "สะสม 10 Chinese Garden",
+    },
+    flavor: {
+      en: "Ink and bamboo, patience and grace.",
+      th: "หมึกและไผ่ ความอดทนและสง่างาม",
+    },
+    rewards: [{ type: "sprouts", amount: 300 }],
+    condition: {
+      type: "species_by_collection",
+      collection: "chinese-garden",
+      target: 10,
+    },
+  },
+  {
+    id: "set_chinese_15",
+    name: "Lotus Sage",
+    badge: { shield: "purple-gradient", emoji: "🏮" },
+    description: {
+      en: "Collect 15 Chinese Garden flora",
+      th: "สะสม 15 Chinese Garden",
+    },
+    flavor: {
+      en: "The pond reflects your wisdom.",
+      th: "สระบัวสะท้อนปัญญาของคุณ",
+    },
+    rewards: [{ type: "sprouts", amount: 1000 }],
+    condition: {
+      type: "species_by_collection",
+      collection: "chinese-garden",
+      target: 15,
+    },
+  },
+  {
+    id: "set_chinese_20",
+    name: "Jade Emperor",
+    badge: { shield: "rainbow", emoji: "🏮" },
+    description: {
+      en: "Collect 20 Chinese Garden flora",
+      th: "สะสม 20 Chinese Garden",
+    },
+    flavor: {
+      en: "The dragon bows in your garden.",
+      th: "มังกรคำนับในสวนของคุณ",
+    },
+    rewards: [{ type: "sprouts", amount: 5000 }],
+    condition: {
+      type: "species_by_collection",
+      collection: "chinese-garden",
+      target: 20,
     },
   },
 
