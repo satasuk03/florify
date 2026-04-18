@@ -342,15 +342,15 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
   // ── Collection: Sets — Chinese Garden (4 tiers) ────────────────────
   {
     id: "set_chinese_5",
-    name: "Willow Wanderer",
+    name: "Jianghu Wanderer",
     badge: { shield: "silver", emoji: "🏮" },
     description: {
       en: "Collect 5 Chinese Garden flora",
       th: "สะสม 5 Chinese Garden",
     },
     flavor: {
-      en: "A stroll past the willow gate.",
-      th: "เดินเล่นผ่านประตูต้นหลิว",
+      en: "A lone sword steps onto the rivers and lakes.",
+      th: "ดาบเดียวดายก้าวสู่แม่น้ำและทะเลสาบ",
     },
     rewards: [{ type: "sprouts", amount: 100 }],
     condition: {
@@ -361,15 +361,15 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
   },
   {
     id: "set_chinese_10",
-    name: "Bamboo Scholar",
+    name: "Plum Blossom Swordsman",
     badge: { shield: "gold", emoji: "🏮" },
     description: {
       en: "Collect 10 Chinese Garden flora",
       th: "สะสม 10 Chinese Garden",
     },
     flavor: {
-      en: "Ink and bamboo, patience and grace.",
-      th: "หมึกและไผ่ ความอดทนและสง่างาม",
+      en: "Your blade dances with falling plum blossoms.",
+      th: "ดาบของคุณร่ายรำกับดอกบ๊วยที่ร่วงหล่น",
     },
     rewards: [{ type: "sprouts", amount: 300 }],
     condition: {
@@ -380,15 +380,15 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
   },
   {
     id: "set_chinese_15",
-    name: "Lotus Sage",
+    name: "Orchid Pavilion Sage",
     badge: { shield: "purple-gradient", emoji: "🏮" },
     description: {
       en: "Collect 15 Chinese Garden flora",
       th: "สะสม 15 Chinese Garden",
     },
     flavor: {
-      en: "The pond reflects your wisdom.",
-      th: "สระบัวสะท้อนปัญญาของคุณ",
+      en: "The pavilion bows to your mastery.",
+      th: "ศาลาน้อมคำนับต่อวิชาของคุณ",
     },
     rewards: [{ type: "sprouts", amount: 1000 }],
     condition: {
@@ -399,15 +399,15 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
   },
   {
     id: "set_chinese_20",
-    name: "Jade Emperor",
+    name: "Ninefold Lotus Immortal",
     badge: { shield: "rainbow", emoji: "🏮" },
     description: {
       en: "Collect 20 Chinese Garden flora",
       th: "สะสม 20 Chinese Garden",
     },
     flavor: {
-      en: "The dragon bows in your garden.",
-      th: "มังกรคำนับในสวนของคุณ",
+      en: "Nine lotuses bloom — you ascend to immortality.",
+      th: "บัวเก้ากลีบผลิบาน คุณก้าวสู่ความเป็นอมตะ",
     },
     rewards: [{ type: "sprouts", amount: 5000 }],
     condition: {
