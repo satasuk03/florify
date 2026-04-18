@@ -593,7 +593,14 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
   // ── Harvest: By Rarity (Common) (6 tiers) ──────────────────────────
   ...([10, 50, 100, 200, 500, 1000] as const).map((n, i) => ({
     id: `harvest_common_${n}`,
-    name: `Common Reaper ${n}`,
+    name: [
+      "Petal Plucker",
+      "Meadow Hand",
+      "Daisy Scythe",
+      "Bouquet Baron",
+      "Garland Lord",
+      "Emperor of Meadows",
+    ][i]!,
     badge: {
       shield: ["blue", "bronze", "silver", "gold", "purple-gradient", "rainbow"][i]!,
       emoji: "🌼",
@@ -626,7 +633,14 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
   // ── Harvest: By Rarity (Rare) (6 tiers) ────────────────────────────
   ...([10, 50, 100, 200, 500, 1000] as const).map((n, i) => ({
     id: `harvest_rare_${n}`,
-    name: `Rare Reaper ${n}`,
+    name: [
+      "Gem Gleaner",
+      "Prism Hunter",
+      "Sapphire Scythe",
+      "Jewel Baron",
+      "Crystal Sovereign",
+      "Empress of Prisms",
+    ][i]!,
     badge: {
       shield: ["blue", "bronze", "silver", "gold", "purple-gradient", "rainbow"][i]!,
       emoji: "💎",
@@ -659,7 +673,14 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
   // ── Harvest: By Rarity (Legendary) (6 tiers) ───────────────────────
   ...([10, 50, 100, 200, 500, 1000] as const).map((n, i) => ({
     id: `harvest_legend_${n}`,
-    name: `Legend Reaper ${n}`,
+    name: [
+      "Starling Harvester",
+      "Comet Chaser",
+      "Nova Scythe",
+      "Myth Baron",
+      "Astral Monarch",
+      "Deity of Legends",
+    ][i]!,
     badge: {
       shield: ["blue", "bronze", "silver", "gold", "purple-gradient", "rainbow"][i]!,
       emoji: "⭐",
@@ -1077,11 +1098,11 @@ export const ACHIEVEMENTS: readonly AchievementDef[] = [
   ...([10, 30, 90, 365, 1000] as const).map((n, i) => ({
     id: `daily_all_${n}`,
     name: [
-      "Devoted 10",
-      "Devoted 30",
-      "Devoted 90",
-      "Devoted 365",
-      "Devoted 1000",
+      "Kindled Spirit",
+      "Steady Lantern",
+      "Season's Vow",
+      "Year-Sworn",
+      "Timeless Oath",
     ][i]!,
     badge: {
       shield: ["bronze", "silver", "gold", "purple-gradient", "rainbow"][i]!,
