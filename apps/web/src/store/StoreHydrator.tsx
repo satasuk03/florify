@@ -1,10 +1,12 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useGameStore } from './gameStore';
+import { useGameStore, deriveSerial } from './gameStore';
 import { flushSave } from './debouncedSave';
 import { initMissionSubscriber } from './missionSubscriber';
 import { initAchievementSubscriber } from './achievementSubscriber';
+import { initAnalyticsSubscriber } from './analyticsSubscriber';
+import { identify } from '@/lib/analytics';
 import { checkAchievements } from './achievementChecker';
 import { scheduleSave } from './debouncedSave';
 
@@ -41,8 +43,22 @@ export function StoreHydrator() {
     return cleanup;
   }, []);
 
+  // Initialize analytics event subscriber (once).
+  useEffect(() => {
+    const cleanup = initAnalyticsSubscriber();
+    return cleanup;
+  }, []);
+
   // Retroactive achievement unlock — runs once after hydration.
   const hydrated = useGameStore((s) => s.hydrated);
+
+  // Send the passport serial to GA as user_id once hydrated. No displayName
+  // is sent — it's user-editable free text and could contain PII.
+  const userId = useGameStore((s) => s.state.userId);
+  useEffect(() => {
+    if (!hydrated || !userId) return;
+    identify(deriveSerial(userId));
+  }, [hydrated, userId]);
   useEffect(() => {
     if (!hydrated) return;
     const state = useGameStore.getState().state;

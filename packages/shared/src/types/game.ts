@@ -34,11 +34,14 @@ export interface DailyMissionState {
 export type GameEvent =
   | { type: 'water' }
   | { type: 'plant' }
-  | { type: 'harvest'; rarity: Rarity; isNew: boolean }
+  | { type: 'harvest'; speciesId: number; rarity: Rarity; isNew: boolean }
   | { type: 'combo'; level: number }
   | { type: 'visit' }
   | { type: 'share' }
-  | { type: 'booster_open'; tier: BoosterTier; rarity: Rarity; isNew: boolean };
+  | { type: 'booster_open'; tier: BoosterTier; rarity: Rarity; isNew: boolean }
+  | { type: 'cosmetic_box_open'; boxType: CosmeticType; dropKind: 'item' | 'gold' | 'drops'; rarity?: Rarity; isNew?: boolean }
+  | { type: 'mission_claim'; milestone: number; dropsAwarded: number }
+  | { type: 'mission_all_complete'; sproutsAwarded: number };
 
 export interface TreeInstance {
   id: string;                  // nanoid()

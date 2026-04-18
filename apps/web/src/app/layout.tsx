@@ -4,6 +4,7 @@ import {
   IBM_Plex_Sans_Thai_Looped,
   Noto_Serif_Thai,
 } from "next/font/google";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import { StoreHydrator } from "@/store/StoreHydrator";
 import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistration";
 import { RecoveryGesture } from "@/components/RecoveryGesture";
@@ -145,6 +146,7 @@ export default function RootLayout({
         <MobileFrame>{children}</MobileFrame>
         <ToastContainer />
       </body>
+      <GoogleAnalytics gaId="G-48CGST4LZE" />
     </html>
   );
 }

@@ -662,7 +662,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       scheduleSave(next);
   
       gameEventBus.emit({ type: 'water' });
-      gameEventBus.emit({ type: 'harvest', rarity: harvested.rarity, isNew: !isDuplicate });
+      gameEventBus.emit({ type: 'harvest', speciesId: harvested.speciesId, rarity: harvested.rarity, isNew: !isDuplicate });
       return { ok: true, harvested, isNew: !isDuplicate, pityPointsGained: result.pityPointsGained, pityReward: result.pityReward, sproutsGained, goldGained };
     }
 
@@ -868,11 +868,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
     // Find newly reachable milestones
     let dropsAwarded = 0;
     const newClaimed = [...claimedMilestones];
+    const newlyClaimed: Array<{ milestone: number; drops: number }> = [];
     for (let i = 0; i < MISSION_MILESTONES.length; i++) {
       const milestone = MISSION_MILESTONES[i]!;
       const drops = MISSION_MILESTONE_DROPS[i]!;
       if (totalPoints >= milestone && !claimedMilestones.includes(milestone)) {
         newClaimed.push(milestone);
+        newlyClaimed.push({ milestone, drops });
         dropsAwarded += drops;
       }
     }
@@ -893,6 +895,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
     };
     set({ state: next });
     scheduleSave(next);
+    for (const c of newlyClaimed) {
+      gameEventBus.emit({ type: 'mission_claim', milestone: c.milestone, dropsAwarded: c.drops });
+    }
     return { dropsAwarded };
   },
 
@@ -953,6 +958,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     };
     set({ state: next });
     scheduleSave(next);
+    gameEventBus.emit({ type: 'mission_all_complete', sproutsAwarded: SPROUT_ALL_MISSIONS_BONUS });
     return { sproutsAwarded: SPROUT_ALL_MISSIONS_BONUS };
   },
 
@@ -1252,6 +1258,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
     };
     set({ state: next });
     scheduleSave(next);
+
+    gameEventBus.emit({
+      type: 'cosmetic_box_open',
+      boxType: type,
+      dropKind: drop.kind,
+      ...(itemResult ? { rarity: itemResult.rarity, isNew: itemResult.isNew } : {}),
+    });
 
     return {
       type,

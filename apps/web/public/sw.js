@@ -1,7 +1,7 @@
-// Florify Service Worker v10
-const CACHE_NAME = "florify-v10";
-const STATIC_CACHE = "florify-static-v10";
-const FLORA_CACHE = "florify-flora-v10";
+// Florify Service Worker v11
+const CACHE_NAME = "florify-v11";
+const STATIC_CACHE = "florify-static-v11";
+const FLORA_CACHE = "florify-flora-v11";
 
 const APP_SHELL = [
   "/",
