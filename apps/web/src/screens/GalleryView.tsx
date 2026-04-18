@@ -138,8 +138,7 @@ function RarityGem({ rarity, size = 11 }: { rarity: Rarity; size?: number }) {
   );
 }
 
-/* ── Pressed-leaf progress wreath ───────────────────────────────── */
-const WREATH_SEGMENTS = 40;
+/* ── Progress ring ──────────────────────────────────────────────── */
 function ProgressWreath({
   unlocked,
   total,
@@ -154,40 +153,40 @@ function ProgressWreath({
   chaptersTotal: number;
 }) {
   const pct = total === 0 ? 0 : unlocked / total;
+  const radius = 46;
+  const circumference = 2 * Math.PI * radius;
+  const dashOffset = circumference * (1 - pct);
   return (
     <section className="grid grid-cols-[110px_1fr] gap-3.5 items-center bg-cream-100 border border-cream-300 rounded-md p-3.5 mb-4">
       <div className="relative w-[110px] h-[110px]">
-        <svg viewBox="0 0 120 120" width="100%" height="100%" aria-hidden>
-          {Array.from({ length: WREATH_SEGMENTS }).map((_, i) => {
-            const angle = (i / WREATH_SEGMENTS) * Math.PI * 2 - Math.PI / 2;
-            const filled = i / WREATH_SEGMENTS < pct;
-            const x = 60 + Math.cos(angle) * 46;
-            const y = 60 + Math.sin(angle) * 46;
-            const rot = (i / WREATH_SEGMENTS) * 360 + 90;
-            return (
-              <g
-                key={i}
-                transform={`translate(${x} ${y}) rotate(${rot})`}
-                opacity={filled ? 1 : 0.25}
-              >
-                <ellipse
-                  cx="0"
-                  cy="0"
-                  rx="2.2"
-                  ry="5"
-                  fill={filled ? "#6b8e4e" : "#c5b8a0"}
-                />
-                <line
-                  x1="0"
-                  y1="-4"
-                  x2="0"
-                  y2="4"
-                  stroke={filled ? "#4a6b35" : "#a69880"}
-                  strokeWidth="0.5"
-                />
-              </g>
-            );
-          })}
+        <svg
+          viewBox="0 0 120 120"
+          width="100%"
+          height="100%"
+          aria-hidden
+          className="-rotate-90"
+        >
+          <circle
+            cx="60"
+            cy="60"
+            r={radius}
+            fill="none"
+            stroke="#d1c0a0"
+            strokeWidth="4"
+            strokeOpacity="0.55"
+          />
+          <circle
+            cx="60"
+            cy="60"
+            r={radius}
+            fill="none"
+            stroke="#6b8e4e"
+            strokeWidth="4"
+            strokeLinecap="round"
+            strokeDasharray={circumference}
+            strokeDashoffset={dashOffset}
+            style={{ transition: "stroke-dashoffset 900ms cubic-bezier(0.22,1,0.36,1)" }}
+          />
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <div className="font-serif font-semibold text-[26px] text-ink-900 tabular-nums leading-none tracking-tight">
