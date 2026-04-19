@@ -1416,3 +1416,46 @@
     background-position: 200% 50%;
   }
 }
+
+/* Drop-cap used in the detail-page dossier body. */
+.detail-dropcap::first-letter {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-style: italic;
+  font-size: 30px;
+  float: left;
+  line-height: 0.9;
+  padding: 4px 6px 0 0;
+  color: var(--color-clay-600);
+}
+
+/* Gold-only foil variant — legendary epithets on the detail page. */
+.fl-foil-gold {
+  background-image: linear-gradient(
+    110deg,
+    #8c6318 0%,
+    #d4a24c 38%,
+    #f6e1a1 50%,
+    #d4a24c 62%,
+    #8c6318 100%
+  );
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: fl-foil-sweep 7s linear infinite;
+}
+@keyframes fl-foil-sweep {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 220% 50%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fl-foil-gold {
+    animation: none;
+  }
+}

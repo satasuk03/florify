@@ -1,15 +1,15 @@
 
+- rework หน้า floripedia ให้เหมือน detail
+- เพิ่มปุ่มเล่น เวลา share passport + ไม่ต้องโชว์สะสมหมดด้านล่าง เพราะมันมีใน passport อยู่แล้ว
 - หาต้นไม้ที่ใช่สำหรับคุณ -> Viral Marketing
 
-- Customizatble Passport + Collection Progression + ฉายา
 - คำอธิบาย collection
-- Compress images
 - Next Collection: Fungi Kingdom
 - Particles decoration -> อาจจะให้ซื้อจาก Shop? -> แต่ใช้ Currency พิเศษ (Cosmetic coins)
-- Badge Achievement ต้องมีที่ให้โชว์ ใน Passport
-- Passport Background Customization (or theme selection?)
 
 ## Done
+- Customizatble Passport + Collection Progression + ฉายา
+- Passport Background Customization (or theme selection?)
 - Filter ดอกไม้ที่สามารถ upgrade ได้ -> อาจจะใช้คำสั้นๆ
 - Achievement ควรมี Badge เท่ๆ
 - เครื่องผลิต Sprout กับ น้ำ
