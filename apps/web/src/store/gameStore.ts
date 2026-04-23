@@ -220,6 +220,7 @@ export interface GameStore {
   setPassportTitle: (source: PassportTitleSource) => void;
   setPassportAvatar: (avatar: { speciesId: number; stage: 1 | 2 | 3 } | null) => void;
   mergeFloraLevel: (speciesId: number) => void;
+  mergeAllFloraLevels: () => { speciesAdvanced: number };
   replaceState: (next: PlayerState) => void;
 
   // Sprout currency / Shop
@@ -760,6 +761,43 @@ export const useGameStore = create<GameStore>((set, get) => ({
     };
     set({ state: next });
     scheduleSave(next);
+  },
+
+  mergeAllFloraLevels: () => {
+    const state = get().state;
+    const nextFloraLevels: Record<number, FloraLevelEntry> = { ...state.floraLevels };
+    let speciesAdvanced = 0;
+
+    for (const [idStr, entry] of Object.entries(state.floraLevels)) {
+      if (!canMergeFloraLevel(entry)) continue;
+      let level: number = entry.level;
+      let pendingMerges = entry.pendingMerges;
+      const startLevel = level;
+      while (level < FLORA_MAX_LEVEL) {
+        const cost = FLORA_LEVEL_CURVE[level - 1];
+        if (cost === undefined || pendingMerges < cost) break;
+        pendingMerges -= cost;
+        level += 1;
+      }
+      if (level > startLevel) {
+        speciesAdvanced += 1;
+        nextFloraLevels[Number(idStr)] = {
+          level: level as FloraLevelEntry['level'],
+          pendingMerges,
+        };
+      }
+    }
+
+    if (speciesAdvanced === 0) return { speciesAdvanced: 0 };
+
+    const next: PlayerState = {
+      ...state,
+      updatedAt: Date.now(),
+      floraLevels: nextFloraLevels,
+    };
+    set({ state: next });
+    scheduleSave(next);
+    return { speciesAdvanced };
   },
 
   setPassportTitle: (source) => {

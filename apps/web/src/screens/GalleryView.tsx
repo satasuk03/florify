@@ -6,6 +6,7 @@ import { RarityBadge } from "@/components/RarityBadge";
 import { BackIcon } from "@/components/icons";
 import { FloraImage } from "@/components/FloraImage";
 import { ShinyOverlay } from "@/components/flora-level/ShinyOverlay";
+import { MergeBurst } from "@/components/flora-level/MergeBurst";
 import { AnimatedNumber } from "@/components/AnimatedNumber";
 import { useGameStore, canMergeFloraLevel } from "@/store/gameStore";
 import { gameEventBus } from "@/lib/gameEventBus";
@@ -253,6 +254,7 @@ export function GalleryView() {
   const floraLevels = useGameStore((s) => s.state.floraLevels);
   const unlocked = useGameStore((s) => s.uniqueSpeciesUnlocked());
   const hydrated = useGameStore((s) => s.hydrated);
+  const mergeAllFloraLevels = useGameStore((s) => s.mergeAllFloraLevels);
 
   useEffect(() => {
     if (!hydrated) return;
@@ -384,6 +386,31 @@ export function GalleryView() {
     return done;
   }, [collectionUnlocked, collectionTotals]);
 
+  /* ── Merge-all bar state ─────────────────────────────────────── */
+  const mergeableCount = useMemo(() => {
+    let n = 0;
+    for (const entry of Object.values(floraLevels)) {
+      if (canMergeFloraLevel(entry)) n += 1;
+    }
+    return n;
+  }, [floraLevels]);
+
+  const [mergeBurstKey, setMergeBurstKey] = useState(0);
+  const [mergeBurstActive, setMergeBurstActive] = useState(false);
+  const [frozenMergeCount, setFrozenMergeCount] = useState(0);
+
+  const handleMergeAll = useCallback(() => {
+    if (mergeableCount === 0) return;
+    setFrozenMergeCount(mergeableCount);
+    setMergeBurstKey((k) => k + 1);
+    setMergeBurstActive(true);
+    mergeAllFloraLevels();
+    if (typeof navigator !== "undefined" && "vibrate" in navigator) {
+      navigator.vibrate?.(35);
+    }
+    window.setTimeout(() => setMergeBurstActive(false), 1700);
+  }, [mergeableCount, mergeAllFloraLevels]);
+
   /* ── Group filtered species by collection (newest first) ─────── */
   const groupedByCollection = useMemo(() => {
     const groups: { collection: SpeciesCollection; species: SpeciesDef[] }[] =
@@ -501,6 +528,17 @@ export function GalleryView() {
         chaptersDone={chaptersDone}
         chaptersTotal={ALL_COLLECTIONS.length}
       />
+
+      {/* ── Merge-all bar ───────────────────────────────────────── */}
+      {(mergeableCount > 0 || mergeBurstActive) && (
+        <MergeAllBar
+          count={mergeBurstActive ? frozenMergeCount : mergeableCount}
+          burstKey={mergeBurstKey}
+          burstActive={mergeBurstActive}
+          onClick={handleMergeAll}
+          locked={mergeBurstActive}
+        />
+      )}
 
       {/* ── Search row ──────────────────────────────────────────── */}
       <section className="flex items-center gap-2 mb-4 relative z-[1]">
@@ -881,6 +919,46 @@ const PlateTile = memo(function PlateTile(props: PlateTileProps) {
     </div>
   );
 });
+
+/* ── Merge-all bar ──────────────────────────────────────────────── */
+function MergeAllBar({
+  count,
+  burstKey,
+  burstActive,
+  onClick,
+  locked,
+}: {
+  count: number;
+  burstKey: number;
+  burstActive: boolean;
+  onClick: () => void;
+  locked: boolean;
+}) {
+  const t = useT();
+  const disabled = count === 0 || locked;
+  return (
+    <section className="relative flex items-center justify-between gap-3 bg-cream-100 border border-cream-300 rounded-md px-3.5 py-2.5 mb-4 animate-fade-up">
+      <div className="flex items-center gap-2 min-w-0">
+        <span
+          aria-hidden
+          className="w-[8px] h-[8px] rounded-full bg-yellow-400 animate-pulse shadow-[0_0_8px_rgba(251,214,74,0.8)] shrink-0"
+        />
+        <span className="font-mono text-[10.5px] tracking-[0.12em] uppercase text-ink-700 truncate">
+          {t("gallery.mergeAll.ready", { n: String(count) })}
+        </span>
+      </div>
+      <button
+        type="button"
+        onClick={onClick}
+        disabled={disabled}
+        className="relative shrink-0 bg-clay-500 hover:bg-clay-600 disabled:opacity-60 disabled:hover:bg-clay-500 text-cream-50 rounded-full px-4 py-1.5 font-sans font-semibold text-[12px] tracking-wide transition-colors"
+      >
+        ✦ {t("gallery.mergeAll.action")}
+      </button>
+      {burstActive && <MergeBurst playKey={burstKey} />}
+    </section>
+  );
+}
 
 /* ── Filter bottom sheet ────────────────────────────────────────── */
 function FilterSheet({

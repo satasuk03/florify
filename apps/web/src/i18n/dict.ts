@@ -56,6 +56,8 @@ export const dict = {
     "gallery.filterPlates": "ฟิลเตอร์",
     "gallery.filterChapter": "หมวด",
     "gallery.applyFilters": "ตกลง",
+    "gallery.mergeAll.ready": "พร้อมรวม {n} ต้น",
+    "gallery.mergeAll.action": "รวมทั้งหมด",
 
     // ── Settings sheet ─────────────────────────
     "settings.title": "ตั้งค่า",
@@ -466,6 +468,8 @@ export const dict = {
     "gallery.filterPlates": "Filter Plates",
     "gallery.filterChapter": "Chapter",
     "gallery.applyFilters": "Apply",
+    "gallery.mergeAll.ready": "{n} ready to merge",
+    "gallery.mergeAll.action": "Merge all",
 
     // ── Settings sheet ─────────────────────────
     "settings.title": "Settings",
