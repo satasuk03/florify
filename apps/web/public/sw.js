@@ -1,7 +1,7 @@
-// Florify Service Worker v17
-const CACHE_NAME = "florify-v17";
-const STATIC_CACHE = "florify-static-v17";
-const FLORA_CACHE = "florify-flora-v17";
+// Florify Service Worker v18
+const CACHE_NAME = "florify-v18";
+const STATIC_CACHE = "florify-static-v18";
+const FLORA_CACHE = "florify-flora-v18";
 
 const APP_SHELL = [
   "/",
@@ -15,25 +15,27 @@ const APP_SHELL = [
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL))
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL)),
   );
   self.skipWaiting();
 });
 
 self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(
-        keys
-          .filter(
-            (key) =>
-              key !== CACHE_NAME &&
-              key !== STATIC_CACHE &&
-              key !== FLORA_CACHE
-          )
-          .map((key) => caches.delete(key))
-      )
-    )
+    caches
+      .keys()
+      .then((keys) =>
+        Promise.all(
+          keys
+            .filter(
+              (key) =>
+                key !== CACHE_NAME &&
+                key !== STATIC_CACHE &&
+                key !== FLORA_CACHE,
+            )
+            .map((key) => caches.delete(key)),
+        ),
+      ),
   );
   self.clients.claim();
 });
@@ -54,9 +56,9 @@ self.addEventListener("fetch", (event) => {
             fetch(event.request).then((response) => {
               cache.put(event.request, response.clone());
               return response;
-            })
-        )
-      )
+            }),
+        ),
+      ),
     );
     return;
   }
@@ -71,9 +73,9 @@ self.addEventListener("fetch", (event) => {
             fetch(event.request).then((response) => {
               cache.put(event.request, response.clone());
               return response;
-            })
-        )
-      )
+            }),
+        ),
+      ),
     );
     return;
   }
@@ -92,8 +94,8 @@ self.addEventListener("fetch", (event) => {
         .catch(() =>
           caches
             .match(event.request)
-            .then((cached) => cached || caches.match("/"))
-        )
+            .then((cached) => cached || caches.match("/")),
+        ),
     );
     return;
   }
@@ -108,6 +110,6 @@ self.addEventListener("fetch", (event) => {
         return response;
       });
       return cached || fetched;
-    })
+    }),
   );
 });
